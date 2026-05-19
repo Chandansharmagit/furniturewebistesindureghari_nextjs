@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   Search, SlidersHorizontal, Grid3X3, Grid2X2, 
-  ChevronDown, X, Heart, Star, Shield, Truck, 
-  Wrench, Eye, ShoppingCart, RefreshCw, Layers, Check
+  ChevronDown, RefreshCw, Layers, Check
 } from 'lucide-react';
 import { API_BASE_URL } from '@/config/api';
 import ProductCard from '../../common/ProductCard/ProductCard';
@@ -28,11 +27,8 @@ const WOOD_TYPES = ['Sheesham Wood', 'Teak Wood', 'Mango Wood', 'Engineered Wood
 const FurnitureProductCatalog = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [activeImage, setActiveImage] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [quantity, setQuantity] = useState(1);
   const [gridCols, setGridCols] = useState(4); // 3 or 4 columns
   const [sortBy, setSortBy] = useState('recommended');
   
@@ -162,21 +158,6 @@ const FurnitureProductCatalog = () => {
     return Number.isFinite(Number(price)) 
       ? `Rs. ${Math.round(Number(price)).toLocaleString('en-NP')}` 
       : 'Contact for Price';
-  };
-
-  const handleOpenQuickView = (product, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setSelectedProduct(product);
-    setActiveImage(product.imageUrl || '');
-    setQuantity(1);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const handleCloseModal = () => {
-    setSelectedProduct(null);
-    setActiveImage('');
-    document.body.style.overflow = '';
   };
 
   // Filter and sort computation
@@ -497,195 +478,13 @@ const FurnitureProductCatalog = () => {
             ) : (
               <div className={`products-grid-viewport cols-${gridCols}`}>
                 {filteredProducts.map((product) => (
-                  <div key={product._id || product.id} className="premium-card-wrapper">
-                    <ProductCard product={product} />
-                    <button 
-                      className="quick-view-overlay-btn"
-                      onClick={(e) => handleOpenQuickView(product, e)}
-                      aria-label={`Quick view ${product.name}`}
-                    >
-                      <Eye size={16} />
-                      <span>Quick View</span>
-                    </button>
-                  </div>
+                  <ProductCard key={product._id || product.id} product={product} />
                 ))}
               </div>
             )}
           </main>
         </div>
       </div>
-
-      {/* ── PREMIUM QUICK-VIEW PRODUCT MODAL ── */}
-      <AnimatePresence>
-        {selectedProduct && (
-          <div className="premium-modal-overlay" onClick={handleCloseModal}>
-            <motion.div 
-              className="premium-modal-card"
-              onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, scale: 0.95, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 30 }}
-              transition={{ duration: 0.4, cubicBezier: [0.16, 1, 0.3, 1] }}
-            >
-              {/* Close Button */}
-              <button 
-                className="modal-close-btn"
-                onClick={handleCloseModal}
-                aria-label="Close modal"
-              >
-                <X size={20} />
-              </button>
-
-              <div className="modal-inner-grid">
-                {/* Images Viewport (Left) */}
-                <div className="modal-gallery-pane">
-                  <div className="modal-main-image-wrapper">
-                    <img
-                      src={activeImage || selectedProduct.imageUrl || '/images/placeholder.jpg'}
-                      alt={selectedProduct.name}
-                      className="modal-view-image"
-                      onError={(e) => {
-                        e.target.src = '/images/placeholder.jpg';
-                      }}
-                    />
-                  </div>
-                  {/* Thumbnails array */}
-                  {selectedProduct.imageUrls && (
-                    <div className="modal-thumbs-row">
-                      {(() => {
-                        try {
-                          const list = typeof selectedProduct.imageUrls === 'string' 
-                            ? JSON.parse(selectedProduct.imageUrls) 
-                            : selectedProduct.imageUrls;
-                          if (!Array.isArray(list) || list.length <= 1) return null;
-                          return list.slice(0, 5).map((img, idx) => (
-                            <button
-                              key={idx}
-                              className={`thumb-button ${activeImage === img ? 'active' : ''}`}
-                              onClick={() => setActiveImage(img)}
-                            >
-                              <img src={img} alt={`thumbnail-${idx}`} />
-                            </button>
-                          ));
-                        } catch (err) {
-                          return null;
-                        }
-                      })()}
-                    </div>
-                  )}
-                </div>
-
-                {/* Specs Details Pane (Right) */}
-                <div className="modal-info-pane">
-                  <span className="modal-brand-tag">{selectedProduct.brand || 'BISHWOKARMA CRAFTS'}</span>
-                  <h2 className="modal-product-title">{selectedProduct.name}</h2>
-                  
-                  {/* Ratings Row */}
-                  <div className="modal-rating-row">
-                    <div className="stars-wrapper">
-                      {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          size={16} 
-                          fill={i < Math.round(selectedProduct.rating || 5) ? '#d4af37' : 'none'} 
-                          stroke={i < Math.round(selectedProduct.rating || 5) ? 'none' : '#666666'} 
-                        />
-                      ))}
-                    </div>
-                    <span className="rating-text-value">
-                      <strong>{selectedProduct.rating || 4.9}</strong> ({selectedProduct.reviewCount || 42} luxury reviews)
-                    </span>
-                  </div>
-
-                  {/* Pricing displays */}
-                  <div className="modal-price-display">
-                    <span className="modal-active-price">
-                      {formatPrice(selectedProduct.new_price || selectedProduct.salePrice || selectedProduct.price)}
-                    </span>
-                    {selectedProduct.old_price && selectedProduct.old_price > selectedProduct.new_price && (
-                      <span className="modal-crossed-price">
-                        {formatPrice(selectedProduct.old_price)}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* High quality specs list */}
-                  <div className="specs-list-box">
-                    <div className="spec-item">
-                      <span className="spec-label">Premium Material</span>
-                      <span className="spec-value">{selectedProduct.material || 'Seasoned Teak Wood'}</span>
-                    </div>
-                    <div className="spec-item">
-                      <span className="spec-label">Artisan Color</span>
-                      <span className="spec-value">{selectedProduct.product_color || 'Imperial Honey / Walnut'}</span>
-                    </div>
-                    <div className="spec-item">
-                      <span className="spec-label">Bespoke Size</span>
-                      <span className="spec-value">{selectedProduct.product_size || selectedProduct.dimensions || 'Custom Size Available'}</span>
-                    </div>
-                    <div className="spec-item">
-                      <span className="spec-label">Security Shield</span>
-                      <span className="spec-value"><strong>{selectedProduct.warranty || 5} Years</strong> Full Warranty</span>
-                    </div>
-                  </div>
-
-                  <p className="modal-description-paragraph">
-                    {selectedProduct.description || 'Exquisitely crafted luxury wood centerpiece. Constructed by master builders using age-old Nepalese joint joinery techniques for uncompromising strength.'}
-                  </p>
-
-                  {/* Purchase Control Hub */}
-                  <div className="purchase-controls-row">
-                    <div className="quantity-adjuster">
-                      <button 
-                        className="adjust-btn" 
-                        onClick={() => quantity > 1 && setQuantity(prev => prev - 1)}
-                        disabled={quantity <= 1}
-                      >
-                        -
-                      </button>
-                      <span className="qty-value">{quantity}</span>
-                      <button 
-                        className="adjust-btn"
-                        onClick={() => setQuantity(prev => prev + 1)}
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    <button 
-                      className="modal-add-to-cart-btn"
-                      disabled={selectedProduct.stock === 0}
-                    >
-                      <ShoppingCart size={18} />
-                      <span>{selectedProduct.stock === 0 ? 'Fully Reserved' : 'Secure in Cart'}</span>
-                    </button>
-
-                    <button className="modal-wishlist-btn" aria-label="Add to wishlist">
-                      <Heart size={18} />
-                    </button>
-                  </div>
-
-                  {/* Value Props Row */}
-                  <div className="luxury-value-props">
-                    <div className="prop-badge">
-                      <Shield size={16} />
-                      <span>Certified Wood</span>
-                    </div>
-                    <div className="prop-badge">
-                      <Truck size={16} />
-                      <span>Elite White-Glove Delivery</span>
-                    </div>
-                    <div className="prop-badge">
-                      <Wrench size={16} />
-                      <span>Complimentary Installation</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
       {/* ── TWIN RECOMMENDATION ARRAYS ── */}
       <section className="recommendations-showcase-section">
