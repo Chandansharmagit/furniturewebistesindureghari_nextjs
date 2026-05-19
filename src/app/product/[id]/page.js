@@ -82,7 +82,7 @@ export async function generateMetadata({ params }) {
         title: `${name} — Sindureghari Furniture Nepal`,
         description,
         url: `${SITE_URL}/product/${id}`,
-        type: "product",
+        type: "website",
         images: images.length > 0 ? images : undefined,
       },
       twitter: {
