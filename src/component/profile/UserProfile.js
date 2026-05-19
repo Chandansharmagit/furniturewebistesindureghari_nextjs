@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '../../config/api';
 import orderService from '../../services/orderService';
 import authService from '../../services/authService';
@@ -7,7 +7,7 @@ import UserBlogsTab from './UserBlogsTab';
 import './UserProfile.css';
 
 export default function UserProfile() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('orders');
   const [orders, setOrders] = useState([]);
   const [profile, setProfile] = useState(null);
@@ -23,11 +23,11 @@ export default function UserProfile() {
 
   useEffect(() => {
     if (!authService.isAuthenticatedWithContext()) {
-      navigate('/login');
+      router.push('/login');
       return;
     }
     loadUserData();
-  }, [navigate]);
+  }, [router]);
 
   const loadUserData = async () => {
     try {
@@ -101,7 +101,7 @@ export default function UserProfile() {
 
   const handleLogout = () => {
     authService.logout();
-    navigate('/login');
+    router.push('/login');
   };
 
   const handleImageUpload = async (event) => {
@@ -213,19 +213,38 @@ export default function UserProfile() {
               className={`user-profile-tab-button ${activeTab === 'orders' ? 'user-profile-tab-active' : ''}`}
               onClick={() => setActiveTab('orders')}
             >
-              My Orders
+              <span className="user-profile-tab-label">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="user-profile-tab-icon" width="18" height="18">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                My Orders
+              </span>
             </button>
             <button
               className={`user-profile-tab-button ${activeTab === 'profile' ? 'user-profile-tab-active' : ''}`}
               onClick={() => setActiveTab('profile')}
             >
-              Profile Settings
+              <span className="user-profile-tab-label">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="user-profile-tab-icon" width="18" height="18">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                Profile Settings
+              </span>
             </button>
             <button
               className={`user-profile-tab-button ${activeTab === 'blogs' ? 'user-profile-tab-active' : ''}`}
               onClick={() => setActiveTab('blogs')}
             >
-              My Journal Entries
+              <span className="user-profile-tab-label">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="user-profile-tab-icon" width="18" height="18">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                My Journal Entries
+              </span>
             </button>
           </div>
         </div>
@@ -271,7 +290,7 @@ export default function UserProfile() {
                 ) : orders.length === 0 ? (
                   <div className="user-profile-no-orders">
                     <p>You haven't placed any orders yet.</p>
-                    <button onClick={() => navigate('/')} className="user-profile-shop-now-btn">
+                    <button onClick={() => router.push('/')} className="user-profile-shop-now-btn">
                       Start Shopping
                     </button>
                   </div>
@@ -308,7 +327,7 @@ export default function UserProfile() {
 
                             <div className="user-profile-order-actions">
                               <button
-                                onClick={() => navigate(`/order/${order.id}`)}
+                                onClick={() => router.push(`/order/${order.id}`)}
                                 className="user-profile-view-details-btn"
                               >
                                 View Details
@@ -413,7 +432,7 @@ export default function UserProfile() {
 
                 <div className="user-profile-actions-section">
                   <button
-                    onClick={() => navigate('/change-password')}
+                    onClick={() => router.push('/change-password')}
                     className="user-profile-change-password-btn"
                   >
                     Change Password

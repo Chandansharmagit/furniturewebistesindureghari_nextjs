@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Heart, ShoppingCart, Menu, X, Store, Search } from 'lucide-react';
+import { User, Heart, ShoppingCart, Menu, X, Store, Search, Phone, Building2, HelpCircle } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import SearchFunctionality from '../navbar/search/SearchFunctionality';
@@ -44,8 +44,37 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <div className="header-top-bar">
-        <p>Free Delivery on Orders Over NPR 50,000 | Quality Guaranteed</p>
+      <div className="header-top-bar desktop-only">
+        <div className="top-bar-inner">
+          <div className="top-bar-left">
+            <Link to="/category/all-products" className="top-bar-link active">Furniture</Link>
+            <span className="top-bar-separator">|</span>
+            <Link to="/contact" className="top-bar-link">Home Interiors</Link>
+            <span className="top-bar-separator">|</span>
+            <Link to="/contact?type=bulk" className="top-bar-link">Bulk Order</Link>
+          </div>
+          <div className="top-bar-right">
+            <a href="tel:+977-9867332731" className="top-bar-link contact-phone">
+              <Phone size={13} style={{ marginRight: '4px', display: 'inline-block', verticalAlign: 'middle' }} />
+              +977-9867332731
+            </a>
+            <span className="top-bar-separator">|</span>
+            <Link to="/become-a-franchise" className="top-bar-link">
+              <Building2 size={13} style={{ marginRight: '4px', display: 'inline-block', verticalAlign: 'middle' }} />
+              Become a Franchise
+            </Link>
+            <span className="top-bar-separator">|</span>
+            <Link to="/orders" className="top-bar-link">
+              <Store size={13} style={{ marginRight: '4px', display: 'inline-block', verticalAlign: 'middle' }} />
+              Track Order
+            </Link>
+            <span className="top-bar-separator">|</span>
+            <Link to="/help-and-support" className="top-bar-link">
+              <HelpCircle size={13} style={{ marginRight: '4px', display: 'inline-block', verticalAlign: 'middle' }} />
+              Help Center
+            </Link>
+          </div>
+        </div>
       </div>
 
       <div className="header-main">

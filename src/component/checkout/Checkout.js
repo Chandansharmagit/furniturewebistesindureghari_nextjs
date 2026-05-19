@@ -26,7 +26,7 @@ export default function Checkout() {
     city: '',
     state: '',
     pincode: '',
-    country: 'India',
+    country: 'Nepal',
 
     // Payment Information
     paymentMethod: 'cod',
@@ -155,7 +155,7 @@ export default function Checkout() {
           city: formData.city,
           state: formData.state,
           pincode: formData.pincode,
-          country: 'India'
+          country: 'Nepal'
         },
         payment_method: formData.paymentMethod,
         items: cartItems.map(item => ({
@@ -366,7 +366,7 @@ export default function Checkout() {
                 <div className="form-group">
                   <label>Country</label>
                   <select name="country" value={formData.country} onChange={handleInputChange}>
-                    <option value="India">India</option>
+                    <option value="Nepal">Nepal</option>
                   </select>
                 </div>
               </div>

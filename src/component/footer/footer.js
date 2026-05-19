@@ -131,6 +131,7 @@ const Footer = () => {
               <li><a href="/">Grand Home</a></li>
               <li><a href="/about">Our Legacy</a></li>
               <li><a href="/ceo">Meet Our CEO</a></li>
+              <li><a href="/our-vision">Our Vision & Plan</a></li>
               <li><a href="/contact">Imperial Contact</a></li>
               <li><a href="/help-and-support">Help & Support</a></li>
               <li><a href="/careers">Royal Careers</a></li>

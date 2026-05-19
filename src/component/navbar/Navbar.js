@@ -164,7 +164,7 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
       }
     },
     { name: 'All Products', path: '/category/all-products' },
-    { name: 'Meet Our CEO', path: '/ceo', isHighlighted: true },
+    { name: 'Our Showrooms', path: '/stores', isHighlighted: true },
     { name: 'The Journal', path: '/blog', isHighlighted: true },
     { name: 'Offers', path: '/category/offers', isHighlighted: true }
   ];

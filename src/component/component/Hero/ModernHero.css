@@ -1,5 +1,7 @@
+/* ── MODERN LUXURY HERO SHOWCASE (WHITE THEME COMPLEMENT) ── */
+
 .modern-hero-section {
-  padding: 40px 0;
+  padding: 30px 0 50px 0;
   background-color: #ffffff;
 }
 
@@ -11,36 +13,39 @@
 
 .modern-hero-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 20px;
-  height: 480px; /* Reduced from 600px to be more proportionate */
-  min-height: 400px;
-  max-height: 500px;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+  height: 520px;
+  min-height: 480px;
 }
 
-.hero-main-banner {
+/* ── BANNER CARD BASICS ── */
+.hero-main-banner,
+.side-banner {
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 12px;
+  border-radius: 24px;
   overflow: hidden;
+  box-shadow: 0 12px 35px rgba(17, 24, 39, 0.05);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  background-color: #f3f4f6; /* Premium grey load color */
+  cursor: pointer;
+  transform: translateZ(0);
 }
 
 .hero-side-banners {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   height: 100%;
 }
 
 .side-banner {
-  position: relative;
-  width: 100%;
-  height: calc(50% - 10px);
-  border-radius: 12px;
-  overflow: hidden;
+  height: calc(50% - 12px);
 }
 
+/* ── PREMIUM ZOOM TRANSITION ── */
 .banner-img {
   position: absolute;
   top: 0;
@@ -50,118 +55,197 @@
   object-fit: cover;
   display: block;
   z-index: 0;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.hero-main-banner:hover .banner-img,
+.side-banner:hover .banner-img {
+  transform: scale(1.05);
+}
+
+/* ── LUXURY SEMI-DARK GRADIENT MASK ── */
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top,
+    rgba(17, 24, 39, 0.85) 0%,
+    rgba(17, 24, 39, 0.35) 55%,
+    rgba(17, 24, 39, 0.05) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+  transition: background 0.4s ease;
+}
+
+.hero-main-banner:hover .banner-overlay,
+.side-banner:hover .banner-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(17, 24, 39, 0.92) 0%,
+    rgba(17, 24, 39, 0.45) 55%,
+    rgba(17, 24, 39, 0.1) 100%
+  );
+}
+
+/* ── CONTENT & TEXT STYLING ── */
 .banner-content {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 40px;
+  padding: 50px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
 }
 
 .left-banner-content {
-  background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
+  justify-content: flex-end;
+}
+
+.side-banner-content {
+  padding: 35px 40px;
+}
+
+/* Luxury badging */
+.banner-tag {
+  background: #af861d;
+  color: #ffffff;
+  padding: 4px 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 20px;
+  width: fit-content;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 10px rgba(175, 134, 29, 0.3);
+}
+
+.banner-tag.mini {
+  font-size: 0.65rem;
+  padding: 3px 10px;
 }
 
 .banner-subtitle {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
-  color: #fff;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.8rem;
+  color: #ffffff;
   font-weight: 400;
-  margin-bottom: 0px;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+  margin-bottom: 4px;
 }
 
 .banner-highlight {
   font-family: 'Outfit', sans-serif;
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: #ffffff;
 }
 
 .banner-title {
   font-family: 'Outfit', sans-serif;
-  font-size: 2.2rem;
-  color: #fff;
-  font-weight: 600;
-  margin-bottom: 15px;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-}
-
-.banner-price-tag {
-  background: rgba(90, 80, 70, 0.85); /* specific brownish dark tag */
-  color: #fff;
-  padding: 10px 20px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 500;
-  width: fit-content;
-  border-radius: 4px;
-}
-
-.top-right-content, .bottom-right-content {
-  padding: 30px;
-  justify-content: flex-start;
+  font-size: 2.4rem;
+  color: #ffffff;
+  font-weight: 700;
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
 }
 
 .banner-title-small {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.8rem;
-  color: #4a2b15;
-  font-weight: 700;
-  margin-bottom: 8px;
+  font-size: 1.9rem;
+  color: #ffffff;
+  font-weight: 800;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
 }
 
 .banner-desc {
   font-family: 'Outfit', sans-serif;
   font-size: 0.95rem;
-  color: #555;
-  margin-bottom: 15px;
-  max-width: 70%;
+  color: rgba(243, 244, 246, 0.85);
+  margin-bottom: 18px;
+  max-width: 80%;
+  font-weight: 400;
+}
+
+/* Luxury boutique price tags */
+.banner-price-tag {
+  background: rgba(255, 255, 255, 0.95);
+  color: #111827;
+  padding: 12px 24px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  width: fit-content;
+  border-radius: 12px;
+  border-left: 4px solid #af861d;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-main-banner:hover .banner-price-tag,
+.side-banner:hover .banner-price-tag {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
 }
 
 .small-tag {
-  font-size: 0.95rem;
-  padding: 8px 15px;
-  background: rgba(90, 80, 70, 0.85);
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  border-radius: 10px;
 }
 
+/* ── MODERN MINIMAL INTERACTIVE CONTROLS ── */
 .carousel-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.7);
-  border: none;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(229, 231, 235, 0.5);
   border-radius: 50%;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #555;
-  transition: background 0.3s;
-  z-index: 2;
+  color: #111827;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 5;
   pointer-events: auto;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+}
+
+.hero-main-banner:hover .carousel-arrow {
+  opacity: 1;
 }
 
 .carousel-arrow:hover {
-  background: rgba(255, 255, 255, 1);
+  background: #af861d;
+  color: #ffffff;
+  border-color: #af861d;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 8px 20px rgba(175, 134, 29, 0.3);
 }
 
 .left-arrow {
-  left: 20px;
+  left: 24px;
 }
 
 .right-arrow {
-  right: 20px;
+  right: 24px;
 }
 
 .sr-only {
@@ -182,31 +266,88 @@
   margin: inherit;
 }
 
+/* ── 9. MEDIA RESPONSIVE QUERIES ── */
+@media (max-width: 1200px) {
+  .modern-hero-grid {
+    grid-template-columns: 1.2fr 1fr;
+    height: 480px;
+  }
+  .banner-subtitle {
+    font-size: 2.4rem;
+  }
+  .banner-highlight {
+    font-size: 2.8rem;
+  }
+  .banner-title {
+    font-size: 2rem;
+  }
+}
+
 @media (max-width: 1024px) {
+  .modern-hero-section {
+    padding: 20px 0 40px 0;
+  }
   .modern-hero-grid {
     grid-template-columns: 1fr;
     height: auto;
     max-height: none;
+    gap: 20px;
   }
   .hero-main-banner {
-    height: 350px;
+    height: 400px;
+  }
+  .hero-side-banners {
+    gap: 20px;
   }
   .side-banner {
-    height: 250px;
+    height: 280px;
+  }
+  .banner-content {
+    padding: 40px;
+  }
+  .carousel-arrow {
+    opacity: 1; /* Always visible on tablets */
   }
 }
 
 @media (max-width: 600px) {
+  .modern-hero-container {
+    padding: 0 15px;
+  }
   .hero-main-banner {
-    height: 300px;
+    height: 320px;
+    border-radius: 16px;
+  }
+  .side-banner {
+    height: 240px;
+    border-radius: 16px;
+  }
+  .banner-content {
+    padding: 24px;
+  }
+  .side-banner-content {
+    padding: 24px;
   }
   .banner-subtitle {
     font-size: 1.8rem;
   }
+  .banner-highlight {
+    font-size: 2rem;
+  }
   .banner-title {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    margin-bottom: 12px;
   }
   .banner-title-small {
     font-size: 1.4rem;
+  }
+  .banner-price-tag {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+  .small-tag {
+    font-size: 0.85rem;
+    padding: 8px 14px;
   }
 }

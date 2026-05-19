@@ -16,7 +16,11 @@ const ProductCard = ({ product }) => {
         category,
         brand,
         rating,
-        reviewCount
+        reviewCount,
+        new_price,
+        old_price,
+        price,
+        salePrice
     } = product;
 
     // Handle varying data structures from different API endpoints
@@ -33,7 +37,16 @@ const ProductCard = ({ product }) => {
     }
 
     const displayRating = rating || 4.9;
-    const displayReviews = reviewCount || '2.4k';
+    const displayReviews = reviewCount || 42;
+
+    const displayPrice = new_price || salePrice || price;
+    const originalPrice = old_price || price;
+
+    const formatPrice = (p) => {
+        return Number.isFinite(Number(p)) && Number(p) > 0
+            ? `Rs. ${Math.round(Number(p)).toLocaleString('en-NP')}`
+            : null;
+    };
 
     return (
         <motion.div
@@ -80,11 +93,11 @@ const ProductCard = ({ product }) => {
                 </h3>
 
                 <div className="card-action-footer">
-                    <div className="avatar-group">
-                        <img src="https://i.pravatar.cc/100?img=1" alt="user1" className="avatar" />
-                        <img src="https://i.pravatar.cc/100?img=5" alt="user2" className="avatar" />
-                        <img src="https://i.pravatar.cc/100?img=8" alt="user3" className="avatar" />
-                        <div className="avatar-more">+12</div>
+                    <div className="card-price-wrapper">
+                        {originalPrice && Number(originalPrice) > Number(displayPrice) && (
+                            <span className="card-old-price">{formatPrice(originalPrice)}</span>
+                        )}
+                        <span className="card-new-price">{formatPrice(displayPrice) || 'Contact for Price'}</span>
                     </div>
 
                     <button className="navigate-btn">

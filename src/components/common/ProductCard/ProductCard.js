@@ -16,9 +16,7 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
         images,
         imageUrl,
         category,
-
         brand,
-
         reviewCount
     } = product;
 
@@ -29,18 +27,11 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
     const displayImage = images?.[0] || imageUrl || '/images/placeholder.jpg';
     const displayReviews = reviewCount || 42;
 
-    // const formatPrice = (p) => {
-    //     return new Intl.NumberFormat('en-NP', {
-    //         style: 'currency',
-    //         currency: 'NPR',
-    //         maximumFractionDigits: 0
-    //     }).format(p).replace('NPR', 'Rs.');
-    // };
-
-    // eslint-disable-next-line no-unused-vars
-    const discount = originalPrice > currentPrice
-        ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
-        : 0;
+    const formatPrice = (p) => {
+        return Number.isFinite(Number(p)) && Number(p) > 0
+            ? `Rs. ${Math.round(Number(p)).toLocaleString('en-NP')}`
+            : null;
+    };
 
     return (
         <motion.div
@@ -83,15 +74,15 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
                 </div>
 
                 <h3 className="product-title-bold">
-                    {name.split(' ').slice(0, 4).join(' ')}
+                    {name ? name.split(' ').slice(0, 4).join(' ') : 'PREMIUM COLLECTION'}
                 </h3>
 
                 <div className="card-action-footer">
-                    <div className="avatar-group">
-                        <img src="https://i.pravatar.cc/100?img=1" alt="user1" className="avatar" />
-                        <img src="https://i.pravatar.cc/100?img=5" alt="user2" className="avatar" />
-                        <img src="https://i.pravatar.cc/100?img=8" alt="user3" className="avatar" />
-                        <div className="avatar-more">+12</div>
+                    <div className="card-price-wrapper">
+                        {originalPrice && Number(originalPrice) > Number(currentPrice) && (
+                            <span className="card-old-price">{formatPrice(originalPrice)}</span>
+                        )}
+                        <span className="card-new-price">{formatPrice(currentPrice) || 'Contact for Price'}</span>
                     </div>
 
                     <button className="navigate-btn">

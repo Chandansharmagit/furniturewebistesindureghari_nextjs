@@ -21,7 +21,7 @@ Link.displayName = 'Link';
 export const useNavigate = () => {
   const router = useRouter();
 
-  return (to, options) => {
+  return React.useCallback((to, options) => {
     if (typeof to === 'number') {
       if (to === -1) {
         router.back();
@@ -35,7 +35,7 @@ export const useNavigate = () => {
         router.push(to);
       }
     }
-  };
+  }, [router]);
 };
 
 // Mock useParams to use Next.js's native useParams

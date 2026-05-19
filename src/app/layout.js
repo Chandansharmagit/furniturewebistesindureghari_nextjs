@@ -230,6 +230,10 @@ export default function RootLayout({ children }) {
         <Suspense fallback={null}>
           <ClientLayout>{children}</ClientLayout>
         </Suspense>
+
+        {/* Zapier Chatbot Embed */}
+        <script async type="module" src="https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js"></script>
+        <zapier-interfaces-chatbot-embed is-popup="true" chatbot-id="cmpcld4d7005o2jauy2hg9syg"></zapier-interfaces-chatbot-embed>
       </body>
     </html>
   );

@@ -84,10 +84,12 @@ class OrderService {
   // Get single order details
   async getOrderDetails(id) {
     try {
-      const response = await fetch(`${buildApiUrl(ORDER_ENDPOINTS.DETAIL)}/${id}`, {
+      const authToken = localStorage.getItem('authToken');
+      const response = await fetch(buildApiUrl(ORDER_ENDPOINTS.DETAIL.replace(':id', id)), {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
         }
       });
 
@@ -112,10 +114,12 @@ class OrderService {
   // Cancel an order
   async cancelOrder(id, reason = '') {
     try {
-      const response = await fetch(`${buildApiUrl(ORDER_ENDPOINTS.CANCEL)}/${id}`, {
+      const authToken = localStorage.getItem('authToken');
+      const response = await fetch(buildApiUrl(ORDER_ENDPOINTS.CANCEL.replace(':id', id)), {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
         },
         body: JSON.stringify({ reason })
       });
@@ -141,10 +145,12 @@ class OrderService {
   // Track an order
   async trackOrder(id) {
     try {
-      const response = await fetch(`${buildApiUrl(ORDER_ENDPOINTS.DETAIL)}/${id}/track`, {
+      const authToken = localStorage.getItem('authToken');
+      const response = await fetch(`${buildApiUrl(ORDER_ENDPOINTS.DETAIL.replace(':id', id))}/track`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
         }
       });
 

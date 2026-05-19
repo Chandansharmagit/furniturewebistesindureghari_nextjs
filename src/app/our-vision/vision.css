@@ -1,0 +1,336 @@
+/* Our Vision and 10-Year Plan Styling */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+.vision-page-container {
+  min-height: 100vh;
+  width: 100%;
+  padding: 60px 40px 120px 40px;
+  font-family: 'Outfit', sans-serif;
+  color: #333333;
+  /* Signature bottom-up linear gradient drop canvas */
+  background: linear-gradient(0deg, #FAF6ED 0%, #ffffff 550px);
+}
+
+/* Hero Section */
+.vision-hero {
+  max-width: 1200px;
+  margin: 0 auto 50px auto;
+  text-align: center;
+}
+
+.vision-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(197, 160, 89, 0.08);
+  border: 1px solid rgba(197, 160, 89, 0.2);
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #8B4513;
+  margin-bottom: 24px;
+}
+
+.vision-badge .gold-icon {
+  color: #c5a059;
+}
+
+.vision-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.4rem;
+  font-weight: 700;
+  color: #111111;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.vision-intro {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: #666666;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+/* Manifesto Card */
+.manifesto-card {
+  background: #ffffff;
+  border-radius: 28px;
+  border: 1px solid rgba(197, 160, 89, 0.15);
+  box-shadow: 0 20px 50px rgba(197, 160, 89, 0.04);
+  padding: 40px;
+  text-align: center;
+  margin-bottom: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.manifesto-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #c5a059, #8B4513);
+}
+
+.manifesto-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.manifesto-gold-icon {
+  color: #c5a059;
+  margin-bottom: 5px;
+}
+
+.manifesto-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111111;
+}
+
+.manifesto-card p {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: #444444;
+  font-weight: 400;
+  max-width: 750px;
+}
+
+/* Sections General */
+.vision-section {
+  max-width: 1200px;
+  margin: 0 auto 90px auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.section-tag {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #c5a059;
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.section-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  color: #111111;
+  margin-bottom: 12px;
+}
+
+.section-header p {
+  color: #666666;
+  font-size: 1.05rem;
+}
+
+/* Pillars Bento Grid */
+.pillars-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.vision-pillar-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 35px;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vision-pillar-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(197, 160, 89, 0.2);
+  box-shadow: 0 20px 40px rgba(197, 160, 89, 0.06);
+}
+
+.pillar-icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  background: rgba(197, 160, 89, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.pillar-icon {
+  color: #8B4513;
+}
+
+.vision-pillar-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111111;
+  margin-bottom: 12px;
+}
+
+.vision-pillar-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #666666;
+}
+
+/* Timeline Layout */
+.timeline-journey {
+  max-width: 850px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.timeline-step-node {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: start;
+  gap: 30px;
+}
+
+.step-badge {
+  background: #111111;
+  color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.step-details-card {
+  display: flex;
+  gap: 24px;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+}
+
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.milestone-icon {
+  color: #c5a059;
+  flex-shrink: 0;
+  background: #ffffff;
+}
+
+.step-line {
+  width: 2px;
+  flex-grow: 1;
+  background: rgba(197, 160, 89, 0.2);
+  margin-top: 15px;
+  min-height: 40px;
+}
+
+.timeline-step-node:last-child .step-line {
+  display: none;
+}
+
+.step-text h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #111111;
+  margin-bottom: 8px;
+}
+
+.step-text p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #666666;
+}
+
+/* Closing Banner */
+.vision-closing-banner {
+  background: rgba(197, 160, 89, 0.05);
+  border: 1px solid rgba(197, 160, 89, 0.15);
+  border-radius: 28px;
+  padding: 40px;
+  text-align: center;
+}
+
+.closing-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.vision-closing-banner h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: #111111;
+  font-weight: 700;
+}
+
+.vision-closing-banner p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #555555;
+  max-width: 700px;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .pillars-bento-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .vision-hero h1 {
+    font-size: 2.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .vision-page-container {
+    padding: 40px 20px 80px 20px;
+  }
+  
+  .vision-hero h1 {
+    font-size: 2.2rem;
+  }
+  
+  .manifesto-card {
+    padding: 25px;
+  }
+  
+  .manifesto-card p {
+    font-size: 1.1rem;
+  }
+  
+  .timeline-step-node {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .step-badge {
+    align-self: start;
+  }
+}

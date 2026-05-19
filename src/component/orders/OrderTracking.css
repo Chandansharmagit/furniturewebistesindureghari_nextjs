@@ -12,7 +12,7 @@
 }
 
 .ot-page {
-    background-color: var(--ot-bg);
+    background: linear-gradient(0deg, #FAF6ED 0%, #fdfbf7 550px);
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
     color: var(--ot-text);

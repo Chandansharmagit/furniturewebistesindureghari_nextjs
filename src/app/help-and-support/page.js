@@ -88,7 +88,7 @@ export default function HelpSupportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf8f5] py-16 font-sans">
+    <div className="min-h-screen py-16 font-sans" style={{ background: 'linear-gradient(0deg, #FAF6ED 0%, #faf8f5 550px)' }}>
       <div className="max-w-[1600px] mx-auto px-4 md:px-10">
 
         {/* Page Header */}
