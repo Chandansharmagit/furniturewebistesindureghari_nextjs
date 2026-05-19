@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import './hproduct.css';
 import { FaShoppingCart, FaHeart, FaSearch, FaInfoCircle, FaStar } from 'react-icons/fa';
