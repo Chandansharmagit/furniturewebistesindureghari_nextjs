@@ -1,0 +1,526 @@
+/* Admin Orders Styles */
+.ao-container {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  padding: 20px;
+}
+
+/* Header */
+.ao-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ao-header-left h1 {
+  margin: 0 0 5px 0;
+  color: #1f2937;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.ao-header-left p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.ao-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f3f4f6;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #374151;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 15px;
+  transition: all 0.2s ease;
+}
+
+.ao-back-btn:hover {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.ao-header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.ao-export-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #000;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.ao-export-btn:hover {
+  background: #2563eb;
+}
+
+/* Controls */
+.ao-controls {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.ao-search-form {
+  margin-bottom: 20px;
+}
+
+.ao-search-input-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+  max-width: 400px;
+}
+
+.ao-search-icon {
+  position: absolute;
+  left: 12px;
+  color: #9ca3af;
+  z-index: 1;
+}
+
+.ao-search-input {
+  flex: 1;
+  padding: 10px 12px 10px 40px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px 0 0 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.ao-search-input:focus {
+  border-color: #000;
+}
+
+.ao-search-btn {
+  background: #000;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.ao-search-btn:hover {
+  background: #2563eb;
+}
+
+.ao-filter-controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.ao-status-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ao-filter-btn {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.ao-filter-btn:hover {
+  background: #e5e7eb;
+}
+
+.ao-filter-btn.ao-active {
+  background: #000;
+  color: white;
+  border-color: #000;
+}
+
+/* Error Message */
+.ao-error-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ao-retry-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* Orders Table */
+.ao-table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.ao-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ao-table th {
+  background: #f9fafb;
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.ao-table th.ao-sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.ao-table th.ao-sortable:hover {
+  background: #f3f4f6;
+}
+
+.ao-table th.ao-sortable.ao-asc::after {
+  content: '↑';
+  position: absolute;
+  right: 8px;
+  color: #000;
+}
+
+.ao-table th.ao-sortable.ao-desc::after {
+  content: '↓';
+  position: absolute;
+  right: 8px;
+  color: #000;
+}
+
+.ao-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+}
+
+.ao-table tr:hover {
+  background: #f9fafb;
+}
+
+.ao-order-id {
+  font-weight: 600;
+  color: #000;
+}
+
+.ao-customer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ao-customer-name {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.ao-customer-email {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.ao-order-amount {
+  font-weight: 600;
+  color: #059669;
+}
+
+.ao-status-select {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+}
+
+.ao-status-select.ao-pending {
+  background: #fef3c7;
+  color: #d97706;
+  border-color: #fcd34d;
+}
+
+.ao-status-select.ao-confirmed {
+  background: #dbeafe;
+  color: #2563eb;
+  border-color: #93c5fd;
+}
+
+.ao-status-select.ao-processing {
+  background: #e0e7ff;
+  color: #5b21b6;
+  border-color: #c4b5fd;
+}
+
+.ao-status-select.ao-shipped {
+  background: #fef3c7;
+  color: #d97706;
+  border-color: #fcd34d;
+}
+
+.ao-status-select.ao-delivered {
+  background: #d1fae5;
+  color: #059669;
+  border-color: #86efac;
+}
+
+.ao-status-select.ao-cancelled {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+.ao-status-select.ao-refunded {
+  background: #f3f4f6;
+  color: #6b7280;
+  border-color: #d1d5db;
+}
+
+.ao-order-date {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.ao-order-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ao-action-btn {
+  background: none;
+  border: 1px solid #d1d5db;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ao-action-btn:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.ao-view-btn:hover {
+  background: #dbeafe;
+  color: #2563eb;
+  border-color: #93c5fd;
+}
+
+/* No Orders */
+.ao-no-orders {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.ao-no-orders-message h3 {
+  margin: 0 0 8px 0;
+  color: #6b7280;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.ao-no-orders-message p {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* Pagination */
+.ao-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ao-pagination-btn {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.ao-pagination-btn:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.ao-pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ao-pagination-numbers {
+  display: flex;
+  gap: 4px;
+}
+
+.ao-pagination-number {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  min-width: 40px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.ao-pagination-number:hover {
+  background: #e5e7eb;
+}
+
+.ao-pagination-number.ao-active {
+  background: #000;
+  color: white;
+  border-color: #000;
+}
+
+/* Loading Spinner */
+.ao-loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.ao-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f4f6;
+  border-top: 4px solid #000;
+  border-radius: 50%;
+  animation: ao-spin 1s linear infinite;
+}
+
+@keyframes ao-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ao-loading-spinner p {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ao-container {
+    padding: 10px;
+  }
+
+  .ao-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .ao-header-actions {
+    justify-content: flex-end;
+  }
+
+  .ao-controls {
+    padding: 15px;
+  }
+
+  .ao-search-input-group {
+    max-width: 100%;
+  }
+
+  .ao-status-filters {
+    justify-content: center;
+  }
+
+  .ao-table-container {
+    overflow-x: auto;
+  }
+
+  .ao-table {
+    min-width: 800px;
+  }
+
+  .ao-table th,
+  .ao-table td {
+    padding: 12px 8px;
+    font-size: 13px;
+  }
+
+  .ao-customer-info {
+    min-width: 150px;
+  }
+
+  .ao-pagination {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .ao-pagination-numbers {
+    order: -1;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+}

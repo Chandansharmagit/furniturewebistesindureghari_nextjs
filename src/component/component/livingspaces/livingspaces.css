@@ -1,0 +1,158 @@
+/* livingspaces.css */
+
+/* Container wrapper with max-width and border-radius */
+.living-spaces-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 40px 40px;
+  border-radius: 12px;
+  background: #fff;
+}
+
+/* Header styles */
+.recomended {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.5px;
+}
+
+.texts {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #666;
+  margin: 0 0 50px 0;
+  letter-spacing: 0.3px;
+}
+
+/* Grid container */
+.flash-sale-grid-unique {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 0;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Grid items */
+.flash-grid-item-1 {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  background: #fff;
+}
+
+.flash-grid-item-1:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.flash-grid-item-1 a {
+  display: block;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+/* Images */
+#flash-sale-img-1 {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  border-radius: 12px;
+}
+
+.flash-grid-item-1:hover #flash-sale-img-1 {
+  transform: scale(1.05);
+}
+
+/* Overlay effect on hover */
+.flash-grid-item-1 a::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 12px;
+}
+
+.flash-grid-item-1:hover a::after {
+  opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .flash-sale-grid-unique {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  
+  .recomended {
+    font-size: 2.2rem;
+  }
+  
+  .texts {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .living-spaces-container {
+    padding: 30px 15px;
+  }
+  
+  .flash-sale-grid-unique {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .recomended {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+  
+  .texts {
+    font-size: 1rem;
+    margin-bottom: 40px;
+  }
+  
+  #flash-sale-img-1 {
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .living-spaces-container {
+    padding: 20px 10px;
+  }
+  
+  .flash-sale-grid-unique {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .recomended {
+    font-size: 1.6rem;
+  }
+  
+  .texts {
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+  }
+  
+  #flash-sale-img-1 {
+    height: 280px;
+  }
+}

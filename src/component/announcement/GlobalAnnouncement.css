@@ -1,0 +1,333 @@
+/* Global Announcement Styles */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Common Styles */
+.global-announcement-content {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #fffdf0 0%, #ffffff 100%);
+  color: #2C1810;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(139, 69, 19, 0.1);
+  position: relative;
+  overflow: hidden;
+  animation: slideIn 0.5s ease-out;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.global-announcement-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #DAA520, #B8860B, #DAA520);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+
+  0%,
+  100% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(100%);
+  }
+}
+
+.global-announcement-content.closing {
+  animation: slideOut 0.3s ease-in forwards;
+}
+
+@keyframes slideOut {
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* Close Button */
+.global-announcement-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(139, 69, 19, 0.05);
+  border: none;
+  color: #8B4513;
+  font-size: 1.5rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.global-announcement-close:hover {
+  background: rgba(245, 245, 220, 0.3);
+  transform: scale(1.1);
+}
+
+/* Header */
+.global-announcement-header {
+  text-align: center;
+  padding: 2rem 2rem 1rem 2rem;
+}
+
+.global-announcement-badge {
+  display: inline-block;
+  background: #DAA520;
+  color: #2C1810;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.global-announcement-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #F5F5DC, #FFFACD);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Body */
+.global-announcement-body {
+  padding: 0 2rem 2rem 2rem;
+}
+
+.global-announcement-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+  color: #4A2B15;
+}
+
+/* Highlights */
+.global-announcement-highlights {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(245, 245, 220, 0.1);
+  padding: 0.75rem 1rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid rgba(218, 165, 32, 0.3);
+}
+
+.highlight-icon {
+  font-size: 1.2rem;
+}
+
+/* CTA Button */
+.global-announcement-cta {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.global-announcement-btn {
+  background: linear-gradient(135deg, #DAA520, #B8860B);
+  color: #2C1810;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+}
+
+.global-announcement-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(218, 165, 32, 0.4);
+  background: linear-gradient(135deg, #B8860B, #DAA520);
+}
+
+/* Banner Version */
+.global-announcement-banner {
+  margin: 1rem auto;
+  max-width: 1600px;
+}
+
+.global-announcement-banner .global-announcement-content {
+  padding: 1rem;
+}
+
+.global-announcement-banner .global-announcement-header {
+  padding: 1.5rem 1rem 0.5rem 1rem;
+}
+
+.global-announcement-banner .global-announcement-title {
+  font-size: 1.5rem;
+}
+
+.global-announcement-banner .global-announcement-body {
+  padding: 0 1rem 1.5rem 1rem;
+}
+
+.global-announcement-banner .global-announcement-text {
+  font-size: 1rem;
+}
+
+.global-announcement-banner .global-announcement-highlights {
+  gap: 1rem;
+}
+
+/* Popup Version */
+.global-announcement-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20001;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.global-announcement-popup {
+  max-width: 500px;
+  width: 95%;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.global-announcement-popup .global-announcement-content {
+  padding: 10px;
+}
+
+.global-announcement-popup .global-announcement-header {
+  padding: 1.5rem 1.5rem 0.5rem;
+}
+
+.global-announcement-popup .global-announcement-title {
+  font-size: 1.6rem;
+}
+
+.global-announcement-popup .global-announcement-body {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.global-announcement-popup .global-announcement-text {
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.global-announcement-popup .highlight-item {
+  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .global-announcement-title {
+    font-size: 1.5rem;
+  }
+
+  .global-announcement-text {
+    font-size: 1rem;
+  }
+
+  .global-announcement-highlights {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .highlight-item {
+    justify-content: center;
+  }
+
+  .global-announcement-header {
+    padding: 1.5rem 1rem 0.5rem 1rem;
+  }
+
+  .global-announcement-body {
+    padding: 0 1rem 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .global-announcement-title {
+    font-size: 1.25rem;
+  }
+
+  .global-announcement-text {
+    font-size: 0.95rem;
+  }
+
+  .global-announcement-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .global-announcement-close {
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 28px;
+    height: 28px;
+    font-size: 1.25rem;
+  }
+}

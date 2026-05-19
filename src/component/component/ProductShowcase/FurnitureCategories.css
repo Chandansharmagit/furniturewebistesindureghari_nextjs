@@ -1,0 +1,321 @@
+/* Editorial Furniture Showcase - Premium Design System */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&display=swap');
+
+:root {
+  --editorial-bg: #fdfbf7;
+  --editorial-text: #1a1a1a;
+  --editorial-muted: #666666;
+  --editorial-gold: #c5a059;
+  --editorial-border: rgba(0, 0, 0, 0.08);
+  --aether-primary: #1a1a1a;
+}
+
+.furniture-categories {
+  background-color: var(--editorial-bg);
+  padding: 120px 0;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* Header Section */
+.header-section {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.title-badge {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--editorial-muted);
+  border: 1px solid var(--editorial-border);
+  padding: 8px 16px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 32px;
+}
+
+.main-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 84px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--editorial-text);
+  margin-bottom: 24px;
+}
+
+.serif-italic {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--editorial-gold);
+}
+
+.title-separator {
+  width: 120px;
+  height: 1px;
+  background: var(--editorial-border);
+  margin: 40px auto;
+}
+
+.main-subtitle {
+  font-size: 18px;
+  color: var(--editorial-muted);
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Category Filters */
+.category-filters {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 80px;
+}
+
+.filter-btn {
+  padding: 12px 32px;
+  border-radius: 100px;
+  border: 1px solid var(--editorial-border);
+  background: #ffffff;
+  color: var(--editorial-text);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  background: #f5f5f5;
+  border-color: #999;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #e6b85c 0%, #c5a059 100%);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+}
+
+/* Furniture Grid */
+.furniture-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 60px 40px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+}
+
+.furniture-grid.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Card Sizes for Masonry Look */
+.furniture-card.large {
+  grid-column: span 7;
+}
+
+.furniture-card.regular {
+  grid-column: span 5;
+}
+
+/* Furniture Cards */
+.furniture-card {
+  cursor: pointer;
+}
+
+.image-container {
+  position: relative;
+  border-radius: 40px;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 24px;
+}
+
+.furniture-card.regular .image-container {
+  aspect-ratio: 1 / 1;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.furniture-card:hover .image-container img {
+  transform: scale(1.05);
+}
+
+.category-label {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--editorial-text);
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Content */
+.furniture-card-content {
+  padding: 0 10px;
+}
+
+.furniture-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--editorial-text);
+  margin-bottom: 12px;
+}
+
+.furniture-description {
+  font-size: 16px;
+  color: var(--editorial-muted);
+  line-height: 1.5;
+  margin-bottom: 20px;
+  max-width: 90%;
+}
+
+.view-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--editorial-gold);
+  letter-spacing: 2px;
+  transition: gap 0.3s ease;
+}
+
+.furniture-card:hover .view-link {
+  gap: 18px;
+}
+
+/* Background Animated Orbs - Modernized */
+.gradient-orb {
+  display: block;
+  opacity: 0.15;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .main-title {
+    font-size: 64px;
+  }
+}
+
+@media (max-width: 1000px) {
+
+  .furniture-card.large,
+  .furniture-card.regular {
+    grid-column: span 12;
+  }
+
+  .image-container {
+    aspect-ratio: 4 / 3;
+    border-radius: 30px;
+  }
+
+  .main-title {
+    font-size: 52px;
+  }
+
+  .furniture-categories {
+    padding: 80px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .main-title {
+    font-size: 40px;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .filter-btn {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+
+  .furniture-title {
+    font-size: 24px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .gradient-orb {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .furniture-card {
+    border: 2px solid currentColor;
+  }
+
+  .filter-btn {
+    border-width: 3px;
+  }
+}
+
+/* Dark mode support (optional - add this class to body for dark mode) */
+.dark-mode .furniture-categories {
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+}
+
+.dark-mode .furniture-card {
+  background: rgba(26, 26, 46, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .main-title,
+.dark-mode .furniture-title {
+  color: #ffffff;
+}
+
+.dark-mode .main-subtitle,
+.dark-mode .furniture-description {
+  color: #9ca3af;
+}
+
+.dark-mode .filter-btn {
+  background: rgba(61, 36, 21, 0.8);
+  color: #ffffff;
+  border-color: rgba(139, 69, 19, 0.2);
+}
+
+.dark-mode .card-number {
+  background: rgba(26, 26, 46, 0.95);
+}

@@ -1,0 +1,364 @@
+/* Royal Special Offers Container */
+.royal-offers-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Offers Header */
+.offers-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.offers-header h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #dc143c;
+  margin: 0 0 15px 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.offers-header p {
+  font-size: 1.2rem;
+  color: #666666;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Offers Grid */
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+/* Offer Template Base */
+.offer-template {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 2px solid #f0f0f0;
+  position: relative;
+}
+
+.offer-template:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border-color: #d4af37;
+}
+
+/* Template Specific Styling */
+.template-1 {
+  border-top: 4px solid #d4af37;
+}
+
+.template-2 {
+  border-top: 4px solid #dc143c;
+}
+
+.template-3 {
+  border-top: 4px solid #228b22;
+}
+
+/* Offer Image */
+.offer-image {
+  height: 200px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.furniture-illustration,
+.decor-illustration,
+.kitchen-illustration {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Offer Content */
+.offer-content {
+  padding: 25px;
+}
+
+.offer-content h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 10px 0;
+}
+
+.offer-content p {
+  font-size: 1rem;
+  color: #666666;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+/* Offer Details */
+.offer-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid #d4af37;
+}
+
+.discount-badge {
+  background: linear-gradient(135deg, #dc143c 0%, #b91c3c 100%);
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
+}
+
+.template-1 .discount-badge {
+  background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+  color: #000000;
+}
+
+.template-3 .discount-badge {
+  background: linear-gradient(135deg, #228b22 0%, #1e7b1e 100%);
+}
+
+.coupon-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  color: #333333;
+}
+
+.coupon-code {
+  background: #ffffff;
+  color: #dc143c;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px dashed #dc143c;
+}
+
+.coupon-code:hover {
+  background: #dc143c;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.template-1 .coupon-code {
+  color: #d4af37;
+  border-color: #d4af37;
+}
+
+.template-1 .coupon-code:hover {
+  background: #d4af37;
+  color: #000000;
+}
+
+.template-3 .coupon-code {
+  color: #228b22;
+  border-color: #228b22;
+}
+
+.template-3 .coupon-code:hover {
+  background: #228b22;
+  color: #ffffff;
+}
+
+/* Shop Button */
+.shop-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #000000 0%, #333333 100%);
+  color: #ffffff;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.shop-btn:hover {
+  background: linear-gradient(135deg, #333333 0%, #555555 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.template-1 .shop-btn {
+  background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+  color: #000000;
+}
+
+.template-1 .shop-btn:hover {
+  background: linear-gradient(135deg, #f4e8c1 0%, #d4af37 100%);
+}
+
+.template-2 .shop-btn {
+  background: linear-gradient(135deg, #dc143c 0%, #b91c3c 100%);
+}
+
+.template-2 .shop-btn:hover {
+  background: linear-gradient(135deg, #b91c3c 0%, #8b1538 100%);
+}
+
+.template-3 .shop-btn {
+  background: linear-gradient(135deg, #228b22 0%, #1e7b1e 100%);
+}
+
+.template-3 .shop-btn:hover {
+  background: linear-gradient(135deg, #1e7b1e 0%, #196619 100%);
+}
+
+/* Offers Footer */
+.offers-footer {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 15px;
+  border: 2px dashed #d4af37;
+}
+
+.offers-footer p {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #dc143c;
+  margin: 0 0 10px 0;
+}
+
+.festival-note {
+  font-size: 1rem;
+  color: #666666;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashain-offers-container {
+    padding: 30px 15px;
+  }
+
+  .offers-header h2 {
+    font-size: 2rem;
+  }
+
+  .offers-header p {
+    font-size: 1rem;
+  }
+
+  .offers-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .offer-image {
+    height: 180px;
+  }
+
+  .offer-content {
+    padding: 20px;
+  }
+
+  .offer-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .offer-details {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .coupon-info {
+    align-self: stretch;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashain-offers-container {
+    padding: 20px 10px;
+  }
+
+  .offers-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .offer-image {
+    height: 160px;
+  }
+
+  .offer-content {
+    padding: 15px;
+  }
+
+  .offer-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .shop-btn {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+
+  .offers-footer {
+    padding: 20px 15px;
+  }
+
+  .offers-footer p {
+    font-size: 1rem;
+  }
+
+  .festival-note {
+    font-size: 0.9rem;
+  }
+}
+
+/* Animation for templates */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.offer-template {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.offer-template:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.offer-template:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.offer-template:nth-child(3) {
+  animation-delay: 0.3s;
+}

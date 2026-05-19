@@ -1,0 +1,209 @@
+/* Newproduct.css - ROYAL MASTERPIECE THEME */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --royal-gold: #c5a059;
+    --royal-black: #0a0a0a;
+    --royal-border: rgba(197, 160, 89, 0.2);
+}
+
+.newproduct-royal-section {
+    padding: 120px 0;
+    background-color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.newproduct-watermark {
+    position: absolute;
+    top: 40px;
+    right: -2%;
+    font-family: 'Playfair Display', serif;
+    font-size: 15rem;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.02);
+    pointer-events: none;
+    z-index: 0;
+    white-space: nowrap;
+    letter-spacing: 0.1em;
+}
+
+.newproduct-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* Header Section - Editorial Style */
+.newproduct-header-editorial {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 80px;
+    gap: 60px;
+}
+
+.editorial-eyebrow {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: #c5a059;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.newproduct-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: #1a1a1a;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+}
+
+.title-gold-accent {
+    height: 4px;
+    width: 120px;
+    background: linear-gradient(90deg, #c5a059, transparent);
+    margin-top: 30px;
+}
+
+.editorial-right {
+    max-width: 500px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Force right alignment */
+    text-align: right;    /* Modern right-aligned text pillar */
+    gap: 25px;
+}
+
+.newproduct-subtitle {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.8;
+    margin: 0;
+}
+
+.newproduct-view-all {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #1a1a1a;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: fit-content;
+    padding: 12px 0;
+    margin-right: -4px; /* Precision adjustment for SVG arrow tip */
+    border-bottom: 1.5px solid #c5a059;
+    transition: all 0.3s ease;
+}
+
+.newproduct-view-all:hover {
+    gap: 20px;
+    color: #c5a059;
+}
+
+/* Scroll Wrapper */
+.newproduct-scroll-wrapper {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+    padding: 20px 0 60px 0;
+}
+
+.newproduct-scroll-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.newproduct-scroll-wrapper:active {
+    cursor: grabbing;
+}
+
+.newproduct-grid {
+    display: flex;
+    gap: 32px;
+    width: max-content;
+}
+
+/* Set specific width for ProductCard in this section */
+.newproduct-grid>div {
+    flex: 0 0 350px; /* Increased width for better space distribution */
+}
+
+.newproduct-grid .card-media {
+    aspect-ratio: 1 / 1;
+    /* Square for a tighter look in horizontal scroll */
+}
+
+/* Removing redundant card styles - now handled by ProductCard.css */
+
+/* Loading State */
+.newproduct-loading {
+    padding: 100px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.royal-spinner {
+    width: 60px;
+    height: 60px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--royal-gold);
+    border-radius: 50%;
+    animation: royalSpin 1s linear infinite;
+}
+
+@keyframes royalSpin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+    .newproduct-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 25px;
+    }
+
+    .newproduct-title {
+        font-size: 36px;
+    }
+
+    .newproduct-container {
+        padding: 0 25px;
+    }
+}
+
+@media (max-width: 650px) {
+    .newproduct-card {
+        flex: 0 0 280px;
+    }
+
+    .card-content {
+        padding: 20px;
+    }
+
+    .card-name {
+        font-size: 18px;
+    }
+
+    .new-val {
+        font-size: 20px;
+    }
+}

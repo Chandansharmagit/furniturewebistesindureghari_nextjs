@@ -1,0 +1,922 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Outfit:wght@200;300;400;500;600;700;800&display=swap');
+
+/* --- LUXURY AVANT-GARDE DESIGN SYSTEM --- */
+:root {
+    --gold-primary: #C5A85A; /* Elegant light-champagne gold */
+    --gold-dark: #A6863C;
+    --gold-light: #F7EFCF;
+    --gold-glow: rgba(197, 168, 90, 0.2);
+    
+    --bg-base: #FFFFFF;
+    --bg-ambient: #FAF8F5; /* Fine linen cream background */
+    --text-dark: #121215;  /* Deep rich obsidian-ink */
+    --text-muted: #7E7E8A; /* Warm stone grey */
+    
+    --border-thin: rgba(197, 168, 90, 0.2);
+    --border-dark: rgba(197, 168, 90, 0.4);
+    
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Outfit', sans-serif;
+    
+    --transition-slow: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-fast: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- THE CANVAS WRAPPER --- */
+.modern-auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-ambient);
+    min-height: 100vh;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+    font-family: var(--font-sans);
+}
+
+/* Luxury Grid & Ambient Orbs Background */
+.modern-auth-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(197, 168, 90, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(197, 168, 90, 0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+    background-position: center center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.modern-auth-container::after {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(197, 168, 90, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* --- THE MASTER FLOATING BOX (ASYNCHRONOUS SPLIT) --- */
+.auth-floating-box {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    background: #FFFFFF;
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 
+        0 40px 100px -30px rgba(184, 144, 32, 0.08),
+        0 0 0 1px rgba(197, 168, 90, 0.15),
+        0 20px 50px -10px rgba(0, 0, 0, 0.03);
+    min-height: 660px;
+    position: relative;
+    z-index: 10;
+    animation: authEntrance 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes authEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* --- LEFT SIDE: THE ARTISAN SHOWCASE (HIGH-END DUOTONE & BLUR MASK) --- */
+.auth-side-image {
+    flex: 1.25;
+    background: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center center / cover no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    overflow: hidden;
+}
+
+/* Gorgeous Amber-Gold overlay with real sunlight glow */
+.auth-side-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(18, 18, 21, 0.92) 0%, 
+        rgba(40, 36, 28, 0.82) 60%, 
+        rgba(197, 168, 90, 0.25) 100%
+    );
+    z-index: 1;
+}
+
+/* Sunbeam Glow Flare */
+.auth-side-image::after {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(circle, rgba(197, 168, 90, 0.15) 0%, transparent 60%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.brand-content {
+    z-index: 3;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+}
+
+/* Ultra-Premium Glassmorphic floating card in sidebar */
+.brand-content-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 40px 35px;
+    box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.3),
+        inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.brand-content h2 {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 18px;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #FFFFFF 30%, #FDF6E2 70%, var(--gold-primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand-content p {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 30px;
+    font-weight: 300;
+    letter-spacing: 0.2px;
+}
+
+/* Features Bullet Layout */
+.features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.3px;
+}
+
+.feature-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(197, 168, 90, 0.12);
+    color: var(--gold-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    border: 1px solid rgba(197, 168, 90, 0.35);
+    flex-shrink: 0;
+    box-shadow: 0 0 12px rgba(197, 168, 90, 0.1);
+}
+
+.feature-icon svg {
+    width: 10px;
+    height: 10px;
+    stroke-width: 3px;
+}
+
+/* --- RIGHT SIDE: PREMIUM FORM SPACE (NO NESTED CARDS!) --- */
+.auth-form-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
+    padding: 50px 60px;
+    position: relative;
+    z-index: 2;
+}
+
+/* We strip double-box styling completely for perfect breathability */
+.auth-card {
+    width: 100%;
+    max-width: 390px;
+    background: transparent;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-card.register-card {
+    max-width: 420px;
+}
+
+.auth-header {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.auth-header h1 {
+    font-family: var(--font-serif);
+    font-size: 2.3rem;
+    color: var(--text-dark);
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.015em;
+    position: relative;
+}
+
+/* Elegant gold bottom bar accent */
+.auth-header h1::after {
+    content: '';
+    display: block;
+    width: 45px;
+    height: 2.5px;
+    background: var(--gold-primary);
+    margin-top: 10px;
+    border-radius: 2px;
+}
+
+.auth-header p {
+    font-family: var(--font-sans);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    margin-top: 12px;
+}
+
+/* Success Indicator */
+.success-icon, .error-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+}
+
+.success-icon {
+    background: var(--gold-light);
+    color: var(--gold-dark);
+    border: 1px solid var(--border-dark);
+    box-shadow: 0 8px 20px rgba(197, 168, 90, 0.08);
+}
+
+.error-icon {
+    background: rgba(239, 68, 68, 0.06);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+/* --- THE MASTER ROYAL INPUT SYSTEM (ARCHITECTURAL & ALIVE) --- */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+}
+
+.form-group label {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: var(--transition-fast);
+}
+
+/* Premium Physical Input Design */
+.form-group input {
+    width: 100%;
+    background: #FAF8F5; /* Beautiful soft raw linen cream background */
+    border: 1.5px solid rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    padding: 13px 16px;
+    color: var(--text-dark);
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    transition: var(--transition-slow);
+}
+
+.form-group input:hover {
+    border-color: rgba(197, 168, 90, 0.35);
+    background: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(197, 168, 90, 0.03);
+}
+
+/* Liquid gold focus system with interactive slide glow */
+.form-group input:focus {
+    outline: none;
+    background: #FFFFFF;
+    border-color: var(--gold-primary);
+    box-shadow: 
+        0 10px 24px rgba(197, 168, 90, 0.08),
+        0 0 0 4px var(--gold-glow);
+}
+
+.form-group input.error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.08) !important;
+    background: #FFFDFD;
+}
+
+.form-group input::placeholder {
+    color: #A3A3AC;
+}
+
+/* Password Input Shield */
+.password-input-container {
+    position: relative;
+}
+
+.password-input-container input {
+    padding-right: 48px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #B2B2BC;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    padding: 0;
+}
+
+.password-toggle:hover {
+    color: var(--gold-primary);
+    transform: translateY(-50%) scale(1.08);
+}
+
+/* Error Banner Alerts */
+.error-banner {
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    color: #c22f2f;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.76rem;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+/* Form Options: Remember & Recover */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    font-weight: 400;
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition-fast);
+}
+
+.checkbox-container:hover {
+    color: var(--text-dark);
+}
+
+.checkbox-container input {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    background: #FAF8F5;
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition-fast);
+}
+
+.checkbox-container input:checked {
+    background: var(--gold-primary);
+    border-color: var(--gold-primary);
+}
+
+.checkbox-container input:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 5px;
+    height: 9px;
+    border: solid #FFFFFF;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-container input:focus {
+    outline: none;
+    border-color: var(--gold-primary);
+}
+
+.forgot-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    transition: var(--transition-fast);
+    border-bottom: 1.5px dashed rgba(197, 168, 90, 0.3);
+    padding-bottom: 2px;
+}
+
+.forgot-link:hover {
+    color: var(--gold-dark);
+    border-bottom-color: var(--gold-dark);
+}
+
+/* --- THE LIQUID METALLIC GOLD KEY (BUTTONS) --- */
+.auth-btn {
+    background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 24px;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: var(--transition-slow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    box-shadow: 
+        0 10px 30px rgba(197, 168, 90, 0.2),
+        0 4px 10px rgba(0, 0, 0, 0.02);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Shimmer metallic glare sweep animation */
+.auth-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.35) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 15px 35px rgba(197, 168, 90, 0.35),
+        0 0 10px rgba(197, 168, 90, 0.2);
+}
+
+.auth-btn:hover:not(:disabled)::before {
+    left: 150%;
+}
+
+.auth-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.auth-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #E4E4E7;
+    color: #A1A1AA;
+    box-shadow: none;
+}
+
+.auth-btn-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255, 255, 255, 0.25);
+    border-top-color: #FFFFFF;
+    border-radius: 50%;
+    animation: authSpin 0.75s linear infinite;
+}
+
+@keyframes authSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* Recovery Alternate controls */
+.resend-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: var(--transition-slow);
+    position: relative;
+    overflow: hidden;
+    background: var(--gold-light);
+    border: 1px solid var(--border-dark);
+    color: var(--gold-dark);
+    border-radius: 10px;
+    padding: 13px 20px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: none;
+}
+
+.resend-btn:hover:not(:disabled) {
+    background: #F4E8C2;
+    color: var(--gold-dark);
+    border-color: var(--gold-primary);
+}
+
+.change-email-btn, .secondary-btn {
+    background: transparent;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    color: var(--text-muted);
+    border-radius: 10px;
+    padding: 13px 20px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: var(--transition-fast);
+}
+
+.change-email-btn:hover, .secondary-btn:hover {
+    background: #FAF8F5;
+    color: var(--text-dark);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* --- RECOVERY STATES (SPACIOUS & COMPACT) --- */
+.email-sent-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.email-sent-content .instructions {
+    background: #FAF8F5;
+    border: 1px solid rgba(197, 168, 90, 0.15);
+    border-radius: 20px;
+    padding: 24px;
+}
+
+.email-sent-content .instructions h3 {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gold-dark);
+    margin-bottom: 12px;
+}
+
+.email-sent-content .instructions ol {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    line-height: 1.5;
+}
+
+.email-sent-content .instructions ol li strong {
+    color: var(--text-dark);
+}
+
+.email-actions {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 12px;
+}
+
+/* Security sticky note */
+.security-note {
+    display: flex;
+    gap: 12px;
+    background: rgba(197, 168, 90, 0.04);
+    border: 1px solid rgba(197, 168, 90, 0.12);
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 25px;
+}
+
+.security-note .security-icon {
+    font-size: 1.1rem;
+    color: var(--gold-dark);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.security-note p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+.security-note p strong {
+    color: var(--gold-dark);
+}
+
+/* Loading & Token error screens */
+.loading-state, .invalid-token-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 0;
+}
+
+.loading-state .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(197, 168, 90, 0.1);
+    border-top-color: var(--gold-primary);
+    border-radius: 50%;
+    animation: authSpin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.loading-state p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.invalid-token-content .error-reasons {
+    background: rgba(239, 68, 68, 0.02);
+    border: 1px solid rgba(239, 68, 68, 0.1);
+    border-radius: 20px;
+    padding: 24px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.invalid-token-content .error-reasons h3 {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: #ef4444;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.invalid-token-content .error-reasons ul {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.86rem;
+}
+
+.token-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.token-actions .auth-btn, .token-actions .secondary-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}
+
+/* --- THE STRENGTH RADAR --- */
+.password-strength {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.strength-bar {
+    height: 5px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.strength-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease;
+}
+
+.strength-fill.strength-0 { width: 0%; }
+.strength-fill.strength-1 { width: 25%; background: #ef4444; }
+.strength-fill.strength-2 { width: 50%; background: #f97316; }
+.strength-fill.strength-3 { width: 75%; background: #f59e0b; }
+.strength-fill.strength-4 { width: 100%; background: #10b981; }
+
+.strength-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.strength-text {
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.strength-feedback {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+
+/* --- FOOTERS (COMPACT SEAMLESS BRIDGING) --- */
+.auth-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1.5px solid rgba(0, 0, 0, 0.05);
+}
+
+.auth-footer p {
+    font-family: var(--font-sans);
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 1.45;
+}
+
+.auth-link {
+    color: var(--gold-dark);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 4px;
+    transition: var(--transition-fast);
+}
+
+.auth-link:hover {
+    color: var(--text-dark);
+    text-shadow: 0 0 10px var(--gold-glow);
+}
+
+/* --- SCROLLBAR CHUTE --- */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #FFFFFF;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-primary);
+}
+
+/* --- RESPONSIVE GRACEFUL RETREAT --- */
+@media (max-width: 960px) {
+    .modern-auth-container {
+        padding: 30px 15px;
+    }
+    
+    .auth-floating-box {
+        border-radius: 24px;
+        min-height: auto;
+        max-width: 500px;
+    }
+
+    .auth-side-image {
+        display: none; /* Collapses left showcase image beautifully */
+    }
+
+    .auth-form-section {
+        padding: 40px 30px;
+    }
+    
+    .auth-card {
+        max-width: 100%;
+    }
+    
+    .auth-header {
+        text-align: center;
+    }
+    
+    .auth-header h1::after {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .auth-header .success-icon, .auth-header .error-icon {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .security-note {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modern-auth-container {
+        padding: 15px 5px;
+    }
+    
+    .auth-floating-box {
+        border-radius: 18px;
+    }
+
+    .auth-form-section {
+        padding: 30px 20px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .auth-header h1 {
+        font-size: 1.85rem;
+    }
+    
+    .email-actions {
+        grid-template-columns: 1fr;
+    }
+}

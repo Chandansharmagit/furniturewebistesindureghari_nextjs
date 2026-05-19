@@ -1,0 +1,319 @@
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import authService from '../../services/authService';
+import { motion } from 'framer-motion';
+import './Auth.css';
+
+export default function Register() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    password: '',
+    confirmPassword: '',
+    agreeToTerms: false
+  });
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.firstName.trim()) newErrors.firstName = 'Required';
+    if (!formData.lastName.trim()) newErrors.lastName = 'Required';
+    if (!formData.email.trim()) {
+      newErrors.email = 'Required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Invalid email';
+    }
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Required';
+    } else if (!/^[0-9]{10}$/.test(formData.phone)) {
+      newErrors.phone = '10 digits required';
+    }
+    if (formData.password.length < 6) {
+      newErrors.password = 'Min 6 characters';
+    }
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Mismatch';
+    }
+    if (!formData.agreeToTerms) {
+      newErrors.agreeToTerms = 'Agreement required';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    setIsLoading(true);
+    
+    try {
+      const result = await authService.register({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        address: ''
+      });
+      
+      if (result.success) {
+        navigate('/');
+      } else {
+        setErrors({ general: result.error });
+      }
+    } catch (error) {
+      setErrors({ general: 'Registration failed. Please try again.' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getPasswordStrength = () => {
+    const password = formData.password;
+    if (!password) return { strength: 0, label: '' };
+    let strength = 0;
+    if (password.length >= 6) strength++;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/\d/.test(password)) strength++;
+    const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+    return { strength: Math.min(strength, 4), label: labels[strength - 1] || '' };
+  };
+
+  const passwordStrength = getPasswordStrength();
+
+  return (
+    <div className="modern-auth-container">
+      <div className="auth-floating-box">
+        <div className="auth-side-image">
+          <div className="brand-content">
+            <motion.h2
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Luxury Design <br /> For Everyone
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              Create an account to unlock exclusive member pricing, early access to new collections, and bespoke consultation services.
+            </motion.p>
+            <div className="features">
+              {[
+                "Exclusive Lifetime Membership",
+                "Priority Delivery & Installation",
+                "3D Interior Visualization access"
+              ].map((text, i) => (
+                <motion.div 
+                  key={i} 
+                  className="feature"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6 + (i * 0.1) }}
+                >
+                  <span className="feature-icon">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                  <span>{text}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        <div className="auth-form-section">
+          <motion.div 
+            className="auth-card register-card"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="auth-header">
+              <h1>Create Legacy</h1>
+              <p>Join our elite furniture community</p>
+            </div>
+          
+          <form onSubmit={handleSubmit} className="auth-form">
+            {errors.general && (
+              <div className="error-banner">{errors.general}</div>
+            )}
+            
+            <div className="form-row">
+              <div className="form-group">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  className={errors.firstName ? 'error' : ''}
+                />
+              </div>
+              <div className="form-group">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  className={errors.lastName ? 'error' : ''}
+                />
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label>Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className={errors.email ? 'error' : ''}
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Phone Number</label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                className={errors.phone ? 'error' : ''}
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Password</label>
+              <div className="password-input-container">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className={errors.password ? 'error' : ''}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="1" y1="1" x2="23" y2="23"></line>
+                      <path d="M9 9a3 3 0 1 1 4 4"></path>
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  )}
+                </button>
+              </div>
+              {formData.password && (
+                <div className="password-strength">
+                  <div className="strength-bar">
+                    <div className={`strength-fill strength-${passwordStrength.strength}`}></div>
+                  </div>
+                  <span className="strength-label">{passwordStrength.label}</span>
+                </div>
+              )}
+            </div>
+            
+            <div className="form-group">
+              <label>Confirm Password</label>
+              <div className="password-input-container">
+                <input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  className={errors.confirmPassword ? 'error' : ''}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                >
+                  {showConfirmPassword ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="1" y1="1" x2="23" y2="23"></line>
+                      <path d="M9 9a3 3 0 1 1 4 4"></path>
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label className="checkbox-container">
+                <input
+                  type="checkbox"
+                  name="agreeToTerms"
+                  checked={formData.agreeToTerms}
+                  onChange={handleInputChange}
+                />
+                Agree to <Link to="/terms" className="auth-link">Terms</Link>
+              </label>
+              {errors.agreeToTerms && <span className="error-message">{errors.agreeToTerms}</span>}
+            </div>
+            
+            <button
+              type="submit"
+              name="register"
+              id="register"
+              className={`auth-btn ${isLoading ? 'loading' : ''}`}
+              disabled={isLoading}
+            >
+              {isLoading ? <div className="auth-btn-spinner"></div> : 'Create Account'}
+            </button>
+          </form>
+          
+          <div className="auth-footer">
+            <p>
+              Returning Member?
+              <Link to="/login" className="auth-link"> Sign In</Link>
+            </p>
+          </div>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}

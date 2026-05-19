@@ -1,0 +1,194 @@
+.modern-hero-section {
+  padding: 40px 0;
+  background-color: #ffffff;
+}
+
+.modern-hero-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.modern-hero-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 20px;
+  height: 480px; /* Reduced from 600px to be more proportionate */
+  min-height: 400px;
+  max-height: 500px;
+}
+
+.hero-main-banner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.hero-side-banners {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
+.side-banner {
+  position: relative;
+  width: 100%;
+  height: calc(50% - 10px);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.banner-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 0;
+}
+
+.banner-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.left-banner-content {
+  background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
+}
+
+.banner-subtitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  color: #fff;
+  font-weight: 400;
+  margin-bottom: 0px;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+}
+
+.banner-highlight {
+  font-family: 'Outfit', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.banner-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2rem;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+}
+
+.banner-price-tag {
+  background: rgba(90, 80, 70, 0.85); /* specific brownish dark tag */
+  color: #fff;
+  padding: 10px 20px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  width: fit-content;
+  border-radius: 4px;
+}
+
+.top-right-content, .bottom-right-content {
+  padding: 30px;
+  justify-content: flex-start;
+}
+
+.banner-title-small {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8rem;
+  color: #4a2b15;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.banner-desc {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 15px;
+  max-width: 70%;
+}
+
+.small-tag {
+  font-size: 0.95rem;
+  padding: 8px 15px;
+  background: rgba(90, 80, 70, 0.85);
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.7);
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #555;
+  transition: background 0.3s;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.carousel-arrow:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.left-arrow {
+  left: 20px;
+}
+
+.right-arrow {
+  right: 20px;
+}
+
+@media (max-width: 1024px) {
+  .modern-hero-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
+  }
+  .hero-main-banner {
+    height: 350px;
+  }
+  .side-banner {
+    height: 250px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-main-banner {
+    height: 300px;
+  }
+  .banner-subtitle {
+    font-size: 1.8rem;
+  }
+  .banner-title {
+    font-size: 1.5rem;
+  }
+  .banner-title-small {
+    font-size: 1.4rem;
+  }
+}

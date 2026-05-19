@@ -1,0 +1,612 @@
+/* Royal Special Offers Page Styles */
+
+.royal-special-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+
+    color: #000000;
+    min-height: 100vh;
+    padding: 0 40px;
+}
+
+/* Header Section */
+.royal-special-header {
+    padding: 40px 0;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 40px;
+}
+
+.royal-special-header-content {
+    margin-bottom: 20px;
+}
+
+.royal-special-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.royal-special-subtitle {
+    font-size: 1.1rem;
+    color: #000000;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.royal-special-breadcrumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.royal-special-breadcrumb-link {
+    color: #000000;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.royal-special-breadcrumb-link:hover {
+    opacity: 0.7;
+}
+
+.royal-special-breadcrumb-separator {
+    color: #666666;
+}
+
+.royal-special-breadcrumb-current {
+    color: #000000;
+    font-weight: 500;
+}
+
+/* Loading State */
+.royal-special-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.royal-special-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f0f0f0;
+    border-top: 3px solid #000000;
+    border-radius: 50%;
+    animation: dashainTwoSpin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes dashainTwoSpin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.royal-special-loading p {
+    color: #000000;
+    font-size: 1.1rem;
+}
+
+/* Error State */
+.royal-special-error {
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.royal-special-error h2 {
+    color: #000000;
+    margin-bottom: 15px;
+}
+
+.royal-special-error p {
+    color: #000000;
+    margin-bottom: 25px;
+}
+
+.royal-special-retry-btn {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: opacity 0.3s ease;
+}
+
+.royal-special-retry-btn:hover {
+    opacity: 0.8;
+}
+
+/* Hero Section */
+.royal-special-hero-section {
+    margin-bottom: 60px;
+    background-color: #f8f8f8;
+    border-radius: 15px;
+    padding: 40px;
+}
+
+.royal-special-hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.royal-special-hero-text h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.royal-special-hero-text p {
+    font-size: 1.1rem;
+    color: #000000;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.royal-special-hero-features {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.royal-special-feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    color: #000000;
+}
+
+.royal-special-feature-icon {
+    font-size: 1.2rem;
+}
+
+.royal-special-hero-images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.royal-special-hero-image-left,
+.royal-special-hero-image-right {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.royal-special-hero-image-left:hover,
+.royal-special-hero-image-right:hover {
+    transform: translateY(-5px);
+}
+
+.royal-special-hero-image-left img,
+.royal-special-hero-image-right img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.royal-special-hero-image-left:hover img,
+.royal-special-hero-image-right:hover img {
+    transform: scale(1.05);
+}
+
+.royal-special-image-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: #ffffff;
+    padding: 20px 15px 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Products Section */
+.royal-special-products-section {
+    margin-bottom: 60px;
+}
+
+.royal-special-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.royal-special-section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000000;
+    margin: 0;
+}
+
+.royal-special-view-all-btn {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.royal-special-view-all-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+    text-decoration: none;
+    color: white;
+}
+
+.royal-special-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.royal-special-product-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.royal-special-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.royal-special-product-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+}
+
+.royal-special-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.royal-special-product-card:hover .royal-special-product-image {
+    transform: scale(1.05);
+}
+
+.royal-special-discount-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #000000;
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.royal-special-product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.royal-special-product-card:hover .royal-special-product-overlay {
+    opacity: 1;
+}
+
+.royal-special-view-btn {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+}
+
+.royal-special-view-btn:hover {
+    transform: scale(1.05);
+}
+
+.royal-special-product-info {
+    padding: 20px;
+}
+
+.royal-special-product-category {
+    color: #666666;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.royal-special-product-title {
+    margin-bottom: 10px;
+}
+
+.royal-special-product-title a {
+    color: #000000;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.3;
+    transition: opacity 0.3s ease;
+}
+
+.royal-special-product-title a:hover {
+    opacity: 0.7;
+}
+
+.royal-special-product-description {
+    color: #000000;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.royal-special-product-pricing {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.royal-special-current-price {
+    color: #000000;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.royal-special-original-price {
+    color: #999999;
+    font-size: 1rem;
+    text-decoration: line-through;
+}
+
+.royal-special-savings {
+    color: #000000;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Special Banner */
+.royal-special-banner-section {
+    background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
+    color: #1a1a1a;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 60px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.royal-special-banner-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.royal-special-banner-text h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+}
+
+.royal-special-banner-text p {
+    color: #444;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.royal-special-banner-button {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.royal-special-banner-button:hover {
+    opacity: 0.8;
+}
+
+.royal-special-banner-text p {
+    margin-bottom: 5px;
+}
+
+.royal-special-banner-code {
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+.royal-special-shop-now-btn {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.royal-special-shop-now-btn:hover {
+    opacity: 0.8;
+}
+
+/* Contact Section */
+.royal-special-contact-section {
+    background-color: #f8f8f8;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.royal-special-contact-content h2 {
+    color: #000000;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.royal-special-contact-content p {
+    color: #000000;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.royal-special-contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.royal-special-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #000000;
+    font-size: 1rem;
+}
+
+.royal-special-contact-icon {
+    font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .royal-special-container {
+        padding: 0 15px;
+    }
+
+    .royal-special-title {
+        font-size: 2rem;
+    }
+
+    .royal-special-subtitle {
+        font-size: 1rem;
+    }
+
+    .royal-special-section-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .royal-special-section-title {
+        font-size: 1.5rem;
+    }
+
+    .royal-special-hero-section {
+        padding: 30px 20px;
+    }
+
+    .royal-special-hero-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .royal-special-hero-text h2 {
+        font-size: 1.8rem;
+    }
+
+    .royal-special-hero-images {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .royal-special-products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .royal-special-product-image-wrapper {
+        height: 200px;
+    }
+
+    .royal-special-banner-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .royal-special-contact-info {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .royal-special-title {
+        font-size: 1.8rem;
+    }
+
+    .royal-special-products-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .royal-special-breadcrumb {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .royal-special-breadcrumb-separator {
+        display: none;
+    }
+
+    .royal-special-hero-images {
+        grid-template-columns: 1fr;
+    }
+
+    .royal-special-hero-image-left img,
+    .royal-special-hero-image-right img {
+        height: 150px;
+    }
+}

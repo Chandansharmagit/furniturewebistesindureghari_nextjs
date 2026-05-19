@@ -1,0 +1,68 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+
+:root {
+  /* Color Palette */
+  --aether-primary: #1A1A1A;
+  --aether-secondary: #4A4A4A;
+  --aether-accent: #C5A059;
+  /* Subtle Gold */
+  --aether-bg: #FFFFFF;
+  --aether-bg-soft: #F9F9F9;
+  --aether-border: #E5E5E5;
+  --aether-text: #1A1A1A;
+  --aether-text-muted: #707070;
+
+  /* Typography */
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Outfit', sans-serif;
+
+  /* Spacing & Borders */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body, input, button, select, textarea {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  background-color: var(--aether-bg);
+  color: var(--aether-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+.serif {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-smooth);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}

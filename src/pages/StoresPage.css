@@ -1,0 +1,247 @@
+.stores-page {
+  background-color: #ffffff;
+  min-height: 100vh;
+  font-family: 'Outfit', sans-serif;
+  color: #1a1a1a;
+  padding-bottom: 120px;
+}
+
+.stores-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 60px;
+}
+
+/* Hero Section */
+.stores-hero {
+  position: relative;
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+  background-size: cover;
+  margin-bottom: 80px;
+}
+
+.stores-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+}
+
+.stores-hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  color: white;
+  max-width: 800px;
+}
+
+.stores-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #b59978;
+  background: white;
+  padding: 8px 16px;
+  border-radius: 100px;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.stores-main-title {
+  font-size: 84px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 24px;
+  letter-spacing: -2px;
+}
+
+.serif {
+  font-family: 'Playfair Display', serif;
+}
+
+.serif-italic {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 900;
+  color: #b59978;
+}
+
+.stores-main-subtitle {
+  font-size: 20px;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+/* Grid Section */
+.stores-grid-section {
+  padding-bottom: 80px;
+}
+
+.stores-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.store-card {
+  background: #fdfbf7;
+  border-radius: 32px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.store-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.1);
+  border-color: #b59978;
+}
+
+.store-card-image {
+  position: relative;
+  height: 300px;
+  overflow: hidden;
+}
+
+.store-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.store-card:hover .store-card-image img {
+  transform: scale(1.1);
+}
+
+.premium-tag {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #b59978;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.store-card-content {
+  padding: 32px;
+}
+
+.store-name {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.store-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.store-info-item {
+  display: flex;
+  gap: 12px;
+  color: #666;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.store-info-item svg {
+  color: #b59978;
+  flex-shrink: 0;
+}
+
+.store-info-item.highlight {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.store-directions-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 16px;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.1);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.store-directions-btn:hover {
+  background: #1a1a1a;
+  color: white;
+  border-color: #1a1a1a;
+}
+
+/* CTA Section */
+.stores-cta-section {
+  padding: 60px 0;
+}
+
+.stores-cta-card {
+  background: #1a1a1a;
+  color: white;
+  padding: 80px 40px;
+  border-radius: 40px;
+  text-align: center;
+}
+
+.stores-cta-card h2 {
+  font-size: 42px;
+  margin-bottom: 20px;
+}
+
+.stores-cta-card p {
+  font-size: 18px;
+  opacity: 0.7;
+  margin-bottom: 40px;
+}
+
+.consultation-btn {
+  padding: 20px 60px;
+  border-radius: 100px;
+  background: #b59978;
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.consultation-btn:hover {
+  background: #8b7355;
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(181, 153, 120, 0.4);
+}
+
+@media (max-width: 1200px) {
+  .stores-grid { grid-template-columns: repeat(2, 1fr); }
+  .stores-main-title { font-size: 64px; }
+}
+
+@media (max-width: 768px) {
+  .stores-grid { grid-template-columns: 1fr; }
+  .stores-main-title { font-size: 48px; }
+  .stores-container { padding: 0 20px; }
+  .stores-hero { height: 50vh; }
+}

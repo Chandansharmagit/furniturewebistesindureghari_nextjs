@@ -1,0 +1,246 @@
+.favorite-button-container {
+  position: relative;
+  display: inline-block;
+}
+
+.favorite-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.favorite-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.favorite-button:active {
+  transform: scale(0.95);
+}
+
+.favorite-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Size variants */
+.favorite-btn-small {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+}
+
+.favorite-btn-medium {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+}
+
+.favorite-btn-large {
+  width: 48px;
+  height: 48px;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+/* Button with text */
+.favorite-button:has(.favorite-text) {
+  border-radius: 25px;
+  padding: 8px 16px;
+  width: auto;
+  height: auto;
+}
+
+/* Icon styles */
+.favorite-icon {
+  transition: all 0.3s ease;
+}
+
+.favorite-btn-small .favorite-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.favorite-btn-medium .favorite-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.favorite-btn-large .favorite-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.favorite-icon-outline {
+  color: #666;
+  stroke-width: 2;
+}
+
+.favorite-icon-filled {
+  color: #e74c3c;
+  stroke-width: 2;
+  animation: heartBeat 0.6s ease-in-out;
+}
+
+/* Button states */
+.favorite-button-inactive {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.favorite-button-inactive:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: #e74c3c;
+}
+
+.favorite-button-active {
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid #e74c3c;
+}
+
+.favorite-button-active:hover {
+  background: rgba(231, 76, 60, 0.2);
+}
+
+/* Loading state */
+.favorite-button-loading {
+  pointer-events: none;
+}
+
+.favorite-loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #e74c3c;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Text styles */
+.favorite-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+}
+
+.favorite-button-active .favorite-text {
+  color: #e74c3c;
+}
+
+/* Login prompt */
+.favorite-login-prompt {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 1000;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+.favorite-login-prompt::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #333;
+}
+
+/* Animations */
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .favorite-btn-large {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+  }
+  
+  .favorite-btn-large .favorite-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .favorite-text {
+    font-size: 0.8rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .favorite-button-inactive {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .favorite-button-inactive:hover {
+    background: rgba(0, 0, 0, 0.9);
+  }
+  
+  .favorite-icon-outline {
+    color: #ccc;
+  }
+  
+  .favorite-text {
+    color: #fff;
+  }
+}

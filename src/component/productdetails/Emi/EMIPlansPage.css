@@ -1,0 +1,382 @@
+.emi-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20100;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.emi-modal {
+    background: #f8f8f8;
+    /* White background */
+    border-radius: 8px;
+    max-width: 900px;
+    width: 90%;
+    max-height: 90vh;
+    /* Limit height to 90% of viewport */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+    overflow: hidden;
+    transform: translateY(50px);
+    animation: slideIn 0.3s ease forwards;
+    position: absolute;
+    /* allow drag via left/top */
+    display: flex;
+    flex-direction: column;
+}
+
+.emi-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e0e0e0;
+    /* Light gray border */
+    cursor: move;
+    /* indicate draggable */
+    user-select: none;
+    /* avoid text selection while dragging */
+    -webkit-user-select: none;
+    touch-action: none;
+    /* improve touch drag */
+}
+
+.emi-modal-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #000000;
+    /* Black text */
+    margin: 0;
+}
+
+.emi-modal-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: #000000;
+    /* Black icon */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.emi-modal-close-btn:hover {
+    color: #333333;
+    /* Slightly lighter black */
+    transform: scale(1.1);
+}
+
+.emi-modal-content {
+    padding: 24px;
+    color: #333333;
+    /* Dark gray text */
+}
+
+.emi-modal-content p {
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+.emi-error-message {
+    font-size: 14px;
+    color: #000000;
+    /* Black for error */
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.emi-selection {
+    margin-bottom: 20px;
+}
+
+.emi-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.emi-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    color: #333333;
+    background: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.emi-select:focus {
+    outline: none;
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Bank Selection Grid */
+.emi-banks-grid-modal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.emi-bank-option {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.emi-bank-option:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.emi-bank-option.selected {
+    border-color: #007bff;
+    background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+    box-shadow: 0 4px 16px rgba(0, 123, 255, 0.2);
+}
+
+.emi-bank-option.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    color: #007bff;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.bank-logo {
+    font-size: 32px;
+    margin-right: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.bank-details {
+    flex: 1;
+}
+
+.bank-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 4px;
+}
+
+.bank-full-name {
+    font-size: 12px;
+    color: #666666;
+    margin-bottom: 6px;
+}
+
+.bank-rate {
+    font-size: 14px;
+    font-weight: 500;
+    color: #007bff;
+}
+
+.emi-tenure-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.emi-tenure-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #333333;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.emi-tenure-btn:hover {
+    background: #f5f5f5;
+    transform: scale(1.02);
+}
+
+.emi-tenure-btn.active {
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.emi-downpayment-slider {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.emi-downpayment-value {
+    font-size: 14px;
+    color: #333333;
+    text-align: center;
+}
+
+.emi-plans-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    /* White background for table */
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    /* Light gray border */
+    margin-bottom: 16px;
+}
+
+.emi-plans-table th,
+.emi-plans-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.emi-plans-table th {
+    font-weight: 600;
+    color: #000000;
+    background: #f5f5f5;
+    /* Light gray header background */
+}
+
+.emi-plans-table td {
+    color: #333333;
+    /* Dark gray for table content */
+}
+
+.emi-table-row {
+    animation: slideUp 0.5s ease forwards;
+    animation-delay: calc(var(--row-index) * 0.1s);
+}
+
+.emi-note {
+    font-size: 12px;
+    color: #666666;
+    /* Gray for note */
+    margin-top: 16px;
+    text-align: center;
+}
+
+.emi-proceed-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.emi-proceed-btn:hover {
+    background: #333333;
+    transform: scale(1.02);
+}
+
+.emi-proceed-btn:disabled {
+    background: #666666;
+    cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .emi-modal {
+        width: 95%;
+    }
+
+    .emi-tenure-buttons {
+        flex-direction: column;
+    }
+
+    .emi-tenure-btn {
+        width: 100%;
+    }
+
+    .emi-banks-grid-modal {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .emi-bank-option {
+        padding: 12px;
+    }
+
+    .bank-logo {
+        font-size: 24px;
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+    }
+
+    .bank-name {
+        font-size: 14px;
+    }
+
+    .bank-full-name {
+        font-size: 11px;
+    }
+
+    .bank-rate {
+        font-size: 12px;
+    }
+}

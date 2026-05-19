@@ -1,0 +1,823 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import SEOComponent from '../components/SEO/SEOComponent';
+import { motion } from 'framer-motion';
+import { Filter, ChevronRight } from 'lucide-react';
+import { API_BASE_URL } from '../config/api';
+import ProductCard from '../component/common/ProductCard/ProductCard';
+import './CategoryPage.css';
+
+// Category mapping for API calls - moved outside component to avoid re-creation
+const categoryMapping = {
+  'living-room': 'Living room',
+  'bedroom': 'Bedroom',
+  'dining-room': 'Dining room',
+  'office-and-study': 'Office and Study',
+  'modular-kitchens': 'Modular Kitchens',
+  'bathroom': 'Bathroom',
+  'lightings': 'Lightings',
+  'decor': 'Decor',
+  'outdoor': 'Outdoor',
+  'all-products': 'All Products',
+  'offers': 'Offers'
+};
+
+// Subcategory mapping for API calls
+const subcategoryMapping = {
+  'sofas': 'sofas',
+  'recliners': 'recliners',
+  'coffee-tables': 'coffee-tables',
+  'tv-units': 'tv-units',
+  'living-chairs': 'living-chairs',
+  'living-storage': 'living-storage',
+  'beds': 'beds',
+  'wardrobes': 'wardrobes',
+  'dressing-tables': 'dressing-tables',
+  'bedside-tables': 'bedside-tables',
+  'mattresses': 'mattresses',
+  'study-tables': 'study-tables',
+  'dining-sets': 'dining-sets',
+  'dining-tables': 'dining-tables',
+  'dining-chairs': 'dining-chairs',
+  'dining-benches': 'dining-benches',
+  'kitchen-accessories': 'kitchen-accessories',
+  'office-chairs': 'office-chairs',
+  'office-tables': 'office-tables',
+  'storage-solutions': 'storage-solutions',
+  'reception-furniture': 'reception-furniture',
+  'conference-tables': 'conference-tables',
+  'l-shaped': 'l-shaped',
+  'u-shaped': 'u-shaped',
+  'parallel': 'parallel',
+  'island': 'island',
+  'kitchen-acc': 'kitchen-acc',
+  'vanity-units': 'vanity-units',
+  'bathroom-cabinets': 'bathroom-cabinets',
+  'bathroom-mirrors': 'bathroom-mirrors',
+  'bathroom-storage': 'bathroom-storage',
+  'bathroom-accessories': 'bathroom-accessories'
+};
+
+// Hero background images per category
+const categoryHeroImages = {
+  'living-room': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=1800',
+  'bedroom': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=1800',
+  'dining-room': 'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&q=80&w=1800',
+  'office-and-study': 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=1800',
+  'modular-kitchens': 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=1800',
+  'bathroom': 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=1800',
+  'lightings': 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&q=80&w=1800',
+  'decor': 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&q=80&w=1800',
+  'outdoor': 'https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?auto=format&fit=crop&q=80&w=1800',
+  'all-products': 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&q=80&w=1800',
+  'offers': 'https://images.unsplash.com/photo-1600210491892-03d54741b8e2?auto=format&fit=crop&q=80&w=1800'
+};
+
+// Category display names and descriptions
+const categoryInfo = {
+  'living-room': {
+    title: 'Living Room Furniture',
+    description: 'Transform your living space with our premium collection of sofas, coffee tables, TV units, and more. Create a comfortable and stylish environment for relaxation and entertainment.',
+    keywords: 'living room furniture Nepal, sofas Nepal, coffee tables Nepal, TV units Nepal, recliners Nepal'
+  },
+  'bedroom': {
+    title: 'Bedroom Furniture',
+    description: 'Create your perfect sanctuary with our elegant bedroom furniture collection including beds, wardrobes, dressing tables, and bedside furniture.',
+    keywords: 'bedroom furniture Nepal, beds Nepal, wardrobes Nepal, dressing tables Nepal, mattresses Nepal'
+  },
+  'dining-room': {
+    title: 'Dining Room Furniture',
+    description: 'Gather around beautiful dining sets, tables, and chairs designed to make every meal memorable. Perfect for family dinners and entertaining guests.',
+    keywords: 'dining room furniture Nepal, dining sets Nepal, dining tables Nepal, dining chairs Nepal'
+  },
+  'office-and-study': {
+    title: 'Office & Study Furniture',
+    description: 'Boost productivity with our ergonomic office chairs, functional desks, and storage solutions designed for modern workspaces.',
+    keywords: 'office furniture Nepal, office chairs Nepal, office tables Nepal, study furniture Nepal'
+  },
+  'modular-kitchens': {
+    title: 'Modular Kitchens',
+    description: 'Design your dream kitchen with our modular kitchen solutions. Choose from L-shaped, U-shaped, parallel, and island kitchen designs.',
+    keywords: 'modular kitchens Nepal, kitchen design Nepal, L-shaped kitchen Nepal, U-shaped kitchen Nepal'
+  },
+  'bathroom': {
+    title: 'Bathroom Furniture',
+    description: 'Complete your bathroom with stylish vanity units, storage cabinets, mirrors, and accessories for a functional and beautiful space.',
+    keywords: 'bathroom furniture Nepal, vanity units Nepal, bathroom cabinets Nepal, bathroom mirrors Nepal'
+  },
+  'lightings': {
+    title: 'Lighting Solutions',
+    description: 'Illuminate your home with our diverse lighting collection including ceiling lights, table lamps, floor lamps, and decorative lighting.',
+    keywords: 'lighting Nepal, ceiling lights Nepal, table lamps Nepal, floor lamps Nepal, pendant lights Nepal'
+  },
+  'decor': {
+    title: 'Home Decor',
+    description: 'Add personality to your space with our curated collection of wall art, vases, cushions, rugs, and decorative accessories.',
+    keywords: 'home decor Nepal, wall art Nepal, vases Nepal, cushions Nepal, rugs Nepal, decorative items Nepal'
+  },
+  'outdoor': {
+    title: 'Outdoor Furniture',
+    description: 'Extend your living space outdoors with our weather-resistant garden furniture, outdoor dining sets, and patio accessories.',
+    keywords: 'outdoor furniture Nepal, garden furniture Nepal, patio furniture Nepal, outdoor dining Nepal'
+  },
+  'all-products': {
+    title: 'All Furniture Products',
+    description: 'Browse our complete collection of premium furniture and home accessories. Find everything you need to furnish your home.',
+    keywords: 'furniture Nepal, home furniture Nepal, office furniture Nepal, all products Nepal'
+  },
+  'offers': {
+    title: 'Special Offers & Deals',
+    description: 'Discover amazing deals and special offers on premium furniture. Save on your favorite pieces and transform your home for less.',
+    keywords: 'furniture offers Nepal, furniture deals Nepal, discount furniture Nepal, sale furniture Nepal'
+  }
+};
+
+// Modern Skeleton Loader for Product Cards
+const ProductSkeleton = () => (
+  <div className="bkf-skeleton-card">
+    <div className="bkf-skeleton-image">
+      <div className="bkf-skeleton-shimmer"></div>
+    </div>
+    <div className="bkf-skeleton-content">
+      <div className="bkf-skeleton-line title"></div>
+      <div className="bkf-skeleton-line meta"></div>
+      <div className="bkf-skeleton-line price"></div>
+    </div>
+  </div>
+);
+
+// Discount Banner Component
+const DiscountBanner = () => {
+  const navigate = useNavigate();
+
+  return (
+    <motion.div 
+      className="bkf-category__discount-banner"
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+    >
+      <div className="bkf-category__discount-content">
+        <span className="bkf-category__discount-tag">EXCLUSIVE</span>
+        <h2 className="bkf-category__discount-title">Seasonal Refresh</h2>
+        <p className="bkf-category__discount-subtitle">Premium Collections up to 40% Off</p>
+        <button
+          className="bkf-category__discount-cta"
+          onClick={() => navigate('/category/offers')}
+        >
+          Explore Collection
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
+const CategoryPage = () => {
+  const { category, subcategory } = useParams();
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [isFallbackActive, setIsFallbackActive] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [sortBy, setSortBy] = useState('newest');
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [selectedMaterials, setSelectedMaterials] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [fastDelivery, setFastDelivery] = useState(false);
+
+  // Subcategories for each main category
+  const subcategoriesByCategory = {
+    'living-room': [
+      { name: 'Sofas', id: 'sofas' },
+      { name: 'Recliners', id: 'recliners' },
+      { name: 'Coffee Tables', id: 'coffee-tables' },
+      { name: 'TV Units', id: 'tv-units' },
+      { name: 'Chairs', id: 'living-chairs' },
+      { name: 'Storage', id: 'living-storage' }
+    ],
+    'bedroom': [
+      { name: 'Beds', id: 'beds' },
+      { name: 'Wardrobes', id: 'wardrobes' },
+      { name: 'Dressing Tables', id: 'dressing-tables' },
+      { name: 'Bedside Tables', id: 'bedside-tables' },
+      { name: 'Mattresses', id: 'mattresses' },
+      { name: 'Study Tables', id: 'study-tables' }
+    ],
+    'dining-room': [
+      { name: 'Dining Sets', id: 'dining-sets' },
+      { name: 'Dining Tables', id: 'dining-tables' },
+      { name: 'Dining Chairs', id: 'dining-chairs' },
+      { name: 'Dining Benches', id: 'dining-benches' },
+      { name: 'Kitchen Accessories', id: 'kitchen-accessories' }
+    ],
+    'office-and-study': [
+      { name: 'Office Chairs', id: 'office-chairs' },
+      { name: 'Office Tables', id: 'office-tables' },
+      { name: 'Storage Solutions', id: 'storage-solutions' },
+      { name: 'Reception Furniture', id: 'reception-furniture' },
+      { name: 'Conference Tables', id: 'conference-tables' }
+    ],
+    'modular-kitchens': [
+      { name: 'L-Shaped Kitchen', id: 'l-shaped' },
+      { name: 'U-Shaped Kitchen', id: 'u-shaped' },
+      { name: 'Parallel Kitchen', id: 'parallel' },
+      { name: 'Island Kitchen', id: 'island' },
+      { name: 'Kitchen Accessories', id: 'kitchen-acc' }
+    ],
+    'bathroom': [
+      { name: 'Vanity Units', id: 'vanity-units' },
+      { name: 'Bathroom Cabinets', id: 'bathroom-cabinets' },
+      { name: 'Mirrors', id: 'bathroom-mirrors' },
+      { name: 'Storage Baskets', id: 'bathroom-storage' },
+      { name: 'Accessories', id: 'bathroom-accessories' }
+    ]
+  };
+
+  // Fetch products based on category/subcategory
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
+      setIsFallbackActive(false);
+
+      try {
+        let categoryName = '';
+
+        if (subcategory) {
+          // If subcategory is provided, use it for API call
+          categoryName = subcategoryMapping[subcategory] || subcategory;
+        } else if (category) {
+          // If only category is provided, use it for API call
+          categoryName = categoryMapping[category] || category;
+        }
+
+        // Use the products endpoint with categoryName parameter
+        let url = `${API_BASE_URL}/api/products?categoryName=${categoryName}&page=${currentPage}&limit=12&sort=${sortBy}`;
+
+        if (priceRange.min || priceRange.max) {
+          url += `&minPrice=${priceRange.min}&maxPrice=${priceRange.max}`;
+        }
+
+        let isFallback = false;
+        let fetchedProducts = [];
+        let fetchedTotalPages = 1;
+
+        // 1. Fetch category products
+        const response = await fetch(url);
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data)) {
+            fetchedProducts = data;
+          } else {
+            fetchedProducts = data.products || [];
+            fetchedTotalPages = data.totalPages || 1;
+          }
+        } else {
+          throw new Error('Failed to fetch category products');
+        }
+
+        // 2. If no products are found in this category, fetch general products as a fallback
+        if (fetchedProducts.length === 0) {
+          isFallback = true;
+          // Fetch featured/recent general products
+          const fallbackUrl = `${API_BASE_URL}/api/products?page=1&limit=12&sort=newest`;
+          const fallbackResponse = await fetch(fallbackUrl);
+          if (fallbackResponse.ok) {
+            const fallbackData = await fallbackResponse.json();
+            if (Array.isArray(fallbackData)) {
+              fetchedProducts = fallbackData;
+            } else {
+              fetchedProducts = fallbackData.products || [];
+              fetchedTotalPages = fallbackData.totalPages || 1;
+            }
+          }
+        }
+
+        setProducts(fetchedProducts);
+        setTotalPages(fetchedTotalPages);
+        setIsFallbackActive(isFallback);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [category, subcategory, currentPage, sortBy, priceRange]);
+
+  // Get current category info
+  const getCurrentCategoryInfo = () => {
+    if (subcategory) {
+      const subcatName = subcategory.split('-').map(word =>
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' ');
+      return {
+        title: subcatName,
+        description: `Explore our premium ${subcatName.toLowerCase()} collection. High-quality furniture designed for comfort, style, and durability.`,
+        keywords: `${subcatName.toLowerCase()} Nepal, buy ${subcatName.toLowerCase()} Nepal, ${subcatName.toLowerCase()} furniture Nepal`
+      };
+    }
+    return categoryInfo[category] || categoryInfo['all-products'];
+  };
+
+  const currentCategoryInfo = getCurrentCategoryInfo();
+
+  // Handle subcategory click
+  const handleSubcategoryClick = (subcatId) => {
+    navigate(`/category/${category}/${subcatId}`);
+  };
+
+  // Handle sort change
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+    setCurrentPage(1);
+  };
+
+
+
+  // Pagination
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Available filter options (you can fetch these from API in real implementation)
+  const availableMaterials = ['Sheesham Wood', 'Engineered Wood', 'Mango Wood', 'Ash Wood', 'Teak Wood', 'Oak Wood'];
+  const availableBrands = ['Wooden Street', 'Urban Ladder', 'Pepperfry', 'IKEA', 'Godrej Interio'];
+
+  // Handle material filter
+  const handleMaterialChange = (material) => {
+    setSelectedMaterials(prev =>
+      prev.includes(material)
+        ? prev.filter(m => m !== material)
+        : [...prev, material]
+    );
+    setCurrentPage(1);
+  };
+
+  // Handle brand filter
+  const handleBrandChange = (brand) => {
+    setSelectedBrands(prev =>
+      prev.includes(brand)
+        ? prev.filter(b => b !== brand)
+        : [...prev, brand]
+    );
+    setCurrentPage(1);
+  };
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    setPriceRange({ min: '', max: '' });
+    setSelectedMaterials([]);
+    setSelectedBrands([]);
+    setFastDelivery(false);
+    setCurrentPage(1);
+  };
+
+  // Sidebar Filter Component
+  const FilterSidebar = () => (
+    <motion.div
+      className="bkf-category__sidebar"
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.6, delay: 0.2 }}
+    >
+      <div className="bkf-category__sidebar-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Filter size={18} />
+          <h3>Filters</h3>
+        </div>
+        <button onClick={clearAllFilters} className="bkf-category__clear-all">Reset</button>
+      </div>
+
+      {/* Fast Delivery Filter */}
+      <div className="bkf-category__filter-section">
+        <label className="bkf-category__filter-checkbox">
+          <input
+            type="checkbox"
+            checked={fastDelivery}
+            onChange={(e) => setFastDelivery(e.target.checked)}
+          />
+          <span className="bkf-category__checkmark"></span>
+          FAST EXPRESS DELIVERY
+        </label>
+      </div>
+
+      {/* Price Range Filter */}
+      <div className="bkf-category__filter-section">
+        <h4 className="bkf-category__filter-title">PRICE BUDGET</h4>
+        
+        {/* Luxury Price Preset Tiers */}
+        <div className="bkf-category__price-presets">
+          {[
+            { label: 'All Budgets', min: '', max: '' },
+            { label: 'Under NPR 25K', min: '0', max: '25000' },
+            { label: 'NPR 25K – 75K', min: '25000', max: '75000' },
+            { label: 'NPR 75K – 150K', min: '75000', max: '150000' },
+            { label: 'Above NPR 150K', min: '150000', max: '999999' }
+          ].map((tier, idx) => {
+            const isSelected = priceRange.min === tier.min && priceRange.max === tier.max;
+            return (
+              <button
+                key={idx}
+                type="button"
+                className={`bkf-category__preset-pill ${isSelected ? 'active' : ''}`}
+                onClick={() => setPriceRange({ min: tier.min, max: tier.max })}
+              >
+                {tier.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Custom Price Range Inputs */}
+        <div className="bkf-category__custom-price-inputs">
+          <div className="price-input-wrapper">
+            <span className="price-currency">Rs.</span>
+            <input
+              type="number"
+              placeholder="Min"
+              value={priceRange.min}
+              onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
+              className="bkf-category__price-num-input"
+            />
+          </div>
+          <span className="price-input-to">to</span>
+          <div className="price-input-wrapper">
+            <span className="price-currency">Rs.</span>
+            <input
+              type="number"
+              placeholder="Max"
+              value={priceRange.max}
+              onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
+              className="bkf-category__price-num-input"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Material Filter */}
+      <div className="bkf-category__filter-section">
+        <h4 className="bkf-category__filter-title">MATERIAL</h4>
+        <div className="bkf-category__filter-options">
+          {availableMaterials.map(material => (
+            <label key={material} className="bkf-category__filter-option">
+              <input
+                type="checkbox"
+                checked={selectedMaterials.includes(material)}
+                onChange={() => handleMaterialChange(material)}
+              />
+              <span className="bkf-category__option-text">{material}</span>
+              <span className="bkf-category__option-count">(25)</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Brand Filter */}
+      <div className="bkf-category__filter-section">
+        <h4 className="bkf-category__filter-title">BRAND</h4>
+        <div className="bkf-category__filter-options">
+          {availableBrands.map(brand => (
+            <label key={brand} className="bkf-category__filter-option">
+              <input
+                type="checkbox"
+                checked={selectedBrands.includes(brand)}
+                onChange={() => handleBrandChange(brand)}
+              />
+              <span className="bkf-category__option-text">{brand}</span>
+              <span className="bkf-category__option-count">(15)</span>
+            </label>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  // Filter and sort products
+  const filteredProducts = products
+    .filter(product => {
+      // Price filter
+      const price = parseFloat(product.salePrice || product.price || 0);
+      const minPrice = parseFloat(priceRange.min || 1000);
+      const maxPrice = parseFloat(priceRange.max || 150000);
+      const priceInRange = price >= minPrice && price <= maxPrice;
+
+      // Material filter
+      const materialMatch = selectedMaterials.length === 0 ||
+        selectedMaterials.some(material =>
+          product.material?.toLowerCase().includes(material.toLowerCase()) ||
+          product.name.toLowerCase().includes(material.toLowerCase())
+        );
+
+      // Brand filter
+      const brandMatch = selectedBrands.length === 0 ||
+        selectedBrands.some(brand =>
+          product.brand?.toLowerCase().includes(brand.toLowerCase()) ||
+          product.name.toLowerCase().includes(brand.toLowerCase())
+        );
+
+      // Fast delivery filter
+      const deliveryMatch = !fastDelivery || product.fastDelivery === true;
+
+      return priceInRange && materialMatch && brandMatch && deliveryMatch;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'price-low':
+          return parseFloat(a.salePrice || a.price || 0) - parseFloat(b.salePrice || b.price || 0);
+        case 'price-high':
+          return parseFloat(b.salePrice || b.price || 0) - parseFloat(a.salePrice || a.price || 0);
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        case 'oldest':
+          return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
+        case 'newest':
+        default:
+          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+      }
+    });
+
+
+  // Function to render products with discount banner
+  const renderProductsWithDiscount = () => {
+    // const productsPerRow = 5;
+    const discountAfterProducts = 10;
+    const result = [];
+
+    filteredProducts.forEach((product, index) => {
+      // Add discount banner after every 10 products
+      if (index === discountAfterProducts && index < products.length) {
+        result.push(
+          <DiscountBanner key={`discount-${index}`} />
+        );
+      }
+
+      result.push(
+        <ProductCard key={product.id || product._id} product={product} />
+      );
+    });
+
+    return result;
+  };
+
+
+  return (
+    <>
+      <SEOComponent
+        title={`${currentCategoryInfo.title} | Bishwokarma Furniture - Premium Furniture in Nepal`}
+        description={currentCategoryInfo.description}
+        keywords={currentCategoryInfo.keywords}
+        ogTitle={`${currentCategoryInfo.title} | Bishwokarma Furniture`}
+        ogDescription={currentCategoryInfo.description}
+        canonicalUrl={`https://sinduregharifurniture.shop/category/${category}${subcategory ? `/${subcategory}` : ''}`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": currentCategoryInfo.title,
+          "description": currentCategoryInfo.description,
+          "url": `https://sinduregharifurniture.shop/category/${category}${subcategory ? `/${subcategory}` : ''}`,
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": currentCategoryInfo.title,
+            "description": currentCategoryInfo.description,
+            "numberOfItems": products.length,
+            "itemListElement": products.map((prod, idx) => ({
+              "@type": "ListItem",
+              "position": idx + 1,
+              "url": `https://sinduregharifurniture.shop/product/${prod.id || prod._id}`,
+              "name": prod.title || prod.name
+            }))
+          }
+        }}
+      />
+
+      <div className="bkf-category-page">
+        {/* Breadcrumb */}
+        <div className="bkf-category__breadcrumb">
+          <div className="bkf-category__container">
+            <nav>
+              <span onClick={() => navigate('/')} className="bkf-category__breadcrumb-link">Home</span>
+              <span className="bkf-category__breadcrumb-separator">/</span>
+              <span onClick={() => navigate(`/category/${category}`)} className="bkf-category__breadcrumb-link">
+                {categoryMapping[category] || category}
+              </span>
+              {subcategory && (
+                <>
+                  <span className="bkf-category__breadcrumb-separator">/</span>
+                  <span className="bkf-category__breadcrumb-current">
+                    {subcategory.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                  </span>
+                </>
+              )}
+            </nav>
+          </div>
+        </div>
+
+        {/* Category Hero Banner */}
+        <motion.div
+          className="bkf-category__header"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          {/* Background image */}
+          <div className="bkf-category__hero-bg">
+            <img
+              src={categoryHeroImages[category] || categoryHeroImages['all-products']}
+              alt={currentCategoryInfo.title}
+              loading="eager"
+            />
+          </div>
+          {/* Dark gradient overlay */}
+          <div className="bkf-category__hero-overlay" />
+
+          {/* Text content */}
+          <div className="bkf-category__hero-content">
+            <div className="bkf-category__container">
+              <motion.span
+                className="bkf-category__eyebrow"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                Collection
+              </motion.span>
+              <motion.h1
+                className="bkf-category__title"
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+              >
+                {currentCategoryInfo.title}
+              </motion.h1>
+              <motion.p
+                className="bkf-category__description"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.35 }}
+              >
+                {currentCategoryInfo.description}
+              </motion.p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Main Content with Sidebar */}
+        <div className="bkf-category__main-content">
+          <div className="bkf-category__container">
+            <div className="bkf-category__content-wrapper">
+              {/* Sidebar Filters */}
+              <FilterSidebar />
+
+              {/* Products Section */}
+              <div className="bkf-category__products-section">
+                {/* Subcategories (only show if on main category page) */}
+                {!subcategory && subcategoriesByCategory[category] && (
+                  <div className="bkf-category__subcategories-section">
+                    <h2 className="bkf-category__subcategories-title">Shop by Category</h2>
+                    <div className="bkf-category__subcategories-grid">
+                      {subcategoriesByCategory[category].map((subcat, idx) => (
+                        <motion.div
+                          key={subcat.id}
+                          className="bkf-category__subcategory-card"
+                          onClick={() => handleSubcategoryClick(subcat.id)}
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.4, delay: 0.3 + (idx * 0.05) }}
+                        >
+                          <div className="bkf-category__subcategory-content">
+                            <h3 className="bkf-category__subcategory-name">{subcat.name}</h3>
+                            <ChevronRight size={16} className="bkf-category__subcategory-arrow-icon" />
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Sort Controls */}
+                <div className="bkf-category__controls">
+                  <div className="bkf-category__controls-left">
+                    <span className="bkf-category__sort-label">Sort By</span>
+                    <select value={sortBy} onChange={handleSortChange} className="bkf-category__sort-select">
+                      <option value="newest">Recommended</option>
+                      <option value="oldest">Oldest First</option>
+                      <option value="price-low">Price: Low to High</option>
+                      <option value="price-high">Price: High to Low</option>
+                      <option value="name-asc">Name: A to Z</option>
+                      <option value="name-desc">Name: Z to A</option>
+                    </select>
+                  </div>
+                  {!loading && (
+                    <span className="bkf-category__results-count">
+                      {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+                    </span>
+                  )}
+                </div>
+
+                {/* Products Content */}
+                {isFallbackActive && (
+                  <div className="bkf-category__fallback-banner" style={{
+                    background: 'rgba(197, 160, 89, 0.08)',
+                    borderLeft: '4px solid #C5A059',
+                    padding: '20px 25px',
+                    borderRadius: '8px',
+                    marginBottom: '30px',
+                    fontFamily: "'Outfit', sans-serif"
+                  }}>
+                    <span style={{
+                      display: 'inline-block',
+                      fontSize: '11px',
+                      fontWeight: '700',
+                      letterSpacing: '1.5px',
+                      color: '#C5A059',
+                      marginBottom: '6px',
+                      textTransform: 'uppercase'
+                    }}>RECOMMENDED FOR YOU</span>
+                    <h3 style={{
+                      margin: 0,
+                      fontSize: '1.1rem',
+                      fontWeight: '500',
+                      color: '#1a1a1a',
+                      lineHeight: '1.5'
+                    }}>
+                      We are currently updating our <strong>{categoryMapping[category] || category}</strong> collection. In the meantime, explore our finest handcrafted furniture pieces below:
+                    </h3>
+                  </div>
+                )}
+
+                {loading ? (
+                  <div className="bkf-category__products-grid">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map(i => <ProductSkeleton key={i} />)}
+                  </div>
+                ) : error ? (
+                  <div className="bkf-category__error-state">
+                    <p>Error: {error}</p>
+                    <button onClick={() => window.location.reload()} className="bkf-category__retry-btn">
+                      Try Again
+                    </button>
+                  </div>
+                ) : products.length === 0 ? (
+                  <div className="bkf-category__empty-state">
+                    <h3>No products found</h3>
+                    <p>Try adjusting your filters or browse other categories.</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="bkf-category__products-grid">
+                      {filteredProducts.length > 0 ? renderProductsWithDiscount() : (
+                        <div className="bkf-category__no-results">
+                          <p>No products match your current filters.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                      <div className="bkf-category__pagination">
+                        <button
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className="bkf-category__pagination-btn"
+                        >
+                          Previous
+                        </button>
+
+                        {[...Array(totalPages)].map((_, index) => (
+                          <button
+                            key={index + 1}
+                            onClick={() => handlePageChange(index + 1)}
+                            className={`bkf-category__pagination-btn ${currentPage === index + 1 ? 'bkf-category__pagination-btn--active' : ''}`}
+                          >
+                            {index + 1}
+                          </button>
+                        ))}
+
+                        <button
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          className="bkf-category__pagination-btn"
+                        >
+                          Next
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default CategoryPage;

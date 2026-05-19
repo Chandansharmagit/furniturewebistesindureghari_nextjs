@@ -1,0 +1,287 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
+
+.furniture-brand-section {
+  padding: 120px 0;
+  background-color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.furniture-brand-watermark {
+  position: absolute;
+  top: 40px;
+  right: -5%;
+  font-family: 'Playfair Display', serif;
+  font-size: 15rem;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.02);
+  pointer-events: none;
+  z-index: 0;
+  white-space: nowrap;
+  letter-spacing: 0.1em;
+}
+
+.furniture-brand-container {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.furniture-brand-header-editorial {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 80px;
+  padding: 0 40px;
+  gap: 60px;
+}
+
+.editorial-eyebrow {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #d4af37;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.furniture-brand-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: #1a1a1a;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.title-gold-accent {
+  height: 4px;
+  width: 120px;
+  background: linear-gradient(90deg, #d4af37, transparent);
+  margin-top: 30px;
+}
+
+.editorial-right {
+  max-width: 500px;
+  padding-bottom: 30px;
+}
+
+.furniture-brand-description {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.furniture-brand-highlight {
+  color: #d4af37;
+  font-weight: 600;
+}
+
+.furniture-brand-more-btn {
+  background: none;
+  border: none;
+  color: #1a1a1a;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.furniture-brand-more-btn:hover {
+  color: #d4af37;
+}
+
+.furniture-brand-expanded-text {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slider Section */
+.furniture-brand-slider-container {
+  padding: 0;
+  margin-top: 20px;
+}
+
+.furniture-brand-swiper {
+  padding: 40px 40px 80px !important;
+}
+
+/* Card Styling */
+.brand-category-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.04);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.brand-category-card:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.08);
+  border-color: rgba(212, 175, 55, 0.2);
+}
+
+.brand-image-overlay {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.brand-category-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.brand-category-card:hover .brand-category-img {
+  transform: scale(1.1);
+}
+
+.card-hover-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.brand-category-card:hover .card-hover-mask {
+  opacity: 1;
+}
+
+.explore-text {
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 24px;
+  backdrop-filter: blur(10px);
+  background: rgba(0,0,0,0.1);
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.brand-category-card:hover .explore-text {
+  transform: translateY(0);
+}
+
+.brand-category-info {
+  padding: 25px;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff;
+}
+
+.brand-category-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: #1a1a1a;
+  margin: 0 0 12px;
+}
+
+.brand-category-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.brand-category-card:hover .brand-category-link {
+  color: #1a1a1a;
+}
+
+/* Swiper Navigation Customization */
+.furniture-brand-swiper .swiper-button-next,
+.furniture-brand-swiper .swiper-button-prev {
+  width: 50px;
+  height: 50px;
+  background: white;
+  color: #1a1a1a;
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.furniture-brand-swiper .swiper-button-next:after,
+.furniture-brand-swiper .swiper-button-prev:after {
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.furniture-brand-swiper .swiper-button-next:hover,
+.furniture-brand-swiper .swiper-button-prev:hover {
+  background: #d4af37;
+  color: white;
+}
+
+/* Swiper Pagination Customization */
+.furniture-brand-swiper .swiper-pagination-bullet {
+  width: 30px;
+  height: 3px;
+  border-radius: 0;
+  background: #ccc;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.furniture-brand-swiper .swiper-pagination-bullet-active {
+  background: #d4af37 !important;
+  opacity: 1 !important;
+  width: 50px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .furniture-brand-section {
+    padding: 60px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .furniture-brand-section {
+    padding: 50px 20px;
+  }
+
+  .furniture-brand-header {
+    margin-bottom: 40px;
+  }
+
+  .furniture-brand-title {
+    font-size: 2.2rem;
+  }
+}

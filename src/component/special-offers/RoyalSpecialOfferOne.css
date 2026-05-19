@@ -1,0 +1,575 @@
+/* Dashain Offer One Page Styles */
+
+.royal-offer-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    background-color: #ffffff;
+    color: #000000;
+    min-height: 100vh;
+    padding: 0 40px;
+}
+
+/* Header Section */
+.royal-header {
+    padding: 40px 0;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 40px;
+}
+
+.royal-header-content {
+    margin-bottom: 20px;
+}
+
+.royal-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.royal-subtitle {
+    font-size: 1.1rem;
+    color: #000000;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.royal-breadcrumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.royal-breadcrumb-link {
+    color: #000000;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.royal-breadcrumb-link:hover {
+    opacity: 0.7;
+}
+
+.royal-breadcrumb-separator {
+    color: #666666;
+}
+
+.royal-breadcrumb-current {
+    color: #000000;
+    font-weight: 500;
+}
+
+/* Loading State */
+.royal-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.royal-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f0f0f0;
+    border-top: 3px solid #000000;
+    border-radius: 50%;
+    animation: royal-special-spinner 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes royal-special-spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.royal-loading p {
+    color: #000000;
+    font-size: 1.1rem;
+}
+
+/* Error State */
+.royal-error {
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.royal-error h2 {
+    color: #000000;
+    margin-bottom: 15px;
+}
+
+.royal-error p {
+    color: #000000;
+    margin-bottom: 25px;
+}
+
+.royal-retry-btn {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: opacity 0.3s ease;
+}
+
+.royal-retry-btn:hover {
+    opacity: 0.8;
+}
+
+/* Hero Section */
+.royal-hero-section {
+    margin-bottom: 60px;
+    background-color: #f8f8f8;
+    border-radius: 15px;
+    padding: 40px;
+}
+
+.royal-hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.royal-hero-text h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.royal-hero-text p {
+    font-size: 1.1rem;
+    color: #000000;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.royal-hero-features {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.royal-feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    color: #000000;
+}
+
+.royal-feature-icon {
+    font-size: 1.2rem;
+}
+
+.royal-hero-images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.royal-hero-image-left,
+.royal-hero-image-right {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.royal-hero-image-left:hover,
+.royal-hero-image-right:hover {
+    transform: translateY(-5px);
+}
+
+.royal-hero-image-left img,
+.royal-hero-image-right img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.royal-hero-image-left:hover img,
+.royal-hero-image-right:hover img {
+    transform: scale(1.05);
+}
+
+.royal-special-image-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: #ffffff;
+    padding: 20px 15px 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Featured Section (keeping for backward compatibility) */
+.royal-featured-section {
+    margin-bottom: 60px;
+}
+
+.royal-section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000000;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.royal-featured-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.royal-featured-item {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.royal-featured-item:hover {
+    transform: translateY(-5px);
+}
+
+.royal-featured-image {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+.royal-featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.royal-featured-item:hover .royal-featured-image img {
+    transform: scale(1.05);
+}
+
+.royal-featured-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    padding: 30px 20px 20px;
+    color: #ffffff;
+}
+
+.royal-featured-content h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.royal-featured-content p {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    opacity: 0.9;
+}
+
+/* Products Section */
+.royal-products-section {
+    margin-bottom: 60px;
+}
+
+.royal-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.royal-product-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.royal-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.royal-product-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+}
+
+.dashain-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.royal-product-card:hover .dashain-product-image {
+    transform: scale(1.05);
+}
+
+.royal-discount-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #000000;
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.royal-product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.royal-product-card:hover .royal-product-overlay {
+    opacity: 1;
+}
+
+.royal-view-btn {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+}
+
+.royal-view-btn:hover {
+    transform: scale(1.05);
+}
+
+.royal-product-info {
+    padding: 20px;
+}
+
+.royal-product-category {
+    color: #666666;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.royal-product-title {
+    margin-bottom: 10px;
+}
+
+.royal-product-title a {
+    color: #000000;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.3;
+    transition: opacity 0.3s ease;
+}
+
+.royal-product-title a:hover {
+    opacity: 0.7;
+}
+
+.royal-product-description {
+    color: #000000;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.royal-product-pricing {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.royal-current-price {
+    color: #000000;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.royal-original-price {
+    color: #999999;
+    font-size: 1rem;
+    text-decoration: line-through;
+}
+
+.royal-savings {
+    color: #000000;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Call to Action Section */
+.royal-cta-section {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 60px 40px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 40px;
+}
+
+.royal-cta-content h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.royal-cta-content p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #ffffff;
+}
+
+.royal-cta-button {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: opacity 0.3s ease;
+    display: inline-block;
+}
+
+.royal-cta-button:hover {
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .royal-offer-container {
+        padding: 0 15px;
+    }
+
+    .royal-title {
+        font-size: 2rem;
+    }
+
+    .royal-subtitle {
+        font-size: 1rem;
+    }
+
+    .royal-hero-section {
+        padding: 30px 20px;
+    }
+
+    .royal-hero-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .royal-hero-text h2 {
+        font-size: 1.8rem;
+    }
+
+    .royal-hero-images {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .royal-featured-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .royal-products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .royal-product-image-wrapper {
+        height: 200px;
+    }
+
+    .royal-cta-section {
+        padding: 40px 20px;
+    }
+
+    .royal-cta-content h2 {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .royal-title {
+        font-size: 1.8rem;
+    }
+
+    .royal-products-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .royal-breadcrumb {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .royal-breadcrumb-separator {
+        display: none;
+    }
+
+    .royal-hero-images {
+        grid-template-columns: 1fr;
+    }
+
+    .royal-hero-image-left img,
+    .royal-hero-image-right img {
+        height: 150px;
+    }
+
+    .dashain-featured-image {
+        height: 200px;
+    }
+}

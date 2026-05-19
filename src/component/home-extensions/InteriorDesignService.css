@@ -1,0 +1,178 @@
+.interior-service-section {
+    background: #fbfbfb;
+    padding: 120px 0;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+}
+
+.interior-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.interior-image-col {
+    flex: 0 0 60%;
+    position: relative;
+    z-index: 1;
+}
+
+.interior-content-col {
+    flex: 0 0 40%;
+    position: relative;
+    z-index: 2;
+    margin-left: -10%; /* Creates the overlapping card effect */
+}
+
+.interior-image-wrapper {
+    width: 100%;
+    height: 650px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.08);
+}
+
+.interior-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.interior-image-wrapper:hover img {
+    transform: scale(1.05);
+}
+
+.interior-floating-card {
+    background: #ffffff;
+    padding: 60px;
+    border-radius: 16px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.03);
+}
+
+.interior-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: #f5eedf;
+    color: #c5a059;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.interior-floating-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #111;
+}
+
+.interior-floating-card p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+.service-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.service-features li {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+.service-features .dot {
+    width: 8px;
+    height: 8px;
+    background: #c5a059;
+    border-radius: 50%;
+}
+
+.interior-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.book-btn {
+    background: #111;
+    color: #fff;
+    border: none;
+    padding: 16px 30px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.book-btn:hover {
+    background: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.learn-more-btn {
+    background: transparent;
+    color: #111;
+    border: 1px solid #dcdcdc;
+    padding: 16px 30px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.learn-more-btn:hover {
+    border-color: #111;
+    background: #f9f9f9;
+}
+
+@media (max-width: 1024px) {
+    .interior-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+    
+    .interior-content-col {
+        margin-left: 0;
+        margin-top: -100px;
+        width: 90%;
+    }
+    
+    .interior-image-wrapper {
+        height: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .interior-service-section { padding: 80px 0; }
+    .interior-container { padding: 0 20px; }
+    .interior-content-col { width: 100%; margin-top: -60px; }
+    .interior-floating-card { padding: 30px; }
+    .interior-floating-card h2 { font-size: 32px; }
+    .interior-actions { flex-direction: column; }
+    .book-btn, .learn-more-btn { width: 100%; text-align: center; }
+}

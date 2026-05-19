@@ -1,0 +1,170 @@
+.craftsmanship-section {
+    background: #111;
+    color: #fff;
+    padding: 100px 0;
+    font-family: 'Inter', sans-serif;
+    margin-top: 50px;
+}
+
+.craft-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.craft-image-container {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.craft-main-image {
+    width: 100%;
+    height: 700px;
+    object-fit: cover;
+    border-radius: 24px;
+    opacity: 0.9;
+    transition: transform 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.craft-image-container:hover .craft-main-image {
+    transform: scale(1.03);
+}
+
+.craft-floating-card {
+    position: absolute;
+    bottom: -30px;
+    right: 40px;
+    background: #c5a059;
+    color: #fff;
+    padding: 35px;
+    border-radius: 20px;
+    max-width: 250px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.craft-floating-card .years {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 700;
+    display: block;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.craft-floating-card p {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.craft-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.craft-subtitle {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #c5a059; /* Accent gold */
+    margin-bottom: 15px;
+}
+
+.craft-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0 0 30px 0;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+}
+
+.craft-description {
+    font-size: 18px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 50px 0;
+}
+
+.craft-features {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.craft-feature {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+.craft-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #c5a059;
+    transition: all 0.3s;
+}
+
+.craft-feature:hover .craft-icon {
+    background: #c5a059;
+    color: #fff;
+    transform: translateY(-5px);
+}
+
+.craft-feature h4 {
+    font-size: 20px;
+    font-family: 'Playfair Display', serif;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+}
+
+.craft-feature p {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+    .craft-container {
+        grid-template-columns: 1fr;
+        gap: 60px;
+    }
+    
+    .craft-image-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .craft-main-image {
+        height: 500px;
+    }
+    
+    .craft-floating-card {
+        bottom: 20px;
+        right: 20px;
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .craftsmanship-section { padding: 60px 0; }
+    .craft-container { padding: 0 20px; }
+    .craft-title { font-size: 36px; }
+    .craft-main-image { height: 400px; }
+    .craft-floating-card .years { font-size: 40px; }
+}

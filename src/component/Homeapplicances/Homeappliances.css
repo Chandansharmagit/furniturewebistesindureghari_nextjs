@@ -1,0 +1,204 @@
+/* Home Appliances Section - Royal Theme Sync */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap');
+
+.homeappliances-section {
+    max-width: 1600px;
+    margin: 80px auto;
+    padding: 0 40px;
+    font-family: 'Inter', sans-serif;
+}
+
+.homeappliances-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 40px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding-bottom: 20px;
+}
+
+.homeappliances-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    color: #0a0a0a;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.homeappliances-view-all {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #c5a059;
+    /* Royal Gold */
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    /* Added properties from instruction */
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 5px;
+}
+
+.homeappliances-view-all:hover {
+    color: #0a0a0a;
+    transform: translateX(5px);
+}
+
+/* Grid Layout */
+.homeappliances-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+/* Card Styling */
+.homeappliances-card {
+    background: #fff;
+    /* border: 1px solid rgba(0, 0, 0, 0.06); */
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.homeappliances-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: #c5a059;
+}
+
+.homeappliances-image-wrapper {
+    position: relative;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    background: #f9f9f9;
+}
+
+.homeappliances-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.homeappliances-card:hover .homeappliances-image {
+    transform: scale(1.1);
+}
+
+.homeappliances-favorite {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 5;
+}
+
+.homeappliances-info {
+    padding: 24px;
+}
+
+.homeappliances-product-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    margin: 0 0 12px 0;
+    color: #0a0a0a;
+    line-height: 1.3;
+}
+
+.homeappliances-rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.homeappliances-stars {
+    color: #f59e0b;
+    font-size: 14px;
+    display: flex;
+    gap: 2px;
+}
+
+.homeappliances-rating-text {
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+}
+
+.homeappliances-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+/* Pricing */
+.homeappliances-pricing {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.homeappliances-discount-badge {
+    background: #0a0a0a;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.homeappliances-current-price {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0a0a0a;
+}
+
+.homeappliances-original-price {
+    font-size: 15px;
+    color: #999;
+    text-decoration: line-through;
+}
+
+/* Loading & Empty States */
+.homeappliances-loading {
+    padding: 100px;
+    text-align: center;
+    color: #c5a059;
+}
+
+@media (max-width: 1200px) {
+    .homeappliances-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .homeappliances-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .homeappliances-title {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 600px) {
+    .homeappliances-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .homeappliances-section {
+        padding: 0 20px;
+        margin: 40px auto;
+    }
+}

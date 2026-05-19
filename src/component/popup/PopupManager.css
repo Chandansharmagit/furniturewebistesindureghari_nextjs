@@ -1,0 +1,214 @@
+/* Floating Buttons Container */
+.floating-buttons {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 20000;
+  opacity: 0;
+  transform: translateX(100px);
+  transition: all 0.5s ease;
+}
+
+.floating-buttons.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Floating Action Buttons Base Styles */
+.floating-btn {
+  position: fixed;
+  bottom: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 20000;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.floating-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+  border-color: var(--hover-gold);
+}
+
+.floating-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.floating-btn:hover svg {
+  transform: scale(1.1);
+}
+
+/* Furniture Request Button */
+.furniture-request-btn {
+  left: 30px;
+  background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
+  color: var(--text-white);
+}
+
+.furniture-request-btn:hover {
+  background: linear-gradient(135deg, var(--primary-gold) 0%, var(--hover-gold) 100%);
+  color: var(--primary-black);
+}
+
+/* Feedback Button */
+.feedback-btn {
+  right: 30px;
+  background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
+  color: var(--text-white);
+}
+
+.feedback-btn:hover {
+  background: linear-gradient(135deg, var(--primary-gold) 0%, var(--hover-gold) 100%);
+  color: var(--primary-black);
+}
+
+/* Button Text */
+.floating-btn span {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .floating-buttons {
+    right: 20px;
+    bottom: 20px;
+    gap: 12px;
+  }
+
+  .floating-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+    gap: 10px;
+  }
+
+  .floating-btn span {
+    display: none;
+  }
+
+  .floating-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    padding: 0;
+  }
+
+  .floating-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-buttons {
+    right: 15px;
+    bottom: 15px;
+    gap: 10px;
+  }
+
+  .floating-btn {
+    width: 50px;
+    height: 50px;
+  }
+
+  .floating-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Animation for button appearance */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.floating-btn:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.floating-btn:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+/* Pulse animation for attention */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  50% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 0 10px rgba(255, 215, 0, 0.2);
+  }
+
+  100% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.floating-btn:hover {
+  animation: pulse 2s infinite;
+}
+
+/* Accessibility improvements */
+.floating-btn:focus {
+  outline: 2px solid var(--primary-gold);
+  outline-offset: 2px;
+}
+
+.floating-btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.floating-btn:focus-visible {
+  outline: 2px solid var(--primary-gold);
+  outline-offset: 2px;
+}
+
+/* Popup overlay styling */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20002;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+
+  to {
+    opacity: 1;
+    backdrop-filter: blur(5px);
+  }
+}

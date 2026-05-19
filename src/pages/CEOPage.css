@@ -1,0 +1,490 @@
+.ceo-page {
+  font-family: 'Outfit', sans-serif;
+  color: #1a1a1a;
+  background-color: #ffffff;
+  overflow-x: hidden;
+}
+
+/* Typography styles */
+.serif {
+  font-family: 'Playfair Display', serif;
+}
+
+.serif-italic {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 700;
+  color: #b59978;
+}
+
+/* Editorial Page Header */
+.ceo-editorial-header {
+  padding: 50px 0 10px;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.editorial-header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.editorial-pre-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: #c5a059;
+  text-transform: uppercase;
+}
+
+.editorial-title {
+  font-size: 38px;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.editorial-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: #777777;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.editorial-line-divider {
+  width: 80px;
+  height: 1px;
+  background-color: rgba(197, 160, 89, 0.4);
+  margin-top: 15px;
+}
+
+/* Container */
+.ceo-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Main Profile Grid Section */
+.ceo-profile-section {
+  padding: 60px 0 80px;
+  background: linear-gradient(180deg, #ffffff 0%, #faf8f6 100%);
+}
+
+.ceo-grid {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.creative-grid {
+  grid-template-columns: 7fr 5fr;
+  margin-top: 60px;
+}
+
+/* Left Column: Portrait Card */
+.ceo-image-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.ceo-image-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 2/3;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.12);
+  background-color: #e5e5e5;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ceo-image-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+.ceo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.ceo-image-card:hover .ceo-img {
+  transform: scale(1.05);
+}
+
+/* Premium frame borders inside image */
+.ceo-img-border-top {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 2;
+}
+
+.ceo-img-border-bottom {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 2;
+}
+
+.ceo-image-badge {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  background: rgba(26, 26, 26, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  z-index: 3;
+}
+
+.badge-year {
+  font-size: 18px;
+  font-weight: 800;
+  color: #c5a059;
+  letter-spacing: 1px;
+}
+
+.badge-text {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Right Column: Bio Content */
+.ceo-bio-content {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+
+.ceo-quote-box {
+  position: relative;
+  padding-left: 20px;
+  border-left: 3px solid #c5a059;
+}
+
+.quote-icon {
+  position: absolute;
+  top: -15px;
+  left: 10px;
+  color: rgba(197, 160, 89, 0.1);
+  z-index: 1;
+}
+
+.ceo-quote {
+  font-size: 22px;
+  line-height: 1.5;
+  color: #3a3a3a;
+  position: relative;
+  z-index: 2;
+}
+
+.ceo-bio-text {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ceo-bio-text h3 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 5px;
+}
+
+.ceo-bio-text p {
+  font-size: 16px;
+  color: #555555;
+  line-height: 1.7;
+}
+
+.ceo-bio-text strong {
+  color: #1a1a1a;
+}
+
+.ceo-signature-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.ceo-signature {
+  font-size: 32px;
+  color: #b59978;
+}
+
+.signature-font {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.ceo-signature-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ceo-signature-title strong {
+  font-size: 16px;
+  color: #1a1a1a;
+}
+
+.ceo-signature-title span {
+  font-size: 13px;
+  color: #888888;
+}
+
+/* Philosophies Section */
+.ceo-philosophies-section {
+  padding: 100px 0;
+  background-color: #fcfbfa;
+  border-top: 1px solid rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.section-header {
+  margin-bottom: 60px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.section-subtitle {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #b59978;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-size: 42px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.gold-divider {
+  width: 60px;
+  height: 2px;
+  background-color: #c5a059;
+  margin: 20px auto 0;
+}
+
+/* Bento Grid */
+.philosophies-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.philosophy-card {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 45px 35px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.02);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.philosophy-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px rgba(181, 153, 120, 0.08);
+  border-color: rgba(181, 153, 120, 0.25);
+}
+
+.card-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background-color: rgba(197, 160, 89, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gold-icon {
+  color: #c5a059;
+}
+
+.philosophy-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.philosophy-card p {
+  font-size: 15px;
+  color: #666666;
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.ceo-cta-section {
+  padding: 100px 0 120px;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.ceo-cta-card {
+  background-color: #1a1a1a;
+  background-image: radial-gradient(circle at 100% 100%, rgba(197, 160, 89, 0.15) 0%, transparent 60%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 30px;
+  padding: 80px 60px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+
+.ceo-cta-card h2 {
+  font-size: 40px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.ceo-cta-card p {
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  max-width: 650px;
+  margin-bottom: 15px;
+}
+
+.ceo-cta-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.ceo-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 32px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.ceo-btn.primary {
+  background-color: #c5a059;
+  color: #1a1a1a;
+  border: none;
+}
+
+.ceo-btn.primary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(197, 160, 89, 0.3);
+  background-color: #d4b26f;
+}
+
+.ceo-btn.secondary {
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ceo-btn.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: #ffffff;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .ceo-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+  
+  .ceo-image-wrapper {
+    order: -1;
+  }
+  
+  .philosophies-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .ceo-hero-section {
+    height: 40vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .ceo-main-title {
+    font-size: 40px;
+  }
+  
+  .ceo-profile-section {
+    padding: 60px 0;
+  }
+  
+  .ceo-bio-text h3 {
+    font-size: 26px;
+  }
+  
+  .section-title {
+    font-size: 32px;
+  }
+  
+  .ceo-cta-card {
+    padding: 50px 30px;
+  }
+  
+  .ceo-cta-card h2 {
+    font-size: 30px;
+  }
+  
+  .ceo-cta-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .ceo-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
