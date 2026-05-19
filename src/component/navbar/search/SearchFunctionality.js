@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ChevronRight, Sofa, Bed, Utensils, Flame } from 'lucide-react';
+import { Search, ChevronRight, Sofa, Bed, Utensils, Flame, Mic } from 'lucide-react';
 import '../navbar.css';
 
 const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onClose }) => {
@@ -11,9 +11,63 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
+    const [isListening, setIsListening] = useState(false);
+    const [voiceSupported, setVoiceSupported] = useState(false);
     const searchInputRef = useRef(null);
     const debounceTimeout = useRef(null);
+    const recognitionRef = useRef(null);
     const navigate = useNavigate();
+
+    // Check browser support for SpeechRecognition
+    useEffect(() => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            setVoiceSupported(true);
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-IN';
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                setSearchQuery(transcript);
+                debounceSearch(transcript);
+                setIsListening(false);
+            };
+
+            recognition.onerror = (event) => {
+                console.warn('Voice recognition error:', event.error);
+                setIsListening(false);
+            };
+
+            recognition.onend = () => {
+                setIsListening(false);
+            };
+
+            recognitionRef.current = recognition;
+        }
+    }, []);
+
+    const handleVoiceSearch = (e) => {
+        if (e) e.stopPropagation();
+        if (!voiceSupported || !recognitionRef.current) {
+            alert('Voice search is not supported in your browser. Please try Chrome or Edge.');
+            return;
+        }
+        if (isListening) {
+            recognitionRef.current.stop();
+            setIsListening(false);
+        } else {
+            // Open the search modal first if not open
+            if (!isSearchOpen) setIsSearchOpen(true);
+            setIsListening(true);
+            try {
+                recognitionRef.current.start();
+            } catch (err) {
+                setIsListening(false);
+            }
+        }
+    };
 
     const trendingSearches = ['Sofa Set', 'Dining Table', 'Bed Frame', 'Office Chair', 'Wardrobe'];
 
@@ -195,6 +249,15 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
                     readOnly
                     className="main-search-input mock-input"
                 />
+                {voiceSupported && (
+                    <div 
+                        className={`voice-search-icon ${isListening ? 'voice-listening' : ''}`}
+                        onClick={handleVoiceSearch}
+                        title={isListening ? 'Listening... Click to stop' : 'Search by voice'}
+                    >
+                        <Mic size={16} />
+                    </div>
+                )}
             </div>
 
             <AnimatePresence>
@@ -229,13 +292,22 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
                                     <input
                                         ref={searchInputRef}
                                         type="text"
-                                        placeholder="Type to search..."
+                                        placeholder={isListening ? '🎙️ Listening...' : 'Type to search...'}
                                         value={searchQuery}
                                         onChange={handleSearchChange}
                                         onKeyDown={handleKeyDown}
-                                        className="bkf-palette__input"
+                                        className={`bkf-palette__input ${isListening ? 'voice-active-input' : ''}`}
                                         autoComplete="off"
                                     />
+                                    {voiceSupported && (
+                                        <div 
+                                            className={`bkf-palette__voice-icon ${isListening ? 'voice-listening' : ''}`}
+                                            onClick={handleVoiceSearch}
+                                            title={isListening ? 'Listening... Click to stop' : 'Search by voice'}
+                                        >
+                                            <Mic size={20} />
+                                        </div>
+                                    )}
                                     <div className="bkf-palette__close-hint" onClick={() => {
                                         setIsSearchOpen(false);
                                         if (isMobile && onClose) onClose();

@@ -192,8 +192,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-container p {
@@ -451,8 +456,13 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-content {
@@ -468,8 +478,15 @@
 }
 
 @keyframes slideUp {
-  from { transform: translateY(50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .modal-close {
@@ -722,7 +739,7 @@
   .modal-product {
     flex-direction: column;
   }
-  
+
   .modal-main-image {
     height: 350px;
   }
@@ -732,38 +749,38 @@
   .furniture-catalog {
     padding: 15px;
   }
-  
+
   .catalog-header {
     padding: 30px 15px;
   }
-  
+
   .catalog-header h1 {
     font-size: 2rem;
   }
-  
+
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
   }
-  
+
   .modal-product {
     padding: 20px;
   }
-  
+
   .modal-actions {
     flex-wrap: wrap;
   }
-  
+
   .quantity-selector {
     width: 100%;
     margin-bottom: 15px;
     margin-right: 0;
   }
-  
+
   .quantity-btn {
     width: 50px;
   }
-  
+
   .quantity-input {
     width: 100%;
   }
@@ -773,33 +790,33 @@
   .catalog-header h1 {
     font-size: 1.8rem;
   }
-  
+
   .catalog-header p {
     font-size: 1rem;
   }
-  
+
   .products-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .product-actions,
   .modal-actions {
     flex-direction: column;
   }
-  
+
   .modal-main-image {
     height: 250px;
   }
-  
+
   .modal-thumbnails {
     justify-content: center;
   }
-  
+
   .modal-thumbnail {
     width: 70px;
     height: 70px;
   }
-  
+
   .modal-price {
     font-size: 1.8rem;
   }

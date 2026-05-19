@@ -2,244 +2,228 @@ import { Suspense } from "react";
 import "./globals.css";
 import ClientLayout from "./ClientLayout";
 
+/* ─────────────────────────────────────────────
+   SECTION A — Global SSR Metadata (Next.js App Router)
+   ───────────────────────────────────────────── */
 export const metadata = {
-  title: "Sindureghari Furniture | Best Wooden Furniture Store Near Me Nepal",
-  description: "Looking for the best wooden furniture store near me? Discover premium handcrafted royal sofas, beds, dining sets, modular kitchens, and home appliances at Sindureghari Furniture (Bishwokarma). Showrooms in Chandrapur & free shipping to Kathmandu, Lalitpur, Pokhara and all Nepal.",
-  keywords: "furniture near me, furniture store near me, best wooden furniture shop near me, bishwokarma furniture, sindureghari furniture, handcrafted sofa set Nepal, buy luxury bed online Nepal, royal dining table Kathmandu, modular kitchen showroom Nepal, premium wood furniture Rautahat, home decor showroom Nepal",
+  metadataBase: new URL("https://sinduregharifurniture.shop"),
+
+  title: {
+    default: "Sindureghari Furniture — Buy Sofas, Beds & Wooden Furniture Online Nepal",
+    template: "%s | Sindureghari Furniture Nepal",
+  },
+
+  description:
+    "Nepal's #1 handcrafted furniture store. Buy premium wooden sofas, beds, dining tables, wardrobes & office furniture online. Free delivery to Kathmandu, Lalitpur, Bhaktapur & Pokhara. Visit our Chandrapur showroom.",
+
+  keywords: [
+    "furniture", "furniture Nepal", "furniture in Kathmandu",
+    "buy furniture online Nepal", "furniture shop near me", "wooden furniture Nepal",
+    "sofa", "bed", "dining table", "wardrobe", "office chair", "lounge chair",
+    "L-shape sofa price in Nepal", "king size bed Kathmandu",
+    "sindureghari furniture", "bishwokarma furniture",
+    "handcrafted sofa set Nepal", "luxury bed online Nepal",
+    "modular kitchen Nepal", "teak wood furniture Nepal",
+    "furniture store Lalitpur", "furniture store Bhaktapur", "furniture Pokhara",
+  ],
+
   openGraph: {
-    title: "Sindureghari Furniture | Premium Handcrafted Wooden Furniture Store Near Me",
-    description: "handcrafted teak & rosewood royal sofas, luxury beds, dining sets, and kitchens. Visit our premium showroom or shop online with free delivery across Nepal.",
+    title: "Sindureghari Furniture — Premium Handcrafted Wooden Furniture Nepal",
+    description:
+      "Shop handcrafted teak & rosewood royal sofas, luxury beds, dining sets and modular kitchens. Free delivery across Nepal.",
     url: "https://sinduregharifurniture.shop/",
+    siteName: "Sindureghari Furniture",
     type: "website",
+    locale: "en_NP",
     images: [
       {
-        url: "https://sinduregharifurniture.shop/images/showroom-exterior.jpg",
+        url: "/images/showroom-exterior.jpg",
         width: 1200,
         height: 630,
-        alt: "Sindureghari Furniture Showroom Nepal"
-      }
-    ]
+        alt: "Sindureghari Furniture Showroom — Premium Wooden Furniture in Nepal",
+      },
+    ],
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "Sindureghari Furniture | Premium Handcrafted Wooden Furniture Store",
-    description: "Shop custom handcrafted royal furniture. Free shipping and white-glove setup all over Nepal.",
-    images: ["https://sinduregharifurniture.shop/images/showroom-exterior.jpg"]
+    title: "Sindureghari Furniture — Buy Wooden Furniture Online Nepal",
+    description:
+      "Shop custom handcrafted royal furniture. Free shipping and white-glove setup all over Nepal.",
+    images: ["/images/showroom-exterior.jpg"],
   },
+
   alternates: {
     canonical: "https://sinduregharifurniture.shop/",
-  }
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    "max-image-preview": "large",
+    "max-snippet": -1,
+    "max-video-preview": -1,
+  },
+
+  verification: {
+    // Add your real verification codes here after registering
+    google: "YOUR_GOOGLE_SEARCH_CONSOLE_CODE",
+    // yandex: "",
+    // bing: "YOUR_BING_WEBMASTER_CODE",
+  },
+
+  other: {
+    "geo.region": "NP",
+    "geo.placename": "Chandrapur, Rautahat",
+    "geo.position": "27.1352;85.2023",
+    "ICBM": "27.1352, 85.2023",
+  },
+};
+
+/* ─────────────────────────────────────────────
+   SECTION B — Sitewide JSON-LD Structured Data
+   Organization + WebSite + FurnitureStore + LocalBusiness
+   ───────────────────────────────────────────── */
+const SITE_URL = "https://sinduregharifurniture.shop";
+
+const siteJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    /* ── Organization ── */
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: "Sindureghari Furniture (Bishwokarma Woodcraft)",
+      url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/logo.png`,
+        width: 512,
+        height: 512,
+      },
+      description:
+        "Nepal's premium handcrafted wooden furniture brand. Sofas, beds, dining tables, wardrobes, modular kitchens & home appliances.",
+      telephone: "+977-9855040000",
+      email: "support@sinduregharifurniture.shop",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Showroom Highway Road, Chandrapur",
+        addressLocality: "Chandrapur",
+        addressRegion: "Rautahat",
+        postalCode: "44500",
+        addressCountry: "NP",
+      },
+      sameAs: [
+        "https://www.facebook.com/bishwokarmafurniture",
+        "https://www.instagram.com/sinduregharifurniture",
+      ],
+      foundingDate: "2015",
+      founder: {
+        "@type": "Person",
+        name: "Chandan Sharma",
+      },
+    },
+
+    /* ── FurnitureStore / LocalBusiness ── */
+    {
+      "@type": ["FurnitureStore", "LocalBusiness"],
+      "@id": `${SITE_URL}/#furniturestore`,
+      name: "Sindureghari Furniture Showroom",
+      url: SITE_URL,
+      logo: `${SITE_URL}/logo.png`,
+      image: `${SITE_URL}/images/showroom-exterior.jpg`,
+      description:
+        "Visit Nepal's largest handcrafted wooden furniture showroom. Over 10,000 sq ft of teak & rosewood royal sofa sets, luxury beds, dining tables, wardrobes and modular kitchens.",
+      telephone: "+977-9855040000",
+      priceRange: "Rs 5,000 – Rs 5,00,000",
+      currenciesAccepted: "NPR",
+      paymentAccepted: "Cash, Bank Transfer, eSewa, Khalti, EMI",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Showroom Highway Road, Chandrapur",
+        addressLocality: "Chandrapur",
+        addressRegion: "Rautahat",
+        postalCode: "44500",
+        addressCountry: "NP",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 27.1352,
+        longitude: 85.2023,
+      },
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          opens: "08:00",
+          closes: "20:00",
+        },
+      ],
+      areaServed: [
+        { "@type": "City", name: "Kathmandu" },
+        { "@type": "City", name: "Lalitpur" },
+        { "@type": "City", name: "Bhaktapur" },
+        { "@type": "City", name: "Pokhara" },
+        { "@type": "City", name: "Chandrapur" },
+        { "@type": "Country", name: "Nepal" },
+      ],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Sindureghari Furniture Collection",
+        itemListElement: [
+          { "@type": "OfferCatalog", name: "Living Room Furniture", url: `${SITE_URL}/category/living-room` },
+          { "@type": "OfferCatalog", name: "Bedroom Furniture", url: `${SITE_URL}/category/bedroom` },
+          { "@type": "OfferCatalog", name: "Dining Room Furniture", url: `${SITE_URL}/category/dining-room` },
+          { "@type": "OfferCatalog", name: "Office & Study Furniture", url: `${SITE_URL}/category/office-and-study` },
+          { "@type": "OfferCatalog", name: "Modular Kitchens", url: `${SITE_URL}/category/modular-kitchens` },
+        ],
+      },
+    },
+
+    /* ── WebSite with SearchAction ── */
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: "Sindureghari Furniture",
+      description: "Buy premium handcrafted wooden furniture online in Nepal",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
 };
 
 export default function RootLayout({ children }) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "FurnitureStore",
-        "@id": "https://sinduregharifurniture.shop/#furniturestore",
-        "name": "Sindureghari Furniture (Bishwokarma Woodcraft Showroom)",
-        "url": "https://sinduregharifurniture.shop/",
-        "logo": "https://sinduregharifurniture.shop/logo.png",
-        "image": "https://sinduregharifurniture.shop/images/showroom-exterior.jpg",
-        "description": "Nepal's premium handcrafted wooden furniture brand. Specialized in high-end teak, sisau, and solid rosewood royal sofa sets, luxury beds, modular kitchens, dining sets and home appliances near you.",
-        "telephone": "+977-9855040000",
-        "priceRange": "$$$",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "Sindureghari Showroom, Chandrapur Main Highway",
-          "addressLocality": "Chandrapur",
-          "addressRegion": "Rautahat",
-          "postalCode": "44500",
-          "addressCountry": "NP"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": 27.1352,
-          "longitude": 85.2023
-        },
-        "openingHoursSpecification": [
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": [
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday",
-              "Saturday",
-              "Sunday"
-            ],
-            "opens": "08:00",
-            "closes": "20:00"
-          }
-        ],
-        "sameAs": [
-          "https://www.facebook.com/bishwokarmafurniture",
-          "https://www.instagram.com/sinduregharifurniture"
-        ],
-        "areaServed": [
-          {
-            "@type": "AdministrativeArea",
-            "name": "Kathmandu"
-          },
-          {
-            "@type": "AdministrativeArea",
-            "name": "Lalitpur"
-          },
-          {
-            "@type": "AdministrativeArea",
-            "name": "Bhaktapur"
-          },
-          {
-            "@type": "AdministrativeArea",
-            "name": "Chandrapur"
-          },
-          {
-            "@type": "AdministrativeArea",
-            "name": "Pokhara"
-          },
-          {
-            "@type": "AdministrativeArea",
-            "name": "Nepal"
-          }
-        ]
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://sinduregharifurniture.shop/#website",
-        "url": "https://sinduregharifurniture.shop/",
-        "name": "Sindureghari Furniture",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://sinduregharifurniture.shop/search?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      },
-      {
-        "@type": "ItemList",
-        "@id": "https://sinduregharifurniture.shop/#sitelinks",
-        "name": "Sindureghari Furniture Navigation",
-        "itemListElement": [
-          {
-            "@type": "SiteNavigationElement",
-            "position": 1,
-            "name": "Living Room Furniture — Sofas, TV Units & Recliners",
-            "description": "Handcrafted wooden sofa sets, designer coffee tables, luxury TV cabinets, premium recliners and showcases for your living room.",
-            "url": "https://sinduregharifurniture.shop/category/living-room"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 2,
-            "name": "Bedroom Furniture — Royal Beds & Wardrobes",
-            "description": "King-size wooden beds, luxury wardrobes, bedside tables, dressing tables and premium mattresses.",
-            "url": "https://sinduregharifurniture.shop/category/bedroom"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 3,
-            "name": "Dining Room — Handcrafted Dining Sets",
-            "description": "4, 6 and 8 seater dining tables, premium chairs, crockery units and luxury bar cabinets.",
-            "url": "https://sinduregharifurniture.shop/category/dining-room"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 4,
-            "name": "Office & Study — Desks & Ergonomic Chairs",
-            "description": "Executive wooden desks, ergonomic office chairs, sturdy bookshelves and filing storage.",
-            "url": "https://sinduregharifurniture.shop/category/office-and-study"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 5,
-            "name": "Modular Kitchens — Custom Kitchen Design",
-            "description": "Elite kitchen cabinets, designer pantry units, granite counters and kitchen accessories.",
-            "url": "https://sinduregharifurniture.shop/category/modular-kitchens"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 6,
-            "name": "Bathroom Furniture — Vanities & Mirrors",
-            "description": "Bathroom vanity sets, LED wall mirrors, moisture-proof storage cabinets and bath accessories.",
-            "url": "https://sinduregharifurniture.shop/category/bathroom"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 7,
-            "name": "Lightings — Chandeliers & Lamps",
-            "description": "Grand chandeliers, decorative table and floor lamps, wall sconces and ceiling light fixtures.",
-            "url": "https://sinduregharifurniture.shop/category/lightings"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 8,
-            "name": "Decor — Wall Art, Rugs & Vases",
-            "description": "Canvas wall art, handwoven rugs, ceramic vases, cushions and decorative home accents.",
-            "url": "https://sinduregharifurniture.shop/category/decor"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 9,
-            "name": "Outdoor Furniture — Garden & Patio",
-            "description": "Weather-resistant garden chairs, teak porch swings, planters and outdoor storage.",
-            "url": "https://sinduregharifurniture.shop/category/outdoor"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 10,
-            "name": "The Journal — Interior Design Blog",
-            "description": "Design tips, furniture care guides, room makeover ideas and the latest trends in Nepal.",
-            "url": "https://sinduregharifurniture.shop/blog"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 11,
-            "name": "Visionary Leadership — Chandan Sharma (CEO)",
-            "description": "Meet our founder & CEO Chandan Sharma and explore the vision driving Nepal's finest woodcraft heritage.",
-            "url": "https://sinduregharifurniture.shop/ceo"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 12,
-            "name": "Contact Us",
-            "description": "Get in touch with Sindureghari Furniture. Visit our showroom or call for custom orders.",
-            "url": "https://sinduregharifurniture.shop/contact"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 13,
-            "name": "Help & Support",
-            "description": "FAQs, warranty claims, delivery tracking and customer support.",
-            "url": "https://sinduregharifurniture.shop/help-and-support"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 14,
-            "name": "Careers at Bishwokarma",
-            "description": "Join our team. Open positions in design, carpentry, sales and management.",
-            "url": "https://sinduregharifurniture.shop/careers"
-          },
-          {
-            "@type": "SiteNavigationElement",
-            "position": 15,
-            "name": "Special Offers & Deals",
-            "description": "Exclusive discounts, seasonal sales and royal special furniture collections.",
-            "url": "https://sinduregharifurniture.shop/category/offers"
-          }
-        ]
-      }
-    ]
-  };
-
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en-NP" className="h-full antialiased">
       <head>
+        {/* Preconnect to critical origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
+
+        {/* Preload hero font for LCP */}
+        <link
+          rel="preload"
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+          as="style"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+          rel="stylesheet"
+        />
+
+        {/* Sitewide JSON-LD */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
         />
       </head>
       <body className="min-h-full flex flex-col">

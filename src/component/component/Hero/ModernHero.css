@@ -164,6 +164,24 @@
   right: 20px;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.h1-visual {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: inherit;
+}
+
 @media (max-width: 1024px) {
   .modern-hero-grid {
     grid-template-columns: 1fr;

@@ -16,9 +16,9 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
         images,
         imageUrl,
         category,
-     
+
         brand,
-    
+
         reviewCount
     } = product;
 
@@ -51,7 +51,7 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
             transition={{ duration: 0.6 }}
         >
             <Link to={`/product/${productId}`} className="card-link-overlay" aria-label={name} />
-            
+
             <div className="card-media">
                 <img
                     src={displayImage}
@@ -81,7 +81,7 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
                     </svg>
                     <span>{brand || 'GANDAKI PROVINCE, NEPAL'}</span>
                 </div>
-                
+
                 <h3 className="product-title-bold">
                     {name.split(' ').slice(0, 4).join(' ')}
                 </h3>
@@ -93,7 +93,7 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
                         <img src="https://i.pravatar.cc/100?img=8" alt="user3" className="avatar" />
                         <div className="avatar-more">+12</div>
                     </div>
-                    
+
                     <button className="navigate-btn">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                             <line x1="7" y1="17" x2="17" y2="7"></line>

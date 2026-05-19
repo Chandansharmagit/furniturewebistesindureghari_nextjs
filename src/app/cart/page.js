@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import AddToCart from '@/component/cart/AddToCart';
 
