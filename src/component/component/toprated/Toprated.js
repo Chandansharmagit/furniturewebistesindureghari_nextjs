@@ -47,7 +47,7 @@ const TopratedBrand = () => {
           </div>
           <div className="toprated-brand-description-wrapper">
             <p className="toprated-brand-description">
-              Experience the pinnacle of comfort and style with <span className="toprated-brand-highlight">Bishwokarma's</span> top-rated furniture collections. Handpicked by our customers and designers alike for their exceptional quality and timeless appeal.
+              Experience the pinnacle of comfort and style with <span className="toprated-brand-highlight">Sindureghari's</span> top-rated furniture collections. Handpicked by our customers and designers alike for their exceptional quality and timeless appeal.
               {isExpanded && (
                 <span className="toprated-brand-expanded-text">
                   {" "}Each piece in our top-rated selection has been rigorously tested for durability and ergonomic perfection. From plush lounge seating to master-crafted bed frames, we bring you the very best of Nepalese wooden artistry combined with global design trends.

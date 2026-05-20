@@ -90,7 +90,7 @@ const Footer = () => {
               <FaGem className="royal-crest-icon" />
               <div className="branding-text">
                 <span className="royal-pre-title">Elite Living</span>
-                <h2 className="royal-main-title">Bishwokarma</h2>
+                <h2 className="royal-main-title">Sindureghari</h2>
                 <span className="royal-post-title">Furniture & Decor</span>
               </div>
             </div>
@@ -200,7 +200,7 @@ const Footer = () => {
         {/* Bottom Section: Copyright */}
         <motion.div variants={itemVariants} className="royal-footer-bottom">
           <div className="footer-bottom-content">
-            <p>&copy; {new Date().getFullYear()} Bishwokarma Furniture Pvt. Ltd. | All Rights Reserved</p>
+            <p>&copy; {new Date().getFullYear()} Sindureghari Furniture Showroom | All Rights Reserved</p>
             <div className="legal-links">
               <a href="/privacy-policy">Privacy Charter</a>
               <span>|</span>

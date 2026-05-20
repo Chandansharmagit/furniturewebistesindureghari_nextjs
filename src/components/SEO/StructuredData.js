@@ -27,7 +27,7 @@ export const ProductStructuredData = ({ product }) => {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name,
-    "description": product.description || `Premium ${product.category} from Sindureghari Furniture (Bishwokarma) — handcrafted in Nepal`,
+    "description": product.description || `Premium ${product.category} from Sindureghari Furniture — handcrafted in Nepal`,
     "image": product.images || [product.image],
     "brand": {
       "@type": "Brand",
@@ -37,7 +37,7 @@ export const ProductStructuredData = ({ product }) => {
     "sku": product.sku || product.id,
     "manufacturer": {
       "@type": "Organization",
-      "name": "Sindureghari Furniture (Bishwokarma)",
+      "name": "Sindureghari Furniture",
       "url": SITE_URL
     },
     "offers": {
@@ -122,7 +122,7 @@ export const OrganizationStructuredData = () => {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": SITE_NAME,
-    "alternateName": ["Bishwokarma Furniture", "सिन्दुरेघारी फर्निचर"],
+    "alternateName": ["Sindureghari", "सिन्दुरेघारी फर्निचर"],
     "url": SITE_URL,
     "logo": {
       "@type": "ImageObject",
@@ -161,7 +161,7 @@ export const WebsiteStructuredData = () => {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": SITE_NAME,
-    "alternateName": "Bishwokarma Furniture",
+    "alternateName": "Sindureghari",
     "url": SITE_URL,
     "potentialAction": {
       "@type": "SearchAction",
@@ -180,8 +180,8 @@ export const LocalBusinessStructuredData = () => {
   const businessData = {
     "@context": "https://schema.org",
     "@type": "FurnitureStore",
-    "name": "Sindureghari Furniture (Bishwokarma)",
-    "alternateName": "Bishwokarma Furniture",
+    "name": "Sindureghari Furniture Showroom",
+    "alternateName": "सिन्दुरेघारी फर्निचर",
     "description": "Nepal's premium handcrafted furniture store in Sindureghari, Chandrapur. Specializing in wooden sofas, beds, dining sets, office furniture & custom designs with free delivery across Nepal.",
     "url": SITE_URL,
     "telephone": "+977-9800000000",

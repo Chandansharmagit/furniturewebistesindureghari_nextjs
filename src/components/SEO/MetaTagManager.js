@@ -2,7 +2,7 @@
 
 const SITE_URL = 'https://sinduregharifurniture.shop';
 const SITE_NAME = 'Sindureghari Furniture';
-const BRAND_FULL = 'Sindureghari Furniture (Bishwokarma)';
+const BRAND_FULL = 'Sindureghari Furniture';
 
 export class MetaTagManager {
   static generateProductMeta(product) {
@@ -61,7 +61,7 @@ export class MetaTagManager {
   static generateHomeMeta() {
     return {
       title: `${SITE_NAME} | Nepal's #1 Premium Handcrafted Furniture Store`,
-      description: "Shop Nepal's finest handcrafted furniture at Sindureghari Furniture (Bishwokarma). Premium wooden sofas, beds, dining tables & office furniture. ✓ Free Delivery ✓ EMI Available ✓ Custom Designs. Sindureghari, Chandrapur.",
+      description: "Shop Nepal's finest handcrafted furniture at Sindureghari Furniture. Premium wooden sofas, beds, dining tables & office furniture. ✓ Free Delivery ✓ EMI Available ✓ Custom Designs. Sindureghari, Chandrapur.",
       keywords: "sindureghari furniture, bishwokarma furniture, furniture Nepal, sofa set Nepal, dining table Nepal, bedroom furniture Nepal, office furniture Nepal, wooden furniture Nepal, modern furniture Nepal, custom furniture Nepal, furniture Chandrapur",
       canonicalUrl: SITE_URL,
       structuredData: this.generateBusinessStructuredData()
@@ -149,7 +149,7 @@ export class MetaTagManager {
       "@context": "https://schema.org",
       "@type": "FurnitureStore",
       "name": BRAND_FULL,
-      "alternateName": ["Bishwokarma Furniture", "सिन्दुरेघारी फर्निचर"],
+      "alternateName": ["Sindureghari", "सिन्दुरेघारी फर्निचर"],
       "description": "Nepal's premium handcrafted furniture store in Sindureghari, Chandrapur. Specializing in wooden sofas, beds, dining sets, office furniture & custom designs with free delivery across Nepal.",
       "url": SITE_URL,
       "logo": {

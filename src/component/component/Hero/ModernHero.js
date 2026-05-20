@@ -5,8 +5,11 @@ const ModernHero = () => {
   return (
     <section className="modern-hero-section">
       <div className="modern-hero-container">
-        {/* SEO Hidden H1 - Screen Reader & Bot Accessible Only */}
-        <h1 className="sr-only">Sindureghari Furniture — Buy Sofas, Beds & Home Furniture Online in Nepal</h1>
+        {/* Brand-focused visually prominent H1 (Technical SEO & Accessibility aligned) */}
+        <div className="modern-hero-header">
+          <h1 className="modern-hero-h1">Sindureghari Furniture</h1>
+          <p className="modern-hero-lead">Premium Handcrafted Wooden Furniture & Royal Home Decor in Nepal</p>
+        </div>
         
         <div className="modern-hero-grid">
           {/* Left Column: Huge Main Banner */}

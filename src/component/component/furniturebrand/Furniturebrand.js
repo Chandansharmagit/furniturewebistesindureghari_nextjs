@@ -50,7 +50,7 @@ const FurnitureBrand = () => {
           
           <div className="editorial-right">
             <p className="furniture-brand-description">
-              Elevate your living experience with <span className="furniture-brand-highlight">Bishwokarma Furniture</span>. 
+              Elevate your living experience with <span className="furniture-brand-highlight">Sindureghari Furniture</span>. 
               Our extensive collection of premium wooden furniture units is meticulously crafted to bring an 
               elegant, sophisticated touch to your home interiors.
               {isExpanded && (

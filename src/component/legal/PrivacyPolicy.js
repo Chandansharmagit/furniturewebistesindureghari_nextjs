@@ -13,7 +13,7 @@ const PrivacyPolicy = () => {
         <section className="privacy-section">
           <h2>1. Introduction</h2>
           <p>
-            Welcome to Bishwokarma Furniture ("we," "our," or "us"). We are committed to protecting your privacy 
+            Welcome to Sindureghari Furniture ("we," "our," or "us"). We are committed to protecting your privacy 
             and ensuring the security of your personal information. This Privacy Policy explains how we collect, 
             use, disclose, and safeguard your information when you visit our website and use our services.
           </p>
@@ -172,10 +172,10 @@ const PrivacyPolicy = () => {
           <h2>13. Contact Us</h2>
           <p>If you have any questions or concerns about this Privacy Policy or our data practices, please contact us:</p>
           <div className="contact-info">
-            <p><strong>Bishwokarma Furniture</strong></p>
-            <p>Email: privacy@sinduregharifurniture.shop</p>
-            <p>Phone: [Your Phone Number]</p>
-            <p>Address: [Your Business Address]</p>
+            <p><strong>Sindureghari Furniture</strong></p>
+            <p>Email: support@sinduregharifurniture.shop</p>
+            <p>Phone: +977-9855040000</p>
+            <p>Address: Showroom Highway Road, Chandrapur, Rautahat, Nepal</p>
           </div>
         </section>
 

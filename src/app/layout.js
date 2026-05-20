@@ -93,7 +93,8 @@ const siteJsonLd = {
     {
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
-      name: "Sindureghari Furniture (Bishwokarma Woodcraft)",
+      name: "Sindureghari Furniture",
+      alternateName: ["Sindureghari Furniture Showroom", "सिन्दुरेघारी फर्निचर"],
       url: SITE_URL,
       logo: {
         "@type": "ImageObject",

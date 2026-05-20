@@ -22,7 +22,7 @@ const Craftsmanship = () => {
                     <span className="craft-subtitle">Uncompromising Quality</span>
                     <h2 className="craft-title">The Art of Furniture Making</h2>
                     <p className="craft-description">
-                        Every piece at Bishwokarma Furniture is born from a legacy of woodworking excellence. We meticulously select premium hardwoods and apply time-honored artisanal techniques to ensure your furniture isn't just beautiful—it's built to last generations.
+                        Every piece at Sindureghari Furniture is born from a legacy of woodworking excellence. We meticulously select premium hardwoods and apply time-honored artisanal techniques to ensure your furniture isn't just beautiful—it's built to last generations.
                     </p>
 
                     <div className="craft-features">

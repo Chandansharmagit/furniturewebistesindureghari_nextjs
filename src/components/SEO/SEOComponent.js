@@ -41,8 +41,8 @@ const SEOComponent = ({
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "FurnitureStore",
-    "name": "Sindureghari Furniture (Bishwokarma)",
-    "alternateName": ["Bishwokarma Furniture", "सिन्दुरेघारी फर्निचर"],
+    "name": "Sindureghari Furniture Showroom",
+    "alternateName": ["Sindureghari Furniture", "सिन्दुरेघारी फर्निचर"],
     "image": ogImage,
     "@id": SITE_URL,
     "url": SITE_URL,
