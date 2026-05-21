@@ -202,7 +202,7 @@ Price: ₹${formatPrice(calculateFinalPrice())}alert
 Quantity: ${quantity}
 Product Link: ${window.location.href}`;
 
-        const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/9779845427041?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
     };
 

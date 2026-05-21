@@ -174,6 +174,181 @@ const DiscountBanner = () => {
   );
 };
 
+// ============================================================
+// SEO Keyword-Optimized Buying Guides & Collapsible FAQs
+// ============================================================
+const seoContentData = {
+  'living-room': {
+    guideTitle: 'The Ultimate Guide to Selecting the Best Sofa and Living Room Furniture in Nepal',
+    guideText: 'Your living room is the center of your home, and finding the perfect sofa set in Nepal is key to balancing comfort, style, and utility. At Sindureghari Furniture (Bishwokarma), we manufacture premium living room sets using seasoned solid wood like Teak and Sheesham (Sisam) sourced from responsible local forestry. When picking a sofa, first evaluate your room dimensions. L-shape sofas are highly efficient for maximizing seating in corners, while traditional 3-1-1 royal sofa designs offer a grand, symmetrical layout. Teak wood frames provide lifelong durability, natural termite resistance, and elegant grain aesthetics. Every piece in our Rautahat factory undergoes modern kiln drying and advanced preservative seasoning, ensuring your furniture remains warp-free and strong for generations across Nepal.',
+    faqs: [
+      {
+        q: 'Which wood is best for sofa sets in Nepal?',
+        a: 'Teak Wood (Saj) and Sheesham (Sisam) are highly recommended. Seasoned Teak wood has high natural oil content which provides unmatched termite and moisture resistance, while Sisam offers a beautiful dark grain and exceptional load-bearing strength.'
+      },
+      {
+        q: 'How can I customize my living room furniture dimensions?',
+        a: 'You can customize any sofa, TV cabinet, or recliner dimensions at our Chandrapur showroom or online. Share your room blueprint and wood preferences via our WhatsApp support (+977-9845427041) and our master artisans will draft a custom manufacturing design.'
+      },
+      {
+        q: 'Do you provide free home delivery and assembly in Kathmandu?',
+        a: 'Yes, we provide free premium home delivery, unloading, and full assembly across Kathmandu, Lalitpur, Pokhara, and major cities in Nepal for our premium collections.'
+      }
+    ]
+  },
+  'dining-room': {
+    guideTitle: 'Mastering Your Dining Room Furniture Design: A Premium Solid Wood Guide',
+    guideText: 'A thoughtfully designed dining area transforms family dinners and guests gatherings into special memories. Finding the best dining table sets in Nepal requires checking the seating count and room shape. A standard 6-seater dining set is the most popular choice for urban Nepalese families, providing spacious comfort without cluttering the room. Rectangular solid wood tables work best in long rooms, whereas round dining sets encourage conversational flow in square layouts. At Sindureghari, our dining sets are handcrafted using thick logs of premium timber. The dining chairs are ergonomically designed with premium heavy-density cushioning to support comfortable upright seating during long meals. Visit our showroom in Chandrapur, Rautahat to feel the premium finish of our wood polishing.',
+    faqs: [
+      {
+        q: 'What dining table sizes are available?',
+        a: 'We design 4-seater, 6-seater, and 8-seater dining table sets in standard dimensions. Custom length, width, and matching dining bench seating can be designed based on your room dimensions.'
+      },
+      {
+        q: 'How is the dining table surface treated to prevent heat and water damage?',
+        a: 'All our wooden dining tables undergo a multi-layered premium polyurethane (PU) polish treatment. This forms a protective heat-resistant and waterproof barrier, ensuring your wood remains stain-free from hot dishes and accidental liquid spills.'
+      },
+      {
+        q: 'Can I purchase dining chairs separately?',
+        a: 'Yes, you can choose custom dining chairs or purchase matching wooden dining benches and cabinets separately to complete your dining room layout.'
+      }
+    ]
+  },
+  'bedroom': {
+    guideTitle: 'Creating Your Dream Sanctuary: Solid Wood Bed Designs & Bedroom Furniture',
+    guideText: 'Your bedroom should be a serene haven of rest and relaxation. Choosing the right bed design in Nepal involves deciding between a king-size bed for maximum space or a queen-size bed for compact rooms. At Sindureghari Furniture, our master carpenters construct heavy-duty double beds and beds with pneumatic hydraulic storage lifts to help keep your room organized and spacious. Matching bedroom furniture sets such as wardrobes, modular almirahs, dressing tables with high-definition LED mirrors, and solid wood bedside nightstands help build a cohesive luxury interior layout. Our sheesham and teak timber beds are fully treated against pests, providing clean, allergen-free comfort for a lifetime of restful sleep.',
+    faqs: [
+      {
+        q: 'What is the standard warranty on solid wood beds?',
+        a: 'All our premium handcrafted solid wood beds come with a lifetime guarantee on the timber quality and a 1-year warranty on manufacturing defects and hydraulic lifts.'
+      },
+      {
+        q: 'Do you offer hydraulic storage beds?',
+        a: 'Yes, we specialize in high-end hydraulic box storage beds. We use premium heavy-gauge gas lift struts, allowing you to lift the mattress effortlessly to access storage space underneath.'
+      },
+      {
+        q: 'Can I choose a custom wood polish color for my wardrobe?',
+        a: 'Yes, we offer custom polish finishes ranging from natural teak, warm honey, deep walnut, to royal mahogany. Tell our design team your preference, and we will custom finish your entire bedroom set.'
+      }
+    ]
+  },
+  'office-and-study': {
+    guideTitle: 'Ergonomic Office Furniture & Solid Wood Study Tables in Nepal',
+    guideText: 'Boost your workspace productivity with ergonomically structured office furniture designed for premium comfort. At Sindureghari Furniture, we engineer office chairs with flexible lumbar adjustments, high-grade mesh backrests, and adjustable armrests to relieve spinal pressure during long desk hours. Our study tables and executive desks are handcrafted using seasoned timber, offering a clean, professional finish with spacious drawers, built-in cable grommets, and filing drawer slides. Whether you are setting up a cozy home workspace in Kathmandu or a corporate conference boardroom, our modular office desks and reception tables deliver executive-level performance.',
+    faqs: [
+      {
+        q: 'Do you supply bulk furniture for corporate offices?',
+        a: 'Yes, we specialize in bulk commercial and corporate office furniture supply, including modular cubicles, conference tables, and executive chairs, with fast delivery and assembly throughout Nepal.'
+      },
+      {
+        q: 'How do I pick the right ergonomic office chair?',
+        a: 'Look for chairs with adjustable lumbar support, 360-degree swivel, smooth gas lift height controls, and dynamic tilt lock mechanisms. Our team can help you select a model tailored to your height and workspace layout.'
+      }
+    ]
+  },
+  'modular-kitchens': {
+    guideTitle: 'Termite-Proof Modular Kitchen Cabinet Design & Installation in Nepal',
+    guideText: 'Elevate your cooking experience with customized modular kitchen cabinets manufactured for heavy-duty cooking environments in Nepal. We design L-shaped, U-shaped, parallel, and island kitchen layouts using boiling-water-proof (BWP) seasoned solid wood and premium anti-rust stainless steel pullouts. We integrate smart soft-close tandem drawer boxes, corner carousel baskets, and overhead lift-up shutters to maximize kitchen storage. Our team of kitchen consultants works with you from 3D design blueprint rendering to full granite counter fitting and cabinet installation in Rautahat, Kathmandu, and beyond.',
+    faqs: [
+      {
+        q: 'What materials are used for modular kitchen cabinets in Nepal?',
+        a: 'We use high-grade seasoned teak wood and solid boiling-water-proof marine grade plywood (BWP) with termite prevention treatments, ensuring your kitchen cabinets withstand heavy moisture and high-heat environments.'
+      },
+      {
+        q: 'How long does modular kitchen installation take?',
+        a: 'Once the 3D kitchen layout design is approved, manufacturing takes about 2 to 3 weeks at our factory. The on-site installation, including drawer slides and cabinet alignment, is completed in just 3 to 5 days by our professional carpenters.'
+      }
+    ]
+  }
+};
+
+const defaultSEOContent = {
+  guideTitle: 'Premium Solid Wood Furniture Handcrafted by Sindureghari Furniture (Bishwokarma)',
+  guideText: 'For over three decades, Sindureghari Furniture has been synonymous with premium quality, exquisite woodwork design, and timeless craftsmanship. Handcrafted in our advanced manufacturing workshop along the Chandrapur highway in Rautahat, Nepal, our furniture collections include everything from royal sofa sets, luxury king beds, solid wood dining tables, to modern modular kitchens and ergonomic office spaces. We season all our timber using high-temperature steam kilns to prevent shrinking, splitting, or warping over time. We provide free shipping, lifetime wood assurance, custom design flexibility, and a dedicated team of master artisans to help bring your home interior dreams to life.',
+  faqs: [
+    {
+      q: 'Where is your physical showroom and factory located?',
+      a: 'Our main showroom is located along the Highway Road in Chandrapur, Rautahat, Nepal. Our state-of-the-art wood seasoning and manufacturing workshops are situated nearby in the Rautahat district, where we craft and season all solid wood items.'
+    },
+    {
+      q: 'How do I place an order for customized furniture online?',
+      a: 'Browse our online catalogue and click the direct WhatsApp button (+977-9845427041) on any product detail page. You can consult with our design assistant, select custom sizing, wood finish (teak/sisam), and confirm your order securely.'
+    },
+    {
+      q: 'Do you offer flexible EMI payment options?',
+      a: 'Yes, we offer easy EMI plans to make premium furniture affordable for all homes in Nepal. You can discuss the EMI eligibility and bank partners with our sales desk when placing your custom order.'
+    }
+  ]
+};
+
+const CategorySEOSection = ({ category, subcategory }) => {
+  const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
+  
+  const content = seoContentData[category] || defaultSEOContent;
+  
+  const toggleFaq = (index) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
+  
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": content.faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.a
+      }
+    }))
+  };
+
+  return (
+    <div className="bkf-category__seo-section">
+      <script 
+        type="application/ld+json" 
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} 
+      />
+      <div className="bkf-category__seo-container">
+        {/* Editorial Buying Guide */}
+        <div className="bkf-category__seo-guide">
+          <h2 className="bkf-category__seo-guide-title">{content.guideTitle}</h2>
+          <p className="bkf-category__seo-guide-text">{content.guideText}</p>
+        </div>
+        
+        {/* Collapsible FAQ Accordion */}
+        <div className="bkf-category__seo-faqs">
+          <h2 className="bkf-category__seo-faqs-title">Expert Buying Questions & Answers</h2>
+          <div className="bkf-category__faq-list">
+            {content.faqs.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div 
+                  key={idx} 
+                  className={`bkf-category__faq-item ${isOpen ? 'active' : ''}`}
+                >
+                  <div 
+                    className="bkf-category__faq-question" 
+                    onClick={() => toggleFaq(idx)}
+                  >
+                    <h3>{faq.q}</h3>
+                    <span className="bkf-category__faq-toggle-icon">
+                      {isOpen ? '−' : '+'}
+                    </span>
+                  </div>
+                  <div className={`bkf-category__faq-answer ${isOpen ? 'open' : ''}`}>
+                    <p>{faq.a}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const CategoryPage = () => {
   const { category, subcategory } = useParams();
   const navigate = useNavigate();
@@ -815,6 +990,9 @@ const CategoryPage = () => {
                 )}
               </div>
             </div>
+            
+            {/* Keyword-Rich SEO Buying Guide & Collapsible FAQ Section */}
+            <CategorySEOSection category={category} subcategory={subcategory} />
           </div>
         </div>
       </div>

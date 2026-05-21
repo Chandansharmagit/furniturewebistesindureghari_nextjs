@@ -126,6 +126,97 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default function Page() {
-  return <ProductDetails />;
+export default async function Page({ params }) {
+  const { id } = await params;
+  
+  let productJsonLd = null;
+  let breadcrumbJsonLd = null;
+
+  try {
+    const res = await fetch(`${API_URL}/api/products/${id}`, {
+      next: { revalidate: 3600 },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const product = data.product || data;
+      
+      const name = product.name || product.title || "Furniture";
+      const price = product.new_price || product.salePrice || product.price || "0";
+      const description = product.description
+        ? product.description.substring(0, 155).trim() + "…"
+        : `Buy ${name} online at Sindureghari Furniture Nepal.`;
+      
+      let imageUrl = `${SITE_URL}/logo.png`;
+      if (product.imageUrl) {
+        imageUrl = product.imageUrl;
+      } else if (product.image) {
+        imageUrl = product.image;
+      }
+      
+      productJsonLd = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": name,
+        "image": imageUrl,
+        "description": description,
+        "brand": {
+          "@type": "Brand",
+          "name": "Sindureghari Furniture"
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": `${SITE_URL}/product/${id}`,
+          "priceCurrency": "NPR",
+          "price": price,
+          "availability": "https://schema.org/InStock",
+          "itemCondition": "https://schema.org/NewCondition"
+        }
+      };
+
+      breadcrumbJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": SITE_URL
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Products",
+            "item": `${SITE_URL}/products`
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": name,
+            "item": `${SITE_URL}/product/${id}`
+          }
+        ]
+      };
+    }
+  } catch (error) {
+    console.error("Failed to generate Product JSON-LD:", error);
+  }
+
+  return (
+    <>
+      {productJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        />
+      )}
+      {breadcrumbJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+      )}
+      <ProductDetails />
+    </>
+  );
 }

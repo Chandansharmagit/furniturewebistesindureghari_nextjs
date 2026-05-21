@@ -66,7 +66,7 @@ export default async function sitemap() {
   for (const [cat, subs] of Object.entries(SUB_CATEGORIES)) {
     for (const sub of subs) {
       subCategoryEntries.push({
-        url: `${SITE_URL}/category/${cat}?type=${sub}`,
+        url: `${SITE_URL}/category/${cat}/${sub}`,
         lastModified: today,
         changeFrequency: "weekly",
         priority: 0.7,
