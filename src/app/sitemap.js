@@ -74,6 +74,36 @@ export default async function sitemap() {
     }
   }
 
+  // 3.5 Programmatic SEO pages (Keywords)
+  const seoKeywords = [
+    "sofas",
+    "sofa-sets",
+    "beds",
+    "wardrobes",
+    "dining-sets",
+    "dining-tables",
+    "dining-chairs",
+    "dressing-tables",
+    "study-tables",
+    "office-chairs",
+    "office-tables",
+    "tv-units",
+    "coffee-tables",
+    "mattresses",
+    "modular-kitchens",
+    "shoe-racks",
+    "computer-tables",
+    "wooden-beds",
+    "cupboards"
+  ];
+
+  const seoEntries = seoKeywords.map((keyword) => ({
+    url: `${SITE_URL}/best-${keyword}-nepal`,
+    lastModified: today,
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
+
   // 4. Dynamic product pages from API
   let productEntries = [];
   try {
@@ -102,6 +132,7 @@ export default async function sitemap() {
     ...staticEntries,
     ...categoryEntries,
     ...subCategoryEntries,
+    ...seoEntries,
     ...productEntries,
   ];
 }

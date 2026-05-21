@@ -83,6 +83,16 @@ const nextConfig = {
     ];
   },
 
+  /* ── SEO: Rewrites ── */
+  async rewrites() {
+    return [
+      {
+        source: "/best-:keyword-nepal",
+        destination: "/best/:keyword",
+      },
+    ];
+  },
+
   /* ── Webpack Aliases ── */
   webpack: (config) => {
     config.resolve.alias['react-router-dom'] = path.resolve(__dirname, 'src/utils/routerShim.js');

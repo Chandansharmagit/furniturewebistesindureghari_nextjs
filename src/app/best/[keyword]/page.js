@@ -1,7 +1,16 @@
 import CategoryPage from "@/pages/CategoryPage";
 
 export async function generateMetadata({ params }) {
-  const { keyword } = await params;
+  const { keyword } = (await params) || {};
+  if (!keyword) {
+    return {
+      title: "Best Furniture in Nepal | Buy Online at Sindureghari Furniture",
+      description: "Shop the best quality solid wood furniture in Nepal. Premium handcrafted sofas, beds, dining tables with free delivery.",
+      alternates: {
+        canonical: "https://sinduregharifurniture.shop",
+      },
+    };
+  }
   const cleanKeyword = keyword.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
   return {
@@ -20,8 +29,24 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProgrammaticSeoPage({ params }) {
-  const { keyword } = await params;
+  const { keyword } = (await params) || {};
   
+  if (!keyword) {
+    return (
+      <div className="programmatic-seo-landing">
+        <div style={{ backgroundColor: '#F9F9F9', padding: '2rem 1rem', textAlign: 'center', borderBottom: '1px solid #E5E5E5' }}>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', margin: '0 0 0.5rem 0', color: '#1A1A1A' }}>
+            Best Furniture in Nepal
+          </h1>
+          <p style={{ color: '#707070', margin: '0 auto', maxWidth: '600px', fontFamily: 'var(--font-sans)' }}>
+            Discover our premium collection of handcrafted furniture designed for elegance and durability.
+          </p>
+        </div>
+        <CategoryPage />
+      </div>
+    );
+  }
+
   const cleanKeyword = keyword.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
   return (

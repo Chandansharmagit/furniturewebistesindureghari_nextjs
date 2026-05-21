@@ -350,7 +350,7 @@ const CategorySEOSection = ({ category, subcategory }) => {
 };
 
 const CategoryPage = () => {
-  const { category, subcategory } = useParams();
+  const { category, subcategory, keyword } = useParams();
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [isFallbackActive, setIsFallbackActive] = useState(false);
@@ -412,7 +412,7 @@ const CategoryPage = () => {
     ]
   };
 
-  // Fetch products based on category/subcategory
+  // Fetch products based on category/subcategory or keyword
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -420,42 +420,56 @@ const CategoryPage = () => {
       setIsFallbackActive(false);
 
       try {
-        let categoryName = '';
-
-        if (subcategory) {
-          // If subcategory is provided, use it for API call
-          categoryName = subcategoryMapping[subcategory] || subcategory;
-        } else if (category) {
-          // If only category is provided, use it for API call
-          categoryName = categoryMapping[category] || category;
-        }
-
-        // Use the products endpoint with categoryName parameter
-        let url = `${API_BASE_URL}/api/products?categoryName=${categoryName}&page=${currentPage}&limit=12&sort=${sortBy}`;
-
-        if (priceRange.min || priceRange.max) {
-          url += `&minPrice=${priceRange.min}&maxPrice=${priceRange.max}`;
-        }
-
         let isFallback = false;
         let fetchedProducts = [];
         let fetchedTotalPages = 1;
 
-        // 1. Fetch category products
-        const response = await fetch(url);
-        if (response.ok) {
-          const data = await response.json();
-          if (Array.isArray(data)) {
-            fetchedProducts = data;
+        if (keyword) {
+          // Programmatic SEO page mode - fetch matching products using the search API
+          const searchUrl = `${API_BASE_URL}/api/search?q=${encodeURIComponent(keyword)}&limit=100`;
+          const response = await fetch(searchUrl);
+          if (response.ok) {
+            const data = await response.json();
+            const rawProducts = data.products || [];
+            fetchedProducts = rawProducts;
+            fetchedTotalPages = Math.max(1, Math.ceil(rawProducts.length / 12));
           } else {
-            fetchedProducts = data.products || [];
-            fetchedTotalPages = data.totalPages || 1;
+            throw new Error('Failed to fetch search results for keyword');
           }
         } else {
-          throw new Error('Failed to fetch category products');
+          let categoryName = '';
+
+          if (subcategory) {
+            // If subcategory is provided, use it for API call
+            categoryName = subcategoryMapping[subcategory] || subcategory;
+          } else if (category) {
+            // If only category is provided, use it for API call
+            categoryName = categoryMapping[category] || category;
+          }
+
+          // Use the products endpoint with categoryName parameter
+          let url = `${API_BASE_URL}/api/products?categoryName=${categoryName}&page=${currentPage}&limit=12&sort=${sortBy}`;
+
+          if (priceRange.min || priceRange.max) {
+            url += `&minPrice=${priceRange.min}&maxPrice=${priceRange.max}`;
+          }
+
+          // 1. Fetch category products
+          const response = await fetch(url);
+          if (response.ok) {
+            const data = await response.json();
+            if (Array.isArray(data)) {
+              fetchedProducts = data;
+            } else {
+              fetchedProducts = data.products || [];
+              fetchedTotalPages = data.totalPages || 1;
+            }
+          } else {
+            throw new Error('Failed to fetch category products');
+          }
         }
 
-        // 2. If no products are found in this category, fetch general products as a fallback
+        // 2. If no products are found, fetch general products as a fallback
         if (fetchedProducts.length === 0) {
           isFallback = true;
           // Fetch featured/recent general products
@@ -484,10 +498,18 @@ const CategoryPage = () => {
     };
 
     fetchProducts();
-  }, [category, subcategory, currentPage, sortBy, priceRange]);
+  }, [category, subcategory, keyword, currentPage, sortBy, priceRange]);
 
   // Get current category info
   const getCurrentCategoryInfo = () => {
+    if (keyword) {
+      const cleanKeyword = keyword.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      return {
+        title: `Best ${cleanKeyword} in Nepal`,
+        description: `Shop the best ${cleanKeyword} in Nepal. Handcrafted solid wood, premium quality, and free delivery to Kathmandu, Lalitpur, and Bhaktapur.`,
+        keywords: `best ${cleanKeyword.toLowerCase()} Nepal, buy ${cleanKeyword.toLowerCase()} online, solid wood ${cleanKeyword.toLowerCase()}`
+      };
+    }
     if (subcategory) {
       const subcatName = subcategory.split('-').map(word =>
         word.charAt(0).toUpperCase() + word.slice(1)
@@ -753,13 +775,13 @@ const CategoryPage = () => {
         keywords={currentCategoryInfo.keywords}
         ogTitle={`${currentCategoryInfo.title} | Bishwokarma Furniture`}
         ogDescription={currentCategoryInfo.description}
-        canonicalUrl={`https://sinduregharifurniture.shop/category/${category}${subcategory ? `/${subcategory}` : ''}`}
+        canonicalUrl={keyword ? `https://sinduregharifurniture.shop/best-${keyword}-nepal` : `https://sinduregharifurniture.shop/category/${category}${subcategory ? `/${subcategory}` : ''}`}
         structuredData={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           "name": currentCategoryInfo.title,
           "description": currentCategoryInfo.description,
-          "url": `https://sinduregharifurniture.shop/category/${category}${subcategory ? `/${subcategory}` : ''}`,
+          "url": keyword ? `https://sinduregharifurniture.shop/best-${keyword}-nepal` : `https://sinduregharifurniture.shop/category/${category}${subcategory ? `/${subcategory}` : ''}`,
           "mainEntity": {
             "@type": "ItemList",
             "name": currentCategoryInfo.title,
@@ -781,16 +803,27 @@ const CategoryPage = () => {
           <div className="bkf-category__container">
             <nav>
               <span onClick={() => navigate('/')} className="bkf-category__breadcrumb-link">Home</span>
-              <span className="bkf-category__breadcrumb-separator">/</span>
-              <span onClick={() => navigate(`/category/${category}`)} className="bkf-category__breadcrumb-link">
-                {categoryMapping[category] || category}
-              </span>
-              {subcategory && (
+              {keyword ? (
                 <>
                   <span className="bkf-category__breadcrumb-separator">/</span>
                   <span className="bkf-category__breadcrumb-current">
-                    {subcategory.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                    Best {keyword.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                   </span>
+                </>
+              ) : (
+                <>
+                  <span className="bkf-category__breadcrumb-separator">/</span>
+                  <span onClick={() => navigate(`/category/${category}`)} className="bkf-category__breadcrumb-link">
+                    {categoryMapping[category] || category}
+                  </span>
+                  {subcategory && (
+                    <>
+                      <span className="bkf-category__breadcrumb-separator">/</span>
+                      <span className="bkf-category__breadcrumb-current">
+                        {subcategory.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                      </span>
+                    </>
+                  )}
                 </>
               )}
             </nav>
@@ -925,7 +958,7 @@ const CategoryPage = () => {
                       color: '#1a1a1a',
                       lineHeight: '1.5'
                     }}>
-                      We are currently updating our <strong>{categoryMapping[category] || category}</strong> collection. In the meantime, explore our finest handcrafted furniture pieces below:
+                      We are currently updating our <strong>{categoryMapping[category] || category || (keyword ? keyword.replace(/-/g, ' ') : 'furniture')}</strong> collection. In the meantime, explore our finest handcrafted furniture pieces below:
                     </h3>
                   </div>
                 )}
