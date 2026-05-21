@@ -29,7 +29,8 @@ const API_CONFIG = {
       UPDATE_PROFILE: '/api/auth/profile',
       VERIFY: '/api/auth/verify',
       FORGOT_PASSWORD: '/api/auth/forgot-password',
-      CHANGE_PASSWORD: '/api/auth/change-password'
+      CHANGE_PASSWORD: '/api/auth/change-password',
+      VERIFY_EMAIL: '/api/auth/verify-email'
     },
 
     // Product endpoints

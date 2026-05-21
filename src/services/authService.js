@@ -244,6 +244,25 @@ class AuthService {
     }
   }
 
+  // Verify Email
+  async verifyEmail(token) {
+    try {
+      const response = await apiClient.post(
+        buildApiUrl(AUTH_ENDPOINTS.VERIFY_EMAIL),
+        { token }
+      );
+      return {
+        success: true,
+        message: response.data.message
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Email verification failed. The link may have expired or is invalid.'
+      };
+    }
+  }
+
   // Forgot password
   async forgotPassword(email) {
     try {
