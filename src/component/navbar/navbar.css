@@ -1,4 +1,4 @@
-/* Premium Navbar — Clean (No Dropdowns) */
+/* Premium Navbar — With Mega Menu Dropdowns */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
@@ -42,7 +42,8 @@ body.header-scrolled .premium-navbar {
   max-width: 1600px;
   margin: 0 auto;
   height: 52px;
-  overflow: hidden;
+  /* Changed from overflow:hidden so dropdowns are visible */
+  overflow: visible;
   padding: 0 40px;
 }
 
@@ -122,6 +123,307 @@ body.header-scrolled .premium-navbar {
 .nav-highlight-pill,
 .nav-active-line {
   display: none;
+}
+
+/* ── Mega Menu Dropdown ──────────────────── */
+.nav-item-wrapper.has-dropdown {
+  position: relative;
+}
+
+.mega-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  width: 700px;
+  max-width: 90vw;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14), 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 99999;
+}
+
+/* Default Show on hover */
+.nav-item-wrapper.has-dropdown:hover .mega-menu-dropdown {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Shift left-side dropdowns (first 3 items) to prevent left viewport overflow */
+.nav-item-wrapper.has-dropdown:nth-child(-n+3) .mega-menu-dropdown {
+  left: 0;
+  right: auto;
+  transform: translateX(0) translateY(8px);
+}
+
+.nav-item-wrapper.has-dropdown:nth-child(-n+3):hover .mega-menu-dropdown {
+  transform: translateX(0) translateY(0);
+}
+
+/* Shift right-side dropdowns (last 7 items) to prevent right viewport overflow */
+.nav-item-wrapper.has-dropdown:nth-last-child(-n+7) .mega-menu-dropdown {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(8px);
+}
+
+.nav-item-wrapper.has-dropdown:nth-last-child(-n+7):hover .mega-menu-dropdown {
+  transform: translateX(0) translateY(0);
+}
+
+/* Caret triangle base styles */
+.mega-caret {
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 7px;
+  background: #FAF6ED;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  z-index: 1;
+}
+
+/* Adjust caret position for left-side dropdowns to point to their parent item */
+.nav-item-wrapper.has-dropdown:nth-child(-n+3) .mega-caret {
+  left: 45px;
+  transform: none;
+}
+
+/* Adjust caret position for right-side dropdowns to point to their parent item */
+.nav-item-wrapper.has-dropdown:nth-last-child(-n+7) .mega-caret {
+  left: auto;
+  right: 45px;
+  transform: none;
+}
+
+/* ── Mega Menu Header Strip ──────────────── */
+.mega-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: #FAF6ED;
+  border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+}
+
+.mega-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mega-header-icon {
+  color: var(--p-brown);
+  flex-shrink: 0;
+}
+
+.mega-header-cat {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #c5a059;
+  margin: 0 0 2px;
+}
+
+.mega-header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 2px;
+}
+
+.mega-header-desc {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0;
+}
+
+.mega-view-all {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--p-brown);
+  text-decoration: none;
+  border: 1px solid rgba(139, 69, 19, 0.25);
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mega-view-all:hover {
+  background: var(--p-brown);
+  color: #fff;
+  border-color: var(--p-brown);
+}
+
+/* ── Mega Menu Body ──────────────────────── */
+.mega-body {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  min-height: 200px;
+}
+
+.mega-links-col {
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* ── Sub Links ───────────────────────────── */
+.mega-sub-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none !important;
+  transition: background 0.2s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+
+.mega-sub-link:hover {
+  background: rgba(139, 69, 19, 0.05);
+  transform: translateX(3px);
+}
+
+.mega-sub-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mega-sub-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.mega-sub-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.3;
+}
+
+.mega-sub-link:hover .mega-sub-name {
+  color: var(--p-brown);
+}
+
+.mega-sub-desc {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.73rem;
+  color: #aaa;
+  line-height: 1.3;
+}
+
+.mega-sub-arrow {
+  color: #ccc;
+  flex-shrink: 0;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.mega-sub-link:hover .mega-sub-arrow {
+  color: var(--p-brown);
+  transform: translateX(2px);
+}
+
+/* ── Promo Panel ─────────────────────────── */
+.mega-promo-panel {
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  background: #FAF6ED;
+  border-left: 1px solid rgba(197, 160, 89, 0.15);
+}
+
+.mega-promo-badge {
+  display: inline-block;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--p-brown);
+  border: 1px solid rgba(139, 69, 19, 0.25);
+  background: rgba(139, 69, 19, 0.06);
+  padding: 3px 8px;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+.mega-promo-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #333;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.mega-promo-desc {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.72rem;
+  color: #888;
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+
+.mega-promo-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--p-brown);
+  border: 1px solid var(--p-brown);
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+  width: fit-content;
+}
+
+.mega-promo-cta:hover {
+  background: var(--p-brown-dark);
+  border-color: var(--p-brown-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.25);
+}
+
+/* Nav chevron icon rotates on hover */
+.nav-chevron {
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.nav-item-wrapper.has-dropdown:hover .nav-chevron {
+  transform: rotate(180deg);
 }
 
 /* ── Mobile Responsive ──────────────────── */
@@ -268,6 +570,7 @@ body.header-scrolled .premium-navbar {
     opacity: 0;
     transform: translateY(-6px);
   }
+
   to {
     max-height: 600px;
     opacity: 1;
@@ -344,6 +647,7 @@ body.header-scrolled .premium-navbar {
 
 /* ── Print Styles ───────────────────────── */
 @media print {
+
   .premium-navbar,
   .nav-mobile-backdrop,
   .nav-mobile-drawer {

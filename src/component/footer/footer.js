@@ -143,8 +143,8 @@ const Footer = () => {
             <ul>
               <li><a href="/category/living-room">Majestic Living</a></li>
               <li><a href="/category/bedroom">Regal Bedroom</a></li>
-              <li><a href="/category/dining">Imperial Dining</a></li>
-              <li><a href="/category/office">Sovereign Office</a></li>
+              <li><a href="/category/dining-room">Imperial Dining</a></li>
+              <li><a href="/category/office-and-study">Sovereign Office</a></li>
             </ul>
           </motion.div>
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import SEOComponent from '../components/SEO/SEOComponent';
+import { BreadcrumbStructuredData } from '../components/SEO/StructuredData';
 import { motion } from 'framer-motion';
 import { Filter, ChevronRight } from 'lucide-react';
 import { API_BASE_URL } from '../config/api';
@@ -577,8 +578,8 @@ const CategoryPage = () => {
     setCurrentPage(1);
   };
 
-  // Sidebar Filter Component
-  const FilterSidebar = () => (
+  // Sidebar Filter Function
+  const renderFilterSidebar = () => (
     <motion.div
       className="bkf-category__sidebar"
       initial={{ opacity: 0, x: -20 }}
@@ -766,6 +767,32 @@ const CategoryPage = () => {
     return result;
   };
 
+  // Generate dynamic breadcrumbs array for JSON-LD schema
+  const breadcrumbsList = [
+    { name: 'Home', url: 'https://sinduregharifurniture.shop/' }
+  ];
+
+  if (keyword) {
+    const cleanKeyword = keyword.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    breadcrumbsList.push({
+      name: `Best ${cleanKeyword}`,
+      url: `https://sinduregharifurniture.shop/best-${keyword}-nepal`
+    });
+  } else if (category) {
+    breadcrumbsList.push({
+      name: categoryMapping[category] || category,
+      url: `https://sinduregharifurniture.shop/category/${category}`
+    });
+    
+    if (subcategory) {
+      const cleanSub = subcategory.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      breadcrumbsList.push({
+        name: cleanSub,
+        url: `https://sinduregharifurniture.shop/category/${category}/${subcategory}`
+      });
+    }
+  }
+
 
   return (
     <>
@@ -796,6 +823,7 @@ const CategoryPage = () => {
           }
         }}
       />
+      <BreadcrumbStructuredData breadcrumbs={breadcrumbsList} />
 
       <div className="bkf-category-page">
         {/* Breadcrumb */}
@@ -884,7 +912,7 @@ const CategoryPage = () => {
           <div className="bkf-category__container">
             <div className="bkf-category__content-wrapper">
               {/* Sidebar Filters */}
-              <FilterSidebar />
+              {renderFilterSidebar()}
 
               {/* Products Section */}
               <div className="bkf-category__products-section">

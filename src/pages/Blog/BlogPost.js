@@ -43,6 +43,32 @@ const BlogPost = () => {
 
   const readTime = Math.ceil(post.content.split(' ').length / 200) + ' min read';
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://sinduregharifurniture.shop/blog/${slug}`
+    },
+    "headline": post.title,
+    "description": post.excerpt,
+    "image": post.image_url ? [post.image_url] : [],
+    "author": {
+      "@type": "Person",
+      "name": `${post.first_name || ''} ${post.last_name || ''}`.trim() || 'Bishwokarma Furniture'
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Bishwokarma Furniture",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://sinduregharifurniture.shop/logo.png"
+      }
+    },
+    "datePublished": post.created_at,
+    "dateModified": post.updated_at || post.created_at
+  };
+
   return (
     <div className="blog-post-page">
       <SEOComponent 
@@ -50,6 +76,11 @@ const BlogPost = () => {
         description={post.excerpt}
         ogImage={post.image_url}
         ogType="article"
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
 
       <div className="blog-progress-bar"></div>

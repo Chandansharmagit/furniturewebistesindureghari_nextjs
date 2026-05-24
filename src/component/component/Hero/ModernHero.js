@@ -6,10 +6,10 @@ const ModernHero = () => {
     <section className="modern-hero-section">
       <div className="modern-hero-container">
         {/* Brand-focused visually prominent H1 (Technical SEO & Accessibility aligned) */}
-        <div className="modern-hero-header">
-          <h1 className="modern-hero-h1">Sindureghari Furniture</h1>
-          <p className="modern-hero-lead">Premium Handcrafted Wooden Furniture & Royal Home Decor in Nepal</p>
-        </div>
+        {/* <div className="modern-hero-header">
+          <h1 className="modern-hero-h1">Bishwokarma Furniture | Premium Solid Wood Furniture Nepal</h1>
+          <p className="modern-hero-lead">Handcrafted Wooden Furniture & Royal Home Decor in Kathmandu, Pokhara, & Across Nepal</p>
+        </div> */}
         
         <div className="modern-hero-grid">
           {/* Left Column: Huge Main Banner */}
