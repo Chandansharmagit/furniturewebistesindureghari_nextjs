@@ -200,7 +200,7 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
         gradient: 'linear-gradient(135deg, #071A08 0%, #134D18 60%, #2E7D32 100%)'
       }
     },
-    { name: 'All Products', path: '/category/all-products' },
+  
     { name: 'Our Showrooms', path: '/stores', isHighlighted: true },
     { name: 'The Journal', path: '/blog', isHighlighted: true },
     { name: 'Offers', path: '/category/offers', isHighlighted: true }

@@ -10,6 +10,7 @@ import ShoppableRoom from "../component/home-extensions/ShoppableRoom";
 import TopratedBrand from "../component/component/toprated/Toprated";
 import InteriorDesignService from "../component/home-extensions/InteriorDesignService";
 import Craftsmanship from "../component/home-extensions/Craftsmanship";
+import EMIPromo from "../component/emi-promo/EMIPromo";
 import Policy from "../component/component/privacypolicy/privacy";
 
 export default function HomePage() {
@@ -25,6 +26,7 @@ export default function HomePage() {
       <TopratedBrand />
       <InteriorDesignService />
       <Craftsmanship />
+      <EMIPromo />
       <Policy />
     </>
   );

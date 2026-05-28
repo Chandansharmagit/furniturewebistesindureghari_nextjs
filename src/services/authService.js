@@ -306,8 +306,23 @@ class AuthService {
     const email = localStorage.getItem('userEmail');
     const password = localStorage.getItem('userPassword');
     const user = localStorage.getItem('user');
+    const authToken = localStorage.getItem('authToken');
 
-    if (!email || !password || !user) {
+    if (!user) {
+      return false;
+    }
+    
+    // If we have an authToken, that's sufficient (e.g. for Google Auth)
+    if (authToken) {
+      try {
+        const userData = JSON.parse(user);
+        return !!userData.email;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    if (!email || !password) {
       return false;
     }
 

@@ -1,136 +1,259 @@
 "use client";
-import React from 'react';
-import { Helmet } from 'react-helmet';
+
+import React, { useState, useMemo } from 'react';
 import './PrivacyPolicy.css';
 
 const PrivacyPolicy = () => {
-    return (
-        <>
-            <Helmet>
-                <title>Privacy Policy - Bishwokarma Furniture</title>
-                <meta name="description" content="Privacy Policy for Bishwokarma Furniture. Learn how we collect, use, and protect your personal information." />
-            </Helmet>
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeSection, setActiveSection] = useState('sec-1');
 
-            <div className="privacy-policy-page">
-                <div className="privacy-policy-container">
-                    {/* Header */}
-                    <div className="privacy-policy-header">
-                        <h1>Privacy Policy</h1>
-                        <p className="last-updated">Last Updated: December 12, 2024</p>
-                    </div>
+  // Interactive sections data list for Privacy Policy
+  const sections = useMemo(() => [
+    {
+      id: 'sec-1',
+      title: '1. Introduction',
+      shortTitle: 'Introduction',
+      content: 'Welcome to Bishwokarma Furniture (Sindureghari Furniture). We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you about how we collect, handle, and safeguard your personal data when you visit our website, place custom carpentry requests, or communicate with our store representatives, and tell you about your privacy rights and how the law protects you.',
+      bullets: []
+    },
+    {
+      id: 'sec-2',
+      title: '2. Information We Collect',
+      shortTitle: 'Information Collected',
+      content: 'We may collect, use, store, and transfer different kinds of personal data about you to fulfill your orders and enhance your site experience:',
+      bullets: [
+        '<strong>Identity Data:</strong> First name, last name, username, or profile identifiers from social logins.',
+        '<strong>Contact Data:</strong> Shipping address, billing address, phone number, and email address.',
+        '<strong>Transaction Data:</strong> Details about payments, bank transfer screenshots, and records of products purchased.',
+        '<strong>Technical Data:</strong> IP address, device specs, browser types, and cookie session histories.',
+        '<strong>Usage Data:</strong> Information showing how you navigate our catalogs, product pages, and checkout workflows.'
+      ]
+    },
+    {
+      id: 'sec-3',
+      title: '3. How We Use Your Information',
+      shortTitle: 'Data Usage',
+      content: 'We strictly process data in a lawful, transparent manner. Your personal information is utilized in the following ways:',
+      bullets: [
+        'To process, manufacture, ship, and setup your handcrafted wooden furniture orders.',
+        'To manage secure billing transactions, tax reports, and regional transport charges.',
+        'To coordinate with our local carpenters for custom home measurements and white-glove setup.',
+        'To notify you about changes in delivery timelines or send you order tracking details via Email/SMS.',
+        'To improve our storefront performance, catalog layouts, and personalized customer recommendations.'
+      ]
+    },
+    {
+      id: 'sec-4',
+      title: '4. Data Security & Storage',
+      shortTitle: 'Security Standards',
+      content: 'We employ state-of-the-art administrative, logical, and technical protection systems to ensure your details remain strictly confidential.',
+      bullets: [
+        'All client payment receipts, invoices, and design drafts are backed up on secure databases.',
+        'We restrict access to your personal identity to employees and carpenters who require it specifically for custom fabrication or delivery setups.',
+        'Secure Socket Layer (SSL) encryption is deployed on all API transactions between your browser and our servers.'
+      ]
+    },
+    {
+      id: 'sec-5',
+      title: '5. Cookies & Tracking',
+      shortTitle: 'Cookies Policy',
+      content: 'We use secure cookies and tracking pixels to analyze traffic patterns, remember items added to your shopping cart, and maintain active login sessions.',
+      bullets: [
+        'Session cookies are deleted automatically as soon as you close your browser.',
+        'Persistent cookies remain stored to greet you by name and load custom preferences on repeat visits.',
+        'You can configure your browser to reject cookies, though doing so might disable certain checkout features.'
+      ]
+    },
+    {
+      id: 'sec-6',
+      title: '6. Third-Party Integrations',
+      shortTitle: 'Third-Party Links',
+      content: 'Our site utilizes trusted third-party integrations (such as Google OAuth for logins, Cloudinary for custom upload drafts, and digital payment gateways) to provide a rich interactive interface.',
+      bullets: [
+        'These third-party platforms apply their own independent data policies.',
+        'We do not control the practices of external web assets and encourage you to review their legal notices when leaving our portal.'
+      ]
+    },
+    {
+      id: 'sec-7',
+      title: '7. Your Legal Rights',
+      shortTitle: 'Your Rights',
+      content: 'In compliance with the Electronic Transactions and Consumer Protection Acts, you have full ownership over how your data is treated:',
+      bullets: [
+        'Right to request access and view all personal records stored in our databases.',
+        'Right to edit, update, or correct outdated address lines and phone listings.',
+        'Right to request permanent deletion of your profile history (erasure).',
+        'Right to opt-out of newsletter list subscriptions and general direct marketing updates.'
+      ]
+    }
+  ], []);
 
-                    {/* Content */}
-                    <div className="privacy-policy-content">
-                        {/* Introduction */}
-                        <section className="policy-section">
-                            <h2>1. Introduction</h2>
-                            <p>
-                                Welcome to Bishwokarma Furniture. We respect your privacy and are committed to protecting your personal data.
-                                This privacy policy will inform you about how we look after your personal data when you visit our website
-                                and tell you about your privacy rights and how the law protects you.
-                            </p>
-                        </section>
-
-                        {/* Information We Collect */}
-                        <section className="policy-section">
-                            <h2>2. Information We Collect</h2>
-                            <p>We may collect, use, store, and transfer different kinds of personal data about you:</p>
-                            <ul>
-                                <li><strong>Identity Data:</strong> Name, username, or similar identifier</li>
-                                <li><strong>Contact Data:</strong> Email address, telephone numbers, and billing/delivery address</li>
-                                <li><strong>Transaction Data:</strong> Details about payments and products purchased from us</li>
-                                <li><strong>Technical Data:</strong> IP address, browser type and version, time zone setting, and location</li>
-                                <li><strong>Usage Data:</strong> Information about how you use our website and services</li>
-                                <li><strong>Marketing Data:</strong> Your preferences in receiving marketing from us</li>
-                            </ul>
-                        </section>
-
-                        {/* How We Use Your Information */}
-                        <section className="policy-section">
-                            <h2>3. How We Use Your Information</h2>
-                            <p>We use your personal data for the following purposes:</p>
-                            <ul>
-                                <li>To process and deliver your orders</li>
-                                <li>To manage payments, fees, and charges</li>
-                                <li>To communicate with you about your orders and our services</li>
-                                <li>To provide customer support</li>
-                                <li>To send you marketing communications (with your consent)</li>
-                                <li>To improve our website, products, and services</li>
-                                <li>To protect against fraud and malicious activities</li>
-                            </ul>
-                        </section>
-
-                        {/* Data Security */}
-                        <section className="policy-section">
-                            <h2>4. Data Security</h2>
-                            <p>
-                                We have implemented appropriate security measures to prevent your personal data from being accidentally lost,
-                                used, or accessed in an unauthorized way. We limit access to your personal data to those employees, agents,
-                                contractors, and other third parties who have a business need to know.
-                            </p>
-                        </section>
-
-                        {/* Data Retention */}
-                        <section className="policy-section">
-                            <h2>5. Data Retention</h2>
-                            <p>
-                                We will only retain your personal data for as long as necessary to fulfill the purposes we collected it for,
-                                including for the purposes of satisfying any legal, accounting, or reporting requirements.
-                            </p>
-                        </section>
-
-                        {/* Your Legal Rights */}
-                        <section className="policy-section">
-                            <h2>6. Your Legal Rights</h2>
-                            <p>Under certain circumstances, you have rights under data protection laws in relation to your personal data:</p>
-                            <ul>
-                                <li>Request access to your personal data</li>
-                                <li>Request correction of your personal data</li>
-                                <li>Request erasure of your personal data</li>
-                                <li>Object to processing of your personal data</li>
-                                <li>Request restriction of processing your personal data</li>
-                                <li>Request transfer of your personal data</li>
-                                <li>Right to withdraw consent</li>
-                            </ul>
-                        </section>
-
-                        {/* Cookies */}
-                        <section className="policy-section">
-                            <h2>7. Cookies</h2>
-                            <p>
-                                We use cookies and similar tracking technologies to track activity on our website and store certain information.
-                                Cookies are files with a small amount of data which may include an anonymous unique identifier. You can instruct
-                                your browser to refuse all cookies or to indicate when a cookie is being sent.
-                            </p>
-                        </section>
-
-                        {/* Third-Party Links */}
-                        <section className="policy-section">
-                            <h2>8. Third-Party Links</h2>
-                            <p>
-                                Our website may include links to third-party websites, plug-ins, and applications. Clicking on those links or
-                                enabling those connections may allow third parties to collect or share data about you. We do not control these
-                                third-party websites and are not responsible for their privacy statements.
-                            </p>
-                        </section>
-
-                        {/* Contact Us */}
-                        <section className="policy-section">
-                            <h2>9. Contact Us</h2>
-                            <p>
-                                If you have any questions about this Privacy Policy or our privacy practices, please contact us at:
-                            </p>
-                            <div className="contact-info">
-                                <p><strong>Email:</strong> privacy@sinduregharifurniture.shop</p>
-                                <p><strong>Phone:</strong> +977 1234567890</p>
-                                <p><strong>Address:</strong> Kathmandu, Nepal</p>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </>
+  // Filter sections based on search query
+  const filteredSections = useMemo(() => {
+    if (!searchQuery) return sections;
+    return sections.filter(sec => 
+      sec.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      sec.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      sec.bullets.some(b => b.toLowerCase().includes(searchQuery.toLowerCase()))
     );
+  }, [searchQuery, sections]);
+
+  // Scroll to section handler
+  const scrollToSection = (id) => {
+    setActiveSection(id);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  // Dynamic search highlighter
+  const highlightText = (text, highlight) => {
+    if (!highlight) return text;
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+    return (
+      <>
+        {parts.map((part, i) => 
+          part.toLowerCase() === highlight.toLowerCase() ? (
+            <mark key={i} className="search-highlight">{part}</mark>
+          ) : (
+            part
+          )
+        )}
+      </>
+    );
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  return (
+    <div className="privacy-policy-page">
+      {/* Premium Hero Header */}
+      <header className="privacy-hero">
+        <div className="privacy-hero-content">
+          <span className="privacy-badge">Data Privacy</span>
+          <h1>Privacy Policy</h1>
+          <p>
+            We are fully committed to protecting your personal information. Read our transparent policies detailing how your customer profile and payment records are handled.
+          </p>
+        </div>
+      </header>
+
+      {/* Main Grid Content */}
+      <main className="privacy-main-container">
+        {/* Left Column: Interactive Sidebar */}
+        <aside className="privacy-sidebar">
+          {/* Real-time search filter */}
+          <div className="privacy-search-box">
+            <span className="privacy-search-icon">🔍</span>
+            <input 
+              type="text" 
+              placeholder="Search privacy policy..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <h3 className="privacy-nav-title">Sections</h3>
+          <div className="privacy-nav-list">
+            {filteredSections.map((sec) => (
+              <div 
+                key={sec.id} 
+                className={`privacy-nav-item ${activeSection === sec.id ? 'active' : ''}`}
+              >
+                <button onClick={() => scrollToSection(sec.id)}>
+                  {sec.shortTitle}
+                  <span className="privacy-nav-arrow">→</span>
+                </button>
+              </div>
+            ))}
+            {filteredSections.length === 0 && (
+              <p style={{ fontSize: '0.9rem', color: 'var(--aether-text-muted)', textAlign: 'center', padding: '20px 0' }}>
+                No sections matched your search term.
+              </p>
+            )}
+          </div>
+
+          {/* Quick Actions */}
+          <div className="privacy-actions-card">
+            <button className="action-btn primary-btn" onClick={handlePrint}>
+              Print Policy 📄
+            </button>
+            <a 
+              href="mailto:support@sinduregharifurniture.shop" 
+              className="action-btn"
+            >
+              Get Written Copy ✉️
+            </a>
+          </div>
+        </aside>
+
+        {/* Right Column: Privacy Content Panel */}
+        <article className="privacy-content-panel">
+          {filteredSections.map((sec) => (
+            <section 
+              key={sec.id} 
+              id={sec.id} 
+              className="privacy-section-block"
+            >
+              <h2>{highlightText(sec.title, searchQuery)}</h2>
+              <p>{highlightText(sec.content, searchQuery)}</p>
+              
+              {sec.bullets.length > 0 && (
+                <ul>
+                  {sec.bullets.map((bullet, idx) => (
+                    <li 
+                      key={idx}
+                      dangerouslySetInnerHTML={{ 
+                        __html: searchQuery 
+                          ? bullet.replace(new RegExp(`(${searchQuery})`, 'gi'), '<mark class="search-highlight">$1</mark>')
+                          : bullet 
+                      }}
+                    />
+                  ))}
+                </ul>
+              )}
+            </section>
+          ))}
+
+          {/* Contact Section */}
+          <section id="sec-contact" className="privacy-section-block">
+            <h2>Contact Our Privacy Officer</h2>
+            <p>
+              If you have any questions about this Privacy Policy, wish to access your personal data files, or request permanent deletion of your profile:
+            </p>
+            <div className="contact-grid">
+              <div className="contact-card">
+                <div className="contact-card-title">Corporate Office</div>
+                <div className="contact-card-value">Chandrapur Showroom, Rautahat</div>
+              </div>
+              <div className="contact-card">
+                <div className="contact-card-title">Support Helpline</div>
+                <div className="contact-card-value">+977-9867332731</div>
+              </div>
+              <div className="contact-card">
+                <div className="contact-card-title">Privacy Email</div>
+                <div className="contact-card-value">support@sinduregharifurniture.shop</div>
+              </div>
+            </div>
+          </section>
+
+          {/* Acceptance Box */}
+          <div className="privacy-acceptance-banner">
+            <div className="privacy-acceptance-icon-wrapper">
+              ✓
+            </div>
+            <h3>Agreement Acknowledgement</h3>
+            <p>
+              By continuing to use our website, ordering custom products, or interacting with our store customer care, you acknowledge full consent to our privacy guidelines.
+            </p>
+          </div>
+        </article>
+      </main>
+    </div>
+  );
 };
 
 export default PrivacyPolicy;

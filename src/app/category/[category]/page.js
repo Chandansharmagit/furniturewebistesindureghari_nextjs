@@ -90,6 +90,45 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function Page() {
-  return <CategoryPage />;
+export default async function Page({ params }) {
+  const slug = (await params).category;
+  const meta = CATEGORY_META[slug] || {
+    label: slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+  };
+
+  // BreadcrumbList JSON-LD — Shows "Sindureghari Furniture > Category" in Google
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_URL,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Furniture",
+        item: `${SITE_URL}/products`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: meta.label,
+        item: `${SITE_URL}/category/${slug}`,
+      },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <CategoryPage />
+    </>
+  );
 }

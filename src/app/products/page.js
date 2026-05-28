@@ -23,5 +23,32 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <FurnitureProductCatalog />;
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://sinduregharifurniture.shop",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "All Furniture",
+        item: "https://sinduregharifurniture.shop/products",
+      },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <FurnitureProductCatalog />
+    </>
+  );
 }

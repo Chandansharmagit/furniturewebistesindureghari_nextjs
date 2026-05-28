@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import authService from '../services/authService';
 
 const AuthContext = createContext();
@@ -140,10 +140,10 @@ export const AuthProvider = ({ children }) => {
     console.log('✅ Logout complete');
   };
 
-  const updateUser = (userData) => {
+  const updateUser = useCallback((userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
-  };
+  }, []);
 
   const checkAuthStatus = () => {
     if (typeof window === 'undefined') {

@@ -1,12 +1,16 @@
 import { Suspense } from "react";
 import "./globals.css";
 import ClientLayout from "./ClientLayout";
+import { getSiteNavigationJsonLd } from "@/component/seo/SiteLinksJsonLd";
 
 /* ─────────────────────────────────────────────
    SECTION A — Global SSR Metadata (Next.js App Router)
    ───────────────────────────────────────────── */
 export const metadata = {
   metadataBase: new URL("https://sinduregharifurniture.shop"),
+
+  /* Shows "Sindureghari Furniture" instead of domain in Google search results */
+  applicationName: "Sindureghari Furniture",
 
   title: {
     default: "Sindureghari Furniture — Buy Sofas, Beds & Wooden Furniture Online Nepal",
@@ -225,6 +229,12 @@ export default function RootLayout({ children }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
+        />
+
+        {/* Site Navigation JSON-LD — Enables sitelinks dropdown in Google */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(getSiteNavigationJsonLd()) }}
         />
       </head>
       <body className="min-h-full flex flex-col">

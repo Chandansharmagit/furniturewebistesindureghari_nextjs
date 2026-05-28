@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
 import authService from '../services/authService';
 import GuestLeadModal from '../component/cart/GuestLeadModal';
+import ActivityService from '../services/activityService';
 
 // Cart Context
 const CartContext = createContext();
@@ -128,6 +129,13 @@ export const CartProvider = ({ children }) => {
     }
 
     dispatch({ type: CART_ACTIONS.ADD_TO_CART, payload: product });
+
+    // Log cart activity to backend for abandoned cart tracking
+    try {
+      ActivityService.trackAddToCart(product.id, product.quantity || 1, product.price);
+    } catch (err) {
+      console.error('Error tracking add to cart:', err);
+    }
   };
 
   const handleGuestLeadConfirm = (info) => {
@@ -138,6 +146,14 @@ export const CartProvider = ({ children }) => {
     // If there was a pending product, add it now
     if (pendingProduct) {
       dispatch({ type: CART_ACTIONS.ADD_TO_CART, payload: pendingProduct });
+      
+      // Log cart activity for guest lead after they confirm details
+      try {
+        ActivityService.trackAddToCart(pendingProduct.id, pendingProduct.quantity || 1, pendingProduct.price);
+      } catch (err) {
+        console.error('Error tracking guest add to cart:', err);
+      }
+
       setPendingProduct(null);
     }
   };

@@ -22,6 +22,7 @@ const API_CONFIG = {
   ENDPOINTS: {
     // Authentication endpoints
     AUTH: {
+      GOOGLE: '/api/auth/google',
       LOGIN: '/api/auth/login',
       REGISTER: '/api/auth/register',
       LOGOUT: '/api/auth/logout',
