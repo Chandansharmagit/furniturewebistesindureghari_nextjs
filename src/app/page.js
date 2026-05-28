@@ -10,6 +10,7 @@ import ShoppableRoom from "../component/home-extensions/ShoppableRoom";
 import TopratedBrand from "../component/component/toprated/Toprated";
 import InteriorDesignService from "../component/home-extensions/InteriorDesignService";
 import Craftsmanship from "../component/home-extensions/Craftsmanship";
+import GoogleReviews from "../component/home-extensions/GoogleReviews";
 import EMIPromo from "../component/emi-promo/EMIPromo";
 import Policy from "../component/component/privacypolicy/privacy";
 
@@ -20,12 +21,13 @@ export default function HomePage() {
       <RoyalSpecialOffers />
       <Homeappliances />
       <InspirationGallery />
-      <FurnitureBrand />
+      {/* <FurnitureBrand /> */}
       <Newproduct />
       <ShoppableRoom />
-      <TopratedBrand />
-      <InteriorDesignService />
-      <Craftsmanship />
+      {/* <TopratedBrand /> */}
+      {/* <InteriorDesignService />
+      <Craftsmanship /> */}
+      <GoogleReviews />
       <EMIPromo />
       <Policy />
     </>

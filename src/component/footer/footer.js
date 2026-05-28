@@ -203,7 +203,7 @@ const Footer = () => {
             <p>&copy; {new Date().getFullYear()} Sindureghari Furniture Showroom | All Rights Reserved</p>
             <div className="legal-links">
               <a href="/privacy-policy">Privacy Charter</a>
-              <span>|</span>
+              <span className="legal-separator">•</span>
               <a href="/terms-conditions">Terms of Excellence</a>
             </div>
           </div>

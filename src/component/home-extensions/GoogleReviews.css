@@ -1,0 +1,113 @@
+.google-reviews-section {
+  background: #fbf9f6; /* Warm, rich ivory/cream premium background */
+  color: #222;
+  padding: 80px 0;
+  font-family: 'Outfit', sans-serif;
+}
+
+.reviews-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.reviews-header {
+  max-width: 800px;
+  margin: 0 auto 50px auto;
+  text-align: center;
+}
+
+.reviews-subtitle {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #c5a059; /* Gold accent */
+  margin-bottom: 15px;
+  display: block;
+}
+
+.reviews-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  color: #111;
+}
+
+.rating-badge-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+.rating-badge {
+  background: #fff;
+  border: 1px solid rgba(197, 160, 89, 0.2);
+  padding: 12px 24px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 25px rgba(197, 160, 89, 0.08);
+}
+
+.rating-score {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111;
+}
+
+.rating-stars {
+  color: #c5a059;
+  display: flex;
+  gap: 2px;
+}
+
+.rating-stars .star {
+  font-size: 18px;
+}
+
+.rating-text {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.reviews-description {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #555;
+  margin: 0;
+}
+
+.reviews-widget-wrapper {
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  min-height: 400px;
+  transition: all 0.3s ease;
+}
+
+.reviews-widget-wrapper:hover {
+  box-shadow: 0 20px 50px rgba(197, 160, 89, 0.06);
+}
+
+@media (max-width: 768px) {
+  .google-reviews-section {
+    padding: 60px 0;
+  }
+  .reviews-container {
+    padding: 0 20px;
+  }
+  .reviews-title {
+    font-size: 32px;
+  }
+  .reviews-widget-wrapper {
+    padding: 15px;
+  }
+}
