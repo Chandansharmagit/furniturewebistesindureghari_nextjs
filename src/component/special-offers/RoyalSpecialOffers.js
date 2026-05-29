@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { buildApiUrl, PRODUCT_ENDPOINTS } from '../../config/api';
 import './RoyalSpecialOffers.css';
 
@@ -137,7 +139,7 @@ export default function RoyalSpecialOffers() {
                         Try Again
                     </button>
                     <div style={{ marginTop: '20px' }}>
-                        <Link to="/" className="royal-special-breadcrumb-link">
+                        <Link href="/" className="royal-special-breadcrumb-link">
                             Browse All Products
                         </Link>
                     </div>
@@ -156,7 +158,7 @@ export default function RoyalSpecialOffers() {
                     <h2>No Special Offers Found</h2>
                     <p>We don't have any specific offers available at the moment.</p>
                     <div style={{ marginTop: '20px' }}>
-                        <Link to="/" className="royal-special-breadcrumb-link">
+                        <Link href="/" className="royal-special-breadcrumb-link">
                             Browse All Products
                         </Link>
                     </div>
@@ -190,7 +192,7 @@ export default function RoyalSpecialOffers() {
                     </p>
                 </div>
                 <div className="royal-special-breadcrumb">
-                    <Link to="/" className="royal-special-breadcrumb-link">Home</Link>
+                    <Link href="/" className="royal-special-breadcrumb-link">Home</Link>
                     <span className="royal-special-breadcrumb-separator">/</span>
                     <span className="royal-special-breadcrumb-current">Royal Special Offers</span>
                 </div>
@@ -252,7 +254,7 @@ export default function RoyalSpecialOffers() {
                 <div className="royal-special-section-header">
                     <h2 className="royal-special-section-title">Royal Special Offers ({products.length} items)</h2>
                     {products.length > 4 && (
-                        <Link to="/special-offers-all" className="royal-special-view-all-btn">
+                        <Link href="/special-offers-all" className="royal-special-view-all-btn">
                             View All Offers
                         </Link>
                     )}
@@ -272,7 +274,7 @@ export default function RoyalSpecialOffers() {
                             </div>
                             <div className="royal-special-product-info">
                                 <h3 className="royal-special-product-title">
-                                    <Link to={`/product/${product.id}`}>
+                                    <Link href={`/product/${product.id}`}>
                                         {product.name.length > 15
                                             ? product.name.substring(0, 85) + "..."
                                             : product.name}
@@ -306,7 +308,7 @@ export default function RoyalSpecialOffers() {
                         <p>Get 0% interest for 12 months on purchases above Rs. 50,000</p>
                     </div>
                     <div className="royal-special-banner-action">
-                        <Link to="/contact" className="royal-special-banner-button">
+                        <Link href="/contact" className="royal-special-banner-button">
                             Learn More
                         </Link>
                     </div>

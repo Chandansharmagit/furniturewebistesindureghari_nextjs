@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { FaDownload, FaSync, FaEnvelope, FaSearch, FaFilter } from 'react-icons/fa';
+import { 
+  MdSearch, MdFilterList, MdDownload, MdRefresh, 
+  MdEmail, MdGroup, MdNewspaper, MdPersonOutline 
+} from 'react-icons/md';
 import { API_BASE_URL } from '../../../config/api';
 import authService from '../../../services/authService';
 import './LeadsHubTab.css';
@@ -40,7 +43,7 @@ const LeadsHubTab = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `royal_leads_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute("download", `leads_export_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
   };
@@ -52,99 +55,156 @@ const LeadsHubTab = () => {
     return matchesSearch && matchesFilter;
   });
 
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch {
+      return dateString;
+    }
+  };
+
+  const newsletterCount = leads.filter(l => l.source.includes('Newsletter')).length;
+  const guestLeadCount = leads.filter(l => l.source === 'Guest Lead').length;
+
   return (
-    <div className="leads-hub-container">
-      <div className="leads-header">
-        <div className="header-titles">
-          <h2>Leads Hub</h2>
-          <p>Consolidated view of all captured contact information across the platform.</p>
+    <div className="lh-leads-panel">
+      {/* Page Header */}
+      <div className="lh-page-header">
+        <div>
+          <h2 className="lh-header-title">Leads Hub</h2>
+          <p className="lh-header-subtitle">Consolidated view of all captured contact information across the platform.</p>
         </div>
-        <div className="header-actions">
-          <button className="refresh-btn" onClick={fetchLeads} disabled={loading}>
-            <FaSync className={loading ? 'spinning' : ''} /> Refresh
+        <div className="lh-header-actions">
+          <button className="lh-btn-outline" onClick={fetchLeads} disabled={loading}>
+            <MdRefresh /> Refresh
           </button>
-          <button className="export-btn" onClick={handleExport}>
-            <FaDownload /> Export CSV
+          <button className="lh-btn-primary" onClick={handleExport}>
+            <MdDownload /> Export CSV
           </button>
         </div>
       </div>
 
-      <div className="leads-controls">
-        <div className="search-bar">
-          <FaSearch />
-          <input 
-            type="text" 
-            placeholder="Search by email or source..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      {/* Stats Grid */}
+      <div className="lh-stats-grid">
+        <div className="lh-stat-card">
+          <div className="lh-stat-top">
+            <MdGroup className="lh-stat-icon" />
+            <span className="lh-stat-badge">All Channels</span>
+          </div>
+          <p className="lh-stat-label">Total Unique Leads</p>
+          <h3 className="lh-stat-value">{leads.length}</h3>
         </div>
-        <div className="filter-group">
-          <FaFilter />
-          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">All Sources</option>
-            <option value="Newsletter">Newsletter</option>
-            <option value="Guest Lead">Guest Leads</option>
-            <option value="Contact Form">Contact Forms</option>
-            <option value="Order Request">Order Requests</option>
-            <option value="Registered User">Registered Users</option>
-          </select>
+
+        <div className="lh-stat-card">
+          <div className="lh-stat-top">
+            <MdNewspaper className="lh-stat-icon" />
+            <span className="lh-stat-badge">Subscriptions</span>
+          </div>
+          <p className="lh-stat-label">Newsletter Subs</p>
+          <h3 className="lh-stat-value">{newsletterCount}</h3>
+        </div>
+
+        <div className="lh-stat-card">
+          <div className="lh-stat-top">
+            <MdPersonOutline className="lh-stat-icon" />
+            <span className="lh-stat-badge">Anonymous</span>
+          </div>
+          <p className="lh-stat-label">Guest Leads</p>
+          <h3 className="lh-stat-value">{guestLeadCount}</h3>
         </div>
       </div>
 
-      <div className="leads-stats">
-        <div className="stat-card">
-          <span className="stat-label">Total Unique Leads</span>
-          <span className="stat-value">{leads.length}</span>
-        </div>
-        <div className="stat-card">
-          <span className="stat-label">Newsletter Subs</span>
-          <span className="stat-value">{leads.filter(l => l.source.includes('Newsletter')).length}</span>
-        </div>
-        <div className="stat-card">
-          <span className="stat-label">Guest Leads</span>
-          <span className="stat-value">{leads.filter(l => l.source === 'Guest Lead').length}</span>
-        </div>
-      </div>
+      {/* Leads Table */}
+      <div className="lh-table-container">
+        {/* Search & Filters */}
+        <div className="lh-filters-bar">
+          <div className="lh-search-wrapper">
+            <MdSearch className="lh-search-icon" />
+            <input 
+              type="text" 
+              className="lh-search-input" 
+              placeholder="Search by email or source..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
 
-      <div className="leads-table-wrapper">
-        <table className="leads-table">
-          <thead>
-            <tr>
-              <th>Lead Email</th>
-              <th>Origin Source</th>
-              <th>Captured Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr><td colSpan="4" className="loading-row">Processing lead database...</td></tr>
-            ) : filteredLeads.length === 0 ? (
-              <tr><td colSpan="4" className="empty-row">No leads matching your criteria.</td></tr>
-            ) : (
-              filteredLeads.map((lead, index) => (
-                <tr key={index}>
-                  <td className="email-cell">
-                    <FaEnvelope className="email-icon" />
-                    {lead.email}
-                  </td>
-                  <td>
-                    <span className={`source-badge ${lead.source.toLowerCase().replace(/[^a-z]/g, '-')}`}>
-                      {lead.source}
-                    </span>
-                  </td>
-                  <td>{new Date(lead.created_at).toLocaleString()}</td>
-                  <td>
-                    <button className="action-btn" title="Send Email">
-                      <FaEnvelope />
-                    </button>
-                  </td>
+          <div className="lh-filter-group">
+            <select 
+              className="lh-filter-select" 
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <option value="all">Source: All</option>
+              <option value="Newsletter">Newsletter</option>
+              <option value="Guest Lead">Guest Leads</option>
+              <option value="Contact Form">Contact Forms</option>
+              <option value="Order Request">Order Requests</option>
+              <option value="Registered User">Registered Users</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Table Content */}
+        {loading ? (
+          <div className="lh-loading">
+            <div className="lh-loading-spinner"></div>
+            <span className="lh-loading-text">Processing lead database...</span>
+          </div>
+        ) : filteredLeads.length === 0 ? (
+          <div className="lh-empty-state">
+            <MdEmail className="lh-empty-icon" />
+            <h4 className="lh-empty-title">No Leads Found</h4>
+            <p className="lh-empty-desc">Try resetting your search query or source filter to see leads.</p>
+          </div>
+        ) : (
+          <div className="lh-table-scroll">
+            <table className="lh-data-table">
+              <thead>
+                <tr>
+                  <th>Lead Email</th>
+                  <th>Origin Source</th>
+                  <th>Captured Date</th>
+                  <th>Actions</th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {filteredLeads.map((lead, index) => (
+                  <tr key={index}>
+                    <td>
+                      <div className="lh-email-cell">
+                        <div className="lh-email-avatar">
+                          <MdEmail />
+                        </div>
+                        <div>
+                          <p className="lh-email-text">{lead.email}</p>
+                          <p className="lh-email-meta">Lead Contact</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span className="lh-source-badge">
+                        {lead.source}
+                      </span>
+                    </td>
+                    <td>{formatDate(lead.created_at)}</td>
+                    <td>
+                      <button className="lh-action-btn" title="Send Email">
+                        <MdEmail />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

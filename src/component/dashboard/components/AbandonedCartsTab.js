@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FaShoppingCart, FaUser, FaEnvelope, FaPhone, FaCalendarAlt, FaExternalLinkAlt } from 'react-icons/fa';
 import dashboardService from '../../../services/dashboardService';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
+import './AbandonedCartsTab.css';
 
-const AbandonedCartsTab = ({ selectedPeriod }) => {
+const AbandonedCartsTab = ({ selectedPeriod, setSelectedPeriod }) => {
   const [carts, setCarts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -44,8 +45,21 @@ const AbandonedCartsTab = ({ selectedPeriod }) => {
   return (
     <div className="abandoned-carts-container">
       <div className="pu-section-header-royal">
-        <h2>Abandoned Carts</h2>
-        <p>Track users who left items in their cart without checking out</p>
+        <div className="header-main">
+          <h2>Abandoned Carts</h2>
+          <p>Track users who left items in their cart without checking out</p>
+        </div>
+        <div className="pu-header-controls">
+          <select 
+            className="pu-period-select" 
+            value={selectedPeriod} 
+            onChange={(e) => setSelectedPeriod(e.target.value)}
+          >
+            <option value="7d">Last 7 Days</option>
+            <option value="30d">Last 30 Days</option>
+            <option value="1y">Yearly Overview</option>
+          </select>
+        </div>
       </div>
 
       <div className="royal-stats-grid">

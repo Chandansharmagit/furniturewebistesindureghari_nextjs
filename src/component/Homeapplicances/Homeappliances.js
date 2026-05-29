@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import ProductCard from '../../components/common/ProductCard/ProductCard';
 import { buildApiUrl, PRODUCT_ENDPOINTS } from '../../config/api';
 import './Homeappliances.css';
@@ -74,7 +76,7 @@ export default function Homeappliances() {
                             where sophisticated engineering meets elegant editorial style.
                         </p>
                     </div>
-                    <Link to="/home-appliances" className="homeappliances-view-all">
+                    <Link href="/home-appliances" className="homeappliances-view-all">
                         Explore Collection
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                             <path d="M5 12h14M12 5l7 7-7 7" />

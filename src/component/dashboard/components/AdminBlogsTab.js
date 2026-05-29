@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FaPlus, FaTrash, FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
 import blogService from '../../../services/blogService';
 import LoadingSpinner from '../../../components/common/LoadingSpinner';
+import './AdminBlogsTab.css';
 
 const AdminBlogsTab = () => {
   const [blogs, setBlogs] = useState([]);

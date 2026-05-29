@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 // import { motion } from 'framer-motion'; // Removed due to unused warning
 // import FavoriteButton from '../common/FavoriteButton'; // Removed due to unused warning
 import { buildApiUrl, PRODUCT_ENDPOINTS } from '../../config/api';
@@ -87,7 +89,7 @@ const Newproduct = () => {
                         Sophisticated sofa collections designed for the modern royal residence,
                         featuring hand-crafted textures and timeless silhouettes.
                     </p>
-                    <Link to="/new-products" className="newproduct-view-all">
+                    <Link href="/new-products" className="newproduct-view-all">
                         Explore Collection
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M5 12h14M12 5l7 7-7 7" />

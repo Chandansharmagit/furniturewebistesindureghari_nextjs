@@ -205,6 +205,53 @@ const siteJsonLd = {
   ],
 };
 
+const homepageFaqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Where is Sindureghari Furniture located?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our primary showroom is located along the Highway Road in Chandrapur, Rautahat, Nepal. We also have advanced wood seasoning and manufacturing workshops nearby in Rautahat."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What type of wood is used in Sindureghari Furniture?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We use 100% seasoned solid hardwoods, primarily premium Teak (Saj) and Sheesham (Sisam). All timber is treated in our advanced steam kiln chambers to prevent termite infestations and warping."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer home delivery and assembly across Nepal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, we provide free premium home delivery, unloading, and professional assembly across Kathmandu, Lalitpur, Pokhara, and other major cities in Nepal for our collections."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I customize the dimensions and polish color of my furniture?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely! We offer complete customization. You can select your preferred dimensions, fabric, wood type, and polish finish (natural teak, honey, walnut, mahogany) by consulting with our design team."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What warranty is provided on Sindureghari Furniture products?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "All our solid wood furniture pieces come with a lifetime warranty on the quality and durability of the timber against pests and termites, plus a 1-year manufacturing defect warranty."
+      }
+    }
+  ]
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en-NP" className="h-full antialiased">
@@ -235,6 +282,12 @@ export default function RootLayout({ children }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(getSiteNavigationJsonLd()) }}
+        />
+
+        {/* Homepage FAQ JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageFaqJsonLd) }}
         />
       </head>
       <body className="min-h-full flex flex-col">

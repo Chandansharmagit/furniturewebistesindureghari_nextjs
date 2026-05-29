@@ -12,7 +12,7 @@ const navigationItems = [
   {
     '@type': 'SiteNavigationElement',
     name: 'Living Room Furniture',
-    url: `${SITE_URL}/category/living-room`,
+    url: `${SITE_URL}/living-room-furniture`,
     description: 'Handcrafted sofas, TV units & lounge furniture in Nepal',
   },
   {
@@ -30,7 +30,7 @@ const navigationItems = [
   {
     '@type': 'SiteNavigationElement',
     name: 'Office Furniture',
-    url: `${SITE_URL}/category/office-and-study`,
+    url: `${SITE_URL}/office-furniture`,
     description: 'Desks, ergonomic chairs & office storage',
   },
   {
@@ -42,31 +42,31 @@ const navigationItems = [
   {
     '@type': 'SiteNavigationElement',
     name: 'Sofa Sets',
-    url: `${SITE_URL}/category/living-room?type=sofa-sets`,
+    url: `${SITE_URL}/sofas`,
     description: 'Royal teak & sisau wooden sofa sets in Nepal',
   },
   {
     '@type': 'SiteNavigationElement',
     name: 'Wooden Beds',
-    url: `${SITE_URL}/category/bedroom?type=beds`,
+    url: `${SITE_URL}/beds`,
     description: 'King & queen size solid wood beds in Nepal',
   },
   {
     '@type': 'SiteNavigationElement',
     name: 'Wardrobes',
-    url: `${SITE_URL}/category/bedroom?type=wardrobes`,
+    url: `${SITE_URL}/wardrobes`,
     description: 'Spacious wooden wardrobes and storage cabinets',
   },
   {
     '@type': 'SiteNavigationElement',
     name: 'Dining Tables',
-    url: `${SITE_URL}/category/dining-room?type=dining-sets`,
+    url: `${SITE_URL}/dining-tables`,
     description: '4, 6 & 8 seater wooden dining sets',
   },
   {
     '@type': 'SiteNavigationElement',
     name: 'Special Offers',
-    url: `${SITE_URL}/special-offers-all`,
+    url: `${SITE_URL}/category/offers`,
     description: 'Upto 50% OFF on premium furniture in Nepal',
   },
   {

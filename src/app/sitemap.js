@@ -9,6 +9,13 @@ const API_URL = process.env.NEXT_PUBLIC_PROD_API_URL || "https://furnituresindur
 
 const STATIC_PAGES = [
   { loc: "/", priority: 1.0, changefreq: "daily" },
+  { loc: "/sofas", priority: 0.95, changefreq: "daily" },
+  { loc: "/beds", priority: 0.95, changefreq: "daily" },
+  { loc: "/dining-tables", priority: 0.95, changefreq: "daily" },
+  { loc: "/wardrobes", priority: 0.95, changefreq: "daily" },
+  { loc: "/living-room-furniture", priority: 0.95, changefreq: "daily" },
+  { loc: "/office-furniture", priority: 0.95, changefreq: "daily" },
+  { loc: "/lighting", priority: 0.95, changefreq: "daily" },
   { loc: "/products", priority: 0.9, changefreq: "daily" },
   { loc: "/new-products", priority: 0.8, changefreq: "daily" },
   { loc: "/home-appliances", priority: 0.8, changefreq: "weekly" },

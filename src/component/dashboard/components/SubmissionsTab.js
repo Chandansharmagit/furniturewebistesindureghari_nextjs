@@ -1,130 +1,172 @@
 import React from 'react';
-import { FaPhone, FaCommentDots, FaShoppingCart } from 'react-icons/fa';
+import { MdPhone, MdRateReview, MdShoppingCart, MdInbox } from 'react-icons/md';
+import './SubmissionsTab.css';
 
 const SubmissionsTab = ({ 
   contactSubmissions, 
   feedbackSubmissions, 
   orderRequestSubmissions 
 }) => {
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch {
+      return dateString;
+    }
+  };
+
+  const getStatusClass = (status) => {
+    const s = (status || 'new').toLowerCase();
+    if (s === 'resolved') return 'sb-badge sb-badge--resolved';
+    return 'sb-badge sb-badge--new';
+  };
+
   return (
-    <div className="pu-tab-content-royal">
-      <div className="pu-section-header-royal">
-        <div className="header-main">
-          <h2>Customer Inquiries & Submissions</h2>
-          <p>Review contact forms, feedback, and custom order requests</p>
+    <div className="sb-submissions-panel">
+      {/* Page Header */}
+      <div className="sb-page-header">
+        <div>
+          <h2 className="sb-header-title">Customer Inquiries & Submissions</h2>
+          <p className="sb-header-subtitle">Review contact forms, feedback, and custom order requests from your clientele.</p>
         </div>
       </div>
 
-      <div className="pu-submissions-grid-royal">
-        {/* Contact Submissions */}
-        <div className="pu-submission-section-royal">
-          <div className="pu-submission-header-royal">
-            <div className="header-info">
-              <div className="icon-box-royal"><FaPhone /></div>
-              <div>
-                <h3>Contact Submissions</h3>
-                <p>Direct inquiries from contact forms</p>
-              </div>
-            </div>
-          </div>
-          <div className="pu-table-container-royal">
-            <table className="pu-royal-data-table">
-              <thead>
-                <tr>
-                  <th>DATE</th>
-                  <th>NAME</th>
-                  <th>SUBJECT</th>
-                  <th>STATUS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(contactSubmissions || []).length > 0 ? contactSubmissions.map((sub, i) => (
-                  <tr key={i}>
-                    <td>{new Date(sub.created_at).toLocaleDateString()}</td>
-                    <td>{sub.name}</td>
-                    <td>{sub.subject}</td>
-                    <td><span className={`pu-status-royal ${sub.status || 'new'}`}>{sub.status || 'New'}</span></td>
-                  </tr>
-                )) : (
-                  <tr><td colSpan="4" className="pu-no-data-td">No contact inquiries found</td></tr>
-                )}
-              </tbody>
-            </table>
+      {/* Contact Submissions Section */}
+      <div className="sb-section-card">
+        <div className="sb-section-header">
+          <div className="sb-section-icon"><MdPhone /></div>
+          <div>
+            <p className="sb-section-title">Contact Submissions</p>
+            <p className="sb-section-subtitle">Direct inquiries from contact forms</p>
           </div>
         </div>
-
-        {/* Feedback Submissions */}
-        <div className="pu-submission-section-royal" style={{ marginTop: '30px' }}>
-          <div className="pu-submission-header-royal">
-            <div className="header-info">
-              <div className="icon-box-royal"><FaCommentDots /></div>
-              <div>
-                <h3>Feedback & Reviews</h3>
-                <p>Customer testimonials and service feedback</p>
-              </div>
-            </div>
-          </div>
-          <div className="pu-table-container-royal">
-            <table className="pu-royal-data-table">
-              <thead>
-                <tr>
-                  <th>DATE</th>
-                  <th>NAME</th>
-                  <th>RATING</th>
-                  <th>FEEDBACK</th>
+        <div className="sb-table-scroll">
+          <table className="sb-data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Subject</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(contactSubmissions || []).length > 0 ? contactSubmissions.map((sub, i) => (
+                <tr key={i}>
+                  <td>{formatDate(sub.created_at)}</td>
+                  <td style={{ fontWeight: 600, color: '#343A40' }}>{sub.name}</td>
+                  <td>{sub.subject}</td>
+                  <td>
+                    <span className={getStatusClass(sub.status)}>
+                      {(sub.status || 'NEW').toUpperCase()}
+                    </span>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {(feedbackSubmissions || []).length > 0 ? feedbackSubmissions.map((sub, i) => (
-                  <tr key={i}>
-                    <td>{new Date(sub.created_at).toLocaleDateString()}</td>
-                    <td>{sub.name}</td>
-                    <td>{'★'.repeat(sub.rating || 0)}{'☆'.repeat(5 - (sub.rating || 0))}</td>
-                    <td title={sub.message || sub.feedback}>{sub.message || sub.feedback}</td>
-                  </tr>
-                )) : (
-                  <tr><td colSpan="4" className="pu-no-data-td">No feedback submissions found</td></tr>
-                )}
-              </tbody>
-            </table>
+              )) : (
+                <tr>
+                  <td colSpan="4">
+                    <div className="sb-empty-state">
+                      <MdInbox className="sb-empty-icon" />
+                      <h4 className="sb-empty-title">No Contact Inquiries</h4>
+                      <p className="sb-empty-desc">No contact form submissions found yet.</p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Feedback Submissions Section */}
+      <div className="sb-section-card">
+        <div className="sb-section-header">
+          <div className="sb-section-icon"><MdRateReview /></div>
+          <div>
+            <p className="sb-section-title">Feedback & Reviews</p>
+            <p className="sb-section-subtitle">Customer testimonials and service feedback</p>
           </div>
         </div>
-
-        {/* Order Requests */}
-        <div className="pu-submission-section-royal" style={{ marginTop: '30px' }}>
-          <div className="pu-submission-header-royal">
-            <div className="header-info">
-              <div className="icon-box-royal"><FaShoppingCart /></div>
-              <div>
-                <h3>Order Request Submissions</h3>
-                <p>Custom furniture inquiries and requests</p>
-              </div>
-            </div>
-          </div>
-          <div className="pu-table-container-royal">
-            <table className="pu-royal-data-table">
-              <thead>
-                <tr>
-                  <th>DATE</th>
-                  <th>NAME</th>
-                  <th>PRODUCT TYPE</th>
-                  <th>BUDGET</th>
+        <div className="sb-table-scroll">
+          <table className="sb-data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Rating</th>
+                <th>Feedback</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(feedbackSubmissions || []).length > 0 ? feedbackSubmissions.map((sub, i) => (
+                <tr key={i}>
+                  <td>{formatDate(sub.created_at)}</td>
+                  <td style={{ fontWeight: 600, color: '#343A40' }}>{sub.name}</td>
+                  <td><span className="sb-star-rating">{'★'.repeat(sub.rating || 0)}{'☆'.repeat(5 - (sub.rating || 0))}</span></td>
+                  <td><span className="sb-feedback-text" title={sub.message || sub.feedback}>{sub.message || sub.feedback}</span></td>
                 </tr>
-              </thead>
-              <tbody>
-                {(orderRequestSubmissions || []).length > 0 ? orderRequestSubmissions.map((sub, i) => (
-                  <tr key={i}>
-                    <td>{new Date(sub.created_at).toLocaleDateString()}</td>
-                    <td>{sub.name}</td>
-                    <td>{sub.product_name || 'Custom Rendering'}</td>
-                    <td>₹{(sub.budget_range || 0).toLocaleString()}</td>
-                  </tr>
-                )) : (
-                  <tr><td colSpan="4" className="pu-no-data-td">No order requests found</td></tr>
-                )}
-              </tbody>
-            </table>
+              )) : (
+                <tr>
+                  <td colSpan="4">
+                    <div className="sb-empty-state">
+                      <MdRateReview className="sb-empty-icon" />
+                      <h4 className="sb-empty-title">No Feedback</h4>
+                      <p className="sb-empty-desc">No feedback submissions found yet.</p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Order Request Submissions Section */}
+      <div className="sb-section-card">
+        <div className="sb-section-header">
+          <div className="sb-section-icon"><MdShoppingCart /></div>
+          <div>
+            <p className="sb-section-title">Order Request Submissions</p>
+            <p className="sb-section-subtitle">Custom furniture inquiries and requests</p>
           </div>
+        </div>
+        <div className="sb-table-scroll">
+          <table className="sb-data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Product Type</th>
+                <th>Budget</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(orderRequestSubmissions || []).length > 0 ? orderRequestSubmissions.map((sub, i) => (
+                <tr key={i}>
+                  <td>{formatDate(sub.created_at)}</td>
+                  <td style={{ fontWeight: 600, color: '#343A40' }}>{sub.name}</td>
+                  <td>{sub.product_name || 'Custom Rendering'}</td>
+                  <td><span className="sb-budget-value">₹{(sub.budget_range || 0).toLocaleString()}</span></td>
+                </tr>
+              )) : (
+                <tr>
+                  <td colSpan="4">
+                    <div className="sb-empty-state">
+                      <MdShoppingCart className="sb-empty-icon" />
+                      <h4 className="sb-empty-title">No Order Requests</h4>
+                      <p className="sb-empty-desc">No custom order requests found yet.</p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

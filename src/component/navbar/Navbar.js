@@ -20,11 +20,12 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
   const categoryData = [
     { 
       name: 'Living Room',
+      path: '/living-room-furniture',
       Icon: GiSofa,
       color: '#8B4513',
       desc: 'Handcrafted sofas, TV units & lounge furniture',
       subLinks: [
-        { name: 'Wooden Sofa Sets',       path: '/category/living-room?type=sofa-sets',    desc: 'Royal teak & sisau sofas' },
+        { name: 'Wooden Sofa Sets',       path: '/sofas',                                  desc: 'Royal teak & sisau sofas' },
         { name: 'Designer Coffee Tables', path: '/category/living-room?type=coffee-tables', desc: 'Elegant centerpiece tables' },
         { name: 'Luxury TV Cabinets',     path: '/category/living-room?type=tv-cabinets',  desc: 'Modern media consoles' },
         { name: 'Premium Recliners',      path: '/category/living-room?type=recliners',    desc: 'Ergonomic comfort chairs' },
@@ -35,7 +36,7 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
         title: 'Royal Sofa Collection',
         desc: 'Hand-carved premium Teak & Sisau timber sofa sets. Starting from NPR 45,000.',
         cta: 'Explore Collection',
-        ctaPath: '/category/living-room?type=sofa-sets',
+        ctaPath: '/sofas',
         gradient: 'linear-gradient(135deg, #2D1B0E 0%, #5C2E0A 60%, #8B4513 100%)'
       }
     },
@@ -45,8 +46,8 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
       color: '#6B3F8B',
       desc: 'Luxury beds, wardrobes & dressing tables',
       subLinks: [
-        { name: 'Royal Wooden Beds',    path: '/category/bedroom?type=beds',            desc: 'King & queen solid wood beds' },
-        { name: 'Luxury Wardrobes',     path: '/category/bedroom?type=wardrobes',       desc: 'Spacious storage cabinets' },
+        { name: 'Royal Wooden Beds',    path: '/beds',                                  desc: 'King & queen solid wood beds' },
+        { name: 'Luxury Wardrobes',     path: '/wardrobes',                             desc: 'Spacious storage cabinets' },
         { name: 'Bedside Tables',       path: '/category/bedroom?type=bedside-tables',  desc: 'Nightstand companions' },
         { name: 'Dressing Tables',      path: '/category/bedroom?type=dressing-tables', desc: 'Mirror vanity sets' },
         { name: 'Mattresses & Cushions',path: '/category/bedroom?type=mattresses',      desc: 'Premium comfort bedding' }
@@ -56,7 +57,7 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
         title: 'King-Size Bed Collection',
         desc: 'Solid rosewood king beds with built-in storage. Free assembly & delivery.',
         cta: 'View Beds',
-        ctaPath: '/category/bedroom?type=beds',
+        ctaPath: '/beds',
         gradient: 'linear-gradient(135deg, #1A0B2E 0%, #3D1A6E 60%, #6B3F8B 100%)'
       }
     },
@@ -66,7 +67,7 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
       color: '#B8591A',
       desc: 'Dining sets, crockery units & bar cabinets',
       subLinks: [
-        { name: 'Handcrafted Dining Sets', path: '/category/dining-room?type=dining-sets',    desc: '4, 6 & 8 seater tables' },
+        { name: 'Handcrafted Dining Sets', path: '/dining-tables',                            desc: '4, 6 & 8 seater tables' },
         { name: 'Premium Dining Chairs',   path: '/category/dining-room?type=dining-chairs',  desc: 'Solid wood seating' },
         { name: 'Wooden Crockery Units',   path: '/category/dining-room?type=crockery-units', desc: 'Kitchen display storage' },
         { name: 'Luxury Bar Cabinets',     path: '/category/dining-room?type=bar-cabinets',   desc: 'Entertainment furniture' }
@@ -76,27 +77,28 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
         title: '6-Seater Dining Sets',
         desc: 'Marble-top and solid wood dining tables with matching chairs for the whole family.',
         cta: 'Browse Dining',
-        ctaPath: '/category/dining-room?type=dining-sets',
+        ctaPath: '/dining-tables',
         gradient: 'linear-gradient(135deg, #2E1005 0%, #7A3010 60%, #B8591A 100%)'
       }
     },
     { 
       name: 'Office and Study',
+      path: '/office-furniture',
       Icon: MdOutlineDesk,
       color: '#1A5276',
       desc: 'Desks, ergonomic chairs & office storage',
       subLinks: [
-        { name: 'Executive Wooden Desks', path: '/category/office-and-study?type=desks',       desc: 'L-shape & standing desks' },
-        { name: 'Ergonomic Chairs',       path: '/category/office-and-study?type=chairs',      desc: 'Comfort-first seating' },
-        { name: 'Sturdy Bookshelves',     path: '/category/office-and-study?type=bookshelves', desc: 'Open & closed shelving' },
-        { name: 'Filing & Storage',       path: '/category/office-and-study?type=storage',     desc: 'Organized workspace units' }
+        { name: 'Executive Wooden Desks', path: '/office-furniture?type=desks',       desc: 'L-shape & standing desks' },
+        { name: 'Ergonomic Chairs',       path: '/office-furniture?type=chairs',      desc: 'Comfort-first seating' },
+        { name: 'Sturdy Bookshelves',     path: '/office-furniture?type=bookshelves', desc: 'Open & closed shelving' },
+        { name: 'Filing & Storage',       path: '/office-furniture?type=storage',     desc: 'Organized workspace units' }
       ],
       promo: {
         badge: 'WORK FROM HOME',
         title: 'Complete Office Setup',
         desc: 'Desk + chair combos crafted for productivity. Ergonomic designs from NPR 15,000.',
         cta: 'Shop Office',
-        ctaPath: '/category/office-and-study',
+        ctaPath: '/office-furniture',
         gradient: 'linear-gradient(135deg, #0A1628 0%, #0E2E52 60%, #1A5276 100%)'
       }
     },
@@ -141,22 +143,23 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
       }
     },
     { 
-      name: 'Lightings',
+      name: 'Lighting',
+      path: '/lighting',
       Icon: MdOutlineLightbulb,
       color: '#B8960A',
       desc: 'Chandeliers, lamps & ambient lighting',
       subLinks: [
-        { name: 'Chandeliers',       path: '/category/lightings?type=chandeliers',  desc: 'Grand ceiling fixtures' },
-        { name: 'Table & Floor Lamps',path: '/category/lightings?type=lamps',       desc: 'Decorative accent lights' },
-        { name: 'Wall Sconces',      path: '/category/lightings?type=wall-sconces', desc: 'Elegant wall fixtures' },
-        { name: 'Ceiling Lights',    path: '/category/lightings?type=ceiling',      desc: 'Flush & pendant mounts' }
+        { name: 'Chandeliers',       path: '/lighting?type=chandeliers',  desc: 'Grand ceiling fixtures' },
+        { name: 'Table & Floor Lamps',path: '/lighting?type=lamps',       desc: 'Decorative accent lights' },
+        { name: 'Wall Sconces',      path: '/lighting?type=wall-sconces', desc: 'Elegant wall fixtures' },
+        { name: 'Ceiling Lights',    path: '/lighting?type=ceiling',      desc: 'Flush & pendant mounts' }
       ],
       promo: {
         badge: '30% OFF',
         title: 'Crystal Chandelier Sale',
         desc: 'Transform any room with our handpicked European-style chandeliers.',
         cta: 'Shop Lights',
-        ctaPath: '/category/lightings',
+        ctaPath: '/lighting',
         gradient: 'linear-gradient(135deg, #1A1200 0%, #5C4200 60%, #B8960A 100%)'
       }
     },

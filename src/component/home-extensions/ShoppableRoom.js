@@ -1,9 +1,11 @@
+"use client";
+
 import React, { useState } from 'react';
 import './ShoppableRoom.css';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const ShoppableRoom = () => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [hoveredSpot, setHoveredSpot] = useState(null);
 
     const hotspots = [
@@ -68,7 +70,7 @@ const ShoppableRoom = () => {
                             <div className="tooltip-info">
                                 <h4>{spot.title}</h4>
                                 <span className="price">{spot.price}</span>
-                                <button onClick={() => navigate(`/category/${spot.category}`)}>Shop Now</button>
+                                <button onClick={() => router.push(`/category/${spot.category}`)}>Shop Now</button>
                             </div>
                         </div>
                     </div>

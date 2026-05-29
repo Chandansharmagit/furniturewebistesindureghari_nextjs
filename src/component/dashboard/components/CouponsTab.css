@@ -1,12 +1,12 @@
 /* ═══════════════════════════════════════════════════════
-   Leads Hub — Premium Dashboard Stylesheet
+   Coupon Protocols — Premium Dashboard Stylesheet
    Sindureghari Elite Furniture Management System
    ═══════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
 
 /* ─── Root Container ─── */
-.lh-leads-panel {
+.cp-coupons-panel {
   width: 100%;
   font-family: 'Outfit', sans-serif;
   color: #191c1d;
@@ -14,7 +14,7 @@
 }
 
 /* ─── Page Header ─── */
-.lh-page-header {
+.cp-page-header {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -22,14 +22,14 @@
 }
 
 @media (min-width: 768px) {
-  .lh-page-header {
+  .cp-page-header {
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-between;
   }
 }
 
-.lh-header-title {
+.cp-header-title {
   font-family: 'Playfair Display', serif;
   font-size: 32px;
   line-height: 40px;
@@ -38,7 +38,7 @@
   margin: 0;
 }
 
-.lh-header-subtitle {
+.cp-header-subtitle {
   font-family: 'Outfit', sans-serif;
   font-size: 16px;
   line-height: 24px;
@@ -46,64 +46,8 @@
   margin: 8px 0 0 0;
 }
 
-.lh-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.lh-btn-outline {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 24px;
-  border: 1px solid #343A40;
-  color: #343A40;
-  background: transparent;
-  font-family: 'Outfit', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.lh-btn-outline:hover {
-  background: #343A40;
-  color: #fff;
-}
-
-.lh-btn-outline:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.lh-btn-primary {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 24px;
-  border: none;
-  background: #B19456;
-  color: #fff;
-  font-family: 'Outfit', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.lh-btn-primary:hover {
-  box-shadow: 0 8px 24px rgba(177, 148, 86, 0.35);
-  transform: translateY(-1px);
-}
-
 /* ─── Stats Grid ─── */
-.lh-stats-grid {
+.cp-stats-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
@@ -111,44 +55,52 @@
 }
 
 @media (min-width: 768px) {
-  .lh-stats-grid {
+  .cp-stats-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.lh-stat-card {
+.cp-stat-card {
   background: #ffffff;
   padding: 24px;
   border: 1px solid #E9ECEF;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.lh-stat-card:hover {
+.cp-stat-card:hover {
   border-color: #B19456;
   transform: translateY(-4px);
   box-shadow: 0 12px 30px rgba(177, 148, 86, 0.08);
 }
 
-.lh-stat-top {
+.cp-stat-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 16px;
 }
 
-.lh-stat-icon {
+.cp-stat-icon {
   font-size: 24px;
   color: #B19456;
 }
 
-.lh-stat-badge {
+.cp-stat-badge {
   font-family: 'Outfit', sans-serif;
   font-size: 11px;
   font-weight: 500;
   color: #595f65;
 }
 
-.lh-stat-label {
+.cp-stat-badge--active {
+  color: #16a34a;
+}
+
+.cp-stat-badge--expired {
+  color: #ba1a1a;
+}
+
+.cp-stat-label {
   font-family: 'Outfit', sans-serif;
   font-size: 11px;
   font-weight: 600;
@@ -158,7 +110,7 @@
   margin: 0 0 4px 0;
 }
 
-.lh-stat-value {
+.cp-stat-value {
   font-family: 'Playfair Display', serif;
   font-size: 24px;
   line-height: 32px;
@@ -167,127 +119,62 @@
   margin: 0;
 }
 
-/* ─── Table Container ─── */
-.lh-table-container {
+/* ─── Coupons Table Container ─── */
+.cp-table-container {
   background: #ffffff;
   border: 1px solid #E9ECEF;
   overflow: hidden;
+  margin-bottom: 48px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.lh-table-container:hover {
+.cp-table-container:hover {
   border-color: #B19456;
 }
 
-/* ─── Filters Bar ─── */
-.lh-filters-bar {
+.cp-table-header {
   padding: 24px;
   border-bottom: 1px solid #E9ECEF;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: stretch;
-}
-
-@media (min-width: 768px) {
-  .lh-filters-bar {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-}
-
-.lh-search-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 384px;
-}
-
-.lh-search-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #595f65;
-  font-size: 20px;
-  pointer-events: none;
-}
-
-.lh-search-input {
-  width: 100%;
-  padding: 12px 16px 12px 48px;
-  background: #f3f4f5;
-  border: 1px solid #E9ECEF;
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-  color: #191c1d;
-  outline: none;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-}
-
-.lh-search-input::placeholder {
-  color: #94a3b8;
-}
-
-.lh-search-input:focus {
-  border-color: #B19456;
-}
-
-.lh-filter-group {
-  display: flex;
   align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
+  justify-content: space-between;
 }
 
-.lh-filter-select {
-  appearance: none;
-  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%23595f65' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 16px center;
-  border: 1px solid #E9ECEF;
-  padding: 12px 40px 12px 16px;
+.cp-table-title {
   font-family: 'Outfit', sans-serif;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #343A40;
-  outline: none;
-  cursor: pointer;
-  transition: border-color 0.3s ease;
+  margin: 0;
 }
 
-.lh-filter-select:focus {
-  border-color: #B19456;
-}
-
-/* ─── Data Table ─── */
-.lh-table-scroll {
+.cp-table-scroll {
   overflow-x: auto;
 }
 
-.lh-table-scroll::-webkit-scrollbar {
+.cp-table-scroll::-webkit-scrollbar {
   height: 4px;
 }
 
-.lh-table-scroll::-webkit-scrollbar-thumb {
+.cp-table-scroll::-webkit-scrollbar-thumb {
   background: #B19456;
   border-radius: 10px;
 }
 
-.lh-data-table {
+.cp-data-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
 
-.lh-data-table thead tr {
+.cp-data-table thead tr {
   background: #f8f9fa;
   border-bottom: 1px solid #E9ECEF;
 }
 
-.lh-data-table thead th {
+.cp-data-table thead th {
   padding: 16px 24px;
   font-family: 'Outfit', sans-serif;
   font-size: 11px;
@@ -297,42 +184,42 @@
   color: #343A40;
 }
 
-.lh-data-table thead th:last-child {
+.cp-data-table thead th:last-child {
   text-align: right;
 }
 
-.lh-data-table tbody tr {
+.cp-data-table tbody tr {
   transition: background 0.2s ease;
   border-bottom: 1px solid #E9ECEF;
 }
 
-.lh-data-table tbody tr:last-child {
+.cp-data-table tbody tr:last-child {
   border-bottom: none;
 }
 
-.lh-data-table tbody tr:hover {
+.cp-data-table tbody tr:hover {
   background: rgba(248, 249, 250, 0.6);
 }
 
-.lh-data-table tbody td {
-  padding: 20px 24px;
+.cp-data-table tbody td {
+  padding: 24px;
   vertical-align: middle;
   font-family: 'Outfit', sans-serif;
   font-size: 14px;
 }
 
-.lh-data-table tbody td:last-child {
+.cp-data-table tbody td:last-child {
   text-align: right;
 }
 
-/* Lead Email Cell */
-.lh-email-cell {
+/* Coupon Code Cell */
+.cp-code-cell {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.lh-email-avatar {
+.cp-code-avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -343,21 +230,22 @@
   flex-shrink: 0;
 }
 
-.lh-email-avatar svg {
+.cp-code-avatar svg {
   font-size: 20px;
   color: #B19456;
 }
 
-.lh-email-text {
+.cp-code-name {
   font-family: 'Outfit', sans-serif;
   font-size: 15px;
   line-height: 22px;
   font-weight: 600;
   color: #343A40;
   margin: 0;
+  letter-spacing: 0.02em;
 }
 
-.lh-email-meta {
+.cp-code-meta {
   font-family: 'Outfit', sans-serif;
   font-size: 11px;
   font-weight: 500;
@@ -365,8 +253,17 @@
   margin: 2px 0 0 0;
 }
 
-/* Source Badge */
-.lh-source-badge {
+/* Discount Value */
+.cp-discount-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #B19456;
+  margin: 0;
+}
+
+/* Badge */
+.cp-badge {
   display: inline-flex;
   align-items: center;
   padding: 4px 12px;
@@ -375,28 +272,42 @@
   font-weight: 600;
   letter-spacing: 0.05em;
   border-radius: 2px;
+}
+
+.cp-badge--active {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.cp-badge--expired {
   background: #edeeef;
   color: #595f65;
   border: 1px solid #E9ECEF;
 }
 
 /* Action Button */
-.lh-action-btn {
+.cp-action-btn {
   background: none;
-  border: none;
-  color: #595f65;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444;
   cursor: pointer;
-  padding: 4px;
-  transition: color 0.2s ease;
-  font-size: 20px;
+  padding: 6px 16px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
 }
 
-.lh-action-btn:hover {
-  color: #B19456;
+.cp-action-btn:hover {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: #ef4444;
 }
 
 /* ─── Loading State ─── */
-.lh-loading {
+.cp-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -405,20 +316,20 @@
   gap: 16px;
 }
 
-.lh-loading-spinner {
+.cp-loading-spinner {
   width: 40px;
   height: 40px;
   border: 3px solid #E9ECEF;
   border-top-color: #B19456;
   border-radius: 50%;
-  animation: lh-spin 0.8s linear infinite;
+  animation: cp-spin 0.8s linear infinite;
 }
 
-@keyframes lh-spin {
+@keyframes cp-spin {
   to { transform: rotate(360deg); }
 }
 
-.lh-loading-text {
+.cp-loading-text {
   font-family: 'Outfit', sans-serif;
   font-size: 14px;
   color: #595f65;
@@ -427,7 +338,7 @@
 }
 
 /* ─── Empty State ─── */
-.lh-empty-state {
+.cp-empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -436,13 +347,13 @@
   text-align: center;
 }
 
-.lh-empty-icon {
+.cp-empty-icon {
   font-size: 48px;
   color: #d0c5b5;
   margin-bottom: 16px;
 }
 
-.lh-empty-title {
+.cp-empty-title {
   font-family: 'Playfair Display', serif;
   font-size: 20px;
   font-weight: 600;
@@ -450,7 +361,7 @@
   margin: 0 0 8px 0;
 }
 
-.lh-empty-desc {
+.cp-empty-desc {
   font-family: 'Outfit', sans-serif;
   font-size: 14px;
   color: #595f65;

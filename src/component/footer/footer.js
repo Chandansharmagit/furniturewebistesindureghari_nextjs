@@ -3,6 +3,7 @@ import "./footer.css";
 import axios from "axios";
 import { API_BASE_URL } from "../../config/api";
 // import { useNavigate } from "react-router-dom";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn,
@@ -128,33 +129,35 @@ const Footer = () => {
           <motion.div variants={itemVariants} className="footer-link-col">
             <h3>Quick Access</h3>
             <ul>
-              <li><a href="/">Grand Home</a></li>
-              <li><a href="/about">Our Legacy</a></li>
-              <li><a href="/ceo">Meet Our CEO</a></li>
-              <li><a href="/our-vision">Our Vision & Plan</a></li>
-              <li><a href="/contact">Imperial Contact</a></li>
-              <li><a href="/help-and-support">Help & Support</a></li>
-              <li><a href="/careers">Royal Careers</a></li>
+              <li><Link href="/">Grand Home</Link></li>
+              <li><Link href="/ceo">Our Legacy (CEO)</Link></li>
+              <li><Link href="/our-vision">Our Vision & Plan</Link></li>
+              <li><Link href="/contact">Imperial Contact</Link></li>
+              <li><Link href="/help-and-support">Help & Support</Link></li>
+              <li><Link href="/careers">Royal Careers</Link></li>
             </ul>
           </motion.div>
 
           <motion.div variants={itemVariants} className="footer-link-col">
             <h3>Collections</h3>
             <ul>
-              <li><a href="/category/living-room">Majestic Living</a></li>
-              <li><a href="/category/bedroom">Regal Bedroom</a></li>
-              <li><a href="/category/dining-room">Imperial Dining</a></li>
-              <li><a href="/category/office-and-study">Sovereign Office</a></li>
+              <li><Link href="/sofas">Luxury Sofa Sets</Link></li>
+              <li><Link href="/beds">Solid Wood Beds</Link></li>
+              <li><Link href="/dining-tables">Dining Table Sets</Link></li>
+              <li><Link href="/wardrobes">Wooden Wardrobes</Link></li>
+              <li><Link href="/living-room-furniture">Living Room Furniture</Link></li>
+              <li><Link href="/office-furniture">Office & Study Tables</Link></li>
+              <li><Link href="/lighting">Crystal Chandeliers</Link></li>
             </ul>
           </motion.div>
 
           <motion.div variants={itemVariants} className="footer-link-col">
             <h3>Mastery</h3>
             <ul>
-              <li><a href="/materials/finishes">Artisan Finishes</a></li>
-              <li><a href="/warranty">Royal Warranty</a></li>
-              <li><a href="/assembly">Curated Setup</a></li>
-              <li><a href="/custom">Custom Commissions</a></li>
+              <li><Link href="/help-and-support#materials">Artisan Finishes</Link></li>
+              <li><Link href="/help-and-support#warranty">Royal Warranty</Link></li>
+              <li><Link href="/help-and-support#assembly">Curated Setup</Link></li>
+              <li><a href="https://wa.me/9779845427041" target="_blank" rel="noopener noreferrer">Custom Commissions</a></li>
             </ul>
           </motion.div>
 
@@ -163,15 +166,15 @@ const Footer = () => {
             <div className="contact-info-list">
               <div className="contact-info-item">
                 <FaMapMarkerAlt />
-                <span>Indureghari, Nepal</span>
+                <span>Chandrapur, Rautahat, Nepal</span>
               </div>
               <div className="contact-info-item">
                 <FaPhoneAlt />
-                <span>+977-98XXXXXXXX</span>
+                <span>+977-9845427041</span>
               </div>
               <div className="contact-info-item">
                 <FaEnvelope />
-                <span>concierge@bishwokarma.com</span>
+                <span>support@sinduregharifurniture.shop</span>
               </div>
             </div>
           </motion.div>
@@ -190,10 +193,10 @@ const Footer = () => {
             </div>
           </div>
           <div className="royal-social-hub">
-            <a href="/" className="social-link"><FaFacebookF /></a>
-            <a href="/" className="social-link"><FaInstagram /></a>
-            <a href="/" className="social-link"><FaTwitter /></a>
-            <a href="/" className="social-link"><FaLinkedinIn /></a>
+            <Link href="https://www.facebook.com/bishwokarmafurniture" target="_blank" rel="noopener noreferrer" className="social-link"><FaFacebookF /></Link>
+            <Link href="https://www.instagram.com/sinduregharifurniture" target="_blank" rel="noopener noreferrer" className="social-link"><FaInstagram /></Link>
+            <Link href="/" className="social-link"><FaTwitter /></Link>
+            <Link href="/" className="social-link"><FaLinkedinIn /></Link>
           </div>
         </motion.div>
 
@@ -202,9 +205,9 @@ const Footer = () => {
           <div className="footer-bottom-content">
             <p>&copy; {new Date().getFullYear()} Sindureghari Furniture Showroom | All Rights Reserved</p>
             <div className="legal-links">
-              <a href="/privacy-policy">Privacy Charter</a>
+              <Link href="/privacy-policy">Privacy Charter</Link>
               <span className="legal-separator">•</span>
-              <a href="/terms-conditions">Terms of Excellence</a>
+              <Link href="/terms-conditions">Terms of Excellence</Link>
             </div>
           </div>
         </motion.div>

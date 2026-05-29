@@ -28,7 +28,6 @@ export default function robots() {
       {
         userAgent: "Googlebot",
         allow: "/",
-        crawlDelay: 1,
       },
       {
         userAgent: "Bingbot",

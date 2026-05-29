@@ -350,8 +350,11 @@ const CategorySEOSection = ({ category, subcategory }) => {
   );
 };
 
-const CategoryPage = () => {
-  const { category, subcategory, keyword } = useParams();
+const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride } = {}) => {
+  const params = useParams();
+  const category = categoryOverride !== undefined ? categoryOverride : params.category;
+  const subcategory = subcategoryOverride !== undefined ? subcategoryOverride : params.subcategory;
+  const keyword = keywordOverride !== undefined ? keywordOverride : params.keyword;
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [isFallbackActive, setIsFallbackActive] = useState(false);

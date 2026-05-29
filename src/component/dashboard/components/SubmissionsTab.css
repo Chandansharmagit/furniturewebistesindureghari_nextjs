@@ -1,0 +1,237 @@
+/* ═══════════════════════════════════════════════════════
+   Customer Submissions — Premium Dashboard Stylesheet
+   Sindureghari Elite Furniture Management System
+   ═══════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+
+/* ─── Root Container ─── */
+.sb-submissions-panel {
+  width: 100%;
+  font-family: 'Outfit', sans-serif;
+  color: #191c1d;
+  background: #f8f9fa;
+}
+
+/* ─── Page Header ─── */
+.sb-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+@media (min-width: 768px) {
+  .sb-page-header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.sb-header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+  color: #343A40;
+  margin: 0;
+}
+
+.sb-header-subtitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: #595f65;
+  margin: 8px 0 0 0;
+}
+
+/* ─── Section Card ─── */
+.sb-section-card {
+  background: #ffffff;
+  border: 1px solid #E9ECEF;
+  overflow: hidden;
+  margin-bottom: 32px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sb-section-card:hover {
+  border-color: #B19456;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(177, 148, 86, 0.08);
+}
+
+.sb-section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  border-bottom: 1px solid #E9ECEF;
+}
+
+.sb-section-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(177, 148, 86, 0.08), rgba(177, 148, 86, 0.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sb-section-icon svg {
+  font-size: 20px;
+  color: #B19456;
+}
+
+.sb-section-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 600;
+  color: #343A40;
+  margin: 0;
+}
+
+.sb-section-subtitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #595f65;
+  margin: 2px 0 0 0;
+}
+
+/* ─── Data Table ─── */
+.sb-table-scroll {
+  overflow-x: auto;
+}
+
+.sb-table-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.sb-table-scroll::-webkit-scrollbar-thumb {
+  background: #B19456;
+  border-radius: 10px;
+}
+
+.sb-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.sb-data-table thead tr {
+  background: #f8f9fa;
+  border-bottom: 1px solid #E9ECEF;
+}
+
+.sb-data-table thead th {
+  padding: 16px 24px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #343A40;
+}
+
+.sb-data-table tbody tr {
+  transition: background 0.2s ease;
+  border-bottom: 1px solid #E9ECEF;
+}
+
+.sb-data-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.sb-data-table tbody tr:hover {
+  background: rgba(248, 249, 250, 0.6);
+}
+
+.sb-data-table tbody td {
+  padding: 20px 24px;
+  vertical-align: middle;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  color: #191c1d;
+}
+
+/* Status Badge */
+.sb-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border-radius: 2px;
+}
+
+.sb-badge--new {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.sb-badge--resolved {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Star Rating */
+.sb-star-rating {
+  font-size: 16px;
+  color: #B19456;
+  letter-spacing: 2px;
+}
+
+/* Feedback Text */
+.sb-feedback-text {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #595f65;
+}
+
+/* Budget */
+.sb-budget-value {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: #343A40;
+}
+
+/* ─── Empty State ─── */
+.sb-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.sb-empty-icon {
+  font-size: 40px;
+  color: #d0c5b5;
+  margin-bottom: 12px;
+}
+
+.sb-empty-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #343A40;
+  margin: 0 0 4px 0;
+}
+
+.sb-empty-desc {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  color: #595f65;
+  margin: 0;
+}

@@ -156,6 +156,15 @@ const ProductUploading = () => {
     return () => clearInterval(interval);
   }, [activeTab, fetchProducts, fetchCategories, fetchCoupons]);
 
+  useEffect(() => {
+    if (activeTab === 'create' && !editingProduct && !formData.sku) {
+      setFormData(prev => ({
+        ...prev,
+        sku: generateRandomSKU()
+      }));
+    }
+  }, [activeTab, editingProduct, formData.sku]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -524,6 +533,13 @@ const ProductUploading = () => {
     }
   };
 
+  const generateRandomSKU = () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const randPart1 = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+    const randPart2 = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+    return `SIND-${randPart1}-${randPart2}`;
+  };
+
   const resetForm = () => {
     setFormData({
       name: '',
@@ -531,7 +547,7 @@ const ProductUploading = () => {
       old_price: '',
       stock: '',
       description: '',
-      sku: '',
+      sku: generateRandomSKU(),
       product_color: '',
       manufacturer: '',
       warranty: '',
@@ -872,7 +888,25 @@ const ProductUploading = () => {
 
               <div className="pu-form-group-royal">
                 <label>Unique Identifier (SKU)</label>
-                <input type="text" name="sku" value={formData.sku} onChange={handleInputChange} />
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <input 
+                    type="text" 
+                    name="sku" 
+                    value={formData.sku} 
+                    onChange={handleInputChange} 
+                    style={{ flex: 1 }} 
+                    placeholder="Auto-generated or custom..."
+                  />
+                  <button 
+                    type="button" 
+                    onClick={() => setFormData(prev => ({ ...prev, sku: generateRandomSKU() }))}
+                    className="pu-refresh-btn-royal"
+                    style={{ padding: '0 16px', border: '1px solid var(--royal-glass-border)', whiteSpace: 'nowrap' }}
+                    title="Generate New Random SKU"
+                  >
+                    Generate
+                  </button>
+                </div>
               </div>
 
               <div className="pu-form-group-royal">

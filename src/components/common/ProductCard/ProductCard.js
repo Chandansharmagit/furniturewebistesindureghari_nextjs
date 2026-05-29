@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Eye, X, Heart, ShoppingCart, Shield, Truck, Wrench } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useCart } from '../../../context/CartContext';
 import './ProductCard.css';
 
@@ -94,7 +96,7 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
             >
-                <Link to={`/product/${productId}`} className="card-link-overlay" aria-label={name} />
+                <Link href={`/product/${productId}`} className="card-link-overlay" aria-label={name} />
 
                 <div className="card-media">
                     <img

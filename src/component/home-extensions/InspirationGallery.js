@@ -1,9 +1,11 @@
+"use client";
+
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import './InspirationGallery.css';
 
 const InspirationGallery = () => {
-    const navigate = useNavigate();
+    const router = useRouter();
 
     return (
         <section className="inspiration-container">
@@ -19,7 +21,7 @@ const InspirationGallery = () => {
                 {/* Large Featured Tile */}
                 <div 
                     className="bento-card bento-large"
-                    onClick={() => navigate('/category/living-room')}
+                    onClick={() => router.push('/category/living-room')}
                 >
                     <div className="bento-image-wrapper">
                         <img 
@@ -40,7 +42,7 @@ const InspirationGallery = () => {
                 {/* Medium Top Tile */}
                 <div 
                     className="bento-card bento-medium-top"
-                    onClick={() => navigate('/category/bedroom')}
+                    onClick={() => router.push('/category/bedroom')}
                 >
                     <div className="bento-image-wrapper">
                         <img 
@@ -60,7 +62,7 @@ const InspirationGallery = () => {
                 {/* Medium Bottom Tile */}
                 <div 
                     className="bento-card bento-medium-bottom"
-                    onClick={() => navigate('/category/dining-room')}
+                    onClick={() => router.push('/category/dining-room')}
                 >
                     <div className="bento-image-wrapper">
                         <img 
@@ -80,7 +82,7 @@ const InspirationGallery = () => {
                 {/* Tall Tile */}
                 <div 
                     className="bento-card bento-tall"
-                    onClick={() => navigate('/category/office-and-study')}
+                    onClick={() => router.push('/category/office-and-study')}
                 >
                     <div className="bento-image-wrapper">
                         <img 

@@ -23,7 +23,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 // Modular Components
 import DashboardSidebar from './components/DashboardSidebar';
-import DashboardHeader from './components/DashboardHeader';
+// Removed DashboardHeader import
 import OverviewTab from './components/OverviewTab';
 import CouponsTab from './components/CouponsTab';
 import UsersTab from './components/UsersTab';
@@ -61,6 +61,7 @@ const AdminDashboard = () => {
   const [coupons, setCoupons] = useState([]);
   const [couponLoading, setCouponLoading] = useState(false);
   const [usersData, setUsersData] = useState([]);
+  const [usersStatistics, setUsersStatistics] = useState(null);
   const [usersLoading, setUsersLoading] = useState(false);
   const [contactSubmissions, setContactSubmissions] = useState([]);
   const [feedbackSubmissions, setFeedbackSubmissions] = useState([]);
@@ -126,6 +127,7 @@ const AdminDashboard = () => {
       if (response.ok) {
         const data = await response.json();
         setUsersData(data.users || []);
+        setUsersStatistics(data.statistics || null);
       }
     } finally {
       setUsersLoading(false);
@@ -177,7 +179,10 @@ const AdminDashboard = () => {
     datasets: [{
       label: 'Revenue (₹)',
       data: salesData?.sales_trend?.map(item => parseFloat(item.revenue) || 0) || [],
-      borderColor: '#3B82F6', backgroundColor: 'rgba(59, 130, 246, 0.1)', tension: 0.4,
+      borderColor: '#B19456', 
+      backgroundColor: 'rgba(177, 148, 86, 0.1)', 
+      tension: 0.4,
+      fill: true
     }],
   };
 
@@ -185,14 +190,32 @@ const AdminDashboard = () => {
     labels: salesData?.order_status_distribution?.map(item => item.status) || [],
     datasets: [{
       data: salesData?.order_status_distribution?.map(item => item.count) || [],
-      backgroundColor: ['#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '#EF4444'],
+      backgroundColor: ['#B19456', '#343A40', '#825151', '#595f65', '#d0c5b5'],
     }],
   };
 
   const royalChartOptions = {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { position: 'top', labels: { color: '#64748b', font: { family: 'Outfit', size: 12 } } } },
-    scales: { x: { grid: { display: false } }, y: { grid: { color: 'rgba(0,0,0,0.05)' } } }
+    responsive: true, 
+    maintainAspectRatio: false,
+    plugins: { 
+      legend: { 
+        position: 'top', 
+        labels: { 
+          color: '#343A40', 
+          font: { family: 'Outfit', size: 12, weight: '600' } 
+        } 
+      } 
+    },
+    scales: { 
+      x: { 
+        grid: { display: false },
+        ticks: { color: '#595f65', font: { family: 'Outfit', size: 11 } }
+      }, 
+      y: { 
+        grid: { color: 'rgba(0, 0, 0, 0.06)' },
+        ticks: { color: '#595f65', font: { family: 'Outfit', size: 11 } }
+      } 
+    }
   };
 
   const renderTabContent = () => {
@@ -202,6 +225,7 @@ const AdminDashboard = () => {
           <OverviewTab 
             dashboardData={dashboardData} 
             productData={productData} 
+            salesData={salesData}
             revenueChartData={revenueChartData} 
             ordersChartData={ordersChartData} 
             royalChartOptions={royalChartOptions} 
@@ -210,6 +234,8 @@ const AdminDashboard = () => {
             handleRefresh={handleRefresh} 
             refreshing={refreshing} 
             navigate={navigate} 
+            selectedPeriod={selectedPeriod}
+            setSelectedPeriod={setSelectedPeriod}
           />
         );
       case 'products':
@@ -227,7 +253,7 @@ const AdminDashboard = () => {
       case 'analytics':
         return <UserActivityDashboard />;
       case 'users':
-        return <UsersTab usersData={usersData} usersLoading={usersLoading} />;
+        return <UsersTab usersData={usersData} usersLoading={usersLoading} usersStatistics={usersStatistics} formatCurrency={formatCurrency} />;
       case 'customer-data':
         return (
           <SubmissionsTab 
@@ -239,7 +265,7 @@ const AdminDashboard = () => {
       case 'blogs':
         return <AdminBlogsTab />;
       case 'abandoned-carts':
-        return <AbandonedCartsTab selectedPeriod={selectedPeriod} />;
+        return <AbandonedCartsTab selectedPeriod={selectedPeriod} setSelectedPeriod={setSelectedPeriod} />;
       case 'leads-hub':
         return <LeadsHubTab />;
       default:
@@ -261,11 +287,6 @@ const AdminDashboard = () => {
         handleLogout={handleLogout} 
       />
       <div className="admin-dashboard-main">
-        <DashboardHeader 
-          selectedPeriod={selectedPeriod} 
-          setSelectedPeriod={setSelectedPeriod} 
-          userName={authService.getCurrentUser()?.name} 
-        />
         <div className="admin-main-content">
           {renderTabContent()}
         </div>
