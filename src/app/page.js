@@ -50,7 +50,7 @@ export default function HomePage() {
             fontFamily: "'Playfair Display', serif",
             textAlign: 'center'
           }}>
-            Sindureghari Furniture — Nepal's Premium Handcrafted Wooden Furniture
+            Sindureghari Furniture — Nepal&apos;s Premium Handcrafted Wooden Furniture
           </h1>
           <p style={{
             fontSize: '1.05rem',
@@ -76,7 +76,7 @@ export default function HomePage() {
               <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '12px' }}>Living Room</h3>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 <li style={{ marginBottom: '8px' }}>
-                  <Link href="/sofas" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Luxury Sofa Sets</Link>
+                  <Link href="/sofa-set-price-nepal" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Sofa Set Price in Nepal</Link>
                 </li>
                 <li style={{ marginBottom: '8px' }}>
                   <Link href="/living-room-furniture" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Living Room Furniture</Link>
@@ -88,10 +88,10 @@ export default function HomePage() {
               <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '12px' }}>Bedroom</h3>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 <li style={{ marginBottom: '8px' }}>
-                  <Link href="/beds" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Solid Wood Beds</Link>
+                  <Link href="/wooden-bed-nepal" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Wooden Beds in Nepal</Link>
                 </li>
                 <li style={{ marginBottom: '8px' }}>
-                  <Link href="/wardrobes" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Wooden Wardrobes</Link>
+                  <Link href="/wardrobe-price-nepal" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Wardrobe Price in Nepal</Link>
                 </li>
               </ul>
             </div>
@@ -100,10 +100,10 @@ export default function HomePage() {
               <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '12px' }}>Dining & Study</h3>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 <li style={{ marginBottom: '8px' }}>
-                  <Link href="/dining-tables" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Dining Table Sets</Link>
+                  <Link href="/dining-table-nepal" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Dining Table Nepal</Link>
                 </li>
                 <li style={{ marginBottom: '8px' }}>
-                  <Link href="/office-furniture" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Office & Study Tables</Link>
+                  <Link href="/office-furniture-nepal" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Office Furniture Nepal</Link>
                 </li>
               </ul>
             </div>
@@ -115,10 +115,32 @@ export default function HomePage() {
                   <Link href="/lighting" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Crystal Chandeliers & Lighting</Link>
                 </li>
                 <li style={{ marginBottom: '8px' }}>
-                  <Link href="/category/modular-kitchens" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Modular Kitchen Cabinets</Link>
+                  <Link href="/custom-furniture-nepal" style={{ color: '#C5A059', textDecoration: 'none', fontSize: '0.95rem' }}>Custom Furniture Nepal</Link>
                 </li>
               </ul>
             </div>
+          </div>
+
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '14px',
+            marginTop: '34px'
+          }}>
+            {[
+              ['Kathmandu', '/furniture-shop-kathmandu'],
+              ['Lalitpur', '/furniture-shop-lalitpur'],
+              ['Bhaktapur', '/furniture-shop-bhaktapur'],
+              ['Pokhara', '/furniture-shop-pokhara'],
+              ['Butwal', '/furniture-shop-butwal'],
+              ['Chitwan', '/furniture-shop-chitwan'],
+              ['Biratnagar', '/furniture-shop-biratnagar'],
+            ].map(([city, href]) => (
+              <Link key={href} href={href} style={{ color: '#5f4722', textDecoration: 'none', fontSize: '0.95rem' }}>
+                Furniture Shop in {city}
+              </Link>
+            ))}
           </div>
         </div>
       </section>

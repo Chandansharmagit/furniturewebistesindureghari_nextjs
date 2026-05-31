@@ -80,6 +80,31 @@ const nextConfig = {
         destination: "https://sinduregharifurniture.shop/:path*",
         permanent: true,
       },
+      {
+        source: "/sofas",
+        destination: "/sofa-set-price-nepal",
+        permanent: true,
+      },
+      {
+        source: "/beds",
+        destination: "/wooden-bed-nepal",
+        permanent: true,
+      },
+      {
+        source: "/wardrobes",
+        destination: "/wardrobe-price-nepal",
+        permanent: true,
+      },
+      {
+        source: "/dining-tables",
+        destination: "/dining-table-nepal",
+        permanent: true,
+      },
+      {
+        source: "/office-furniture",
+        destination: "/office-furniture-nepal",
+        permanent: true,
+      },
     ];
   },
 

@@ -57,7 +57,6 @@ const AdminDashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('30d');
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [coupons, setCoupons] = useState([]);
   const [couponLoading, setCouponLoading] = useState(false);
   const [usersData, setUsersData] = useState([]);
@@ -77,13 +76,12 @@ const AdminDashboard = () => {
       const [overviewRes, salesRes, productRes] = await Promise.all([
         dashboardService.getOverview(selectedPeriod),
         salesService.getAnalytics(selectedPeriod),
-        dashboardService.getProductAnalytics(selectedPeriod),
-        dashboardService.getSystemHealth()
+        dashboardService.getProductAnalytics(selectedPeriod)
       ]);
 
-      setDashboardData(overviewRes.data);
-      setSalesData(salesRes.data);
-      setProductData(productRes.data);
+      setDashboardData(overviewRes.success ? overviewRes.data : {});
+      setSalesData(salesRes.success ? salesRes.data : {});
+      setProductData(productRes.success ? productRes.data : {});
     } catch (err) {
       console.error('Dashboard loading error:', err);
       setError(err.message || 'Failed to load dashboard data');
@@ -157,7 +155,7 @@ const AdminDashboard = () => {
   const handleLogout = () => { authService.logout(); navigate('/login'); };
   const handleTabChange = (tab) => setActiveTab(tab);
   const handleRefresh = () => loadDashboardData();
-  const formatCurrency = (amount) => `₹${(amount || 0).toLocaleString('en-IN')}`;
+  const formatCurrency = (amount) => `Rs. ${Number(amount || 0).toLocaleString('en-IN')}`;
   const formatNumber = (number) => new Intl.NumberFormat('en-US').format(number || 0);
 
   const handleDeleteCoupon = async (id) => {
@@ -174,15 +172,21 @@ const AdminDashboard = () => {
   }, [activeTab, loadCoupons, loadUsersData, loadCustomerSubmissions]);
 
   // Chart configs moved to local variables for cleaner render logic
+  const chronologicalSalesTrend = [...(salesData?.sales_trend || [])].sort((a, b) => (
+    String(a.period || '').localeCompare(String(b.period || ''))
+  ));
+
   const revenueChartData = {
-    labels: salesData?.sales_trend?.map(item => item.period) || [],
+    labels: chronologicalSalesTrend.map(item => item.period),
     datasets: [{
-      label: 'Revenue (₹)',
-      data: salesData?.sales_trend?.map(item => parseFloat(item.revenue) || 0) || [],
+      label: 'Revenue (Rs.)',
+      data: chronologicalSalesTrend.map(item => parseFloat(item.revenue) || 0),
       borderColor: '#B19456', 
       backgroundColor: 'rgba(177, 148, 86, 0.1)', 
       tension: 0.4,
-      fill: true
+      fill: true,
+      pointRadius: 4,
+      pointHoverRadius: 6
     }],
   };
 
@@ -281,8 +285,6 @@ const AdminDashboard = () => {
       <DashboardSidebar 
         activeTab={activeTab} 
         handleTabChange={handleTabChange} 
-        sidebarExpanded={sidebarExpanded} 
-        setSidebarExpanded={setSidebarExpanded} 
         navigate={navigate} 
         handleLogout={handleLogout} 
       />

@@ -13,7 +13,8 @@ const couponApi = axios.create({
 couponApi.interceptors.request.use(
   (config) => {
     const authToken = localStorage.getItem('authToken');
-    if (authToken) {
+    const method = (config.method || 'get').toLowerCase();
+    if (authToken && method !== 'get') {
       config.headers.Authorization = `Bearer ${authToken}`;
     }
     return config;

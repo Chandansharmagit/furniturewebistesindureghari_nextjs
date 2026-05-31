@@ -146,6 +146,7 @@ class AuthService {
       // Clear stored data
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userPassword');
+      localStorage.removeItem('authToken');
       localStorage.removeItem('user');
 
       return {
@@ -393,10 +394,8 @@ class AuthService {
 
   // Get stored credentials
   getCredentials() {
-    return {
-      email: localStorage.getItem('userEmail'),
-      password: localStorage.getItem('userPassword')
-    };
+    const authToken = localStorage.getItem('authToken');
+    return authToken ? { Authorization: `Bearer ${authToken}` } : {};
   }
 
   // Get authentication token (for compatibility with components expecting JWT)

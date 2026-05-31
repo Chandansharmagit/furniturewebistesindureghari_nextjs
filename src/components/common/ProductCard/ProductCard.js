@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Eye, X, Heart, ShoppingCart, Shield, Truck, Wrench } from 'lucide-react';
 import Link from 'next/link';
 import { useCart } from '../../../context/CartContext';
+import { productSeoPath } from '../../../data/nepalSeo';
 import './ProductCard.css';
 
 const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
@@ -34,6 +35,7 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
 
     // Handle varying data structures from different API endpoints
     const productId = id || _id;
+    const productHref = productSeoPath(product);
 
     // Resolve image from multiple possible shapes
     let displayImage = imageUrl || image1 || '/images/placeholder.jpg';
@@ -96,7 +98,7 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
             >
-                <Link href={`/product/${productId}`} className="card-link-overlay" aria-label={name} />
+                <Link href={productHref} className="card-link-overlay" aria-label={name} />
 
                 <div className="card-media">
                     <img

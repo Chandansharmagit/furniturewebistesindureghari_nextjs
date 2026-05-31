@@ -1,10 +1,11 @@
 import ProductDetails from '@/component/productdetails/Productdetails';
+import { slugifyText } from '@/data/nepalSeo';
 
 const SITE_URL = "https://sinduregharifurniture.shop";
 const API_URL = process.env.NEXT_PUBLIC_DEV_API_URL || process.env.REACT_APP_PROD_API_URL || "https://furnituresinduregharibackend.vercel.app";
 
 export async function generateMetadata({ params }) {
-  const { id } = await params;
+  const { id, slug } = await params;
 
   try {
     // Corrected backend endpoint from /products/:id to /api/products/:id
@@ -66,22 +67,22 @@ export async function generateMetadata({ params }) {
       images.push({ url: product.image, width: 1200, height: 630, alt: name });
     }
 
-    const titleStr = price
-      ? `${name} — Rs ${Number(price).toLocaleString("en-NP")} | Buy Online`
-      : `${name} | Buy Online Nepal`;
+    const titleStr = `${name} Price in Nepal | Sindureghari Furniture`;
 
     const cleanTitle = titleStr.length > 60 ? titleStr.substring(0, 57) + "…" : titleStr;
+    const canonicalSlug = slug || `${slugifyText(name)}-price-in-nepal`;
+    const canonicalUrl = `${SITE_URL}/product/${id}/${canonicalSlug}`;
 
     return {
       title: cleanTitle,
       description,
       alternates: {
-        canonical: `${SITE_URL}/product/${id}`,
+        canonical: canonicalUrl,
       },
       openGraph: {
         title: `${name} — Sindureghari Furniture Nepal`,
         description,
-        url: `${SITE_URL}/product/${id}`,
+        url: canonicalUrl,
         type: "website",
         images: images.length > 0 ? images : undefined,
       },
@@ -127,7 +128,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Page({ params }) {
-  const { id } = await params;
+  const { id, slug } = await params;
   
   let productJsonLd = null;
   let breadcrumbJsonLd = null;
@@ -145,6 +146,8 @@ export default async function Page({ params }) {
       const description = product.description
         ? product.description.substring(0, 155).trim() + "…"
         : `Buy ${name} online at Sindureghari Furniture Nepal.`;
+      const canonicalSlug = slug || `${slugifyText(name)}-price-in-nepal`;
+      const canonicalUrl = `${SITE_URL}/product/${id}/${canonicalSlug}`;
       
       let imageUrl = `${SITE_URL}/logo.png`;
       if (product.imageUrl) {
@@ -165,7 +168,7 @@ export default async function Page({ params }) {
         },
         "offers": {
           "@type": "Offer",
-          "url": `${SITE_URL}/product/${id}`,
+          "url": canonicalUrl,
           "priceCurrency": "NPR",
           "price": price,
           "availability": "https://schema.org/InStock",
@@ -193,7 +196,7 @@ export default async function Page({ params }) {
             "@type": "ListItem",
             "position": 3,
             "name": name,
-            "item": `${SITE_URL}/product/${id}`
+            "item": canonicalUrl
           }
         ]
       };
@@ -216,7 +219,7 @@ export default async function Page({ params }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
       )}
-      <ProductDetails />
+      <ProductDetails productId={id} />
     </>
   );
 }

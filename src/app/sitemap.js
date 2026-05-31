@@ -7,14 +7,32 @@
 const SITE_URL = "https://sinduregharifurniture.shop";
 const API_URL = process.env.NEXT_PUBLIC_PROD_API_URL || "https://furnituresinduregharibackend.vercel.app";
 
+const SEO_MONEY_PAGES = [
+  "/sofa-set-price-nepal",
+  "/wooden-bed-nepal",
+  "/wardrobe-price-nepal",
+  "/dining-table-nepal",
+  "/office-furniture-nepal",
+  "/wooden-furniture-nepal",
+  "/custom-furniture-nepal",
+  "/sofa-set-nepal",
+  "/wooden-bed-design-nepal",
+  "/furniture-price-guide-nepal-2026",
+];
+
+const CITY_PAGES = [
+  "/furniture-shop-kathmandu",
+  "/furniture-shop-lalitpur",
+  "/furniture-shop-bhaktapur",
+  "/furniture-shop-pokhara",
+  "/furniture-shop-butwal",
+  "/furniture-shop-chitwan",
+  "/furniture-shop-biratnagar",
+];
+
 const STATIC_PAGES = [
   { loc: "/", priority: 1.0, changefreq: "daily" },
-  { loc: "/sofas", priority: 0.95, changefreq: "daily" },
-  { loc: "/beds", priority: 0.95, changefreq: "daily" },
-  { loc: "/dining-tables", priority: 0.95, changefreq: "daily" },
-  { loc: "/wardrobes", priority: 0.95, changefreq: "daily" },
   { loc: "/living-room-furniture", priority: 0.95, changefreq: "daily" },
-  { loc: "/office-furniture", priority: 0.95, changefreq: "daily" },
   { loc: "/lighting", priority: 0.95, changefreq: "daily" },
   { loc: "/products", priority: 0.9, changefreq: "daily" },
   { loc: "/new-products", priority: 0.8, changefreq: "daily" },
@@ -29,6 +47,8 @@ const STATIC_PAGES = [
   { loc: "/search", priority: 0.5, changefreq: "weekly" },
   { loc: "/privacy-policy", priority: 0.3, changefreq: "yearly" },
   { loc: "/terms-conditions", priority: 0.3, changefreq: "yearly" },
+  ...SEO_MONEY_PAGES.map((loc) => ({ loc, priority: 0.92, changefreq: "weekly" })),
+  ...CITY_PAGES.map((loc) => ({ loc, priority: 0.86, changefreq: "weekly" })),
 ];
 
 const CATEGORY_PAGES = [
@@ -114,9 +134,14 @@ export default async function sitemap() {
   // 4. Dynamic product pages from API
   let productEntries = [];
   try {
-    const res = await fetch(`${API_URL}/products`, {
+    let res = await fetch(`${API_URL}/api/products`, {
       next: { revalidate: 86400 }, // Revalidate daily
     });
+    if (!res.ok) {
+      res = await fetch(`${API_URL}/products`, {
+        next: { revalidate: 86400 },
+      });
+    }
     if (res.ok) {
       const data = await res.json();
       const products = Array.isArray(data) ? data : data.products || [];
@@ -130,6 +155,29 @@ export default async function sitemap() {
           changeFrequency: "weekly",
           priority: 0.8,
         }));
+
+      const productSlugEntries = products
+        .filter((p) => p && (p._id || p.id) && (p.name || p.title))
+        .map((product) => {
+          const productName = product.name || product.title || "furniture";
+          const slug = productName
+            .toString()
+            .toLowerCase()
+            .replace(/&/g, " and ")
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "")
+            .slice(0, 80);
+          return {
+            url: `${SITE_URL}/product/${product._id || product.id}/${slug}-price-in-nepal`,
+            lastModified: product.updated_at
+              ? new Date(product.updated_at).toISOString().split("T")[0]
+              : today,
+            changeFrequency: "weekly",
+            priority: 0.82,
+          };
+        });
+
+      productEntries.push(...productSlugEntries);
     }
   } catch (error) {
     console.error("Sitemap: Failed to fetch products from API:", error.message);

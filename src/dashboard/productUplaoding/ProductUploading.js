@@ -58,27 +58,28 @@ const ProductUploading = () => {
 
   // No longer needed: const API_BASE = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api`;
 
+  const getAuthHeaders = useCallback((contentType) => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('Admin session expired. Please log in again.');
+    }
+
+    return {
+      ...(contentType ? { 'Content-Type': contentType } : {}),
+      Authorization: `Bearer ${token}`
+    };
+  }, []);
+
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
-      // Get authentication credentials
-      const email = localStorage.getItem('userEmail');
-      const password = localStorage.getItem('userPassword');
 
       // Add cache-busting parameter to prevent caching issues
       const cacheBuster = Date.now();
       const url = `${buildApiUrl(PRODUCT_ENDPOINTS.LIST)}?_t=${cacheBuster}`;
       console.log('Fetching products from:', url);
 
-      const response = await fetch(url, {
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
-          'email': email,
-          'password': password
-        }
-      });
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -95,23 +96,11 @@ const ProductUploading = () => {
 
   const fetchCategories = useCallback(async () => {
     try {
-      // Get authentication credentials
-      const email = localStorage.getItem('userEmail');
-      const password = localStorage.getItem('userPassword');
-
       // Add cache-busting parameter to prevent caching issues
       const cacheBuster = Date.now();
       const url = `${buildApiUrl(PRODUCT_ENDPOINTS.CATEGORIES)}?_t=${cacheBuster}`;
 
-      const response = await fetch(url, {
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
-          'email': email,
-          'password': password
-        }
-      });
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -233,19 +222,12 @@ const ProductUploading = () => {
         submitFormData.append('video', selectedVideo);
       }
 
-      // Get authentication credentials
-      const email = localStorage.getItem('userEmail');
-      const password = localStorage.getItem('userPassword');
-
       const url = buildApiUrl(PRODUCT_ENDPOINTS.LIST);
       console.log('Creating product at:', url);
 
       const response = await fetch(url, {
         method: 'POST',
-        headers: {
-          'email': email,
-          'password': password
-        },
+        headers: getAuthHeaders(),
         body: submitFormData
       });
 
@@ -273,18 +255,10 @@ const ProductUploading = () => {
     setErrorMessage('');
 
     try {
-      // Get authentication credentials
-      const email = localStorage.getItem('userEmail');
-      const password = localStorage.getItem('userPassword');
-
       const url = buildApiUrl(PRODUCT_ENDPOINTS.CATEGORIES);
       const response = await fetch(url, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'email': email,
-          'password': password
-        },
+        headers: getAuthHeaders('application/json'),
         body: JSON.stringify({
           name: categoryForm.name,
           parentCategoryId: categoryForm.parentCategoryId ? parseInt(categoryForm.parentCategoryId) : null
@@ -351,10 +325,6 @@ const ProductUploading = () => {
         submitFormData.append('video', selectedVideo);
       }
 
-      // Get authentication credentials
-      const email = localStorage.getItem('userEmail');
-      const password = localStorage.getItem('userPassword');
-
       // Add cache-busting parameter to prevent caching issues
       const cacheBuster = Date.now();
       const url = `${buildApiUrl(PRODUCT_ENDPOINTS.DETAIL.replace(':id', editingProduct.id))}?_t=${cacheBuster}`;
@@ -362,13 +332,7 @@ const ProductUploading = () => {
 
       const response = await fetch(url, {
         method: 'PUT',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
-          'email': email,
-          'password': password
-        },
+        headers: getAuthHeaders(),
         body: submitFormData
       });
 
@@ -394,10 +358,6 @@ const ProductUploading = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        // Get authentication credentials
-        const email = localStorage.getItem('userEmail');
-        const password = localStorage.getItem('userPassword');
-
         // Add cache-busting parameter to prevent caching issues
         const cacheBuster = Date.now();
         const url = `${buildApiUrl(PRODUCT_ENDPOINTS.DETAIL.replace(':id', id))}?_t=${cacheBuster}`;
@@ -405,13 +365,7 @@ const ProductUploading = () => {
 
         const response = await fetch(url, {
           method: 'DELETE',
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0',
-            'email': email,
-            'password': password
-          }
+          headers: getAuthHeaders()
         });
 
         if (!response.ok) {
@@ -434,19 +388,11 @@ const ProductUploading = () => {
     setErrorMessage('');
 
     try {
-      // Get authentication credentials
-      const email = localStorage.getItem('userEmail');
-      const password = localStorage.getItem('userPassword');
-
       const url = buildApiUrl(COUPON_ENDPOINTS.LIST);
 
       const response = await fetch(url, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'email': email,
-          'password': password
-        },
+        headers: getAuthHeaders('application/json'),
         body: JSON.stringify({
           ...couponData,
           discount_percentage: parseFloat(couponData.discount_percentage)
@@ -478,18 +424,9 @@ const ProductUploading = () => {
     }
 
     try {
-      // Get authentication credentials
-      const email = localStorage.getItem('userEmail');
-      const password = localStorage.getItem('userPassword');
-
       const url = buildApiUrl(COUPON_ENDPOINTS.VALIDATE.replace(':code', couponValidation));
 
-      const response = await fetch(url, {
-        headers: {
-          'email': email,
-          'password': password
-        }
-      });
+      const response = await fetch(url);
       if (response.ok) {
         const coupon = await response.json();
         setValidationResult({

@@ -7,10 +7,7 @@ const apiClient = axios.create({
   baseURL: api.BASE_URL,
   timeout: 30000, // Increased to 30 seconds for production database
   headers: {
-    'Content-Type': 'application/json',
-    'Cache-Control': 'no-cache, no-store, must-revalidate',
-    'Pragma': 'no-cache',
-    'Expires': '0'
+    'Content-Type': 'application/json'
   }
 });
 
@@ -41,25 +38,11 @@ class DashboardService {
   // Get dashboard overview with KPIs
   async getOverview(period = '30d') {
     try {
-      const email = localStorage.getItem('userEmail');
-      const password = localStorage.getItem('userPassword');
-      console.log('Dashboard API call - Credentials exist:', !!(email && password));
-      
-      if (!email || !password) {
-        console.error('No credentials found for dashboard API call');
-        return {
-          success: false,
-          error: 'Access token required. Please log in again.'
-        };
-      }
-      
       // Convert period format (e.g., '30d' -> '30')
       const periodDays = period.replace(/[^0-9]/g, '');
       
       // Add cache-busting parameter
       const cacheBuster = Date.now();
-      
-      console.log('Making dashboard API call with credentials, period:', periodDays);
       
       const response = await apiClient.get(`${buildApiUrl(api.ENDPOINTS.DASHBOARD.OVERVIEW)}?period=${periodDays}&_t=${cacheBuster}`);
       

@@ -6,10 +6,7 @@ import api from '../config/api';
 const apiClient = axios.create({
   timeout: 30000, // Increased to 30 seconds for production database
   headers: {
-    'Content-Type': 'application/json',
-    'Cache-Control': 'no-cache, no-store, must-revalidate',
-    'Pragma': 'no-cache',
-    'Expires': '0'
+    'Content-Type': 'application/json'
   }
 });
 
@@ -96,7 +93,21 @@ class SalesService {
   // Get sales analytics
   async getAnalytics(period = '30d') {
     try {
-      const response = await apiClient.get(`${buildApiUrl(api.ENDPOINTS.DASHBOARD.SALES_ANALYTICS)}?period=${period}`);
+      const periodMap = {
+        '7d': { days: 7, groupBy: 'day' },
+        '30d': { days: 30, groupBy: 'day' },
+        '90d': { days: 90, groupBy: 'week' },
+        '6m': { days: 180, groupBy: 'month' },
+        '1y': { days: 365, groupBy: 'month' }
+      };
+      const normalizedPeriod = periodMap[period] || periodMap['30d'];
+      const queryParams = new URLSearchParams({
+        period: normalizedPeriod.days,
+        group_by: normalizedPeriod.groupBy,
+        _t: Date.now()
+      });
+
+      const response = await apiClient.get(`${buildApiUrl(api.ENDPOINTS.DASHBOARD.SALES_ANALYTICS)}?${queryParams.toString()}`);
       const data = response.data;
       return {
         success: true,

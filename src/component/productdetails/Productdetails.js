@@ -14,8 +14,9 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import gsap from 'gsap';
 import './ProductDetails.css';
 
-export default function ProductDetails() {
-    const { id } = useParams();
+export default function ProductDetails({ productId }) {
+    const routeParams = useParams();
+    const id = productId || routeParams?.id;
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const { trackProductView, trackAddToCart } = useActivityTracking();
@@ -393,6 +394,14 @@ Product Link: ${window.location.href}`;
                 }}
             />
 
+            <div className="pd-breadcrumb">
+                <button type="button" onClick={() => navigate('/products')}>Products</button>
+                <span>/</span>
+                <span>{product.category || product.categoryName || 'Furniture'}</span>
+                <span>/</span>
+                <strong>{product.name || product.title}</strong>
+            </div>
+
             <div className="product-details-content">
                 {/* Image Section */}
                 <div className="product-images-section">
@@ -544,7 +553,13 @@ Product Link: ${window.location.href}`;
                 {/* Product Info Section */}
                 <div className="product-info-section">
                     <div className="product-header">
-                        <h1 className="product-title">{product.name}</h1>
+                        <div className="pd-status-row">
+                            <span className="pd-category-pill">{product.category || product.categoryName || 'Furniture'}</span>
+                            <span className={`pd-stock-pill ${Number(product.stock || 0) > 0 ? 'in-stock' : 'out-stock'}`}>
+                                {Number(product.stock || 0) > 0 ? 'In stock' : 'Made to order'}
+                            </span>
+                        </div>
+                        <h1 className="product-title">{product.name || product.title}</h1>
                         <div className="product-rating">
                             <div className="stars-container">
                                 {renderStars(rating)}
@@ -556,6 +571,21 @@ Product Link: ${window.location.href}`;
 
                     <div className="product-description">
                         <p>{sanitizeDescription(product.description) || 'Premium quality product designed for your comfort and style.'}</p>
+                    </div>
+
+                    <div className="pd-service-strip">
+                        <div>
+                            <strong>Delivery</strong>
+                            <span>Kathmandu & across Nepal</span>
+                        </div>
+                        <div>
+                            <strong>Assembly</strong>
+                            <span>Available on request</span>
+                        </div>
+                        <div>
+                            <strong>Support</strong>
+                            <span>Call or WhatsApp order help</span>
+                        </div>
                     </div>
 
                     <div className="product-pricing">
