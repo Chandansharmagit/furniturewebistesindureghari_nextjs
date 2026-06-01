@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/set-state-in-effect, react-hooks/preserve-manual-memoization, react-hooks/immutability */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ChevronRight, Sofa, Bed, Utensils, Flame, Mic } from 'lucide-react';
+import { Search, ChevronRight, Grid3X3, Mic } from 'lucide-react';
+import { buildCategoryPath, flattenCategories } from '../../../utils/categoryHelpers';
 import '../navbar.css';
 
 const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onClose }) => {
@@ -13,6 +15,7 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
     const [activeIndex, setActiveIndex] = useState(-1);
     const [isListening, setIsListening] = useState(false);
     const [voiceSupported, setVoiceSupported] = useState(false);
+    const [categories, setCategories] = useState([]);
     const searchInputRef = useRef(null);
     const debounceTimeout = useRef(null);
     const recognitionRef = useRef(null);
@@ -69,38 +72,39 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
         }
     };
 
-    const trendingSearches = ['Sofa Set', 'Dining Table', 'Bed Frame', 'Office Chair', 'Wardrobe'];
+    useEffect(() => {
+        let isMounted = true;
 
-    const defaultCategories = [
-        {
-            id: 'sofas',
-            title: 'Sofa Sets & Seating',
-            desc: 'Explore luxury handcrafted royal wooden sofa sets',
-            icon: <Sofa size={18} strokeWidth={1.5} />,
-            path: '/category/living-room'
-        },
-        {
-            id: 'beds',
-            title: 'Bed Frames & Bedroom',
-            desc: 'Serene solid-wood luxury beds & wardrobe systems',
-            icon: <Bed size={18} strokeWidth={1.5} />,
-            path: '/category/bedroom'
-        },
-        {
-            id: 'dining',
-            title: 'Dining Tables & Chairs',
-            desc: 'Premium wooden dining tables for memory making',
-            icon: <Utensils size={18} strokeWidth={1.5} />,
-            path: '/category/dining-room'
-        },
-        {
-            id: 'kitchens',
-            title: 'Modular Kitchens',
-            desc: 'Tailored luxury modular kitchen setups & cabinets',
-            icon: <Flame size={18} strokeWidth={1.5} />,
-            path: '/category/modular-kitchens'
-        }
-    ];
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(`${apiBaseUrl}/api/categories`);
+                if (isMounted && Array.isArray(response.data)) {
+                    setCategories(response.data);
+                }
+            } catch (error) {
+                console.warn('Search categories failed to load:', error);
+            }
+        };
+
+        fetchCategories();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [apiBaseUrl]);
+
+    const defaultCategories = flattenCategories(categories)
+        .filter((category) => category.status !== 'inactive')
+        .slice(0, 8)
+        .map((category) => ({
+            id: category.id,
+            title: category.name,
+            desc: category.description || `${category.product_count || 0} products`,
+            icon: <Grid3X3 size={18} strokeWidth={1.5} />,
+            path: buildCategoryPath(category, category.parent)
+        }));
+
+    const trendingSearches = defaultCategories.slice(0, 5).map((category) => category.title);
 
     // Debounced search function
     const debounceSearch = useCallback((query) => {
@@ -373,8 +377,8 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
                                             {searchResults.length === 0 ? (
                                                 <div className="bkf-palette__empty">
                                                     <div className="bkf-palette__empty-icon">✧</div>
-                                                    <h4>No masterpieces found for "{searchQuery}"</h4>
-                                                    <p>Try searching for other premium products like 'Sofa', 'Dining Table' or 'Bed'.</p>
+                                                    <h4>No masterpieces found for &quot;{searchQuery}&quot;</h4>
+                                                    <p>Try another product name or choose a category from the admin-managed list.</p>
                                                 </div>
                                             ) : (
                                                 <div className="bkf-palette__section">

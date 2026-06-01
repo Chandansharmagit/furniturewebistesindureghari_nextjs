@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, MapPin, Calendar, Edit3, Save, X, Camera, Package, Heart, CreditCard, Monitor, Globe } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Calendar, Edit3, Save, X, Camera, Package, Heart, CreditCard, Monitor, Globe, Copy, Truck } from 'lucide-react';
 import useFavorites from '../../hooks/useFavorites';
 import FavoriteButton from '../common/FavoriteButton';
+import orderService from '../../services/orderService';
 import './Auth.css';
 
 export default function UserProfile() {
@@ -10,6 +11,9 @@ export default function UserProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [ordersError, setOrdersError] = useState('');
   
   const [userInfo, setUserInfo] = useState({
     firstName: 'John',
@@ -147,26 +151,6 @@ export default function UserProfile() {
     }
   };
   
-  // Mock data for orders
-  const [orders] = useState([
-    {
-      id: 'ORD001',
-      date: '2024-01-15',
-      status: 'Delivered',
-      total: 25999,
-      items: 2,
-      image: '/placeholder-sofa.jpg'
-    },
-    {
-      id: 'ORD002',
-      date: '2024-01-10',
-      status: 'In Transit',
-      total: 15999,
-      items: 1,
-      image: '/placeholder-chair.jpg'
-    }
-  ]);
-
   useEffect(() => {
     // Simulate loading user data
     const loadUserData = async () => {
@@ -182,7 +166,41 @@ export default function UserProfile() {
       }
     };
     
+    const loadOrders = async () => {
+      setOrdersLoading(true);
+      setOrdersError('');
+
+      try {
+        const result = await orderService.getMyOrders({ page: 1, limit: 10 });
+
+        if (!result.success) {
+          setOrdersError(result.error || 'Failed to load your orders');
+          setOrders([]);
+          return;
+        }
+
+        const ordersWithItems = await Promise.all(
+          (result.data.orders || []).map(async (order) => {
+            const details = await orderService.getOrderDetails(order.id);
+            return {
+              ...order,
+              items: details.success ? details.data.items || [] : [],
+            };
+          })
+        );
+
+        setOrders(ordersWithItems);
+      } catch (error) {
+        console.error('Failed to load user orders:', error);
+        setOrdersError('Failed to load your orders');
+      } finally {
+        setOrdersLoading(false);
+      }
+    };
+
     loadUserData();
+    loadOrders();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     getBrowserInfo();
     getLocationInfo();
   }, []);
@@ -298,7 +316,7 @@ export default function UserProfile() {
   };
 
   const getStatusColor = (status) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case 'delivered':
         return '#48bb78';
       case 'in transit':
@@ -309,6 +327,17 @@ export default function UserProfile() {
         return '#e53e3e';
       default:
         return '#718096';
+    }
+  };
+
+  const copySku = async (sku) => {
+    if (!sku) return;
+
+    try {
+      await navigator.clipboard.writeText(sku);
+      alert(`SKU copied: ${sku}`);
+    } catch (error) {
+      console.error('Failed to copy SKU:', error);
     }
   };
 
@@ -590,11 +619,25 @@ export default function UserProfile() {
               <h2>My Orders</h2>
             </div>
             
-            {orders.length === 0 ? (
+            {ordersLoading ? (
+              <div className="loading-state">
+                <div className="spinner"></div>
+                <p>Loading your orders...</p>
+              </div>
+            ) : ordersError ? (
+              <div className="empty-state">
+                <Package size={48} />
+                <h3>Orders unavailable</h3>
+                <p>{ordersError}</p>
+                <button className="auth-btn" onClick={() => navigate('/orders')}>
+                  Open Tracking Page
+                </button>
+              </div>
+            ) : orders.length === 0 ? (
               <div className="empty-state">
                 <Package size={48} />
                 <h3>No orders yet</h3>
-                <p>When you place orders, they'll appear here</p>
+                <p>When you place orders, they will appear here</p>
                 <button className="auth-btn" onClick={() => navigate('/products')}>
                   Start Shopping
                 </button>
@@ -605,8 +648,8 @@ export default function UserProfile() {
                   <div key={order.id} className="order-card">
                     <div className="order-header">
                       <div className="order-info">
-                        <h4>Order #{order.id}</h4>
-                        <p>Placed on {formatDate(order.date)}</p>
+                        <h4>Order #{order.order_number || order.id}</h4>
+                        <p>Placed on {formatDate(order.created_at)}</p>
                       </div>
                       <div className="order-status">
                         <span 
@@ -619,16 +662,38 @@ export default function UserProfile() {
                     </div>
                     <div className="order-details">
                       <div className="order-image">
-                        <img src={order.image} alt="Order item" />
+                        <img src={order.items?.[0]?.product_image || '/api/placeholder/120/120'} alt="Order item" />
                       </div>
                       <div className="order-summary">
-                        <p>{order.items} item{order.items > 1 ? 's' : ''}</p>
-                        <p className="order-total">{formatPrice(order.total)}</p>
+                        <p>{order.items?.length || 0} product{(order.items?.length || 0) === 1 ? '' : 's'}</p>
+                        <p className="order-total">{formatPrice(Number(order.total_amount || 0))}</p>
+                        {order.items?.length > 0 && (
+                          <div className="profile-sku-list">
+                            {order.items.map((item) => (
+                              <div key={`${order.id}-${item.product_id}`} className="profile-sku-item">
+                                <span>
+                                  <strong>{item.product_name || 'Product'}</strong>
+                                  <small>SKU: {item.sku || 'Not available'}</small>
+                                </span>
+                                {item.sku && (
+                                  <div className="profile-sku-actions">
+                                    <button type="button" onClick={() => copySku(item.sku)} title="Copy SKU">
+                                      <Copy size={14} />
+                                    </button>
+                                    <button type="button" onClick={() => navigate(`/orders?sku=${encodeURIComponent(item.sku)}`)} title="Track by SKU">
+                                      <Truck size={14} />
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="order-actions">
-                      <button className="secondary-btn">View Details</button>
-                      {order.status.toLowerCase() === 'delivered' && (
+                      <button className="secondary-btn" onClick={() => navigate('/orders')}>View Details</button>
+                      {order.status?.toLowerCase() === 'delivered' && (
                         <button className="secondary-btn">Reorder</button>
                       )}
                     </div>

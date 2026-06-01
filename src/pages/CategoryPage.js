@@ -8,73 +8,17 @@ import { motion } from 'framer-motion';
 import { Filter, ChevronRight } from 'lucide-react';
 import { API_BASE_URL } from '../config/api';
 import ProductCard from '../component/common/ProductCard/ProductCard';
+import { findCategoryBySlug, slugifyCategory, titleFromSlug } from '../utils/categoryHelpers';
 import './CategoryPage.css';
 
 // Category mapping for API calls - moved outside component to avoid re-creation
-const categoryMapping = {
-  'living-room': 'Living room',
-  'bedroom': 'Bedroom',
-  'dining-room': 'Dining room',
-  'office-and-study': 'Office and Study',
-  'modular-kitchens': 'Modular Kitchens',
-  'bathroom': 'Bathroom',
-  'lightings': 'Lightings',
-  'decor': 'Decor',
-  'outdoor': 'Outdoor',
-  'all-products': 'All Products',
-  'offers': 'Offers'
-};
+const categoryMapping = {};
 
 // Subcategory mapping for API calls
-const subcategoryMapping = {
-  'sofas': 'sofas',
-  'recliners': 'recliners',
-  'coffee-tables': 'coffee-tables',
-  'tv-units': 'tv-units',
-  'living-chairs': 'living-chairs',
-  'living-storage': 'living-storage',
-  'beds': 'beds',
-  'wardrobes': 'wardrobes',
-  'dressing-tables': 'dressing-tables',
-  'bedside-tables': 'bedside-tables',
-  'mattresses': 'mattresses',
-  'study-tables': 'study-tables',
-  'dining-sets': 'dining-sets',
-  'dining-tables': 'dining-tables',
-  'dining-chairs': 'dining-chairs',
-  'dining-benches': 'dining-benches',
-  'kitchen-accessories': 'kitchen-accessories',
-  'office-chairs': 'office-chairs',
-  'office-tables': 'office-tables',
-  'storage-solutions': 'storage-solutions',
-  'reception-furniture': 'reception-furniture',
-  'conference-tables': 'conference-tables',
-  'l-shaped': 'l-shaped',
-  'u-shaped': 'u-shaped',
-  'parallel': 'parallel',
-  'island': 'island',
-  'kitchen-acc': 'kitchen-acc',
-  'vanity-units': 'vanity-units',
-  'bathroom-cabinets': 'bathroom-cabinets',
-  'bathroom-mirrors': 'bathroom-mirrors',
-  'bathroom-storage': 'bathroom-storage',
-  'bathroom-accessories': 'bathroom-accessories'
-};
+const subcategoryMapping = {};
 
 // Hero background images per category
-const categoryHeroImages = {
-  'living-room': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=1800',
-  'bedroom': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=1800',
-  'dining-room': 'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&q=80&w=1800',
-  'office-and-study': 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=1800',
-  'modular-kitchens': 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=1800',
-  'bathroom': 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=1800',
-  'lightings': 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&q=80&w=1800',
-  'decor': 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&q=80&w=1800',
-  'outdoor': 'https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?auto=format&fit=crop&q=80&w=1800',
-  'all-products': 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&q=80&w=1800',
-  'offers': 'https://images.unsplash.com/photo-1600210491892-03d54741b8e2?auto=format&fit=crop&q=80&w=1800'
-};
+const categoryHeroImages = {};
 
 // Category display names and descriptions
 const categoryInfo = {
@@ -367,53 +311,42 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
   const [selectedMaterials, setSelectedMaterials] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [fastDelivery, setFastDelivery] = useState(false);
+  const [adminCategories, setAdminCategories] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/categories`);
+        if (!response.ok) return;
+        const data = await response.json();
+        if (isMounted && Array.isArray(data)) {
+          setAdminCategories(data);
+        }
+      } catch (error) {
+        console.warn('Category taxonomy fetch failed:', error);
+      }
+    };
+
+    fetchCategories();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Subcategories for each main category
-  const subcategoriesByCategory = {
-    'living-room': [
-      { name: 'Sofas', id: 'sofas' },
-      { name: 'Recliners', id: 'recliners' },
-      { name: 'Coffee Tables', id: 'coffee-tables' },
-      { name: 'TV Units', id: 'tv-units' },
-      { name: 'Chairs', id: 'living-chairs' },
-      { name: 'Storage', id: 'living-storage' }
-    ],
-    'bedroom': [
-      { name: 'Beds', id: 'beds' },
-      { name: 'Wardrobes', id: 'wardrobes' },
-      { name: 'Dressing Tables', id: 'dressing-tables' },
-      { name: 'Bedside Tables', id: 'bedside-tables' },
-      { name: 'Mattresses', id: 'mattresses' },
-      { name: 'Study Tables', id: 'study-tables' }
-    ],
-    'dining-room': [
-      { name: 'Dining Sets', id: 'dining-sets' },
-      { name: 'Dining Tables', id: 'dining-tables' },
-      { name: 'Dining Chairs', id: 'dining-chairs' },
-      { name: 'Dining Benches', id: 'dining-benches' },
-      { name: 'Kitchen Accessories', id: 'kitchen-accessories' }
-    ],
-    'office-and-study': [
-      { name: 'Office Chairs', id: 'office-chairs' },
-      { name: 'Office Tables', id: 'office-tables' },
-      { name: 'Storage Solutions', id: 'storage-solutions' },
-      { name: 'Reception Furniture', id: 'reception-furniture' },
-      { name: 'Conference Tables', id: 'conference-tables' }
-    ],
-    'modular-kitchens': [
-      { name: 'L-Shaped Kitchen', id: 'l-shaped' },
-      { name: 'U-Shaped Kitchen', id: 'u-shaped' },
-      { name: 'Parallel Kitchen', id: 'parallel' },
-      { name: 'Island Kitchen', id: 'island' },
-      { name: 'Kitchen Accessories', id: 'kitchen-acc' }
-    ],
-    'bathroom': [
-      { name: 'Vanity Units', id: 'vanity-units' },
-      { name: 'Bathroom Cabinets', id: 'bathroom-cabinets' },
-      { name: 'Mirrors', id: 'bathroom-mirrors' },
-      { name: 'Storage Baskets', id: 'bathroom-storage' },
-      { name: 'Accessories', id: 'bathroom-accessories' }
-    ]
+  const subcategoriesByCategory = {};
+
+  const getCategoryAndDescendantIds = (categoryNode) => {
+    if (!categoryNode?.id) return [];
+
+    const childIds = Array.isArray(categoryNode.children)
+      ? categoryNode.children.flatMap(getCategoryAndDescendantIds)
+      : [];
+
+    return [categoryNode.id, ...childIds];
   };
 
   // Fetch products based on category/subcategory or keyword
@@ -441,9 +374,15 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
             throw new Error('Failed to fetch search results for keyword');
           }
         } else {
+          const activeAdminCategory = subcategory
+            ? findCategoryBySlug(adminCategories, subcategory)
+            : findCategoryBySlug(adminCategories, category);
+          const activeCategoryIds = getCategoryAndDescendantIds(activeAdminCategory);
           let categoryName = '';
 
-          if (subcategory) {
+          if (activeAdminCategory?.id) {
+            categoryName = '';
+          } else if (subcategory) {
             // If subcategory is provided, use it for API call
             categoryName = subcategoryMapping[subcategory] || subcategory;
           } else if (category) {
@@ -451,8 +390,13 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
             categoryName = categoryMapping[category] || category;
           }
 
-          // Use the products endpoint with categoryName parameter
-          let url = `${API_BASE_URL}/api/products?categoryName=${categoryName}&page=${currentPage}&limit=12&sort=${sortBy}`;
+          // Prefer admin taxonomy ID; fallback to legacy category names for old routes.
+          const shouldFilterDescendants = activeAdminCategory?.id && activeCategoryIds.length > 1;
+          let url = shouldFilterDescendants
+            ? `${API_BASE_URL}/api/products?category=${activeAdminCategory.id}&includeChildren=true&page=${currentPage}&limit=12&sort=${sortBy}`
+            : activeAdminCategory?.id
+            ? `${API_BASE_URL}/api/products?category=${activeAdminCategory.id}&page=${currentPage}&limit=12&sort=${sortBy}`
+            : `${API_BASE_URL}/api/products?categoryName=${categoryName}&page=${currentPage}&limit=12&sort=${sortBy}`;
 
           if (priceRange.min || priceRange.max) {
             url += `&minPrice=${priceRange.min}&maxPrice=${priceRange.max}`;
@@ -473,8 +417,14 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
           }
         }
 
-        // 2. If no products are found, fetch general products as a fallback
-        if (fetchedProducts.length === 0) {
+        // 2. If no products are found for legacy/fallback routes, fetch general products.
+        // Admin-created categories should show their own empty state instead of unrelated products.
+        const hasAdminCategoryMatch = !keyword && (
+          (subcategory && findCategoryBySlug(adminCategories, subcategory)) ||
+          (!subcategory && category && findCategoryBySlug(adminCategories, category))
+        );
+
+        if (fetchedProducts.length === 0 && !hasAdminCategoryMatch) {
           isFallback = true;
           // Fetch featured/recent general products
           const fallbackUrl = `${API_BASE_URL}/api/products?page=1&limit=12&sort=newest`;
@@ -502,7 +452,7 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
     };
 
     fetchProducts();
-  }, [category, subcategory, keyword, currentPage, sortBy, priceRange]);
+  }, [category, subcategory, keyword, currentPage, sortBy, priceRange, adminCategories]);
 
   // Get current category info
   const getCurrentCategoryInfo = () => {
@@ -515,6 +465,15 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
       };
     }
     if (subcategory) {
+      const adminSubcategory = findCategoryBySlug(adminCategories, subcategory);
+      if (adminSubcategory) {
+        return {
+          title: adminSubcategory.name,
+          description: `Explore ${adminSubcategory.name} products uploaded by our team. Browse pricing, finishes, stock and product details in one place.`,
+          keywords: `${adminSubcategory.name} Nepal, buy ${adminSubcategory.name} Nepal, Sindureghari Furniture`
+        };
+      }
+
       const subcatName = subcategory.split('-').map(word =>
         word.charAt(0).toUpperCase() + word.slice(1)
       ).join(' ');
@@ -524,14 +483,41 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
         keywords: `${subcatName.toLowerCase()} Nepal, buy ${subcatName.toLowerCase()} Nepal, ${subcatName.toLowerCase()} furniture Nepal`
       };
     }
-    return categoryInfo[category] || categoryInfo['all-products'];
+    const adminCategory = findCategoryBySlug(adminCategories, category);
+    if (adminCategory) {
+      return {
+        title: adminCategory.name,
+        description: `Shop ${adminCategory.name} products uploaded from the admin dashboard. Products shown here follow the same category selected during product upload.`,
+        keywords: `${adminCategory.name} Nepal, Sindureghari Furniture, furniture category Nepal`
+      };
+    }
+
+    return categoryInfo[category] || {
+      title: titleFromSlug(category || 'all-products'),
+      description: `Shop premium ${titleFromSlug(category || 'furniture').toLowerCase()} products in Nepal.`,
+      keywords: `${titleFromSlug(category || 'furniture').toLowerCase()} Nepal`
+    };
   };
 
   const currentCategoryInfo = getCurrentCategoryInfo();
+  const activeAdminCategory = findCategoryBySlug(adminCategories, category);
+  const activeAdminSubcategory = subcategory ? findCategoryBySlug(adminCategories, subcategory) : null;
+  const categoryLabel = activeAdminCategory?.name || categoryMapping[category] || titleFromSlug(category || '');
+  const subcategoryLabel = activeAdminSubcategory?.name || (subcategory ? titleFromSlug(subcategory) : '');
+  const dynamicSubcategories = !subcategory
+    ? (
+      Array.isArray(activeAdminCategory?.children) && activeAdminCategory.children.length > 0
+        ? activeAdminCategory.children.map((child) => ({
+          id: child.slug || slugifyCategory(child.name),
+          name: child.name,
+        }))
+        : subcategoriesByCategory[category] || []
+    )
+    : [];
 
   // Handle subcategory click
   const handleSubcategoryClick = (subcatId) => {
-    navigate(`/category/${category}/${subcatId}`);
+    navigate(`/category/${category}/${slugifyCategory(subcatId)}`);
   };
 
   // Handle sort change
@@ -783,14 +769,13 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
     });
   } else if (category) {
     breadcrumbsList.push({
-      name: categoryMapping[category] || category,
+      name: categoryLabel,
       url: `https://sinduregharifurniture.shop/category/${category}`
     });
     
     if (subcategory) {
-      const cleanSub = subcategory.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
       breadcrumbsList.push({
-        name: cleanSub,
+        name: subcategoryLabel,
         url: `https://sinduregharifurniture.shop/category/${category}/${subcategory}`
       });
     }
@@ -845,13 +830,13 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
                 <>
                   <span className="bkf-category__breadcrumb-separator">/</span>
                   <span onClick={() => navigate(`/category/${category}`)} className="bkf-category__breadcrumb-link">
-                    {categoryMapping[category] || category}
+                    {categoryLabel}
                   </span>
                   {subcategory && (
                     <>
                       <span className="bkf-category__breadcrumb-separator">/</span>
                       <span className="bkf-category__breadcrumb-current">
-                        {subcategory.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                        {subcategoryLabel}
                       </span>
                     </>
                   )}
@@ -871,7 +856,7 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
           {/* Background image */}
           <div className="bkf-category__hero-bg">
             <img
-              src={categoryHeroImages[category] || categoryHeroImages['all-products']}
+              src={activeAdminCategory?.image || 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&q=80&w=1800'}
               alt={currentCategoryInfo.title}
               loading="eager"
             />
@@ -920,11 +905,11 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
               {/* Products Section */}
               <div className="bkf-category__products-section">
                 {/* Subcategories (only show if on main category page) */}
-                {!subcategory && subcategoriesByCategory[category] && (
+                {dynamicSubcategories.length > 0 && (
                   <div className="bkf-category__subcategories-section">
                     <h2 className="bkf-category__subcategories-title">Shop by Category</h2>
                     <div className="bkf-category__subcategories-grid">
-                      {subcategoriesByCategory[category].map((subcat, idx) => (
+                      {dynamicSubcategories.map((subcat, idx) => (
                         <motion.div
                           key={subcat.id}
                           className="bkf-category__subcategory-card"
@@ -989,7 +974,7 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
                       color: '#1a1a1a',
                       lineHeight: '1.5'
                     }}>
-                      We are currently updating our <strong>{categoryMapping[category] || category || (keyword ? keyword.replace(/-/g, ' ') : 'furniture')}</strong> collection. In the meantime, explore our finest handcrafted furniture pieces below:
+                      We are currently updating our <strong>{categoryLabel || (keyword ? keyword.replace(/-/g, ' ') : 'furniture')}</strong> collection. In the meantime, explore our finest handcrafted furniture pieces below:
                     </h3>
                   </div>
                 )}

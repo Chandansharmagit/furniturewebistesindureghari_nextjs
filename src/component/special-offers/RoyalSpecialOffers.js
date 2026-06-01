@@ -17,10 +17,6 @@ export default function RoyalSpecialOffers() {
         ogImage: 'https://sinduregharifurniture.shop/images/special-premium-collection.jpg'
     });
 
-    useEffect(() => {
-        fetchSpecialProducts();
-    }, []);
-
     const fetchSpecialProducts = async () => {
         try {
             setLoading(true);
@@ -57,10 +53,12 @@ export default function RoyalSpecialOffers() {
             console.log(`Found ${filteredProducts.length} special products from ${allProducts.length} total products`);
 
             if (filteredProducts.length === 0) {
-                throw new Error('No special offer products found in the database');
+                setProducts([]);
+                setLoading(false);
+                return;
             }
 
-            let data = filteredProducts;
+            const data = filteredProducts;
 
             // Transform API data to match component structure
             const transformedProducts = data.map((product, index) => {
@@ -113,6 +111,11 @@ export default function RoyalSpecialOffers() {
         }
     };
 
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        fetchSpecialProducts();
+    }, []);
+
 
     if (loading) {
         return (
@@ -156,7 +159,7 @@ export default function RoyalSpecialOffers() {
                 </Helmet>
                 <div className="royal-special-error">
                     <h2>No Special Offers Found</h2>
-                    <p>We don't have any specific offers available at the moment.</p>
+                    <p>We do not have any specific offers available at the moment.</p>
                     <div style={{ marginTop: '20px' }}>
                         <Link href="/" className="royal-special-breadcrumb-link">
                             Browse All Products

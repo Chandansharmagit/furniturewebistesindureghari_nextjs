@@ -380,3 +380,223 @@
         font-size: 12px;
     }
 }
+
+/* Functional Nepal bank EMI modal refresh */
+.emi-modal-overlay {
+    background: rgba(17, 24, 39, 0.54);
+    backdrop-filter: blur(4px);
+}
+
+.emi-modal {
+    width: min(960px, calc(100vw - 28px));
+    max-height: min(88vh, 860px);
+    background: #ffffff;
+    border-radius: 8px;
+    position: relative;
+    inset: auto;
+    overflow: hidden;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+}
+
+.emi-modal-header {
+    cursor: default;
+    padding: 18px 22px;
+    background: #111827;
+    color: #ffffff;
+    border-bottom: 0;
+}
+
+.emi-modal-kicker {
+    display: block;
+    margin-bottom: 4px;
+    color: #f7b267;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.emi-modal-header h2 {
+    color: #ffffff;
+    font-size: 24px;
+}
+
+.emi-modal-close-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.emi-modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    transform: none;
+}
+
+.emi-modal-content {
+    padding: 20px 22px 22px;
+    overflow: auto;
+}
+
+.emi-intro {
+    padding: 12px 14px;
+    background: #fff7ed;
+    border-radius: 8px;
+    color: #4b5563;
+}
+
+.emi-selection {
+    margin-bottom: 18px;
+}
+
+.emi-label,
+.emi-label-row {
+    color: #111827;
+    font-weight: 850;
+}
+
+.emi-label-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.emi-banks-grid-modal {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 10px;
+}
+
+.emi-bank-option {
+    min-height: 94px;
+    padding: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    text-align: left;
+    box-shadow: none;
+}
+
+.emi-bank-option:hover {
+    border-color: #f97316;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(249, 115, 22, 0.12);
+}
+
+.emi-bank-option.selected {
+    border-color: #f97316;
+    background: #fff7ed;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+}
+
+.emi-bank-option.selected::after {
+    content: 'Selected';
+    top: 8px;
+    right: 10px;
+    color: #ea580c;
+    font-size: 11px;
+}
+
+.bank-logo {
+    width: 48px;
+    height: 48px;
+    margin-right: 12px;
+    background: #111827;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.bank-name,
+.bank-full-name,
+.bank-rate {
+    display: block;
+}
+
+.bank-rate {
+    color: #067647;
+    font-weight: 800;
+}
+
+.emi-tenure-buttons {
+    gap: 8px;
+}
+
+.emi-tenure-btn {
+    min-height: 40px;
+    border-radius: 8px;
+    font-weight: 750;
+}
+
+.emi-tenure-btn.active {
+    background: #111827;
+    box-shadow: none;
+}
+
+.emi-downpayment-slider {
+    accent-color: #f97316;
+}
+
+.emi-downpayment-value {
+    text-align: left;
+    color: #6b7280;
+}
+
+.emi-summary-card {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin: 18px 0;
+}
+
+.emi-summary-card > div {
+    padding: 14px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.emi-summary-card span,
+.emi-summary-card strong {
+    display: block;
+}
+
+.emi-summary-card span {
+    margin-bottom: 6px;
+    color: #667085;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.emi-summary-card strong {
+    color: #111827;
+    font-size: 18px;
+}
+
+.emi-note {
+    text-align: left;
+}
+
+.emi-proceed-btn {
+    background: #0f172a;
+    font-weight: 850;
+}
+
+.emi-proceed-btn:hover {
+    background: #ea580c;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 760px) {
+    .emi-summary-card {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .emi-summary-card {
+        grid-template-columns: 1fr;
+    }
+}

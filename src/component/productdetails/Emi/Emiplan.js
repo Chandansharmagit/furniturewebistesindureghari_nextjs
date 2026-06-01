@@ -1,181 +1,105 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import './EMIPlansPage.css';
 
+const banks = [
+  {
+    name: 'Nabil Bank',
+    shortName: 'NABIL',
+    cardType: 'Credit Card EMI',
+    interestRates: { 3: 12.5, 6: 13, 9: 13.5, 12: 14, 18: 14.5, 24: 15 },
+  },
+  {
+    name: 'Standard Chartered Bank',
+    shortName: 'SCB',
+    cardType: 'Credit Card EMI',
+    interestRates: { 3: 12, 6: 12.75, 9: 13.25, 12: 13.75, 18: 14.25, 24: 14.75 },
+  },
+  {
+    name: 'NIC Asia Bank',
+    shortName: 'NICA',
+    cardType: 'Card / Finance EMI',
+    interestRates: { 3: 13, 6: 13.5, 9: 14, 12: 14.5, 18: 15, 24: 15.5 },
+  },
+  {
+    name: 'Global IME Bank',
+    shortName: 'GIME',
+    cardType: 'Card EMI',
+    interestRates: { 3: 12.75, 6: 13.25, 9: 13.75, 12: 14.25, 18: 14.75, 24: 15.25 },
+  },
+  {
+    name: 'Himalayan Bank',
+    shortName: 'HBL',
+    cardType: 'Credit Card EMI',
+    interestRates: { 3: 13, 6: 13.5, 9: 14, 12: 14.5, 18: 15, 24: 15.5 },
+  },
+  {
+    name: 'Nepal SBI Bank',
+    shortName: 'NSBI',
+    cardType: 'Card EMI',
+    interestRates: { 3: 13.25, 6: 13.75, 9: 14.25, 12: 14.75, 18: 15.25, 24: 15.75 },
+  },
+  {
+    name: 'Kumari Bank',
+    shortName: 'KBL',
+    cardType: 'Finance EMI',
+    interestRates: { 3: 13.25, 6: 13.75, 9: 14.25, 12: 14.75, 18: 15.25, 24: 15.75 },
+  },
+  {
+    name: 'Siddhartha Bank',
+    shortName: 'SBL',
+    cardType: 'Card EMI',
+    interestRates: { 3: 13, 6: 13.5, 9: 14, 12: 14.5, 18: 15, 24: 15.5 },
+  },
+];
+
+const tenures = [3, 6, 9, 12, 18, 24];
+
+const calculateEMI = (principal, annualRate, months) => {
+  if (!principal || !annualRate || !months) return 0;
+  const monthlyRate = annualRate / 100 / 12;
+  const factor = Math.pow(1 + monthlyRate, months);
+  return (principal * monthlyRate * factor) / (factor - 1);
+};
+
 const EMIPlansModal = ({ isOpen, onClose, productPrice, formatPrice }) => {
-  const [selectedBank, setSelectedBank] = useState('');
-  const [selectedTenure, setSelectedTenure] = useState(3);
+  const [selectedBank, setSelectedBank] = useState('Nabil Bank');
+  const [selectedTenure, setSelectedTenure] = useState(6);
   const [downPayment, setDownPayment] = useState(0);
-  const [error, setError] = useState('');
-  const modalRef = useRef(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const dragOffsetRef = useRef({ x: 0, y: 0 });
 
-  // Center modal when opened
-  useEffect(() => {
-    if (isOpen && modalRef.current) {
-      const modal = modalRef.current;
-      const x = Math.max(0, (window.innerWidth - modal.offsetWidth) / 2);
-      const y = Math.max(0, (window.innerHeight - modal.offsetHeight) / 2);
-      setPosition({ x, y });
-    }
-  }, [isOpen]);
+  const selectedBankData = banks.find((bank) => bank.name === selectedBank) || banks[0];
+  const maxDownPayment = Math.round((Number(productPrice) || 0) * 0.5);
 
-  // Handle drag movement
-  const onDrag = useCallback(
-    (e) => {
-      e.preventDefault();
-      const clientX = e.clientX ?? (e.touches && e.touches[0]?.clientX);
-      const clientY = e.clientY ?? (e.touches && e.touches[0]?.clientY);
-      if (clientX == null || clientY == null || !modalRef.current) return;
-
-      const modal = modalRef.current;
-      const maxX = Math.max(0, window.innerWidth - modal.offsetWidth);
-      const maxY = Math.max(0, window.innerHeight - modal.offsetHeight);
-      let newX = clientX - dragOffsetRef.current.x;
-      let newY = clientY - dragOffsetRef.current.y;
-      newX = Math.max(0, Math.min(newX, maxX));
-      newY = Math.max(0, Math.min(newY, maxY));
-      setPosition({ x: newX, y: newY });
-    },
-    []
-  );
-
-  // End dragging
-  const endDrag = useCallback(() => {
-    window.removeEventListener('mousemove', onDrag);
-    window.removeEventListener('mouseup', endDrag);
-    window.removeEventListener('touchmove', onDrag);
-    window.removeEventListener('touchend', endDrag);
-  }, [onDrag]);
-
-  // Start dragging
-  const startDrag = (e) => {
-    e.preventDefault();
-    const clientX = e.clientX ?? (e.touches && e.touches[0]?.clientX);
-    const clientY = e.clientY ?? (e.touches && e.touches[0]?.clientY);
-    if (clientX == null || clientY == null) return;
-
-    dragOffsetRef.current = { x: clientX - position.x, y: clientY - position.y };
-    window.addEventListener('mousemove', onDrag);
-    window.addEventListener('mouseup', endDrag);
-    window.addEventListener('touchmove', onDrag, { passive: false });
-    window.addEventListener('touchend', endDrag);
-  };
-
-  // Cleanup event listeners on unmount
-  useEffect(() => {
-    return () => {
-      endDrag();
-    };
-  }, [endDrag]);
-
-  // Define Nepali banks with interest rates (annual rates in %)
-  const banks = [
-    {
-      name: 'Nepal Investment Bank',
-      shortName: 'NIBL',
-      interestRates: { 3: 13.5, 6: 14, 9: 14.5, 12: 15, 18: 15.5, 24: 16 },
-      logo: '🏦'
-    },
-    {
-      name: 'Standard Chartered Bank',
-      shortName: 'SCB',
-      interestRates: { 3: 13, 6: 13.5, 9: 14, 12: 14.5, 18: 15, 24: 15.5 },
-      logo: '🏛️'
-    },
-    {
-      name: 'Nabil Bank',
-      shortName: 'NABIL',
-      interestRates: { 3: 14, 6: 14.5, 9: 15, 12: 15.5, 18: 16, 24: 16.5 },
-      logo: '🏦'
-    },
-    {
-      name: 'Nepal SBI Bank',
-      shortName: 'NSBI',
-      interestRates: { 3: 13.25, 6: 13.75, 9: 14.25, 12: 14.75, 18: 15.25, 24: 15.75 },
-      logo: '🏛️'
-    },
-    {
-      name: 'Himalayan Bank',
-      shortName: 'HBL',
-      interestRates: { 3: 13.75, 6: 14.25, 9: 14.75, 12: 15.25, 18: 15.75, 24: 16.25 },
-      logo: '🏔️'
-    },
-    {
-      name: 'NIC Asia Bank',
-      shortName: 'NICA',
-      interestRates: { 3: 13.5, 6: 14, 9: 14.5, 12: 15, 18: 15.5, 24: 16 },
-      logo: '🏦'
-    }
-  ];
-
-  const tenures = [3, 6, 9, 12, 18, 24];
-
-  // Calculate EMI: EMI = [P * r * (1 + r)^n] / [(1 + r)^n - 1]
-  const calculateEMI = (principal, annualRate, months) => {
-    if (!principal || !annualRate || !months) return 0;
-    const monthlyRate = annualRate / 100 / 12;
-    const numerator = principal * monthlyRate * Math.pow(1 + monthlyRate, months);
-    const denominator = Math.pow(1 + monthlyRate, months) - 1;
-    return numerator / denominator;
-  };
-
-  // Calculate total interest paid over the tenure
-  const calculateTotalInterest = (emi, months, principal) => {
-    if (!emi || !months || !principal) return 0;
-    return emi * months - principal;
-  };
-
-  // Validate down payment
-  const validateDownPayment = (value) => {
-    if (value < 0 || value > productPrice * 0.5) {
-      setError('Down payment must be between 0% and 50% of the product price.');
-      return false;
-    }
-    setError('');
-    return true;
-  };
-
-  // Handle down payment change
-  const handleDownPaymentChange = (e) => {
-    const value = parseFloat(e.target.value) || 0;
-    if (validateDownPayment(value)) {
-      setDownPayment(value);
-    }
-  };
-
-  // Calculate EMI details
-  const getEMIDetails = () => {
-    if (!selectedBank || !productPrice || !formatPrice) return null;
-    const bank = banks.find((b) => b.name === selectedBank);
-    if (!bank) return null;
-    const interestRate = bank.interestRates[selectedTenure];
-    const principal = productPrice - downPayment;
+  const emiDetails = useMemo(() => {
+    const price = Number(productPrice) || 0;
+    const principal = Math.max(0, price - downPayment);
+    const interestRate = selectedBankData.interestRates[selectedTenure];
     const emi = calculateEMI(principal, interestRate, selectedTenure);
-    const totalInterest = calculateTotalInterest(emi, selectedTenure, principal);
     const totalAmount = emi * selectedTenure + downPayment;
-    return { emi, interestRate, totalInterest, totalAmount, principal };
-  };
+    const totalInterest = Math.max(0, emi * selectedTenure - principal);
 
-  // Handle proceed button
+    return {
+      principal,
+      interestRate,
+      emi,
+      totalInterest,
+      totalAmount,
+    };
+  }, [downPayment, productPrice, selectedBankData, selectedTenure]);
+
   const handleProceed = () => {
-    const details = getEMIDetails();
-    if (!details) {
-      setError('Please select a bank and try again.');
-      return;
-    }
-    console.log('Proceeding with EMI:', {
-      bank: selectedBank,
-      tenure: selectedTenure,
-      downPayment: formatPrice(downPayment),
-      principal: formatPrice(details.principal),
-      monthlyEMI: formatPrice(details.emi),
-      interestRate: details.interestRate,
-      totalInterest: formatPrice(details.totalInterest),
-      totalAmount: formatPrice(details.totalAmount),
-    });
-    alert('EMI plan selected! Contact us to proceed.');
+    const message = `Hi Sindureghari Furniture, I want to proceed with this EMI plan:
+Bank: ${selectedBank}
+Tenure: ${selectedTenure} months
+Product Price: NPR ${formatPrice(productPrice)}
+Down Payment: NPR ${formatPrice(downPayment)}
+Financed Amount: NPR ${formatPrice(emiDetails.principal)}
+Monthly EMI: NPR ${formatPrice(emiDetails.emi)}
+Interest Rate: ${emiDetails.interestRate}% p.a.
+Total Payable: NPR ${formatPrice(emiDetails.totalAmount)}
+Product Link: ${window.location.href}`;
+
+    window.open(`https://wa.me/9779845427041?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   if (!isOpen) return null;
@@ -183,34 +107,10 @@ const EMIPlansModal = ({ isOpen, onClose, productPrice, formatPrice }) => {
   if (!productPrice || !formatPrice) {
     return createPortal(
       <div className="emi-modal-overlay">
-        <div
-          className="emi-modal"
-          ref={modalRef}
-          style={{ left: position.x, top: position.y }}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="emi-modal-title"
-        >
-          <div
-            className="emi-modal-header"
-            onMouseDown={startDrag}
-            onTouchStart={startDrag}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && startDrag(e)}
-            aria-label="Drag to move modal"
-          >
-            <h2 id="emi-modal-title">Error</h2>
-            <button
-              className="emi-modal-close-btn"
-              onClick={onClose}
-              aria-label="Close EMI modal"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 6L6 18" />
-                <path d="M6 6L18 18" />
-              </svg>
-            </button>
+        <div className="emi-modal" role="dialog" aria-modal="true" aria-labelledby="emi-modal-title">
+          <div className="emi-modal-header">
+            <h2 id="emi-modal-title">EMI Plans</h2>
+            <button className="emi-modal-close-btn" onClick={onClose} aria-label="Close EMI modal">x</button>
           </div>
           <div className="emi-modal-content">
             <p>Unable to load EMI plans. Please try again.</p>
@@ -221,70 +121,50 @@ const EMIPlansModal = ({ isOpen, onClose, productPrice, formatPrice }) => {
     );
   }
 
-  const emiDetails = getEMIDetails();
-
   return createPortal(
     <div className="emi-modal-overlay">
-      <div
-        className="emi-modal"
-        ref={modalRef}
-        style={{ left: position.x, top: position.y }}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="emi-modal-title"
-      >
-        <div
-          className="emi-modal-header"
-          onMouseDown={startDrag}
-          onTouchStart={startDrag}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => e.key === 'Enter' && startDrag(e)}
-          aria-label="Drag to move modal"
-        >
-          <h2 id="emi-modal-title">Customize Your EMI Plan</h2>
-          <button
-            className="emi-modal-close-btn"
-            onClick={onClose}
-            aria-label="Close EMI modal"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M18 6L6 18" />
-              <path d="M6 6L18 18" />
-            </svg>
-          </button>
+      <div className="emi-modal" role="dialog" aria-modal="true" aria-labelledby="emi-modal-title">
+        <div className="emi-modal-header">
+          <div>
+            <span className="emi-modal-kicker">Nepal Bank EMI</span>
+            <h2 id="emi-modal-title">Choose Your EMI Plan</h2>
+          </div>
+          <button className="emi-modal-close-btn" onClick={onClose} aria-label="Close EMI modal">x</button>
         </div>
-        <div className="emi-modal-content">
-          <p>Customize EMI for ₹{formatPrice(productPrice)}:</p>
-          {error && <p className="emi-error-message">{error}</p>}
 
-          {/* Bank Selection */}
+        <div className="emi-modal-content">
+          <p className="emi-intro">
+            Estimate EMI for <strong>NPR {formatPrice(productPrice)}</strong>. Final approval, processing charge, and exact rate depend on the selected bank.
+          </p>
+
           <div className="emi-selection">
-            <label className="emi-label" htmlFor="bank-select">
-              Select Bank:
-            </label>
-            <select
-              id="bank-select"
-              value={selectedBank}
-              onChange={(e) => setSelectedBank(e.target.value)}
-              className="emi-select"
-              aria-required="true"
-            >
-              <option value="">Choose a bank</option>
+            <label className="emi-label">Select Nepal Bank</label>
+            <div className="emi-banks-grid-modal">
               {banks.map((bank) => (
-                <option key={bank.name} value={bank.name}>
-                  {bank.name}
-                </option>
+                <button
+                  type="button"
+                  key={bank.name}
+                  className={`emi-bank-option ${selectedBank === bank.name ? 'selected' : ''}`}
+                  onClick={() => setSelectedBank(bank.name)}
+                  aria-pressed={selectedBank === bank.name}
+                >
+                  <span className="bank-logo">{bank.shortName}</span>
+                  <span className="bank-details">
+                    <span className="bank-name">{bank.name}</span>
+                    <span className="bank-full-name">{bank.cardType}</span>
+                    <span className="bank-rate">{bank.interestRates[selectedTenure]}% p.a. estimate</span>
+                  </span>
+                </button>
               ))}
-            </select>
+            </div>
           </div>
 
-          {/* Tenure Selection */}
           <div className="emi-selection">
-            <label className="emi-label">Select Tenure:</label>
+            <label className="emi-label">Select Tenure</label>
             <div className="emi-tenure-buttons">
               {tenures.map((months) => (
                 <button
+                  type="button"
                   key={months}
                   className={`emi-tenure-btn ${selectedTenure === months ? 'active' : ''}`}
                   onClick={() => setSelectedTenure(months)}
@@ -296,62 +176,48 @@ const EMIPlansModal = ({ isOpen, onClose, productPrice, formatPrice }) => {
             </div>
           </div>
 
-          {/* Down Payment */}
           <div className="emi-selection">
-            <label className="emi-label" htmlFor="down-payment-slider">
-              Down Payment (0% - 50%):
-            </label>
+            <div className="emi-label-row">
+              <label className="emi-label" htmlFor="down-payment-slider">Down Payment</label>
+              <strong>NPR {formatPrice(downPayment)}</strong>
+            </div>
             <input
               id="down-payment-slider"
               type="range"
               min="0"
-              max={productPrice * 0.5}
-              step="100"
+              max={maxDownPayment}
+              step="500"
               value={downPayment}
-              onChange={handleDownPaymentChange}
+              onChange={(event) => setDownPayment(Number(event.target.value))}
               className="emi-downpayment-slider"
-              aria-valuenow={downPayment}
-              aria-valuemin={0}
-              aria-valuemax={productPrice * 0.5}
-              aria-label="Down payment slider"
             />
             <div className="emi-downpayment-value">
-              ₹{formatPrice(downPayment)} ({((downPayment / productPrice) * 100).toFixed(0)}%)
+              {productPrice ? ((downPayment / productPrice) * 100).toFixed(0) : 0}% of product price
             </div>
           </div>
 
-          {/* EMI Details Table */}
-          {emiDetails && (
-            <table className="emi-plans-table" aria-label="EMI plan details">
-              <thead>
-                <tr>
-                  <th scope="col">Principal</th>
-                  <th scope="col">Monthly EMI</th>
-                  <th scope="col">Interest Rate</th>
-                  <th scope="col">Total Interest</th>
-                  <th scope="col">Total Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="emi-table-row">
-                  <td>₹{formatPrice(emiDetails.principal)}</td>
-                  <td>₹{formatPrice(emiDetails.emi)}</td>
-                  <td>{emiDetails.interestRate}% p.a.</td>
-                  <td>₹{formatPrice(emiDetails.totalInterest)}</td>
-                  <td>₹{formatPrice(emiDetails.totalAmount)}</td>
-                </tr>
-              </tbody>
-            </table>
-          )}
+          <div className="emi-summary-card">
+            <div>
+              <span>Monthly EMI</span>
+              <strong>NPR {formatPrice(emiDetails.emi)}</strong>
+            </div>
+            <div>
+              <span>Financed Amount</span>
+              <strong>NPR {formatPrice(emiDetails.principal)}</strong>
+            </div>
+            <div>
+              <span>Total Interest</span>
+              <strong>NPR {formatPrice(emiDetails.totalInterest)}</strong>
+            </div>
+            <div>
+              <span>Total Payable</span>
+              <strong>NPR {formatPrice(emiDetails.totalAmount)}</strong>
+            </div>
+          </div>
 
-          <p className="emi-note">*Contact us to proceed with your selected EMI plan.</p>
-          <button
-            className="emi-proceed-btn"
-            onClick={handleProceed}
-            disabled={!selectedBank}
-            aria-disabled={!selectedBank}
-          >
-            Proceed with EMI
+          <p className="emi-note">*This is an estimate for planning. The bank may ask for citizenship, income proof, card eligibility, or additional verification.</p>
+          <button className="emi-proceed-btn" onClick={handleProceed}>
+            Proceed on WhatsApp
           </button>
         </div>
       </div>

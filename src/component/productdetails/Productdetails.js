@@ -11,6 +11,23 @@ import { useCart } from '../../context/CartContext';
 import useActivityTracking from '../../hooks/useActivityTracking';
 import FavoriteButton from '../common/FavoriteButton';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import {
+    Activity,
+    BadgeCheck,
+    ChevronDown,
+    Copy,
+    CreditCard,
+    Headphones,
+    LockKeyhole,
+    MessageCircle,
+    RotateCcw,
+    Share2,
+    ShieldCheck,
+    ShoppingCart,
+    Truck,
+    Wrench,
+} from 'lucide-react';
+import { FaChevronLeft, FaChevronRight, FaShareAlt } from 'react-icons/fa';
 import gsap from 'gsap';
 import './ProductDetails.css';
 
@@ -307,6 +324,27 @@ Product Link: ${window.location.href}`;
         }
     };
 
+    const handleQuickShare = async () => {
+        const url = window.location.href;
+        const title = product.name || product.title || 'Sindureghari Furniture product';
+        const text = `Check out ${title}`;
+
+        try {
+            if (navigator.share) {
+                await navigator.share({ title, text, url });
+                return;
+            }
+
+            await navigator.clipboard.writeText(url);
+            setShareMessage('Link copied to clipboard!');
+            setTimeout(() => setShareMessage(''), 3000);
+        } catch (error) {
+            console.error('Error sharing product:', error);
+            setShareMessage('Unable to share right now');
+            setTimeout(() => setShareMessage(''), 3000);
+        }
+    };
+
     // Toggle product details
     const toggleDetails = () => {
         setShowDetails(!showDetails);
@@ -338,6 +376,22 @@ Product Link: ${window.location.href}`;
 
     const rating = generateRandomRating(product.id);
     const reviewCount = Math.floor((product.id * 7 + 123) % 50) + 10;
+    const hasDiscount = product.old_price && parseFloat(product.old_price) > parseFloat(product.new_price);
+    const discountPercent = hasDiscount
+        ? Math.round(((parseFloat(product.old_price) - parseFloat(product.new_price)) / parseFloat(product.old_price)) * 100)
+        : 0;
+    const productSku = product?.sku || `SF-${product?.id || '000'}`;
+
+    const copySku = async () => {
+        try {
+            await navigator.clipboard.writeText(productSku);
+            setShareMessage('SKU copied to clipboard!');
+        } catch (error) {
+            console.error('Error copying SKU:', error);
+            setShareMessage('Unable to copy SKU right now');
+        }
+        setTimeout(() => setShareMessage(''), 3000);
+    };
 
 
     return (
@@ -428,6 +482,17 @@ Product Link: ${window.location.href}`;
 
                             return currentImage ? (
                                 <div className="main-image-wrapper">
+                                    <span className="pd-best-seller-badge">Best Seller</span>
+                                    <div className="pd-image-actions">
+                                        <button type="button" className="pd-image-action-btn" onClick={handleQuickShare} aria-label="Share product">
+                                            <FaShareAlt size={17} />
+                                        </button>
+                                        <FavoriteButton
+                                            productId={product?.id}
+                                            size="medium"
+                                            className="pd-image-favorite"
+                                        />
+                                    </div>
                                     <img
                                         src={currentImage}
                                         alt={product.name || product.title}
@@ -447,9 +512,7 @@ Product Link: ${window.location.href}`;
                                                 )}
                                                 aria-label="Previous image"
                                             >
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                    <polyline points="15,18 9,12 15,6"></polyline>
-                                                </svg>
+                                                <FaChevronLeft size={16} />
                                             </button>
                                             <button
                                                 className="image-nav-btn next-btn"
@@ -458,9 +521,7 @@ Product Link: ${window.location.href}`;
                                                 )}
                                                 aria-label="Next image"
                                             >
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                    <polyline points="9,18 15,12 9,6"></polyline>
-                                                </svg>
+                                                <FaChevronRight size={16} />
                                             </button>
 
                                             {/* Image counter */}
@@ -560,6 +621,14 @@ Product Link: ${window.location.href}`;
                             </span>
                         </div>
                         <h1 className="product-title">{product.name || product.title}</h1>
+                        <div className="pd-sku-row">
+                            <span>SKU</span>
+                            <strong>{productSku}</strong>
+                            <button type="button" onClick={copySku} aria-label="Copy product SKU">
+                                <Copy size={14} />
+                                Copy
+                            </button>
+                        </div>
                         <div className="product-rating">
                             <div className="stars-container">
                                 {renderStars(rating)}
@@ -575,25 +644,79 @@ Product Link: ${window.location.href}`;
 
                     <div className="pd-service-strip">
                         <div>
+                            <Truck size={18} />
                             <strong>Delivery</strong>
                             <span>Kathmandu & across Nepal</span>
                         </div>
                         <div>
+                            <Wrench size={18} />
                             <strong>Assembly</strong>
                             <span>Available on request</span>
                         </div>
                         <div>
+                            <Headphones size={18} />
                             <strong>Support</strong>
                             <span>Call or WhatsApp order help</span>
                         </div>
                     </div>
 
                     <div className="product-pricing">
+                        <div className="pd-deal-row">
+                            <span className="pd-deal-badge">Limited-Time Deal</span>
+                        </div>
                         <div className="price-container">
                             <span className="current-price">₹{formatPrice(product.new_price)}</span>
                             {product.old_price && parseFloat(product.old_price) > parseFloat(product.new_price) && (
                                 <span className="original-price">₹{formatPrice(product.old_price)}</span>
                             )}
+                        </div>
+                        {hasDiscount && (
+                            <span className="pd-discount-badge">{discountPercent}% off</span>
+                        )}
+                        {hasDiscount && (
+                            <p className="pd-mrp-line">MRP <span>₹{formatPrice(product.old_price)}</span></p>
+                        )}
+                        <p className="pd-unlock-line">
+                            Get today&apos;s instant extra discount on this product <button type="button" onClick={() => setCouponValidation('')}>Unlock Now!</button>
+                        </p>
+                    </div>
+
+                    <div className="pd-choice-panel">
+                        <div className="pd-option-title">Color &amp; Finishes : <strong>{product.product_color || 'Honey Finish'}</strong></div>
+                        <div className="pd-finish-grid">
+                            {(() => {
+                                let imageUrls = [];
+                                if (product.imageUrls) {
+                                    try {
+                                        imageUrls = typeof product.imageUrls === 'string' ? JSON.parse(product.imageUrls) : product.imageUrls;
+                                    } catch (e) {
+                                        console.error('Error parsing imageUrls:', e);
+                                    }
+                                }
+                                if (imageUrls.length === 0 && product.imageUrl) {
+                                    imageUrls = [product.imageUrl];
+                                }
+                                const finishImages = imageUrls.length > 1 ? imageUrls.slice(0, 2) : [imageUrls[0], imageUrls[0]].filter(Boolean);
+                                const finishNames = [product.product_color || 'Honey Finish', 'Walnut Finish'];
+
+                                return finishImages.map((imageUrl, index) => (
+                                    <button
+                                        type="button"
+                                        key={`${imageUrl}-${index}`}
+                                        className={`pd-finish-card ${index === 0 ? 'active' : ''}`}
+                                        onClick={() => setSelectedImageIndex(Math.min(index, imageUrls.length - 1))}
+                                    >
+                                        <img src={imageUrl} alt={finishNames[index]} />
+                                        <span>{finishNames[index]}</span>
+                                        <small>₹{formatPrice(index === 0 ? product.new_price : Number(product.new_price || 0) + 1000)}</small>
+                                    </button>
+                                ));
+                            })()}
+                        </div>
+                        <div className="pd-option-title size-title">Size : <strong>{product.size || 'King Size'}</strong></div>
+                        <div className="pd-size-grid">
+                            <button type="button" className="pd-size-chip active">King Size</button>
+                            <button type="button" className="pd-size-chip">Queen Size</button>
                         </div>
                     </div>
 
@@ -601,7 +724,7 @@ Product Link: ${window.location.href}`;
 
                     {/* Share Section */}
                     <div className="share-section">
-                        <label className="share-label">Share this product:</label>
+                        <label className="share-label"><Share2 size={16} /> Share this product:</label>
                         <div className="share-buttons">
                             <button className="share-btn facebook" onClick={() => shareProduct('facebook')}>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -689,15 +812,17 @@ Product Link: ${window.location.href}`;
                     <div className="product-details-section">
                         <div className="details-header" onClick={toggleDetails}>
                             <h3>Product Specifications</h3>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: showDetails ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}>
-                                <polyline points="6,9 12,15 18,9"></polyline>
-                            </svg>
+                            <ChevronDown size={20} style={{ transform: showDetails ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }} />
                         </div>
                         <div className={`details-content ${showDetails ? 'active' : ''}`}>
                             <ul className="details-list">
                                 <li>
                                     <span className="label">Product ID:</span>
                                     <span className="value">#{product.id}</span>
+                                </li>
+                                <li>
+                                    <span className="label">SKU:</span>
+                                    <span className="value">{productSku}</span>
                                 </li>
                                 <li>
                                     <span className="label">Category:</span>
@@ -759,11 +884,7 @@ Product Link: ${window.location.href}`;
                                     </>
                                 ) : (
                                     <>
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                            <path d="M3.33333 3.33333H5L7.66667 13.3333H15L17.6667 6.66667H6.66667" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                            <circle cx="8.33333" cy="16.6667" r="1.66667" stroke="currentColor" strokeWidth="2" />
-                                            <circle cx="14.1667" cy="16.6667" r="1.66667" stroke="currentColor" strokeWidth="2" />
-                                        </svg>
+                                        <ShoppingCart size={20} />
                                         Add to Cart
                                     </>
                                 )}
@@ -777,18 +898,12 @@ Product Link: ${window.location.href}`;
                                 />
 
                                 <button className="whatsapp-btn" onClick={handleWhatsApp}>
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                        <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.6056 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
+                                    <MessageCircle size={18} />
                                     WhatsApp
                                 </button>
 
                                 <button className="emi-btn" onClick={handleEMI}>
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="currentColor" strokeWidth="2" />
-                                        <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" strokeWidth="2" />
-                                        <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" strokeWidth="2" />
-                                    </svg>
+                                    <CreditCard size={18} />
                                     EMI Plan
                                 </button>
                             </div>
@@ -812,50 +927,32 @@ Product Link: ${window.location.href}`;
                         <h3 className="trust-title">Why Choose Us?</h3>
                         <div className="trust-indicators">
                             <div className="trust-item">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                </svg>
+                                <BadgeCheck size={24} />
                                 <h4>Premium Quality</h4>
                                 <p>100% authentic products with quality guarantee</p>
                             </div>
                             <div className="trust-item">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M9 12l2 2 4-4" />
-                                    <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3" />
-                                    <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3" />
-                                </svg>
+                                <RotateCcw size={24} />
                                 <h4>Easy Returns</h4>
                                 <p>7-day easy return policy with full refund</p>
                             </div>
                             <div className="trust-item">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <rect x="1" y="3" width="15" height="13" />
-                                    <polygon points="16,8 20,8 23,11 23,16 16,16 16,8" />
-                                    <circle cx="5.5" cy="18.5" r="2.5" />
-                                    <circle cx="18.5" cy="18.5" r="2.5" />
-                                </svg>
+                                <Truck size={24} />
                                 <h4>Fast Delivery</h4>
                                 <p>Free shipping on orders above ₹499</p>
                             </div>
                             <div className="trust-item">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                                </svg>
+                                <LockKeyhole size={24} />
                                 <h4>Secure Payment</h4>
                                 <p>100% secure payment with SSL encryption</p>
                             </div>
                             <div className="trust-item">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                                </svg>
+                                <Headphones size={24} />
                                 <h4>24/7 Support</h4>
                                 <p>Round-the-clock customer support</p>
                             </div>
                             <div className="trust-item">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
-                                </svg>
+                                <Activity size={24} />
                                 <h4>Live Tracking</h4>
                                 <p>Real-time order tracking available</p>
                             </div>
@@ -866,9 +963,7 @@ Product Link: ${window.location.href}`;
                     <div className="product-features">
                         <div className="feature-item">
                             <div className="feature-icon-wrapper">
-                                <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                                    <path d="M8 1L10.09 5.26L15 6L11.5 9.74L12.18 15L8 12.77L3.82 15L4.5 9.74L1 6L5.91 5.26L8 1Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
+                                <BadgeCheck size={18} />
                             </div>
                             <div className="feature-text-wrapper">
                                 <span>Premium Quality</span>
@@ -877,10 +972,7 @@ Product Link: ${window.location.href}`;
                         </div>
                         <div className="feature-item">
                             <div className="feature-icon-wrapper">
-                                <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                                    <path d="M14 8A6 6 0 1 1 2 8A6 6 0 0 1 14 8Z" stroke="currentColor" strokeWidth="1.5" />
-                                    <path d="M6 8L7 9L10 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
+                                <ShieldCheck size={18} />
                             </div>
                             <div className="feature-text-wrapper">
                                 <span>Quality Assured</span>
@@ -889,9 +981,7 @@ Product Link: ${window.location.href}`;
                         </div>
                         <div className="feature-item">
                             <div className="feature-icon-wrapper">
-                                <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                                    <path d="M8 1L2 4V8C2 12 8 15 8 15S14 12 14 8V4L8 1Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
+                                <LockKeyhole size={18} />
                             </div>
                             <div className="feature-text-wrapper">
                                 <span>Secure Purchase</span>

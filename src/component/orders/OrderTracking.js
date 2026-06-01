@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Package, Search, Calendar, MapPin, Truck, CheckCircle, XCircle, Clock, RefreshCw, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import orderService from '../../services/orderService';
@@ -8,6 +8,7 @@ import './OrderTracking.css';
 
 export default function OrderTracking() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -16,6 +17,10 @@ export default function OrderTracking() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [trackingDetails, setTrackingDetails] = useState(null);
   const [trackingLoading, setTrackingLoading] = useState(false);
+  const [skuTerm, setSkuTerm] = useState('');
+  const [skuResults, setSkuResults] = useState([]);
+  const [skuLoading, setSkuLoading] = useState(false);
+  const [skuError, setSkuError] = useState('');
 
   const loadOrders = useCallback(async (showLoading = true) => {
     try {
@@ -46,6 +51,7 @@ export default function OrderTracking() {
       navigate('/login');
       return;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadOrders();
   }, [navigate, loadOrders]);
 
@@ -67,6 +73,48 @@ export default function OrderTracking() {
     const matchesStatus = !statusFilter || order.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  const handleSkuTrack = async (event, skuOverride = '') => {
+    event?.preventDefault();
+    const sku = (skuOverride || skuTerm).trim();
+
+    if (!sku) {
+      setSkuError('Please enter a product SKU');
+      setSkuResults([]);
+      return;
+    }
+
+    setSkuLoading(true);
+    setSkuError('');
+    setSkuResults([]);
+
+    const result = await orderService.trackBySku(sku);
+
+    if (result.success) {
+      setSkuResults(result.data.orders || []);
+    } else {
+      setSkuError(result.error || 'No orders found for this SKU');
+    }
+
+    setSkuLoading(false);
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const sku = params.get('sku');
+    const order = params.get('order');
+
+    if (order) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSearchTerm(order);
+    }
+
+    if (sku) {
+      setSkuTerm(sku);
+      handleSkuTrack(null, sku);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
   if (loading) {
     return (
@@ -105,6 +153,21 @@ export default function OrderTracking() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+
+            <form className="ot-sku-form" onSubmit={handleSkuTrack}>
+              <div className="ot-search-pill ot-sku-pill">
+                <Package size={18} />
+                <input
+                  type="text"
+                  placeholder="Track by product SKU..."
+                  value={skuTerm}
+                  onChange={(e) => setSkuTerm(e.target.value)}
+                />
+              </div>
+              <button type="submit" className="ot-sku-submit" disabled={skuLoading}>
+                {skuLoading ? 'Tracking...' : 'Track SKU'}
+              </button>
+            </form>
             
             <div className="ot-filter-group">
               <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
@@ -129,12 +192,72 @@ export default function OrderTracking() {
             {error}
           </div>
         )}
+
+        {(skuError || skuResults.length > 0) && (
+          <section className="ot-sku-results">
+            <div className="ot-sku-results-header">
+              <span className="ot-label">SKU Tracking</span>
+              <h2>Product Journey Results</h2>
+            </div>
+
+            {skuError ? (
+              <div className="ot-sku-error">
+                <XCircle size={18} />
+                <span>{skuError}</span>
+              </div>
+            ) : (
+              <div className="ot-sku-grid">
+                {skuResults.map((order) => {
+                  const status = getStatusInfo(order.status);
+                  const firstItem = order.matched_items?.[0];
+
+                  return (
+                    <div key={order.id} className="ot-sku-card">
+                      <div className="ot-sku-product">
+                        {firstItem?.product_image && (
+                          <img src={firstItem.product_image} alt={firstItem.product_name || 'Tracked product'} />
+                        )}
+                        <div>
+                          <span className="ot-label">Matched Product</span>
+                          <h3>{firstItem?.product_name || 'Product'}</h3>
+                          <p>SKU: {firstItem?.sku || skuTerm}</p>
+                        </div>
+                      </div>
+
+                      <div className="ot-sku-order">
+                        <div>
+                          <span className="ot-label">Order Reference</span>
+                          <strong>#{order.order_number || order.id}</strong>
+                        </div>
+                        <div className={`ot-status-pill ${status.class}`}>
+                          {status.icon}
+                          <span>{status.label}</span>
+                        </div>
+                      </div>
+
+                      <div className="ot-card-body">
+                        <div className="ot-meta-item">
+                          <Calendar size={14} />
+                          <span>{orderService.formatOrderDate(order.created_at)}</span>
+                        </div>
+                        <div className="ot-meta-item">
+                          <Package size={14} />
+                          <span>{firstItem?.quantity || 1} item ordered</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+        )}
         
         {filteredOrders.length === 0 ? (
           <div className="ot-empty-state">
             <div className="ot-empty-icon"><Package size={48} /></div>
             <h2 className="serif">No Orders Found</h2>
-            <p>You haven't added any pieces to your collection yet.</p>
+            <p>You have not added any pieces to your collection yet.</p>
             <Link to="/" className="ot-cta-btn">Start Exploring</Link>
           </div>
         ) : (
@@ -178,7 +301,7 @@ export default function OrderTracking() {
                     </div>
                     <div className="ot-actions">
                       <button 
-                        onClick={() => navigate(`/product/${order.id}`)}
+                        onClick={() => navigate(`/orders?order=${encodeURIComponent(order.order_number || order.id)}`)}
                         className="ot-view-details"
                       >
                         Details

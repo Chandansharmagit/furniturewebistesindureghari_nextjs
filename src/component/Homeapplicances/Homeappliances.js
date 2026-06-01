@@ -26,12 +26,6 @@ export default function Homeappliances() {
                     data = altResponse.data || [];
                 }
 
-                if (data.length === 0) {
-                    const bedUrl = buildApiUrl(`${PRODUCT_ENDPOINTS.LIST}?categoryName=bed`);
-                    const bedResponse = await axios.get(bedUrl);
-                    data = bedResponse.data || [];
-                }
-
                 // Transform with grid metadata for editorial look
                 const transformedData = data.slice(0, 12).map((product, index) => ({
                     ...product,

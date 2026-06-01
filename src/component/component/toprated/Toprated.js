@@ -1,43 +1,35 @@
 "use client";
 
-import React, { useState } from 'react';
+/* eslint-disable react/no-unescaped-entities */
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { buildApiUrl, PRODUCT_ENDPOINTS } from '../../../config/api';
 import './TopBrand.css';
 
 const TopratedBrand = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [roomCategories, setRoomCategories] = useState([]);
 
-  const roomCategories = [
-    {
-      id: 1,
-      title: 'Living Room',
-      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=fit&crop&w=600&q=80'
-    },
-    {
-      id: 2,
-      title: 'Bedroom',
-      image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
-    },
-    {
-      id: 3,
-      title: 'Dining Room',
-      image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
-    },
-    {
-      id: 4,
-      title: 'Study',
-      image: 'https://images.unsplash.com/photo-1541558869434-2840d308329a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
-    },
-    {
-      id: 5,
-      title: 'Outdoor',
-      image: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
-    }
-  ];
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const response = await fetch(buildApiUrl(PRODUCT_ENDPOINTS.CATEGORIES));
+        if (!response.ok) return;
+        const data = await response.json();
+        setRoomCategories((Array.isArray(data) ? data : []).filter(category => category.status !== 'inactive'));
+      } catch (error) {
+        console.warn('Top rated categories failed to load:', error);
+      }
+    };
+
+    loadCategories();
+  }, []);
+
+  if (roomCategories.length === 0) return null;
 
   return (
     <section className="toprated-brand-section">
@@ -84,13 +76,17 @@ const TopratedBrand = () => {
               <SwiperSlide key={item.id}>
                 <div className="toprated-category-card">
                   <div className="toprated-image-overlay">
-                    <img src={item.image} alt={item.title} className="toprated-category-img" />
+                    {item.image ? (
+                      <img src={item.image} alt={item.name} className="toprated-category-img" />
+                    ) : (
+                      <div className="category-image-placeholder">{item.icon || item.name.charAt(0)}</div>
+                    )}
                     <div className="toprated-card-hover-mask">
                       <span className="toprated-explore-text">View Collection</span>
                     </div>
                   </div>
                   <div className="toprated-category-info">
-                    <h3 className="toprated-category-title">{item.title}</h3>
+                    <h3 className="toprated-category-title">{item.name}</h3>
                     <div className="toprated-category-link">Shop Now</div>
                   </div>
                 </div>

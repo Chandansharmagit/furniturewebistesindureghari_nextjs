@@ -172,6 +172,37 @@ class OrderService {
     }
   }
 
+  // Track orders that contain a product SKU
+  async trackBySku(sku) {
+    try {
+      const authToken = localStorage.getItem('authToken');
+      const response = await fetch(`${buildApiUrl(ORDER_ENDPOINTS.LIST)}/track-by-sku/${encodeURIComponent(sku)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      }
+
+      return {
+        success: true,
+        data
+      };
+    } catch (error) {
+      console.error('Track order by SKU error:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to track order by SKU'
+      };
+    }
+  }
+
   // Admin methods for order management
   async getAllOrders(params = {}) {
     try {

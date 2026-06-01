@@ -32,11 +32,8 @@ const CITY_PAGES = [
 
 const STATIC_PAGES = [
   { loc: "/", priority: 1.0, changefreq: "daily" },
-  { loc: "/living-room-furniture", priority: 0.95, changefreq: "daily" },
-  { loc: "/lighting", priority: 0.95, changefreq: "daily" },
   { loc: "/products", priority: 0.9, changefreq: "daily" },
   { loc: "/new-products", priority: 0.8, changefreq: "daily" },
-  { loc: "/home-appliances", priority: 0.8, changefreq: "weekly" },
   { loc: "/special-offers-all", priority: 0.8, changefreq: "daily" },
   { loc: "/blog", priority: 0.7, changefreq: "weekly" },
   { loc: "/contact", priority: 0.7, changefreq: "monthly" },
@@ -51,22 +48,23 @@ const STATIC_PAGES = [
   ...CITY_PAGES.map((loc) => ({ loc, priority: 0.86, changefreq: "weekly" })),
 ];
 
-const CATEGORY_PAGES = [
-  "living-room", "bedroom", "dining-room", "office-and-study",
-  "modular-kitchens", "bathroom", "lightings", "decor",
-  "outdoor", "all-products", "offers",
-];
-
-const SUB_CATEGORIES = {
-  "living-room": ["sofa-sets", "coffee-tables", "tv-cabinets", "recliners", "showcases"],
-  "bedroom": ["beds", "wardrobes", "bedside-tables", "dressing-tables", "mattresses"],
-  "dining-room": ["dining-sets", "dining-chairs", "crockery-units", "bar-cabinets"],
-  "office-and-study": ["desks", "chairs", "bookshelves", "storage"],
-  "modular-kitchens": ["cabinets", "pantry", "counters", "accessories"],
-  "bathroom": ["vanities", "mirrors", "cabinets"],
-  "lightings": ["chandeliers", "lamps", "wall-sconces", "ceiling"],
-  "decor": ["wall-art", "rugs", "vases"],
-  "outdoor": ["garden-sets", "swings", "planters"],
+const flattenCategories = (categories = [], parent = null, list = []) => {
+  categories.forEach((category) => {
+    const item = {
+      ...category,
+      parent,
+      slug: category.slug || String(category.name || "")
+        .toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+    };
+    list.push(item);
+    if (Array.isArray(category.children)) {
+      flattenCategories(category.children, item, list);
+    }
+  });
+  return list;
 };
 
 export default async function sitemap() {
@@ -80,25 +78,27 @@ export default async function sitemap() {
     priority: page.priority,
   }));
 
-  // 2. Category pages
-  const categoryEntries = CATEGORY_PAGES.map((cat) => ({
-    url: `${SITE_URL}/category/${cat}`,
-    lastModified: today,
-    changeFrequency: "weekly",
-    priority: 0.9,
-  }));
-
-  // 3. Sub-category pages
-  const subCategoryEntries = [];
-  for (const [cat, subs] of Object.entries(SUB_CATEGORIES)) {
-    for (const sub of subs) {
-      subCategoryEntries.push({
-        url: `${SITE_URL}/category/${cat}/${sub}`,
-        lastModified: today,
-        changeFrequency: "weekly",
-        priority: 0.7,
-      });
+  // 2. Dynamic category pages from Admin taxonomy
+  let categoryEntries = [];
+  try {
+    const res = await fetch(`${API_URL}/api/categories`, {
+      next: { revalidate: 1800 },
+    });
+    if (res.ok) {
+      const categoryTree = await res.json();
+      categoryEntries = flattenCategories(Array.isArray(categoryTree) ? categoryTree : [])
+        .filter((category) => category.status !== "inactive")
+        .map((category) => ({
+          url: `${SITE_URL}${category.parent ? `/category/${category.parent.slug}/${category.slug}` : `/category/${category.slug}`}`,
+          lastModified: category.updated_at
+            ? new Date(category.updated_at).toISOString().split("T")[0]
+            : today,
+          changeFrequency: "weekly",
+          priority: category.parent ? 0.75 : 0.9,
+        }));
     }
+  } catch (error) {
+    console.error("Sitemap: Failed to fetch categories from API:", error.message);
   }
 
   // 3.5 Programmatic SEO pages (Keywords)
@@ -186,7 +186,6 @@ export default async function sitemap() {
   return [
     ...staticEntries,
     ...categoryEntries,
-    ...subCategoryEntries,
     ...seoEntries,
     ...productEntries,
   ];

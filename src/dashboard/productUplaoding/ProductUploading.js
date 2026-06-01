@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect, react-hooks/purity */
 import React, { useState, useEffect, useCallback } from 'react';
 import './ProductUploading.css';
 import couponService from '../../services/couponService';
@@ -18,6 +19,7 @@ const ProductUploading = () => {
   const [activeTab, setActiveTab] = useState('list');
   const [selectedCategoryId, setSelectedCategoryId] = useState('all');
   const [editingProduct, setEditingProduct] = useState(null);
+  const [editingCategory, setEditingCategory] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
   // Form state for product
@@ -42,7 +44,15 @@ const ProductUploading = () => {
   // Form state for category
   const [categoryForm, setCategoryForm] = useState({
     name: '',
-    parentCategoryId: ''
+    slug: '',
+    description: '',
+    image: '',
+    icon: '',
+    parentCategoryId: '',
+    seo_title: '',
+    seo_description: '',
+    sort_order: '0',
+    status: 'active'
   });
 
   // Coupon state
@@ -261,7 +271,15 @@ const ProductUploading = () => {
         headers: getAuthHeaders('application/json'),
         body: JSON.stringify({
           name: categoryForm.name,
-          parentCategoryId: categoryForm.parentCategoryId ? parseInt(categoryForm.parentCategoryId) : null
+          slug: categoryForm.slug,
+          description: categoryForm.description,
+          image: categoryForm.image,
+          icon: categoryForm.icon,
+          parentCategoryId: categoryForm.parentCategoryId ? parseInt(categoryForm.parentCategoryId) : null,
+          seo_title: categoryForm.seo_title,
+          seo_description: categoryForm.seo_description,
+          sort_order: categoryForm.sort_order ? parseInt(categoryForm.sort_order) : 0,
+          status: categoryForm.status
         })
       });
 
@@ -271,13 +289,99 @@ const ProductUploading = () => {
       }
 
       alert('Category created successfully!');
-      setCategoryForm({ name: '', parentCategoryId: '' });
+      resetCategoryForm();
       await fetchCategories();
     } catch (error) {
       console.error('Error creating category:', error);
       setErrorMessage(`Error creating category: ${error.message}`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleEditCategory = (category) => {
+    setEditingCategory(category);
+    setCategoryForm({
+      name: category.name || '',
+      slug: category.slug || '',
+      description: category.description || '',
+      image: category.image || '',
+      icon: category.icon || '',
+      parentCategoryId: category.parentCategoryId ? category.parentCategoryId.toString() : '',
+      seo_title: category.seo_title || '',
+      seo_description: category.seo_description || '',
+      sort_order: category.sort_order !== undefined ? category.sort_order.toString() : '0',
+      status: category.status || 'active'
+    });
+    setActiveTab('categories');
+  };
+
+  const handleCategoryUpdate = async (e) => {
+    e.preventDefault();
+    if (!editingCategory) return;
+
+    setLoading(true);
+    setErrorMessage('');
+
+    try {
+      const url = `${buildApiUrl(PRODUCT_ENDPOINTS.CATEGORIES)}/${editingCategory.id}`;
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: getAuthHeaders('application/json'),
+        body: JSON.stringify({
+          name: categoryForm.name,
+          slug: categoryForm.slug,
+          description: categoryForm.description,
+          image: categoryForm.image,
+          icon: categoryForm.icon,
+          parentCategoryId: categoryForm.parentCategoryId ? parseInt(categoryForm.parentCategoryId) : null,
+          seo_title: categoryForm.seo_title,
+          seo_description: categoryForm.seo_description,
+          sort_order: categoryForm.sort_order ? parseInt(categoryForm.sort_order) : 0,
+          status: categoryForm.status
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to update category');
+      }
+
+      alert('Category updated successfully!');
+      resetCategoryForm();
+      await fetchCategories();
+    } catch (error) {
+      console.error('Error updating category:', error);
+      setErrorMessage(`Error updating category: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteCategory = async (category) => {
+    if (!window.confirm(`Deactivate category "${category.name}"? Products remain saved but this category will disappear from customer-facing menus.`)) {
+      return;
+    }
+
+    try {
+      const url = `${buildApiUrl(PRODUCT_ENDPOINTS.CATEGORIES)}/${category.id}`;
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete category');
+      }
+
+      await fetchCategories();
+      if (editingCategory?.id === category.id) {
+        resetCategoryForm();
+      }
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      setErrorMessage(`Error deleting category: ${error.message}`);
     }
   };
 
@@ -499,7 +603,19 @@ const ProductUploading = () => {
   };
 
   const resetCategoryForm = () => {
-    setCategoryForm({ name: '', parentCategoryId: '' });
+    setCategoryForm({
+      name: '',
+      slug: '',
+      description: '',
+      image: '',
+      icon: '',
+      parentCategoryId: '',
+      seo_title: '',
+      seo_description: '',
+      sort_order: '0',
+      status: 'active'
+    });
+    setEditingCategory(null);
     setErrorMessage('');
   };
 
@@ -936,7 +1052,7 @@ const ProductUploading = () => {
             </button>
           </div>
 
-          <form onSubmit={handleCategorySubmit} className="pu-form-royal">
+          <form onSubmit={editingCategory ? handleCategoryUpdate : handleCategorySubmit} className="pu-form-royal">
             <div className="pu-form-grid-royal">
               <div className="pu-form-group-royal">
                 <label>Category Label</label>
@@ -950,6 +1066,16 @@ const ProductUploading = () => {
                 />
               </div>
               <div className="pu-form-group-royal">
+                <label>Slug</label>
+                <input
+                  type="text"
+                  name="slug"
+                  value={categoryForm.slug}
+                  onChange={handleCategoryInputChange}
+                  placeholder="Auto-generated if blank"
+                />
+              </div>
+              <div className="pu-form-group-royal">
                 <label>Parent Node</label>
                 <select
                   name="parentCategoryId"
@@ -960,10 +1086,81 @@ const ProductUploading = () => {
                   {renderCategories(categories)}
                 </select>
               </div>
-              <div className="pu-form-group-royal" style={{ justifyContent: 'flex-end', display: 'flex' }}>
+              <div className="pu-form-group-royal">
+                <label>Category Image URL</label>
+                <input
+                  type="url"
+                  name="image"
+                  value={categoryForm.image}
+                  onChange={handleCategoryInputChange}
+                  placeholder="https://..."
+                />
+              </div>
+              <div className="pu-form-group-royal">
+                <label>Icon</label>
+                <input
+                  type="text"
+                  name="icon"
+                  value={categoryForm.icon}
+                  onChange={handleCategoryInputChange}
+                  placeholder="sofa, bed, dining, chair..."
+                />
+              </div>
+              <div className="pu-form-group-royal">
+                <label>SEO Title</label>
+                <input
+                  type="text"
+                  name="seo_title"
+                  value={categoryForm.seo_title}
+                  onChange={handleCategoryInputChange}
+                  placeholder="Buy Sofa in Nepal"
+                />
+              </div>
+              <div className="pu-form-group-royal">
+                <label>Sort Order</label>
+                <input
+                  type="number"
+                  name="sort_order"
+                  value={categoryForm.sort_order}
+                  onChange={handleCategoryInputChange}
+                />
+              </div>
+              <div className="pu-form-group-royal">
+                <label>Status</label>
+                <select name="status" value={categoryForm.status} onChange={handleCategoryInputChange}>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+              <div className="pu-form-group-royal full-width">
+                <label>Description</label>
+                <textarea
+                  name="description"
+                  value={categoryForm.description}
+                  onChange={handleCategoryInputChange}
+                  rows="3"
+                  placeholder="Short customer-facing category description..."
+                />
+              </div>
+              <div className="pu-form-group-royal full-width">
+                <label>SEO Description</label>
+                <textarea
+                  name="seo_description"
+                  value={categoryForm.seo_description}
+                  onChange={handleCategoryInputChange}
+                  rows="3"
+                  placeholder="Explore premium category collection in Nepal..."
+                />
+              </div>
+              <div className="pu-form-group-royal full-width" style={{ justifyContent: 'flex-end', display: 'flex', gap: '12px' }}>
                 <button type="submit" className="pu-submit-btn-royal" disabled={loading} style={{ width: '100%' }}>
-                  {loading ? 'Processing...' : 'Deploy Node'}
+                  {loading ? 'Processing...' : (editingCategory ? 'Update Node' : 'Deploy Node')}
                 </button>
+                {editingCategory && (
+                  <button type="button" onClick={resetCategoryForm} className="pu-reset-btn-royal">
+                    Cancel Edit
+                  </button>
+                )}
               </div>
             </div>
           </form>
@@ -978,13 +1175,26 @@ const ProductUploading = () => {
                   <div key={cat.id} className="pu-tree-node-royal">
                     <div className="node-content">
                       <FaCubes /> <span>{cat.name}</span>
-                      <small>ID: {cat.id}</small>
+                      <small>/{cat.slug || cat.id} | {cat.product_count || 0} products</small>
+                      <button type="button" onClick={() => handleEditCategory(cat)} className="action-edit" title="Edit Category">
+                        <FaEdit />
+                      </button>
+                      <button type="button" onClick={() => handleDeleteCategory(cat)} className="action-delete" title="Deactivate Category">
+                        <FaTrash />
+                      </button>
                     </div>
                     {cat.children && cat.children.length > 0 && (
                       <div className="node-children">
                         {cat.children.map(child => (
                           <div key={child.id} className="pu-tree-node-royal child">
                             <FaChevronRight /> <span>{child.name}</span>
+                            <small>/{child.slug || child.id} | {child.product_count || 0} products</small>
+                            <button type="button" onClick={() => handleEditCategory(child)} className="action-edit" title="Edit Category">
+                              <FaEdit />
+                            </button>
+                            <button type="button" onClick={() => handleDeleteCategory(child)} className="action-delete" title="Deactivate Category">
+                              <FaTrash />
+                            </button>
                           </div>
                         ))}
                       </div>

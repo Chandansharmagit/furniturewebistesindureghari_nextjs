@@ -21,15 +21,7 @@ export default function UserProfile() {
   });
   const [pagination, setPagination] = useState(null);
 
-  useEffect(() => {
-    if (!authService.isAuthenticatedWithContext()) {
-      router.push('/login');
-      return;
-    }
-    loadUserData();
-  }, [router]);
-
-  const loadUserData = async () => {
+  const loadUserData = useCallback(async () => {
     try {
       const profileResult = await authService.getProfile();
       if (profileResult.success) {
@@ -43,7 +35,16 @@ export default function UserProfile() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!authService.isAuthenticatedWithContext()) {
+      router.push('/login');
+      return;
+    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadUserData();
+  }, [router, loadUserData]);
 
   const loadOrders = useCallback(async () => {
     try {
@@ -65,6 +66,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     if (activeTab === 'orders') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       loadOrders();
     }
   }, [activeTab, loadOrders]);
@@ -289,7 +291,7 @@ export default function UserProfile() {
                   </div>
                 ) : orders.length === 0 ? (
                   <div className="user-profile-no-orders">
-                    <p>You haven't placed any orders yet.</p>
+                    <p>You have not placed any orders yet.</p>
                     <button onClick={() => router.push('/')} className="user-profile-shop-now-btn">
                       Start Shopping
                     </button>
@@ -327,7 +329,7 @@ export default function UserProfile() {
 
                             <div className="user-profile-order-actions">
                               <button
-                                onClick={() => router.push(`/order/${order.id}`)}
+                                onClick={() => router.push(`/orders?order=${encodeURIComponent(order.order_number || order.id)}`)}
                                 className="user-profile-view-details-btn"
                               >
                                 View Details

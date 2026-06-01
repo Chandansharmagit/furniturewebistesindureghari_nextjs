@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ModernHero from "../component/component/Hero/ModernHero";
 import RoyalSpecialOffers from "../component/special-offers/RoyalSpecialOffers";
+import CategoryLandingGrid from "../component/home-extensions/CategoryLandingGrid";
 import Homeappliances from "../component/Homeapplicances/Homeappliances";
 import InspirationGallery from "../component/home-extensions/InspirationGallery";
 import FurnitureBrand from "../component/component/furniturebrand/Furniturebrand";
@@ -17,6 +18,7 @@ export default function HomePage() {
   return (
     <>
       <ModernHero />
+      <CategoryLandingGrid />
       <RoyalSpecialOffers />
       <Homeappliances />
       <InspirationGallery />

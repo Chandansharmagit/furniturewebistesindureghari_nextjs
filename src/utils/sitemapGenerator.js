@@ -48,23 +48,14 @@ export class SitemapGenerator {
 
   // Generate sitemap for product categories
   static generateCategoryPages(categories = []) {
-    const defaultCategories = [
-      'Living Room',
-      'Bedroom',
-      'Dining Room',
-      'Office',
-      'Home Appliances'
-    ];
-
-    const categoriesToUse = categories.length > 0 ? categories : defaultCategories;
-
-    return categoriesToUse.map(category => {
-      const slug = SEOHelpers.generateSlug(category);
+    return categories.map(category => {
+      const name = typeof category === 'string' ? category : category.name;
+      const slug = typeof category === 'string' ? SEOHelpers.generateSlug(category) : (category.slug || SEOHelpers.generateSlug(name));
       return {
         loc: `${this.baseUrl}/category/${slug}`,
         changefreq: 'weekly',
         priority: '0.8',
-        lastmod: new Date().toISOString()
+        lastmod: category.updated_at || new Date().toISOString()
       };
     });
   }

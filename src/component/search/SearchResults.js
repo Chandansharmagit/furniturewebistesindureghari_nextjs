@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect, react/no-unescaped-entities, @next/next/no-html-link-for-pages */
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -6,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SEOComponent from '../../components/SEO/SEOComponent';
 import { API_BASE_URL } from '../../config/api';
 import ProductCard from '../common/ProductCard/ProductCard';
+import { flattenCategories } from '../../utils/categoryHelpers';
 import './SearchResults.css';
 
 const SearchResults = () => {
@@ -13,13 +15,13 @@ const SearchResults = () => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    // eslint-disable-next-line no-unused-vars
-    const [error, setError] = useState(null);
+    const [, setError] = useState(null);
 
     const [sortBy, setSortBy] = useState('relevance');
     const [showFilters, setShowFilters] = useState(true); // Default to true for premium bento side-by-side view
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(12);
+    const [categoryOptions, setCategoryOptions] = useState([]);
 
     // Animation variants
     const containerVariants = {
@@ -57,15 +59,7 @@ const SearchResults = () => {
     const searchParams = new URLSearchParams(location.search);
     const searchQuery = searchParams.get('q') || '';
 
-    // Categories for filter
-    const categories = [
-        'All Categories',
-        'Living Room',
-        'Bedroom',
-        'Dining Room',
-        'Office and Study',
-        'Modular Kitchens'
-    ];
+    const categories = ['All Categories', ...categoryOptions.map(category => category.name)];
 
     // Price ranges for filter
     const priceRanges = [
@@ -131,9 +125,8 @@ const SearchResults = () => {
             } catch (err) {
                 console.error('Error fetching search results:', err);
                 setError('Failed to fetch search results');
-                const mockProducts = generateMockProducts(searchQuery);
-                setProducts(mockProducts);
-                setFilteredProducts(mockProducts);
+                setProducts([]);
+                setFilteredProducts([]);
             } finally {
                 setLoading(false);
             }
@@ -142,21 +135,20 @@ const SearchResults = () => {
         fetchSearchResults();
     }, [searchQuery]);
 
-    const generateMockProducts = (query) => {
-        const mockData = [
-            { id: 1, name: 'Modern Sofa Set', price: 45000, originalPrice: 55000, rating: 4.5, category: 'Living Room', image: 'https://images.pexels.com/photos/276583/pexels-photo-276583.jpeg?auto=compress&cs=tinysrgb&w=400', availability: 'in-stock' },
-            { id: 2, name: 'Dining Table 6 Seater', price: 32000, originalPrice: 38000, rating: 4.2, category: 'Dining Room', image: 'https://images.pexels.com/photos/534172/pexels-photo-534172.jpeg?auto=compress&cs=tinysrgb&w=400', availability: 'in-stock' },
-            { id: 3, name: 'Office Chair Executive', price: 15000, originalPrice: 18000, rating: 4.7, category: 'Office and Study', image: 'https://images.pexels.com/photos/569153/pexels-photo-569153.jpeg?auto=compress&cs=tinysrgb&w=400', availability: 'in-stock' },
-            { id: 4, name: 'Modular Kitchen L-Shape', price: 85000, originalPrice: 95000, rating: 4.8, category: 'Modular Kitchens', image: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=400', availability: 'in-stock' },
-            { id: 5, name: 'Coffee Table Glass Top', price: 12000, originalPrice: 15000, rating: 4.3, category: 'Living Room', image: 'https://images.pexels.com/photos/370717/pexels-photo-370717.jpeg?auto=compress&cs=tinysrgb&w=400', availability: 'in-stock' },
-            { id: 6, name: 'Wardrobe 3 Door', price: 28000, originalPrice: 35000, rating: 4.4, category: 'Bedroom', image: 'https://images.pexels.com/photos/5998043/pexels-photo-5998043.jpeg?auto=compress&cs=tinysrgb&w=400', availability: 'in-stock' }
-        ];
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/api/categories`);
+                const categoryTree = Array.isArray(response.data) ? response.data : [];
+                setCategoryOptions(flattenCategories(categoryTree).filter(category => category.status !== 'inactive'));
+            } catch (err) {
+                console.warn('Search filter categories failed to load:', err);
+                setCategoryOptions([]);
+            }
+        };
 
-        return mockData.filter(product =>
-            product.name.toLowerCase().includes(query.toLowerCase()) ||
-            product.category.toLowerCase().includes(query.toLowerCase())
-        );
-    };
+        fetchCategories();
+    }, []);
 
     useEffect(() => {
         let filtered = [...products];

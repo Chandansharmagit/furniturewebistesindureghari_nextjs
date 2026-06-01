@@ -11,11 +11,14 @@ const AdminOrders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [submittedSearch, setSubmittedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sortBy, setSortBy] = useState('created_at');
   const [sortOrder, setSortOrder] = useState('desc');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
 
   // Load orders data
   const loadOrders = useCallback(async () => {
@@ -34,15 +37,23 @@ const AdminOrders = () => {
         params.status = statusFilter;
       }
 
-      if (searchTerm.trim()) {
-        params.customerSearch = searchTerm.trim();
+      if (submittedSearch.trim()) {
+        params.customerSearch = submittedSearch.trim();
+      }
+
+      if (dateFrom) {
+        params.dateFrom = dateFrom;
+      }
+
+      if (dateTo) {
+        params.dateTo = dateTo;
       }
 
       const result = await orderService.getAllOrders(params);
 
       if (result.success) {
         setOrders(result.data || []);
-        setTotalPages(result.pagination?.totalPages || 1);
+        setTotalPages(result.pagination?.total_pages || result.pagination?.totalPages || 1);
       } else {
         setError(result.error || 'Failed to load orders');
         setOrders([]);
@@ -54,11 +65,12 @@ const AdminOrders = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, statusFilter, searchTerm, sortBy, sortOrder]);
+  }, [currentPage, statusFilter, submittedSearch, sortBy, sortOrder, dateFrom, dateTo]);
 
   // Load orders on component mount and when dependencies change
   useEffect(() => {
     if (authService.isAuthenticatedWithContext()) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       loadOrders();
     } else {
       navigate('/login');
@@ -69,7 +81,18 @@ const AdminOrders = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     setCurrentPage(1);
-    loadOrders();
+    setSubmittedSearch(searchTerm.trim());
+  };
+
+  const handleClearFilters = () => {
+    setSearchTerm('');
+    setSubmittedSearch('');
+    setStatusFilter('all');
+    setDateFrom('');
+    setDateTo('');
+    setSortBy('created_at');
+    setSortOrder('desc');
+    setCurrentPage(1);
   };
 
   // Handle status filter change
@@ -162,13 +185,45 @@ const AdminOrders = () => {
             <FaSearch className="ao-search-icon" />
             <input
               type="text"
-              placeholder="Search by customer name, order ID..."
+              placeholder="Search order, customer, phone, product, SKU, category..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="ao-search-input"
             />
             <button type="submit" className="ao-search-btn">
               Search
+            </button>
+          </div>
+          {submittedSearch && (
+            <div className="ao-applied-search">
+              Searching: <strong>{submittedSearch}</strong>
+            </div>
+          )}
+          <div className="ao-advanced-search">
+            <label>
+              From
+              <input
+                type="date"
+                value={dateFrom}
+                onChange={(e) => {
+                  setDateFrom(e.target.value);
+                  setCurrentPage(1);
+                }}
+              />
+            </label>
+            <label>
+              To
+              <input
+                type="date"
+                value={dateTo}
+                onChange={(e) => {
+                  setDateTo(e.target.value);
+                  setCurrentPage(1);
+                }}
+              />
+            </label>
+            <button type="button" className="ao-clear-btn" onClick={handleClearFilters}>
+              Clear All
             </button>
           </div>
         </form>
@@ -277,7 +332,8 @@ const AdminOrders = () => {
                   <td>
                     <div className="ao-customer-info">
                       <span className="ao-customer-name">{order.customer_name}</span>
-                      <span className="ao-customer-email">{order.customer_email}</span>
+                      <span className="ao-customer-email">{order.email}</span>
+                      {order.phone && <span className="ao-customer-email">{order.phone}</span>}
                     </div>
                   </td>
                   <td>

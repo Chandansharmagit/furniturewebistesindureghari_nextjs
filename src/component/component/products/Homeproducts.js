@@ -1,26 +1,17 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Search, SlidersHorizontal, Grid3X3, Grid2X2, 
-  ChevronDown, RefreshCw, Layers, Check
+  ChevronDown, RefreshCw, Layers, Check, X, Eye
 } from 'lucide-react';
 import { API_BASE_URL } from '@/config/api';
 import ProductCard from '../../common/ProductCard/ProductCard';
 import ProductRecommendations from '../../recommendations/ProductRecommendations';
+import { flattenCategories } from '@/utils/categoryHelpers';
 import './hproduct.css';
-
-// Central mapping of premium categories supported by the backend
-const CATEGORY_FILTERS = [
-  { slug: 'all', label: 'All Creations', icon: Layers },
-  { slug: 'Living room', label: 'Living Room', icon: Star },
-  { slug: 'Bedroom', label: 'Bedroom Suite', icon: Star },
-  { slug: 'Dining room', label: 'Dining Area', icon: Star },
-  { slug: 'Office and Study', label: 'Work & Study', icon: Star },
-  { slug: 'Modular Kitchens', label: 'Kitchen Hub', icon: Star },
-  { slug: 'Decor', label: 'Home Decor', icon: Star }
-];
 
 const WOOD_TYPES = ['Sheesham Wood', 'Teak Wood', 'Mango Wood', 'Engineered Wood'];
 
@@ -31,6 +22,7 @@ const FurnitureProductCatalog = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [gridCols, setGridCols] = useState(4); // 3 or 4 columns
   const [sortBy, setSortBy] = useState('recommended');
+  const [categories, setCategories] = useState([]);
   
   // Custom Filter Panel States
   const [pricePreset, setPricePreset] = useState('all');
@@ -49,7 +41,7 @@ const FurnitureProductCatalog = () => {
       // Build query string
       const queryParams = [];
       if (filterCategory !== 'all') {
-        queryParams.push(`categoryName=${encodeURIComponent(filterCategory)}`);
+        queryParams.push(`category=${encodeURIComponent(filterCategory)}`);
       }
       if (selectedWood !== 'all') {
         queryParams.push(`wooden_type=${encodeURIComponent(selectedWood)}`);
@@ -70,14 +62,25 @@ const FurnitureProductCatalog = () => {
       setLoading(false);
     } catch (error) {
       console.error('Error fetching products:', error);
-      // Fallback: Seed basic high-end products to prevent empty screen if backend is offline
-      setProducts(getFallbackProducts());
+      setProducts([]);
       setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/categories`);
+      if (!response.ok) return;
+      const data = await response.json();
+      setCategories(flattenCategories(Array.isArray(data) ? data : []).filter(category => category.status !== 'inactive'));
+    } catch (error) {
+      console.warn('Catalog categories failed to load:', error);
     }
   };
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
     
     // Smooth scroll configuration
     document.documentElement.style.scrollBehavior = 'smooth';
@@ -86,73 +89,6 @@ const FurnitureProductCatalog = () => {
       document.body.style.overflow = '';
     };
   }, [filterCategory, selectedWood]);
-
-  const getFallbackProducts = () => [
-    {
-      _id: 'fb1',
-      name: 'Royal Maharaja Velvet Sofa Set',
-      new_price: 135000,
-      old_price: 165000,
-      category: 'Living room',
-      brand: 'SINDUREGHARI LUXURY',
-      rating: 5,
-      reviewCount: 38,
-      imageUrl: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800',
-      description: 'Handcrafted luxury velvet sofa set reflecting pure elegance. Crafted from pure Gandaki Sheesham wood with majestic premium cushioning.',
-      material: 'Teak Wood & Velvet',
-      dimensions: '84" W x 38" D x 40" H',
-      warranty: 5,
-      stock: 3
-    },
-    {
-      _id: 'fb2',
-      name: 'Premium Teak Wood King Bed',
-      new_price: 85000,
-      old_price: 110000,
-      category: 'Bedroom',
-      brand: 'BISHWOKARMA SELECTIONS',
-      rating: 4.9,
-      reviewCount: 47,
-      imageUrl: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=800',
-      description: 'Elegant wooden king size bed crafted with signature high-density seasoned teak. Sturdy internal supports ensure lifetime structural integrity.',
-      material: 'A-Grade Teak Wood',
-      dimensions: '78" W x 72" D x 48" H',
-      warranty: 10,
-      stock: 5
-    },
-    {
-      _id: 'fb3',
-      name: 'Classic 6-Seater Wooden Dining Set',
-      new_price: 75000,
-      old_price: 95000,
-      category: 'Dining room',
-      brand: 'SINDUREGHARI LUXURY',
-      rating: 4.8,
-      reviewCount: 29,
-      imageUrl: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&q=80&w=800',
-      description: 'Sophisticated rectangular dining table paired with 6 ergonomically cushioned chairs. Highly refined natural finish wood grain details.',
-      material: 'Sheesham Wood',
-      dimensions: '60" L x 36" W x 30" H',
-      warranty: 3,
-      stock: 4
-    },
-    {
-      _id: 'fb4',
-      name: 'Minimalist Walnut Executive Desk',
-      new_price: 42000,
-      old_price: 49000,
-      category: 'Office and Study',
-      brand: 'BISHWOKARMA SELECTIONS',
-      rating: 4.7,
-      reviewCount: 16,
-      imageUrl: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=800',
-      description: 'Spacious ergonomic executive workspace desk featuring dynamic internal cable management and soft-closing drawer glides.',
-      material: 'Engineered Oak Wood',
-      dimensions: '48" W x 24" D x 30" H',
-      warranty: 2,
-      stock: 8
-    }
-  ];
 
   const formatPrice = (price) => {
     return Number.isFinite(Number(price)) 
@@ -170,11 +106,9 @@ const FurnitureProductCatalog = () => {
     if (!nameMatch && !descMatch) return false;
 
     // Category check (redundancy for local fallback filter)
-    if (filterCategory !== 'all' && product.category !== filterCategory) {
-      // Soft matching in case of casing differences
-      const pCat = (product.category || '').toLowerCase();
-      const fCat = filterCategory.toLowerCase();
-      if (pCat !== fCat && !pCat.includes(fCat) && !fCat.includes(pCat)) return false;
+    if (filterCategory !== 'all') {
+      const productCategoryId = product.categoryId ? String(product.categoryId) : '';
+      if (productCategoryId !== String(filterCategory)) return false;
     }
 
     // Wood Type check
@@ -322,17 +256,17 @@ const FurnitureProductCatalog = () => {
             <div className="sidebar-widget">
               <h3 className="widget-title">Categories</h3>
               <div className="category-select-list">
-                {CATEGORY_FILTERS.map((cat) => {
-                  const Icon = cat.icon;
-                  const isSelected = filterCategory === cat.slug;
+                {[{ id: 'all', name: 'All Creations' }, ...categories].map((cat) => {
+                  const Icon = cat.id === 'all' ? Layers : Grid3X3;
+                  const isSelected = filterCategory === String(cat.id);
                   return (
                     <button
-                      key={cat.slug}
+                      key={cat.id}
                       className={`category-select-item ${isSelected ? 'active' : ''}`}
-                      onClick={() => setFilterCategory(cat.slug)}
+                      onClick={() => setFilterCategory(String(cat.id))}
                     >
                       <Icon size={16} className="category-item-icon" />
-                      <span>{cat.label}</span>
+                      <span>{cat.name}</span>
                       {isSelected && <Check size={14} className="category-check" />}
                     </button>
                   );

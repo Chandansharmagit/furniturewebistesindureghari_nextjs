@@ -57,10 +57,6 @@ const SpecialOffersAll = () => {
                 index === self.findIndex(p => p.id === product.id)
             );
 
-            if (uniqueProducts.length === 0) {
-                throw new Error('No special offer products found. Please check the database.');
-            }
-
             setProducts(uniqueProducts);
 
         } catch (err) {
@@ -72,6 +68,7 @@ const SpecialOffersAll = () => {
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchSpecialProducts();
     }, []);
 
@@ -140,8 +137,17 @@ const SpecialOffersAll = () => {
                     <div className="special-all-section-header">
                         <h2 className="special-all-section-title">All Premium Special Offers ({products.length} items)</h2>
                     </div>
-                    <div className="special-all-products-grid">
-                        {products.map((product) => (
+                    {products.length === 0 ? (
+                        <div className="special-all-error">
+                            <h2>No Special Offers Found</h2>
+                            <p>We do not have any special offers available at the moment.</p>
+                            <Link to="/" className="special-all-contact-btn">
+                                Browse All Products
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className="special-all-products-grid">
+                            {products.map((product) => (
                             <div key={product.id} className="special-all-product-card">
                                 <div className="special-all-product-image-wrapper">
                                     <img
@@ -187,20 +193,23 @@ const SpecialOffersAll = () => {
                                     </div>
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Special Banner */}
-                <div className="special-all-special-banner">
+                {products.length > 0 && (
+                    <div className="special-all-special-banner">
                     <div className="special-all-banner-content">
                         <h3>🎉 Limited Time Premium Offers!</h3>
-                        <p>Don't miss out on these exclusive deals. Offer valid until stocks last!</p>
+                        <p>Do not miss out on these exclusive deals. Offer valid until stocks last!</p>
                         <Link to="/contact" className="special-all-contact-btn">
                             Contact Us for More Deals
                         </Link>
                     </div>
-                </div>
+                    </div>
+                )}
             </div>
         </>
     );
