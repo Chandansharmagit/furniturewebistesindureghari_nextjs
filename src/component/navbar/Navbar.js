@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronDown, FiChevronRight, FiArrowRight, FiGrid } from 'react-icons/fi';
 import { MdOutlineShoppingBag } from 'react-icons/md';
 import { buildApiUrl, PRODUCT_ENDPOINTS } from '../../config/api';
@@ -46,16 +45,6 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
 
   const getCategorySlug = (categoryName) => {
     return slugifyCategory(categoryName);
-  };
-
-  const menuVariants = {
-    closed: { x: '-100%', transition: { type: 'spring', stiffness: 300, damping: 30 } },
-    open: { x: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
-  };
-
-  const backdropVariants = {
-    closed: { opacity: 0 },
-    open: { opacity: 1 }
   };
 
   const toggleMobileExpand = (name) => {
@@ -146,23 +135,14 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
       </nav>
 
       {/* Mobile Sidebar Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
+      {isMobileMenuOpen && (
           <>
-            <motion.div 
+            <div 
               className="nav-mobile-backdrop"
-              initial="closed"
-              animate="open"
-              exit="closed"
-              variants={backdropVariants}
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            <motion.div 
+            <div 
               className="nav-mobile-drawer"
-              initial="closed"
-              animate="open"
-              exit="closed"
-              variants={menuVariants}
             >
               <div className="drawer-header">
                 <span className="drawer-title">Browse Categories</span>
@@ -233,10 +213,9 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
                 <p>Sindureghari Furniture</p>
                 <small>Traditional... bonded with love</small>
               </div>
-            </motion.div>
+            </div>
           </>
         )}
-      </AnimatePresence>
     </>
   );
 };

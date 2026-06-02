@@ -1,32 +1,133 @@
-import React, { useState, useEffect } from 'react';
-import { User, Heart, ShoppingCart, Menu, X, Store, Search, Phone, Building2, HelpCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { User, Heart, ShoppingCart, Menu, X, Store, Search, Building2, HelpCircle, BadgePercent } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import SearchFunctionality from '../navbar/search/SearchFunctionality';
 import { useCart } from '../../context/CartContext';
 import useFavorites from '../../hooks/useFavorites';
 // import useOrders from '../../hooks/useOrders';
 import { useAuth } from '../../context/AuthContext';
-import { API_BASE_URL } from '../../config/api';
+import { API_BASE_URL, buildApiUrl } from '../../config/api';
+import couponService from '../../services/couponService';
 import './Header.css';
 
 const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [activeCoupon, setActiveCoupon] = useState(null);
   const navigate = useNavigate();
   const { getCartItemsCount } = useCart();
   const { favoritesCount } = useFavorites();
   const { user, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const isScrolled = window.scrollY > 50;
-      setScrolled(isScrolled);
-      document.body.classList.toggle('header-scrolled', isScrolled);
+    let isMounted = true;
+
+    const getCouponDiscount = (coupon) => Number(
+      coupon.discount_percentage ?? coupon.discount_value ?? coupon.discount ?? 0
+    );
+
+    const isActiveValue = (value) => (
+      value === undefined ||
+      value === null ||
+      value === true ||
+      value === 1 ||
+      value === '1' ||
+      String(value).toLowerCase() === 'true' ||
+      String(value).toLowerCase() === 'active'
+    );
+
+    const isNotExpired = (expiryDate) => {
+      if (!expiryDate) return true;
+
+      const dateOnlyMatch = String(expiryDate).match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (dateOnlyMatch) {
+        const [, year, month, day] = dateOnlyMatch;
+        const endOfDay = new Date(Number(year), Number(month) - 1, Number(day), 23, 59, 59, 999);
+        return endOfDay >= new Date();
+      }
+
+      return new Date(expiryDate) >= new Date();
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    const isCouponLive = (coupon) => {
+      const isActive = isActiveValue(coupon.is_active ?? coupon.status);
+      const hasNotExpired = isNotExpired(coupon.expiry_date ?? coupon.expires_at ?? coupon.valid_until);
+      return isActive && hasNotExpired && coupon.code && getCouponDiscount(coupon) > 0;
+    };
+
+    const pickBestCoupon = (coupons) => coupons
+        .filter(isCouponLive)
+        .sort((a, b) => getCouponDiscount(b) - getCouponDiscount(a))[0] || null;
+
+    const normalizeCouponList = (data) => {
+      if (Array.isArray(data)) return data;
+      if (Array.isArray(data?.coupons)) return data.coupons;
+      if (Array.isArray(data?.data)) return data.data;
+      if (Array.isArray(data?.items)) return data.items;
+      return [];
+    };
+
+    const loadActiveCoupon = async () => {
+      try {
+        const response = await fetch(buildApiUrl(`/api/products/coupons/active?fresh=1&t=${Date.now()}`), {
+          cache: 'no-store',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (isMounted && data?.coupon && isCouponLive(data.coupon)) {
+            setActiveCoupon(data.coupon);
+            return;
+          }
+        }
+      } catch (error) {
+        console.warn('Active coupon endpoint failed, falling back to coupon list:', error);
+      }
+
+      const result = await couponService.getAllCoupons({ fresh: true });
+      if (!isMounted || !result.success) return;
+
+      const bestCoupon = pickBestCoupon(normalizeCouponList(result.data));
+      if (bestCoupon) {
+        setActiveCoupon(bestCoupon);
+        return;
+      }
+
+      const featuredCode = process.env.NEXT_PUBLIC_FEATURED_COUPON_CODE || 'royal2026';
+      try {
+        const response = await fetch(buildApiUrl(`/api/products/coupons/validate/${featuredCode}?fresh=1&t=${Date.now()}`), {
+          cache: 'no-store',
+        });
+
+        if (response.ok) {
+          const coupon = await response.json();
+          setActiveCoupon(isCouponLive(coupon) ? coupon : null);
+          return;
+        }
+      } catch (error) {
+        console.warn('Featured coupon validation failed:', error);
+      }
+
+      setActiveCoupon(null);
+    };
+
+    loadActiveCoupon();
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        loadActiveCoupon();
+      }
+    };
+
+    const refreshTimer = window.setInterval(loadActiveCoupon, 60 * 1000);
+    window.addEventListener('focus', loadActiveCoupon);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      isMounted = false;
+      window.clearInterval(refreshTimer);
+      window.removeEventListener('focus', loadActiveCoupon);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const getProfileImageUrl = (path) => {
@@ -36,44 +137,34 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
   };
 
   const getAllProducts = () => [];
+  const activeDiscount = activeCoupon ? Math.round(Number(
+    activeCoupon.discount_percentage ?? activeCoupon.discount_value ?? activeCoupon.discount ?? 0
+  )) : null;
 
   return (
-    <motion.header
-      className={`premium-header ${scrolled ? 'scrolled' : ''} ${isMobileSearchOpen ? 'mobile-search-active' : ''}`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    >
-      <div className="header-top-bar desktop-only">
-        <div className="top-bar-inner">
-          <div className="top-bar-left">
-            <Link to="/category/all-products" className="top-bar-link active">Furniture</Link>
-            <span className="top-bar-separator">|</span>
-            <Link to="/contact" className="top-bar-link">Home Interiors</Link>
-            <span className="top-bar-separator">|</span>
-            <Link to="/contact?type=bulk" className="top-bar-link">Bulk Order</Link>
+    <header className={`premium-header ${isMobileSearchOpen ? 'mobile-search-active' : ''}`}>
+      <div className="header-utility-row desktop-only">
+        <div className="header-utility-inner">
+          <div className="header-utility-offer">
+            <BadgePercent size={15} />
+            <span>{activeCoupon ? `${activeDiscount}% discount` : 'Current Offer'}</span>
+            <strong>{activeCoupon ? `Use code ${activeCoupon.code}` : 'Offers updating'}</strong>
           </div>
-          <div className="top-bar-right">
-            <a href="tel:+977-9867332731" className="top-bar-link contact-phone">
-              <Phone size={13} style={{ marginRight: '4px', display: 'inline-block', verticalAlign: 'middle' }} />
-              +977-9867332731
-            </a>
-            <span className="top-bar-separator">|</span>
-            <Link to="/become-a-franchise" className="top-bar-link">
-              <Building2 size={13} style={{ marginRight: '4px', display: 'inline-block', verticalAlign: 'middle' }} />
-              Become a Franchise
+
+          <nav className="header-utility-links" aria-label="Quick header links">
+            <Link to="/become-a-franchise" className="header-utility-link">
+              <Building2 size={14} />
+              <span>Become a Franchise</span>
             </Link>
-            <span className="top-bar-separator">|</span>
-            <Link to="/orders" className="top-bar-link">
-              <Store size={13} style={{ marginRight: '4px', display: 'inline-block', verticalAlign: 'middle' }} />
-              Track Order
+            <Link to="/orders" className="header-utility-link">
+              <Store size={14} />
+              <span>Track Order</span>
             </Link>
-            <span className="top-bar-separator">|</span>
-            <Link to="/help-and-support" className="top-bar-link">
-              <HelpCircle size={13} style={{ marginRight: '4px', display: 'inline-block', verticalAlign: 'middle' }} />
-              Help Center
+            <Link to="/help-and-support" className="header-utility-link">
+              <HelpCircle size={14} />
+              <span>Help Center</span>
             </Link>
-          </div>
+          </nav>
         </div>
       </div>
 
@@ -139,14 +230,8 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
                 )}
               </div>
 
-              <AnimatePresence>
-                {showUserDropdown && (
-                  <motion.div
-                    className="premium-dropdown"
-                    initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  >
+              {showUserDropdown && (
+                  <div className="premium-dropdown">
                     <div className="dropdown-header">
                       {isAuthenticated ? `Hello, ${user?.name || user?.first_name || 'User'}` : 'Welcome'}
                     </div>
@@ -165,9 +250,8 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
                         </>
                       )}
                     </div>
-                  </motion.div>
+                  </div>
                 )}
-              </AnimatePresence>
             </div>
 
             {/* Wishlist */}
@@ -190,14 +274,9 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
       </div>
 
       {/* Mobile Search Overlay */}
-      <AnimatePresence>
-        {isMobileSearchOpen && (
-          <motion.div 
+      {isMobileSearchOpen && (
+          <div 
             className="mobile-search-overlay"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="mobile-search-container">
               <SearchFunctionality 
@@ -207,10 +286,9 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
                 onClose={() => setIsMobileSearchOpen(false)} 
               />
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
-    </motion.header>
+    </header>
   );
 };
 

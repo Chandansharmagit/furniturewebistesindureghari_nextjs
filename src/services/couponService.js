@@ -35,9 +35,12 @@ couponApi.interceptors.response.use(
 
 class CouponService {
   // Get all coupons
-  async getAllCoupons() {
+  async getAllCoupons(options = {}) {
     try {
-      const response = await couponApi.get(buildApiUrl(COUPON_ENDPOINTS.LIST));
+      const response = await couponApi.get(buildApiUrl(COUPON_ENDPOINTS.LIST), {
+        params: options.fresh ? { fresh: '1', t: Date.now() } : undefined,
+        headers: options.fresh ? { 'Cache-Control': 'no-cache' } : undefined
+      });
       const data = response.data;
       return {
         success: true,

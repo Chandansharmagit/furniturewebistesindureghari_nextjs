@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ChevronRight, Grid3X3, Mic } from 'lucide-react';
 import { buildCategoryPath, flattenCategories } from '../../../utils/categoryHelpers';
 import '../navbar.css';
@@ -264,15 +263,11 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
                 )}
             </div>
 
-            <AnimatePresence>
-                {isSearchOpen && (
+            {isSearchOpen && (
                     <div className="bkf-palette__portal">
                         {/* Dark Backdrop Overlay */}
-                        <motion.div 
+                        <div 
                             className="bkf-palette__backdrop"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
                             onClick={() => {
                                 setIsSearchOpen(false);
                                 if (isMobile && onClose) onClose();
@@ -281,12 +276,8 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
 
                         {/* Centered Modal Container */}
                         <div className="bkf-palette__wrapper">
-                            <motion.div 
+                            <div 
                                 className="bkf-palette__panel"
-                                initial={{ opacity: 0, scale: 0.96, y: -20 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.96, y: -20 }}
-                                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                             >
                                 {/* Modal Header */}
                                 <div className="bkf-palette__header">
@@ -429,11 +420,10 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
                                         <span className="bkf-palette__footer-brand">QUICK SEARCH</span>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         </div>
                     </div>
                 )}
-            </AnimatePresence>
         </div>
     );
 };

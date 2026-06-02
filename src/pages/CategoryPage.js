@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import SEOComponent from '../components/SEO/SEOComponent';
 import { BreadcrumbStructuredData } from '../components/SEO/StructuredData';
-import { motion } from 'framer-motion';
 import { Filter, ChevronRight } from 'lucide-react';
 import { API_BASE_URL } from '../config/api';
 import ProductCard from '../component/common/ProductCard/ProductCard';
@@ -98,11 +97,8 @@ const DiscountBanner = () => {
   const navigate = useNavigate();
 
   return (
-    <motion.div 
+    <div 
       className="bkf-category__discount-banner"
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
     >
       <div className="bkf-category__discount-content">
         <span className="bkf-category__discount-tag">EXCLUSIVE</span>
@@ -115,7 +111,7 @@ const DiscountBanner = () => {
           Explore Collection
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -569,12 +565,7 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
 
   // Sidebar Filter Function
   const renderFilterSidebar = () => (
-    <motion.div
-      className="bkf-category__sidebar"
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
-    >
+    <aside className="bkf-category__sidebar">
       <div className="bkf-category__sidebar-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Filter size={18} />
@@ -684,7 +675,7 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
           ))}
         </div>
       </div>
-    </motion.div>
+    </aside>
   );
 
   // Filter and sort products
@@ -847,12 +838,7 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
         </div>
 
         {/* Category Hero Banner */}
-        <motion.div
-          className="bkf-category__header"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
+        <div className="bkf-category__header">
           {/* Background image */}
           <div className="bkf-category__hero-bg">
             <img
@@ -867,33 +853,18 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
           {/* Text content */}
           <div className="bkf-category__hero-content">
             <div className="bkf-category__container">
-              <motion.span
-                className="bkf-category__eyebrow"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
+              <span className="bkf-category__eyebrow">
                 Collection
-              </motion.span>
-              <motion.h1
-                className="bkf-category__title"
-                initial={{ y: 30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-              >
+              </span>
+              <h1 className="bkf-category__title">
                 {currentCategoryInfo.title}
-              </motion.h1>
-              <motion.p
-                className="bkf-category__description"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.35 }}
-              >
+              </h1>
+              <p className="bkf-category__description">
                 {currentCategoryInfo.description}
-              </motion.p>
+              </p>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Main Content with Sidebar */}
         <div className="bkf-category__main-content">
@@ -910,19 +881,16 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
                     <h2 className="bkf-category__subcategories-title">Shop by Category</h2>
                     <div className="bkf-category__subcategories-grid">
                       {dynamicSubcategories.map((subcat, idx) => (
-                        <motion.div
+                        <div
                           key={subcat.id}
                           className="bkf-category__subcategory-card"
                           onClick={() => handleSubcategoryClick(subcat.id)}
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.4, delay: 0.3 + (idx * 0.05) }}
                         >
                           <div className="bkf-category__subcategory-content">
                             <h3 className="bkf-category__subcategory-name">{subcat.name}</h3>
                             <ChevronRight size={16} className="bkf-category__subcategory-arrow-icon" />
                           </div>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
                   </div>

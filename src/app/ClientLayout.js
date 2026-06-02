@@ -1,20 +1,56 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import Header from "../component/header/Header";
 import Navbar from "../component/navbar/Navbar";
-import Footer from "../component/footer/footer";
-import GlobalAnnouncement from "../component/announcement/GlobalAnnouncement";
-import FloatingActionDock from "../component/popup/FloatingActionDock";
-import FloatingOrderRequest from "../component/popup/FloatingOrderRequest";
-import FloatingContact from "../component/popup/FloatingContact";
-import FloatingFeedback from "../component/popup/FloatingFeedback";
-import PopupManager from "../component/popup/PopupManager";
-import ChatbaseWidget from "../component/common/ChatbaseWidget";
-import CookieConsentBanner from "../component/common/CookieConsentBanner";
 import { AuthProvider } from "../context/AuthContext";
 import { CartProvider } from "../context/CartContext";
+
+const Footer = dynamic(() => import("../component/footer/footer"), {
+  loading: () => null,
+});
+
+const FloatingActionDock = dynamic(() => import("../component/popup/FloatingActionDock"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const FloatingOrderRequest = dynamic(() => import("../component/popup/FloatingOrderRequest"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const FloatingContact = dynamic(() => import("../component/popup/FloatingContact"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const FloatingFeedback = dynamic(() => import("../component/popup/FloatingFeedback"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const PopupManager = dynamic(() => import("../component/popup/PopupManager"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const CookieConsentBanner = dynamic(() => import("../component/common/CookieConsentBanner"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const ChatbaseWidget = dynamic(() => import("../component/common/ChatbaseWidget"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const ZapierChatbot = dynamic(() => import("./ZapierChatbot"), {
+  loading: () => null,
+  ssr: false,
+});
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
@@ -62,18 +98,24 @@ export default function ClientLayout({ children }) {
               onOpenFeedback={() => setIsFeedbackOpen(true)}
             />
 
-            <FloatingOrderRequest
-              isOpen={isOrderOpen}
-              onClose={() => setIsOrderOpen(false)}
-            />
-            <FloatingContact
-              isOpen={isContactOpen}
-              onClose={() => setIsContactOpen(false)}
-            />
-            <FloatingFeedback
-              isOpen={isFeedbackOpen}
-              onClose={() => setIsFeedbackOpen(false)}
-            />
+            {isOrderOpen && (
+              <FloatingOrderRequest
+                isOpen={isOrderOpen}
+                onClose={() => setIsOrderOpen(false)}
+              />
+            )}
+            {isContactOpen && (
+              <FloatingContact
+                isOpen={isContactOpen}
+                onClose={() => setIsContactOpen(false)}
+              />
+            )}
+            {isFeedbackOpen && (
+              <FloatingFeedback
+                isOpen={isFeedbackOpen}
+                onClose={() => setIsFeedbackOpen(false)}
+              />
+            )}
           </>
         )}
 
@@ -81,6 +123,7 @@ export default function ClientLayout({ children }) {
         <PopupManager />
         <CookieConsentBanner />
         <ChatbaseWidget />
+        <ZapierChatbot />
       </CartProvider>
     </AuthProvider>
   );

@@ -21,7 +21,6 @@ export default function robots() {
           "/reset-password/",
           "/debug/",
           "/upload/",
-          "/orders/",
           "/favorites/",
         ],
       },

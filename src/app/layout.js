@@ -1,42 +1,43 @@
 import { Suspense } from "react";
 import "./globals.css";
 import ClientLayout from "./ClientLayout";
-import ZapierChatbot from "./ZapierChatbot";
 import { getSiteNavigationJsonLd } from "@/component/seo/SiteLinksJsonLd";
 
-/* ─────────────────────────────────────────────
-   SECTION A — Global SSR Metadata (Next.js App Router)
-   ───────────────────────────────────────────── */
+const SITE_URL = "https://sinduregharifurniture.shop";
+
 export const metadata = {
-  metadataBase: new URL("https://sinduregharifurniture.shop"),
-
-  /* Shows "Sindureghari Furniture" instead of domain in Google search results */
+  metadataBase: new URL(SITE_URL),
   applicationName: "Sindureghari Furniture",
-
+  manifest: "/manifest.json",
   title: {
-    default: "Sindureghari Furniture — Buy Sofas, Beds & Wooden Furniture Online Nepal",
+    default: "Sindureghari Furniture - Buy Sofas, Beds & Wooden Furniture Online Nepal",
     template: "%s | Sindureghari Furniture Nepal",
   },
-
   description:
-    "Nepal's #1 handcrafted furniture store. Buy premium wooden sofas, beds, dining tables, wardrobes & office furniture online. Free delivery to Kathmandu, Lalitpur, Bhaktapur & Pokhara. Visit our Chandrapur showroom.",
-
+    "Nepal's premium handcrafted furniture store. Buy wooden sofas, beds, dining tables, wardrobes, lighting and office furniture online with delivery to Kathmandu, Lalitpur, Bhaktapur, Pokhara and across Nepal.",
   keywords: [
-    "furniture", "furniture Nepal", "furniture in Kathmandu",
-    "buy furniture online Nepal", "furniture shop near me", "wooden furniture Nepal",
-    "sofa", "bed", "dining table", "wardrobe", "office chair", "lounge chair",
-    "L-shape sofa price in Nepal", "king size bed Kathmandu",
-    "sindureghari furniture", "bishwokarma furniture",
-    "handcrafted sofa set Nepal", "luxury bed online Nepal",
-    "modular kitchen Nepal", "teak wood furniture Nepal",
-    "furniture store Lalitpur", "furniture store Bhaktapur", "furniture Pokhara",
+    "sindureghari furniture",
+    "bishwokarma furniture",
+    "furniture Nepal",
+    "buy furniture online Nepal",
+    "wooden furniture Nepal",
+    "sofa set Nepal",
+    "wooden bed Nepal",
+    "dining table Nepal",
+    "wardrobe Nepal",
+    "office furniture Nepal",
+    "furniture shop Kathmandu",
+    "furniture shop Lalitpur",
+    "custom furniture Nepal",
   ],
-
+  alternates: {
+    canonical: SITE_URL,
+  },
   openGraph: {
-    title: "Sindureghari Furniture — Premium Handcrafted Wooden Furniture Nepal",
+    title: "Sindureghari Furniture - Premium Handcrafted Wooden Furniture Nepal",
     description:
-      "Shop handcrafted teak & rosewood royal sofas, luxury beds, dining sets and modular kitchens. Free delivery across Nepal.",
-    url: "https://sinduregharifurniture.shop/",
+      "Shop handcrafted solid wood sofas, luxury beds, dining sets, wardrobes, lighting and office furniture with delivery across Nepal.",
+    url: SITE_URL,
     siteName: "Sindureghari Furniture",
     type: "website",
     locale: "en_NP",
@@ -45,23 +46,22 @@ export const metadata = {
         url: "/images/showroom-exterior.jpg",
         width: 1200,
         height: 630,
-        alt: "Sindureghari Furniture Showroom — Premium Wooden Furniture in Nepal",
+        alt: "Sindureghari Furniture showroom - premium wooden furniture in Nepal",
       },
     ],
   },
-
   twitter: {
     card: "summary_large_image",
-    title: "Sindureghari Furniture — Buy Wooden Furniture Online Nepal",
+    title: "Sindureghari Furniture - Buy Wooden Furniture Online Nepal",
     description:
-      "Shop custom handcrafted royal furniture. Free shipping and white-glove setup all over Nepal.",
+      "Shop custom handcrafted furniture for Nepali homes with delivery and assembly support.",
     images: ["/images/showroom-exterior.jpg"],
   },
-
-  alternates: {
-    canonical: "https://sinduregharifurniture.shop/",
+  appleWebApp: {
+    capable: true,
+    title: "Sindureghari Furniture",
+    statusBarStyle: "default",
   },
-
   robots: {
     index: true,
     follow: true,
@@ -69,37 +69,27 @@ export const metadata = {
     "max-snippet": -1,
     "max-video-preview": -1,
   },
-
   verification: {
-    // Add your real verification codes here after registering
-    google: "YOUR_GOOGLE_SEARCH_CONSOLE_CODE",
-    // yandex: "",
-    // bing: "YOUR_BING_WEBMASTER_CODE",
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
   },
-
   other: {
+    "application-name": "Sindureghari Furniture",
+    "apple-mobile-web-app-title": "Sindureghari Furniture",
     "geo.region": "NP",
     "geo.placename": "Chandrapur, Rautahat",
     "geo.position": "27.1352;85.2023",
-    "ICBM": "27.1352, 85.2023",
+    ICBM: "27.1352, 85.2023",
   },
 };
-
-/* ─────────────────────────────────────────────
-   SECTION B — Sitewide JSON-LD Structured Data
-   Organization + WebSite + FurnitureStore + LocalBusiness
-   ───────────────────────────────────────────── */
-const SITE_URL = "https://sinduregharifurniture.shop";
 
 const siteJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
-    /* ── Organization ── */
     {
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
       name: "Sindureghari Furniture",
-      alternateName: ["Sindureghari Furniture Showroom", "सिन्दुरेघारी फर्निचर"],
+      alternateName: ["Bishwokarma Furniture", "Bishwokarma Woodcraft", "Sindureghari Furniture Nepal"],
       url: SITE_URL,
       logo: {
         "@type": "ImageObject",
@@ -108,7 +98,7 @@ const siteJsonLd = {
         height: 512,
       },
       description:
-        "Nepal's premium handcrafted wooden furniture brand. Sofas, beds, dining tables, wardrobes, modular kitchens & home appliances.",
+        "Nepal's premium handcrafted wooden furniture brand for sofas, beds, dining tables, wardrobes, lighting, office furniture and custom interiors.",
       telephone: "+977-9855040000",
       email: "support@sinduregharifurniture.shop",
       address: {
@@ -123,14 +113,7 @@ const siteJsonLd = {
         "https://www.facebook.com/bishwokarmafurniture",
         "https://www.instagram.com/sinduregharifurniture",
       ],
-      foundingDate: "2015",
-      founder: {
-        "@type": "Person",
-        name: "Chandan Sharma",
-      },
     },
-
-    /* ── FurnitureStore / LocalBusiness ── */
     {
       "@type": ["FurnitureStore", "LocalBusiness"],
       "@id": `${SITE_URL}/#furniturestore`,
@@ -139,9 +122,9 @@ const siteJsonLd = {
       logo: `${SITE_URL}/logo.png`,
       image: `${SITE_URL}/images/showroom-exterior.jpg`,
       description:
-        "Visit Nepal's largest handcrafted wooden furniture showroom. Over 10,000 sq ft of teak & rosewood royal sofa sets, luxury beds, dining tables, wardrobes and modular kitchens.",
+        "Visit Sindureghari Furniture showroom for solid wood sofa sets, beds, dining tables, wardrobes, office furniture, lighting and custom furniture in Nepal.",
       telephone: "+977-9855040000",
-      priceRange: "Rs 5,000 – Rs 5,00,000",
+      priceRange: "Rs 5,000 - Rs 5,00,000",
       currenciesAccepted: "NPR",
       paymentAccepted: "Cash, Bank Transfer, eSewa, Khalti, EMI",
       address: {
@@ -177,22 +160,21 @@ const siteJsonLd = {
         "@type": "OfferCatalog",
         name: "Sindureghari Furniture Collection",
         itemListElement: [
-          { "@type": "OfferCatalog", name: "Living Room Furniture", url: `${SITE_URL}/category/living-room` },
-          { "@type": "OfferCatalog", name: "Bedroom Furniture", url: `${SITE_URL}/category/bedroom` },
-          { "@type": "OfferCatalog", name: "Dining Room Furniture", url: `${SITE_URL}/category/dining-room` },
-          { "@type": "OfferCatalog", name: "Office & Study Furniture", url: `${SITE_URL}/category/office-and-study` },
-          { "@type": "OfferCatalog", name: "Modular Kitchens", url: `${SITE_URL}/category/modular-kitchens` },
+          { "@type": "OfferCatalog", name: "Living Room Furniture", url: `${SITE_URL}/living-room-furniture` },
+          { "@type": "OfferCatalog", name: "Sofas", url: `${SITE_URL}/sofas` },
+          { "@type": "OfferCatalog", name: "Beds", url: `${SITE_URL}/beds` },
+          { "@type": "OfferCatalog", name: "Dining Tables", url: `${SITE_URL}/dining-tables` },
+          { "@type": "OfferCatalog", name: "Special Offers", url: `${SITE_URL}/special-offers-all` },
         ],
       },
     },
-
-    /* ── WebSite with SearchAction ── */
     {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
       url: SITE_URL,
       name: "Sindureghari Furniture",
-      description: "Buy premium handcrafted wooden furniture online in Nepal",
+      alternateName: ["Bishwokarma Furniture", "Sindureghari Furniture Nepal"],
+      description: "Buy premium handcrafted wooden furniture online in Nepal.",
       publisher: { "@id": `${SITE_URL}/#organization` },
       potentialAction: {
         "@type": "SearchAction",
@@ -206,63 +188,13 @@ const siteJsonLd = {
   ],
 };
 
-const homepageFaqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Where is Sindureghari Furniture located?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Our primary showroom is located along the Highway Road in Chandrapur, Rautahat, Nepal. We also have advanced wood seasoning and manufacturing workshops nearby in Rautahat."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What type of wood is used in Sindureghari Furniture?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "We use 100% seasoned solid hardwoods, primarily premium Teak (Saj) and Sheesham (Sisam). All timber is treated in our advanced steam kiln chambers to prevent termite infestations and warping."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Do you offer home delivery and assembly across Nepal?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, we provide free premium home delivery, unloading, and professional assembly across Kathmandu, Lalitpur, Pokhara, and other major cities in Nepal for our collections."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I customize the dimensions and polish color of my furniture?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Absolutely! We offer complete customization. You can select your preferred dimensions, fabric, wood type, and polish finish (natural teak, honey, walnut, mahogany) by consulting with our design team."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What warranty is provided on Sindureghari Furniture products?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "All our solid wood furniture pieces come with a lifetime warranty on the quality and durability of the timber against pests and termites, plus a 1-year manufacturing defect warranty."
-      }
-    }
-  ]
-};
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en-NP" className="h-full antialiased">
       <head>
-        {/* Preconnect to critical origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
-
-        {/* Preload hero font for LCP */}
         <link
           rel="preload"
           href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
@@ -272,31 +204,19 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
           rel="stylesheet"
         />
-
-        {/* Sitewide JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
         />
-
-        {/* Site Navigation JSON-LD — Enables sitelinks dropdown in Google */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(getSiteNavigationJsonLd()) }}
-        />
-
-        {/* Homepage FAQ JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageFaqJsonLd) }}
         />
       </head>
       <body className="min-h-full flex flex-col">
         <Suspense fallback={null}>
           <ClientLayout>{children}</ClientLayout>
         </Suspense>
-
-        <ZapierChatbot />
       </body>
     </html>
   );

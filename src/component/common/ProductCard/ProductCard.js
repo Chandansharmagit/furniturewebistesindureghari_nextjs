@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Eye, X, Heart, ShoppingCart, Shield, Truck, Wrench } from 'lucide-react';
 import Link from 'next/link';
 import { useCart } from '../../../context/CartContext';
@@ -91,13 +90,7 @@ const ProductCard = ({ product }) => {
 
     return (
         <>
-            <motion.div
-                className="aether-product-card"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-            >
+            <div className="aether-product-card">
                 <Link href={productHref} className="card-link-overlay" aria-label={name} />
 
                 <div className="card-media">
@@ -160,19 +153,14 @@ const ProductCard = ({ product }) => {
                         </button>
                     </div>
                 </div>
-            </motion.div>
+            </div>
 
             {/* ── PREMIUM QUICK-VIEW PRODUCT MODAL ── */}
-            <AnimatePresence>
-                {showQuickView && (
+            {showQuickView && (
                     <div className="premium-modal-overlay" onClick={handleCloseModal}>
-                        <motion.div
+                        <div
                             className="premium-modal-card"
                             onClick={(e) => e.stopPropagation()}
-                            initial={{ opacity: 0, scale: 0.95, y: 30 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 30 }}
-                            transition={{ duration: 0.4, cubicBezier: [0.16, 1, 0.3, 1] }}
                         >
                             {/* Close Button */}
                             <button
@@ -349,10 +337,9 @@ const ProductCard = ({ product }) => {
                                     </div>
                                 </div>
                             </div>
-                        </motion.div>
+                        </div>
                     </div>
                 )}
-            </AnimatePresence>
         </>
     );
 };

@@ -4,6 +4,8 @@
  * Access at: /sitemap.xml
  */
 
+import { seoSitelinks } from "@/data/seoSitelinks";
+
 const SITE_URL = "https://sinduregharifurniture.shop";
 const API_URL = process.env.NEXT_PUBLIC_PROD_API_URL || "https://furnituresinduregharibackend.vercel.app";
 
@@ -32,18 +34,19 @@ const CITY_PAGES = [
 
 const STATIC_PAGES = [
   { loc: "/", priority: 1.0, changefreq: "daily" },
-  { loc: "/products", priority: 0.9, changefreq: "daily" },
-  { loc: "/new-products", priority: 0.8, changefreq: "daily" },
-  { loc: "/special-offers-all", priority: 0.8, changefreq: "daily" },
   { loc: "/blog", priority: 0.7, changefreq: "weekly" },
-  { loc: "/contact", priority: 0.7, changefreq: "monthly" },
-  { loc: "/stores", priority: 0.7, changefreq: "monthly" },
   { loc: "/ceo", priority: 0.6, changefreq: "monthly" },
-  { loc: "/help-and-support", priority: 0.6, changefreq: "monthly" },
   { loc: "/careers", priority: 0.5, changefreq: "monthly" },
   { loc: "/search", priority: 0.5, changefreq: "weekly" },
   { loc: "/privacy-policy", priority: 0.3, changefreq: "yearly" },
   { loc: "/terms-conditions", priority: 0.3, changefreq: "yearly" },
+  ...seoSitelinks.map((item) => ({
+    loc: item.path,
+    priority: item.priority,
+    changefreq: item.path === "/products" || item.path === "/special-offers-all" || item.path === "/new-products"
+      ? "daily"
+      : "weekly",
+  })),
   ...SEO_MONEY_PAGES.map((loc) => ({ loc, priority: 0.92, changefreq: "weekly" })),
   ...CITY_PAGES.map((loc) => ({ loc, priority: 0.86, changefreq: "weekly" })),
 ];
@@ -65,6 +68,23 @@ const flattenCategories = (categories = [], parent = null, list = []) => {
     }
   });
   return list;
+};
+
+const uniqueSitemapEntries = (entries) => {
+  const seen = new Map();
+  entries.forEach((entry) => {
+    if (!seen.has(entry.url)) {
+      seen.set(entry.url, entry);
+      return;
+    }
+
+    const existing = seen.get(entry.url);
+    seen.set(entry.url, {
+      ...existing,
+      priority: Math.max(existing.priority || 0, entry.priority || 0),
+    });
+  });
+  return Array.from(seen.values());
 };
 
 export default async function sitemap() {
@@ -183,10 +203,10 @@ export default async function sitemap() {
     console.error("Sitemap: Failed to fetch products from API:", error.message);
   }
 
-  return [
+  return uniqueSitemapEntries([
     ...staticEntries,
     ...categoryEntries,
     ...seoEntries,
     ...productEntries,
-  ];
+  ]);
 }

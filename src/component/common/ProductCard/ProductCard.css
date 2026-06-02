@@ -2,15 +2,12 @@
     position: relative;
     width: 100%;
     aspect-ratio: 0.75;
-    border-radius: 28px;
+    border-radius: 14px;
     overflow: hidden;
     background: var(--aether-bg);
     cursor: pointer;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.aether-product-card:hover {
-    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(31, 21, 12, 0.08);
+    contain: layout paint;
 }
 
 .card-link-overlay {
@@ -34,11 +31,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.aether-product-card:hover .card-media img {
-    transform: scale(1.05);
 }
 
 .card-overlay {
@@ -66,9 +58,7 @@
 }
 
 .badge-pill {
-    background: rgba(220, 225, 255, 0.4);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(17, 17, 17, 0.48);
     border-radius: 30px;
     padding: 8px 16px;
     color: #fff;
@@ -175,14 +165,13 @@
     color: #000;
     cursor: pointer;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
+    transition: background-color 160ms ease, color 160ms ease;
     pointer-events: auto;
     position: relative;
     z-index: 25;
 }
 
 .aether-product-card:hover .navigate-btn {
-    transform: scale(1.1);
     background: var(--aether-primary, #6366f1);
     color: #ffffff;
 }
@@ -192,7 +181,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -30%) scale(0.9);
+    transform: translate(-50%, -50%);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -206,23 +195,20 @@
     cursor: pointer;
     z-index: 25; /* Above card-link-overlay (20) */
     opacity: 0;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 160ms ease, background-color 160ms ease, color 160ms ease, border-color 160ms ease;
     pointer-events: auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
 }
 
 .aether-product-card:hover .quick-view-overlay-btn {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%);
 }
 
 .quick-view-overlay-btn:hover {
     background: #af861d; /* Gold */
     color: #ffffff;
     border-color: #af861d;
-    box-shadow: 0 15px 30px rgba(175, 134, 29, 0.3);
 }
 
 /* Premium Interactive Quick View Modal (Global rules) */
@@ -233,8 +219,6 @@
     width: 100%;
     height: 100%;
     background: rgba(15, 23, 42, 0.4); /* Soft transparent dark */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -249,12 +233,18 @@
     border: 1px solid rgba(255, 255, 255, 0.5);
     width: 100%;
     max-width: 1100px;
-    border-radius: 32px;
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.22);
     z-index: 30005;
     color: #333333;
     text-align: left;
+    animation: modalEnter 160ms ease-out;
+}
+
+@keyframes modalEnter {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .modal-close-btn {
@@ -272,13 +262,12 @@
     justify-content: center;
     cursor: pointer;
     z-index: 30010;
-    transition: all 0.3s ease;
+    transition: background-color 160ms ease, color 160ms ease;
 }
 
 .modal-close-btn:hover {
     background: #f1f3f5;
     color: #111111;
-    transform: rotate(90deg);
 }
 
 .modal-inner-grid {
@@ -330,17 +319,13 @@
     padding: 0;
     border: 2px solid transparent;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
 .thumb-button img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.thumb-button:hover {
-    transform: translateY(-2px);
 }
 
 .thumb-button.active {
@@ -484,7 +469,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: color 160ms ease, background-color 160ms ease;
 }
 
 .adjust-btn:hover:not(:disabled) {
@@ -520,12 +505,11 @@
     justify-content: center;
     gap: 10px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 160ms ease, box-shadow 160ms ease;
     box-shadow: 0 4px 10px rgba(175, 134, 29, 0.15);
 }
 
 .modal-add-to-cart-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(175, 134, 29, 0.25);
 }
 
@@ -547,14 +531,13 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .modal-wishlist-btn:hover {
     background: rgba(239, 68, 68, 0.05);
     border-color: rgba(239, 68, 68, 0.2);
     color: #ef4444;
-    transform: translateY(-2px);
 }
 
 .luxury-value-props {
