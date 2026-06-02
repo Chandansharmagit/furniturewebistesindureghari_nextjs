@@ -26,6 +26,7 @@ import {
     ShoppingCart,
     Truck,
     Wrench,
+    X,
 } from 'lucide-react';
 import { FaChevronLeft, FaChevronRight, FaShareAlt } from 'react-icons/fa';
 import gsap from 'gsap';
@@ -52,6 +53,7 @@ export default function ProductDetails({ productId }) {
     const [showDetails, setShowDetails] = useState(false);
     const [shareMessage, setShareMessage] = useState('');
     const [isEMIPlansModalOpen, setIsEMIPlansModalOpen] = useState(false);
+    const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
 
     // Get product by ID
     const getProductById = useCallback(async () => {
@@ -60,6 +62,7 @@ export default function ProductDetails({ productId }) {
             setError(null);
             const response = await axios.get(`${API_BASE_URL}/api/products/${id}`);
             setProduct(response.data);
+            setSelectedImageIndex(0);
             console.log('Product Details:', response.data);
         } catch (error) {
             console.error('Error fetching product:', error);
@@ -118,6 +121,39 @@ export default function ProductDetails({ productId }) {
             .replace(/Box Storage \(King Size, Honey Finish\)/g, "")
             .replace(/Brixton Sheesham Wood Bed/g, "")
             .trim();
+    };
+
+    const normalizeImageUrl = (url) => {
+        if (!url || typeof url !== 'string') return '';
+        const trimmed = url.trim();
+        if (!trimmed) return '';
+        if (/^(https?:)?\/\//i.test(trimmed) || trimmed.startsWith('data:') || trimmed.startsWith('/api/')) {
+            return trimmed;
+        }
+        if (trimmed.startsWith('/')) {
+            return `${API_BASE_URL}${trimmed}`;
+        }
+        return trimmed;
+    };
+
+    const getProductImages = (item) => {
+        const rawImages = [];
+
+        if (item?.imageUrls) {
+            try {
+                const parsed = typeof item.imageUrls === 'string'
+                    ? JSON.parse(item.imageUrls)
+                    : item.imageUrls;
+                if (Array.isArray(parsed)) rawImages.push(...parsed);
+            } catch (e) {
+                console.error('Error parsing imageUrls:', e);
+            }
+        }
+
+        if (item?.imageUrl) rawImages.push(item.imageUrl);
+        if (Array.isArray(item?.image_paths)) rawImages.push(...item.image_paths);
+
+        return [...new Set(rawImages.map(normalizeImageUrl).filter(Boolean))];
     };
 
     // Calculate discount percentage
@@ -350,6 +386,36 @@ Product Link: ${window.location.href}`;
         setShowDetails(!showDetails);
     };
 
+    const productImages = product ? getProductImages(product) : [];
+    const selectedImage = productImages[selectedImageIndex] || productImages[0];
+
+    const showPreviousImage = useCallback(() => {
+        setSelectedImageIndex((prev) => (prev === 0 ? productImages.length - 1 : prev - 1));
+    }, [productImages.length]);
+
+    const showNextImage = useCallback(() => {
+        setSelectedImageIndex((prev) => (prev === productImages.length - 1 ? 0 : prev + 1));
+    }, [productImages.length]);
+
+    useEffect(() => {
+        if (!isImageViewerOpen) return undefined;
+
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') setIsImageViewerOpen(false);
+            if (event.key === 'ArrowLeft' && productImages.length > 1) showPreviousImage();
+            if (event.key === 'ArrowRight' && productImages.length > 1) showNextImage();
+        };
+
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isImageViewerOpen, productImages.length, showNextImage, showPreviousImage]);
+
     // Loading state
     if (loading) {
         return (
@@ -402,7 +468,7 @@ Product Link: ${window.location.href}`;
                 keywords={`${product?.name || ''}, ${product?.name || ''} price Nepal, buy ${product?.name || 'furniture'} online, ${product?.wooden_type || 'wooden'} furniture Nepal, sindureghari furniture, bishwokarma furniture`}
                 ogTitle={`${product?.name || product?.title || 'Premium Furniture'} — NPR ${formatPrice(product?.new_price)} | Sindureghari Furniture`}
                 ogDescription={`Buy ${product?.name || product?.title || 'premium furniture'} at best price in Nepal. Free delivery nationwide. EMI options available.`}
-                ogImage={product?.imageUrl || (product?.image_paths?.[0] ? `${API_BASE_URL}${product.image_paths[0]}` : '')}
+                ogImage={productImages[0] || ''}
                 ogType="product"
                 price={product?.new_price}
                 priceCurrency="NPR"
@@ -413,7 +479,7 @@ Product Link: ${window.location.href}`;
                     "@type": "Product",
                     "name": product?.name || product?.title || 'Premium Furniture',
                     "description": product?.description || 'Premium handcrafted furniture from Sindureghari, Nepal.',
-                    "image": product?.imageUrl || (product?.image_paths?.[0] ? `${API_BASE_URL}${product.image_paths[0]}` : ''),
+                    "image": productImages[0] || '',
                     "sku": product?.sku || `SF-${product?.id || '000'}`,
                     "mpn": `SF-${product?.id || '000'}`,
                     "brand": { "@type": "Brand", "name": "Sindureghari Furniture" },
@@ -460,27 +526,7 @@ Product Link: ${window.location.href}`;
                 {/* Image Section */}
                 <div className="product-images-section">
                     <div className="main-image-container">
-                        {(() => {
-                            // Parse imageUrls if it exists and is a string
-                            let imageUrls = [];
-                            if (product.imageUrls) {
-                                try {
-                                    imageUrls = typeof product.imageUrls === 'string'
-                                        ? JSON.parse(product.imageUrls)
-                                        : product.imageUrls;
-                                } catch (e) {
-                                    console.error('Error parsing imageUrls:', e);
-                                }
-                            }
-
-                            // Fallback to single imageUrl if no imageUrls
-                            if (imageUrls.length === 0 && product.imageUrl) {
-                                imageUrls = [product.imageUrl];
-                            }
-
-                            const currentImage = imageUrls[selectedImageIndex] || imageUrls[0];
-
-                            return currentImage ? (
+                        {selectedImage ? (
                                 <div className="main-image-wrapper">
                                     <span className="pd-best-seller-badge">Best Seller</span>
                                     <div className="pd-image-actions">
@@ -494,31 +540,28 @@ Product Link: ${window.location.href}`;
                                         />
                                     </div>
                                     <img
-                                        src={currentImage}
+                                        src={selectedImage}
                                         alt={product.name || product.title}
                                         className="main-product-image"
+                                        onClick={() => setIsImageViewerOpen(true)}
                                         onError={(e) => {
-                                            e.target.src = '/api/placeholder/600/600';
+                                            e.currentTarget.src = '/api/placeholder/600/600';
                                         }}
                                     />
 
                                     {/* Navigation arrows for multiple images */}
-                                    {imageUrls.length > 1 && (
+                                    {productImages.length > 1 && (
                                         <>
                                             <button
                                                 className="image-nav-btn prev-btn"
-                                                onClick={() => setSelectedImageIndex(prev =>
-                                                    prev === 0 ? imageUrls.length - 1 : prev - 1
-                                                )}
+                                                onClick={showPreviousImage}
                                                 aria-label="Previous image"
                                             >
                                                 <FaChevronLeft size={16} />
                                             </button>
                                             <button
                                                 className="image-nav-btn next-btn"
-                                                onClick={() => setSelectedImageIndex(prev =>
-                                                    prev === imageUrls.length - 1 ? 0 : prev + 1
-                                                )}
+                                                onClick={showNextImage}
                                                 aria-label="Next image"
                                             >
                                                 <FaChevronRight size={16} />
@@ -526,60 +569,42 @@ Product Link: ${window.location.href}`;
 
                                             {/* Image counter */}
                                             <div className="image-counter">
-                                                {selectedImageIndex + 1} / {imageUrls.length}
+                                                {selectedImageIndex + 1} / {productImages.length}
                                             </div>
                                         </>
                                     )}
                                 </div>
-                            ) : (
+                        ) : (
                                 <div className="no-image-placeholder">
                                     <span>No Image Available</span>
                                 </div>
-                            );
-                        })()}
+                        )}
                     </div>
 
-                    {(() => {
-                        // Parse imageUrls for thumbnails
-                        let imageUrls = [];
-                        if (product.imageUrls) {
-                            try {
-                                imageUrls = typeof product.imageUrls === 'string'
-                                    ? JSON.parse(product.imageUrls)
-                                    : product.imageUrls;
-                            } catch (e) {
-                                console.error('Error parsing imageUrls:', e);
-                            }
-                        }
-
-                        // Fallback to single imageUrl if no imageUrls
-                        if (imageUrls.length === 0 && product.imageUrl) {
-                            imageUrls = [product.imageUrl];
-                        }
-
-                        return imageUrls.length > 1 && (
+                    {productImages.length > 1 && (
                             <div className="thumbnail-gallery">
                                 <div className="thumbnail-container">
-                                    {imageUrls.map((imageUrl, index) => (
-                                        <div
+                                    {productImages.map((imageUrl, index) => (
+                                        <button
+                                            type="button"
                                             key={index}
                                             className={`thumbnail ${index === selectedImageIndex ? 'active' : ''}`}
                                             onClick={() => setSelectedImageIndex(index)}
+                                            aria-label={`View product image ${index + 1}`}
                                         >
                                             <img
                                                 src={imageUrl}
                                                 alt={`${product.name || product.title} ${index + 1}`}
                                                 onError={(e) => {
-                                                    e.target.src = '/api/placeholder/90/90';
+                                                    e.currentTarget.src = '/api/placeholder/90/90';
                                                 }}
                                             />
                                             <div className="thumbnail-overlay"></div>
-                                        </div>
+                                        </button>
                                     ))}
                                 </div>
                             </div>
-                        );
-                    })()}
+                    )}
 
                     {/* Video Section */}
                     {product.videoUrl && (
@@ -590,17 +615,7 @@ Product Link: ${window.location.href}`;
                                     controls
                                     className="product-video"
                                     poster={(() => {
-                                        let imageUrls = [];
-                                        if (product.imageUrls) {
-                                            try {
-                                                imageUrls = typeof product.imageUrls === 'string'
-                                                    ? JSON.parse(product.imageUrls)
-                                                    : product.imageUrls;
-                                            } catch (e) {
-                                                console.error('Error parsing imageUrls:', e);
-                                            }
-                                        }
-                                        return imageUrls[0] || product.imageUrl;
+                                        return productImages[0] || '';
                                     })()}
                                 >
                                     <source src={product.videoUrl} type="video/mp4" />
@@ -685,18 +700,7 @@ Product Link: ${window.location.href}`;
                         <div className="pd-option-title">Color &amp; Finishes : <strong>{product.product_color || 'Honey Finish'}</strong></div>
                         <div className="pd-finish-grid">
                             {(() => {
-                                let imageUrls = [];
-                                if (product.imageUrls) {
-                                    try {
-                                        imageUrls = typeof product.imageUrls === 'string' ? JSON.parse(product.imageUrls) : product.imageUrls;
-                                    } catch (e) {
-                                        console.error('Error parsing imageUrls:', e);
-                                    }
-                                }
-                                if (imageUrls.length === 0 && product.imageUrl) {
-                                    imageUrls = [product.imageUrl];
-                                }
-                                const finishImages = imageUrls.length > 1 ? imageUrls.slice(0, 2) : [imageUrls[0], imageUrls[0]].filter(Boolean);
+                                const finishImages = productImages.length > 1 ? productImages.slice(0, 2) : [productImages[0], productImages[0]].filter(Boolean);
                                 const finishNames = [product.product_color || 'Honey Finish', 'Walnut Finish'];
 
                                 return finishImages.map((imageUrl, index) => (
@@ -704,7 +708,7 @@ Product Link: ${window.location.href}`;
                                         type="button"
                                         key={`${imageUrl}-${index}`}
                                         className={`pd-finish-card ${index === 0 ? 'active' : ''}`}
-                                        onClick={() => setSelectedImageIndex(Math.min(index, imageUrls.length - 1))}
+                                        onClick={() => setSelectedImageIndex(Math.min(index, productImages.length - 1))}
                                     >
                                         <img src={imageUrl} alt={finishNames[index]} />
                                         <span>{finishNames[index]}</span>
@@ -1002,6 +1006,65 @@ Product Link: ${window.location.href}`;
                 API_BASE={API_BASE_URL}
                 product={product}
             />
+
+            {isImageViewerOpen && selectedImage && (
+                <div className="pd-image-lightbox" role="dialog" aria-modal="true" aria-label="Product image viewer" onClick={() => setIsImageViewerOpen(false)}>
+                    <div className="pd-image-lightbox__topbar" onClick={(event) => event.stopPropagation()}>
+                        <span>{selectedImageIndex + 1} / {productImages.length}</span>
+                        <button type="button" onClick={() => setIsImageViewerOpen(false)} aria-label="Close image viewer">
+                            <X size={22} />
+                        </button>
+                    </div>
+
+                    {productImages.length > 1 && (
+                        <button
+                            type="button"
+                            className="pd-image-lightbox__nav pd-image-lightbox__nav--prev"
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                showPreviousImage();
+                            }}
+                            aria-label="Previous image"
+                        >
+                            <FaChevronLeft size={20} />
+                        </button>
+                    )}
+
+                    <div className="pd-image-lightbox__stage" onClick={(event) => event.stopPropagation()}>
+                        <img src={selectedImage} alt={product.name || product.title} />
+                    </div>
+
+                    {productImages.length > 1 && (
+                        <button
+                            type="button"
+                            className="pd-image-lightbox__nav pd-image-lightbox__nav--next"
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                showNextImage();
+                            }}
+                            aria-label="Next image"
+                        >
+                            <FaChevronRight size={20} />
+                        </button>
+                    )}
+
+                    {productImages.length > 1 && (
+                        <div className="pd-image-lightbox__thumbs" onClick={(event) => event.stopPropagation()}>
+                            {productImages.map((imageUrl, index) => (
+                                <button
+                                    type="button"
+                                    key={`${imageUrl}-${index}`}
+                                    className={index === selectedImageIndex ? 'active' : ''}
+                                    onClick={() => setSelectedImageIndex(index)}
+                                    aria-label={`Open image ${index + 1}`}
+                                >
+                                    <img src={imageUrl} alt={`${product.name || product.title} thumbnail ${index + 1}`} />
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

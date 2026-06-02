@@ -424,6 +424,22 @@
   border-color: #93c5fd;
 }
 
+.ao-delete-btn {
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.ao-delete-btn:hover:not(:disabled) {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+.ao-action-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 /* No Orders */
 .ao-no-orders {
   text-align: center;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaSearch, FaEye, FaDownload, FaArrowLeft } from 'react-icons/fa';
+import { FaSearch, FaEye, FaDownload, FaArrowLeft, FaTrash } from 'react-icons/fa';
 import orderService from '../../services/orderService';
 import authService from '../../services/authService';
 import './AdminOrders.css';
@@ -19,6 +19,7 @@ const AdminOrders = () => {
   const [sortOrder, setSortOrder] = useState('desc');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
+  const [deletingOrderId, setDeletingOrderId] = useState(null);
 
   // Load orders data
   const loadOrders = useCallback(async () => {
@@ -120,6 +121,35 @@ const AdminOrders = () => {
   // Handle view order details
   const handleViewOrder = (orderId) => {
     navigate(`/admin/orders/${orderId}`);
+  };
+
+  const handleDeleteOrder = async (order) => {
+    const orderLabel = order.order_number ? `#${order.order_number}` : `ID ${order.id}`;
+    const confirmed = window.confirm(`Delete order ${orderLabel}? This action cannot be undone.`);
+
+    if (!confirmed) return;
+
+    try {
+      setDeletingOrderId(order.id);
+      const result = await orderService.deleteOrder(order.id);
+
+      if (result.success) {
+        setOrders((currentOrders) => currentOrders.filter((item) => item.id !== order.id));
+
+        if (orders.length === 1 && currentPage > 1) {
+          setCurrentPage((page) => page - 1);
+        } else {
+          loadOrders();
+        }
+      } else {
+        alert('Failed to delete order: ' + (result.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      alert('Failed to delete order');
+    } finally {
+      setDeletingOrderId(null);
+    }
   };
 
   // Format currency
@@ -367,6 +397,14 @@ const AdminOrders = () => {
                         title="View Order Details"
                       >
                         <FaEye />
+                      </button>
+                      <button
+                        className="ao-action-btn ao-delete-btn"
+                        onClick={() => handleDeleteOrder(order)}
+                        title="Delete Order"
+                        disabled={deletingOrderId === order.id}
+                      >
+                        <FaTrash />
                       </button>
                     </div>
                   </td>

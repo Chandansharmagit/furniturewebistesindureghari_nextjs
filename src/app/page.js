@@ -2,6 +2,7 @@ import Link from "next/link";
 import ModernHero from "../component/component/Hero/ModernHero";
 import RoyalSpecialOffers from "../component/special-offers/RoyalSpecialOffers";
 import CategoryLandingGrid from "../component/home-extensions/CategoryLandingGrid";
+import SmartCampaignTemplate from "../component/home-extensions/SmartCampaignTemplate";
 import Homeappliances from "../component/Homeapplicances/Homeappliances";
 import InspirationGallery from "../component/home-extensions/InspirationGallery";
 import FurnitureBrand from "../component/component/furniturebrand/Furniturebrand";
@@ -19,6 +20,7 @@ export default function HomePage() {
     <>
       <ModernHero />
       <CategoryLandingGrid />
+      <SmartCampaignTemplate />
       <RoyalSpecialOffers />
       <Homeappliances />
       <InspirationGallery />

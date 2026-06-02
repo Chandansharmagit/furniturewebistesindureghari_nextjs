@@ -9,6 +9,7 @@ import "./CategoryLandingGrid.css";
 export default function CategoryLandingGrid() {
   const [categories, setCategories] = useState([]);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [showAllCategories, setShowAllCategories] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -75,7 +76,7 @@ export default function CategoryLandingGrid() {
     ...rootCategories.map((category) => ({ id: category.slug, label: category.name }))
   ], [rootCategories]);
 
-  const visibleCategories = useMemo(() => {
+  const filteredCategories = useMemo(() => {
     const list = activeFilter === "all"
       ? flatCategories
       : flatCategories.filter((category) => category.slug === activeFilter || category.parent?.slug === activeFilter);
@@ -83,11 +84,15 @@ export default function CategoryLandingGrid() {
     return list
       .filter((category) => category.status !== "inactive")
       .filter((category) => getCategoryProductCount(category) > 0)
-      .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
-      .slice(0, 12);
+      .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
   }, [activeFilter, flatCategories]);
 
-  if (visibleCategories.length === 0) return null;
+  const visibleCategories = useMemo(
+    () => showAllCategories ? filteredCategories : filteredCategories.slice(0, 6),
+    [filteredCategories, showAllCategories]
+  );
+
+  if (filteredCategories.length === 0) return null;
 
   return (
     <section className="category-landing" aria-labelledby="category-landing-title">
@@ -103,7 +108,10 @@ export default function CategoryLandingGrid() {
               type="button"
               key={filter.id}
               className={`category-filter-pill ${activeFilter === filter.id ? "active" : ""}`}
-              onClick={() => setActiveFilter(filter.id)}
+              onClick={() => {
+                setActiveFilter(filter.id);
+                setShowAllCategories(false);
+              }}
             >
               {filter.label}
             </button>
@@ -125,6 +133,19 @@ export default function CategoryLandingGrid() {
             </Link>
           ))}
         </div>
+
+        {filteredCategories.length > 6 && (
+          <div className="category-view-all-wrap">
+            <button
+              type="button"
+              className="category-view-all-btn"
+              onClick={() => setShowAllCategories((current) => !current)}
+              aria-expanded={showAllCategories}
+            >
+              {showAllCategories ? "Show Less" : `View All Categories (${filteredCategories.length})`}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

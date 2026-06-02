@@ -277,6 +277,42 @@ class OrderService {
     }
   }
 
+  // Delete order (Admin only)
+  async deleteOrder(id) {
+    try {
+      const authToken = localStorage.getItem('authToken');
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (authToken) {
+        headers.Authorization = `Bearer ${authToken}`;
+      }
+
+      const response = await fetch(buildApiUrl(ORDER_ENDPOINTS.DETAIL.replace(':id', id)), {
+        method: 'DELETE',
+        headers
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      }
+
+      return {
+        success: true,
+        message: data.message || 'Order deleted successfully'
+      };
+    } catch (error) {
+      console.error('Delete order error:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to delete order'
+      };
+    }
+  }
+
   // Utility methods
   formatCurrency(amount) {
     return `₹${(amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;

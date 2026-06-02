@@ -19,7 +19,7 @@
   border-bottom: 1px solid rgba(139, 69, 19, 0.08);
   border-top: 0;
   position: sticky;
-  top: 126px;
+  top: 108px;
   z-index: 11000;
   box-shadow: var(--p-shadow);
 }
