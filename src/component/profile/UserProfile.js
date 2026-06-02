@@ -159,6 +159,16 @@ export default function UserProfile() {
     );
   }
 
+  const profileCompletion = [
+    profile?.first_name,
+    profile?.last_name,
+    profile?.email,
+    profile?.phone,
+    profile?.address,
+    profile?.profile_picture
+  ].filter(Boolean).length;
+  const profileCompletionPercent = Math.round((profileCompletion / 6) * 100);
+
   return (
     <div className="user-profile-main-container">
       <div className="user-profile-content-wrapper">
@@ -261,6 +271,28 @@ export default function UserProfile() {
                 <button onClick={() => setError('')} className="user-profile-close-error">×</button>
               </div>
             )}
+
+            <div className="user-profile-overview-panel">
+              <div className="user-profile-overview-copy">
+                <span className="user-profile-overview-kicker">Account Overview</span>
+                <h2>Welcome back, {profile?.first_name || 'customer'}</h2>
+                <p>Track furniture orders, review account details, and keep your profile ready for faster checkout.</p>
+              </div>
+              <div className="user-profile-overview-stats">
+                <div>
+                  <strong>{orders.length}</strong>
+                  <span>Visible orders</span>
+                </div>
+                <div>
+                  <strong>{profileCompletionPercent}%</strong>
+                  <span>Profile complete</span>
+                </div>
+                <div>
+                  <strong>{activeTab === 'orders' ? 'Orders' : activeTab === 'blogs' ? 'Journal' : 'Profile'}</strong>
+                  <span>Current tab</span>
+                </div>
+              </div>
+            </div>
 
             {/* Tab Content */}
             {activeTab === 'orders' && (

@@ -192,14 +192,6 @@ const FurnitureProductCatalog = () => {
                   >
                     <FaHeart />
                   </button>
-                  <button
-                    className="quick-action-btn"
-                    title="Quick view"
-                    aria-label="Quick view product details"
-                    onClick={() => openModal(product)}
-                  >
-                    <FaSearch />
-                  </button>
                 </div>
               </div>
 

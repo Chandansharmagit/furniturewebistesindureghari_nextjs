@@ -247,10 +247,13 @@ export default function Checkout() {
   return (
     <div className="checkout-container">
       <div className="checkout-header">
-        <h1>
-          <ShoppingBag size={28} style={{ marginRight: '12px', verticalAlign: 'middle', color: 'var(--primary-brown)' }} />
-          Checkout
-        </h1>
+        <div>
+          <span className="checkout-eyebrow">Secure Order</span>
+          <h1>
+            <ShoppingBag size={28} style={{ marginRight: '12px', verticalAlign: 'middle', color: 'var(--primary-brown)' }} />
+            Checkout
+          </h1>
+        </div>
         <button onClick={() => navigate('/cart')} className="back-to-cart-btn">
           <ArrowLeft size={18} />
           Back to Cart
@@ -259,6 +262,11 @@ export default function Checkout() {
 
       <div className="checkout-content">
         <div className="checkout-form">
+          <div className="checkout-progress-strip">
+            <span>Customer</span>
+            <span>Delivery</span>
+            <span>Payment</span>
+          </div>
           <form onSubmit={handleSubmit}>
             {/* Personal Information */}
             <div className="form-section">
@@ -458,7 +466,7 @@ export default function Checkout() {
               className={`place-order-btn ${isProcessing ? 'processing' : ''}`}
               disabled={isProcessing}
             >
-              {isProcessing ? 'Processing...' : `Place Order - ₹${formatPrice(getCartTotal())}`}
+              {isProcessing ? 'Processing...' : `Place Order - NPR ${formatPrice(getCartTotal())}`}
             </button>
           </form>
         </div>
@@ -466,6 +474,9 @@ export default function Checkout() {
         {/* Order Summary */}
         <div className="order-summary">
           <h3>Order Summary</h3>
+          <div className="order-summary-note">
+            Your order details will be confirmed by our team before delivery.
+          </div>
           <div className="summary-items">
             {cartItems.map(item => (
               <div key={item.id} className="summary-item">
@@ -473,7 +484,7 @@ export default function Checkout() {
                 <div className="item-details">
                   <h4>{item.title}</h4>
                   <p>Qty: {item.quantity}</p>
-                  <span className="item-price">₹{formatPrice(item.price * item.quantity)}</span>
+                  <span className="item-price">NPR {formatPrice(item.price * item.quantity)}</span>
                 </div>
               </div>
             ))}
@@ -481,7 +492,7 @@ export default function Checkout() {
           <div className="summary-total">
             <div className="total-row">
               <span>Subtotal:</span>
-              <span>₹{formatPrice(getCartTotal())}</span>
+              <span>NPR {formatPrice(getCartTotal())}</span>
             </div>
             <div className="total-row">
               <span>Shipping:</span>
@@ -489,8 +500,12 @@ export default function Checkout() {
             </div>
             <div className="summary-row total-row">
               <span>Grand Total</span>
-              <span>₹{formatPrice(getCartTotal())}</span>
+              <span>NPR {formatPrice(getCartTotal())}</span>
             </div>
+          </div>
+          <div className="checkout-support-strip">
+            <span>Cash on delivery available</span>
+            <span>Support after purchase</span>
           </div>
         </div>
       </div>

@@ -17,7 +17,7 @@ const AddToCart = () => {
   };
 
   const formatPrice = (price) => {
-    return `₹${(price || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `NPR ${(price || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
   if (items.length === 0) {
@@ -51,22 +51,34 @@ const AddToCart = () => {
   return (
     <div className="cart-container">
       <div className="cart-header">
-        <button className="back-btn" onClick={() => navigate(-1)}>
-          <ArrowLeft size={20} />
-          Back
-        </button>
-        <h1 className="cart-title">
-          <ShoppingBag size={28} />
-          Shopping Cart ({items.length} {items.length === 1 ? 'item' : 'items'})
-        </h1>
-        <button className="clear-cart-btn" onClick={clearCart}>
-          <Trash2 size={18} />
-          Clear Cart
-        </button>
+        <div className="cart-header-main">
+          <button className="back-btn" onClick={() => navigate(-1)}>
+            <ArrowLeft size={20} />
+            Back
+          </button>
+          <div>
+            <span className="cart-eyebrow">Your Selection</span>
+            <h1 className="cart-title">
+              <ShoppingBag size={28} />
+              Shopping Cart ({items.length} {items.length === 1 ? 'item' : 'items'})
+            </h1>
+          </div>
+        </div>
+        <div className="cart-header-actions">
+          <button className="clear-cart-btn" onClick={clearCart}>
+            <Trash2 size={18} />
+            Clear Cart
+          </button>
+        </div>
       </div>
 
       <div className="cart-content">
         <div className="cart-items">
+          <div className="cart-flow-strip">
+            <span>Cart</span>
+            <span>Delivery Details</span>
+            <span>Order Confirmation</span>
+          </div>
           {items.map((item) => (
             <div key={item.id} className="cart-item">
               <div className="item-image">
@@ -161,7 +173,12 @@ const AddToCart = () => {
             </div>
             
             <div className="security-info">
-              <p>🔒 Secure checkout with 256-bit SSL encryption</p>
+              <p>Secure checkout with protected order details</p>
+            </div>
+            <div className="cart-summary-promises">
+              <span>Free delivery inside service area</span>
+              <span>Pay after confirmation</span>
+              <span>Support on WhatsApp or call</span>
             </div>
           </div>
         </div>

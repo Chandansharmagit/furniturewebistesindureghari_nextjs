@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Star, Eye, X, Heart, ShoppingCart, Shield, Truck, Wrench } from 'lucide-react';
+import { Star, X, Heart, ShoppingCart, Shield, Truck, Wrench } from 'lucide-react';
 import Link from 'next/link';
 import { useCart } from '../../../context/CartContext';
 import { productSeoPath } from '../../../data/nepalSeo';
@@ -58,15 +58,6 @@ const ProductCard = ({ product }) => {
             : null;
     };
 
-    const handleOpenQuickView = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setShowQuickView(true);
-        setActiveImage(displayImage);
-        setQuantity(1);
-        document.body.style.overflow = 'hidden';
-    };
-
     const handleCloseModal = (e) => {
         if (e) {
             e.preventDefault();
@@ -102,16 +93,6 @@ const ProductCard = ({ product }) => {
                     />
                     <div className="card-overlay"></div>
                 </div>
-
-                {/* Quick View Hover Trigger Button */}
-                <button
-                    className="quick-view-overlay-btn"
-                    onClick={handleOpenQuickView}
-                    aria-label={`Quick view ${name}`}
-                >
-                    <Eye size={16} />
-                    <span>Quick View</span>
-                </button>
 
                 <div className="card-top-badges">
                     <div className="badge-pill category-badge">
