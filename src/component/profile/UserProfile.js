@@ -4,6 +4,7 @@ import { API_BASE_URL } from '../../config/api';
 import orderService from '../../services/orderService';
 import authService from '../../services/authService';
 import UserBlogsTab from './UserBlogsTab';
+import { fetchLoyaltyStatus, getLoyaltyStatusClass } from '../../utils/loyaltyStatus';
 import './UserProfile.css';
 
 export default function UserProfile() {
@@ -14,6 +15,7 @@ export default function UserProfile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [loyaltyStatus, setLoyaltyStatus] = useState(null);
   const [orderFilters, setOrderFilters] = useState({
     page: 1,
     limit: 10,
@@ -26,6 +28,20 @@ export default function UserProfile() {
       const profileResult = await authService.getProfile();
       if (profileResult.success) {
         setProfile(profileResult.data);
+        try {
+          const statusResult = await fetchLoyaltyStatus({
+            id: profileResult.data?.id || profileResult.data?.user_id,
+            email: profileResult.data?.email,
+            totalSpend: profileResult.data?.total_spend || profileResult.data?.totalSpend
+          });
+          setLoyaltyStatus(statusResult);
+        } catch {
+          setLoyaltyStatus({
+            status: 'Registered',
+            status_key: 'registered',
+            eligible_for_loyalty: false
+          });
+        }
       } else {
         setError('Failed to load profile');
       }
@@ -51,8 +67,25 @@ export default function UserProfile() {
       setLoading(true);
       const result = await orderService.getMyOrders(orderFilters);
       if (result.success) {
-        setOrders(result.data.orders || []);
+        const loadedOrders = result.data.orders || [];
+        setOrders(loadedOrders);
         setPagination(result.data.pagination);
+        const orderSpend = loadedOrders.reduce((sum, order) => (
+          sum + Number(order.total_amount || order.totalAmount || 0)
+        ), 0);
+
+        if (profile?.email || profile?.id) {
+          try {
+            const statusResult = await fetchLoyaltyStatus({
+              id: profile?.id || profile?.user_id,
+              email: profile?.email,
+              totalSpend: profile?.total_spend || profile?.totalSpend || orderSpend
+            });
+            setLoyaltyStatus(statusResult);
+          } catch {
+            // Keep the profile-visible fallback status from the profile load.
+          }
+        }
       } else {
         setError(result.error);
       }
@@ -62,7 +95,7 @@ export default function UserProfile() {
     } finally {
       setLoading(false);
     }
-  }, [orderFilters]);
+  }, [orderFilters, profile]);
 
   useEffect(() => {
     if (activeTab === 'orders') {
@@ -212,6 +245,16 @@ export default function UserProfile() {
                 <h1>{profile?.first_name} {profile?.last_name}</h1>
                 <p className="user-profile-email-display">{profile?.email}</p>
                 <p className="user-profile-phone-display">{profile?.phone}</p>
+                {loyaltyStatus?.status && (
+                  <div className={`user-profile-loyalty-status ${getLoyaltyStatusClass(loyaltyStatus.status_key || loyaltyStatus.status)}`}>
+                    <span>{loyaltyStatus.status}</span>
+                    <small>
+                      {loyaltyStatus.discount_percent
+                        ? `${loyaltyStatus.discount_percent}% loyalty discount available`
+                        : loyaltyStatus.message || 'Customer status'}
+                    </small>
+                  </div>
+                )}
               </div>
             </div>
             <button className="user-profile-logout-button" onClick={handleLogout}>

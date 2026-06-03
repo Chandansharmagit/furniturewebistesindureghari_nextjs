@@ -4,11 +4,22 @@ import ClientLayout from "./ClientLayout";
 import { getSiteNavigationJsonLd } from "@/component/seo/SiteLinksJsonLd";
 
 const SITE_URL = "https://sinduregharifurniture.shop";
+const SITE_ICON_URL = `${SITE_URL}/sf-icon.png`;
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: "Sindureghari Furniture",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+      { url: "/sf-icon.png", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/icon.png",
+    apple: [
+      { url: "/apple-icon.png", type: "image/png", sizes: "512x512" },
+    ],
+  },
   title: {
     default: "Sindureghari Furniture - Buy Sofas, Beds & Wooden Furniture Online Nepal",
     template: "%s | Sindureghari Furniture Nepal",
@@ -93,7 +104,7 @@ const siteJsonLd = {
       url: SITE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/logo.png`,
+        url: SITE_ICON_URL,
         width: 512,
         height: 512,
       },
@@ -119,7 +130,7 @@ const siteJsonLd = {
       "@id": `${SITE_URL}/#furniturestore`,
       name: "Sindureghari Furniture Showroom",
       url: SITE_URL,
-      logo: `${SITE_URL}/logo.png`,
+      logo: SITE_ICON_URL,
       image: `${SITE_URL}/images/showroom-exterior.jpg`,
       description:
         "Visit Sindureghari Furniture showroom for solid wood sofa sets, beds, dining tables, wardrobes, office furniture, lighting and custom furniture in Nepal.",

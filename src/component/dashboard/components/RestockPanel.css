@@ -1,0 +1,214 @@
+.restock-panel {
+  margin: 0 0 18px;
+  padding: 16px;
+  border: 1px solid #dfe5ee;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fff, #fbfaf7);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, .045);
+}
+
+.restock-panel__header,
+.restock-panel__summary,
+.restock-card,
+.restock-card__actions {
+  display: flex;
+  align-items: center;
+}
+
+.restock-panel__header {
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.restock-panel__eyebrow {
+  display: block;
+  color: #9a6a00;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.restock-panel h3 {
+  margin: 3px 0 0;
+  color: #071735;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.restock-panel__refresh,
+.restock-card__actions button {
+  border: 0;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.restock-panel__refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+}
+
+.restock-panel__refresh:disabled,
+.restock-card__actions button:disabled {
+  cursor: wait;
+  opacity: .62;
+}
+
+.restock-panel__summary {
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.restock-panel__summary span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #f5efe4;
+  color: #7a540d;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.restock-panel__notice {
+  margin: 12px 0 0;
+  color: #071735;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.restock-panel__empty {
+  margin-top: 12px;
+  padding: 18px;
+  border: 1px dashed #d9c28d;
+  border-radius: 8px;
+  background: #fffaf0;
+  color: #6b7280;
+  font-weight: 800;
+  text-align: center;
+}
+
+.restock-panel__empty--healthy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #047857;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.restock-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.restock-card {
+  gap: 12px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #e6ebf2;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.restock-card img,
+.restock-card__fallback {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #f5efe4;
+}
+
+.restock-card__fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #9a6a00;
+}
+
+.restock-card__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.restock-card__body strong,
+.restock-card__body small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.restock-card__body strong {
+  color: #071735;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.restock-card__body small {
+  margin-top: 2px;
+  color: #657089;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.restock-card__stock {
+  display: inline-block;
+  margin-top: 7px;
+  color: #9a6a00;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.restock-card__stock.danger {
+  color: #dc2626;
+}
+
+.restock-card__actions {
+  gap: 6px;
+}
+
+.restock-card__actions input {
+  width: 64px;
+  height: 36px;
+  border: 1px solid #dfe5ee;
+  border-radius: 999px;
+  color: #071735;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.restock-card__actions button {
+  height: 36px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+@media (max-width: 720px) {
+  .restock-panel__header,
+  .restock-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .restock-card__actions,
+  .restock-card__actions input,
+  .restock-card__actions button {
+    width: 100%;
+  }
+}

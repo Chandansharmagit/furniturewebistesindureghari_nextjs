@@ -9,12 +9,50 @@ const couponApi = axios.create({
   }
 });
 
+const getCouponCustomerIdentity = () => {
+  if (typeof window === 'undefined') return {};
+
+  const identity = {};
+  const inspectValue = (value) => {
+    if (!value || typeof value !== 'object') return;
+
+    identity.user_id = identity.user_id || value.id || value.user_id || value.userId || value.customer_id;
+    identity.email = identity.email || value.email || value.user_email;
+
+    Object.values(value).forEach((nestedValue) => {
+      if (nestedValue && typeof nestedValue === 'object' && !Array.isArray(nestedValue)) {
+        inspectValue(nestedValue);
+      }
+    });
+  };
+
+  try {
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+    inspectValue(storedUser);
+  } catch {
+    // Ignore malformed user cache.
+  }
+
+  identity.email = identity.email || localStorage.getItem('userEmail') || '';
+
+  Object.keys(localStorage).forEach((key) => {
+    if (!/user|customer|auth|profile|client|patron/i.test(key)) return;
+
+    try {
+      inspectValue(JSON.parse(localStorage.getItem(key)));
+    } catch {
+      // Ignore plain token strings.
+    }
+  });
+
+  return identity;
+};
+
 // Add request interceptor to include JWT token
 couponApi.interceptors.request.use(
   (config) => {
     const authToken = localStorage.getItem('authToken');
-    const method = (config.method || 'get').toLowerCase();
-    if (authToken && method !== 'get') {
+    if (authToken) {
       config.headers.Authorization = `Bearer ${authToken}`;
     }
     return config;
@@ -28,7 +66,6 @@ couponApi.interceptors.request.use(
 couponApi.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('Coupon API error:', error);
     return Promise.reject(error);
   }
 );
@@ -38,8 +75,7 @@ class CouponService {
   async getAllCoupons(options = {}) {
     try {
       const response = await couponApi.get(buildApiUrl(COUPON_ENDPOINTS.LIST), {
-        params: options.fresh ? { fresh: '1', t: Date.now() } : undefined,
-        headers: options.fresh ? { 'Cache-Control': 'no-cache' } : undefined
+        params: options.fresh ? { fresh: '1', t: Date.now() } : undefined
       });
       const data = response.data;
       return {
@@ -47,7 +83,6 @@ class CouponService {
         data: data
       };
     } catch (error) {
-      console.error('Get all coupons error:', error);
       return {
         success: false,
         error: error.message || 'Failed to fetch coupons'
@@ -74,17 +109,25 @@ class CouponService {
   }
 
   // Validate a coupon
-  async validateCoupon(code) {
+  async validateCoupon(code, options = {}) {
     try {
       const endpoint = COUPON_ENDPOINTS.VALIDATE.replace(':code', code);
-      const response = await couponApi.get(buildApiUrl(endpoint));
+      const identity = {
+        ...getCouponCustomerIdentity(),
+        ...options
+      };
+      const response = await couponApi.get(buildApiUrl(endpoint), {
+        params: {
+          ...(identity.email ? { email: identity.email } : {}),
+          ...(identity.user_id ? { user_id: identity.user_id } : {})
+        }
+      });
       const data = response.data;
       return {
         success: true,
         data: data
       };
     } catch (error) {
-      console.error('Validate coupon error:', error);
       return {
         success: false,
         error: error.message || 'Failed to validate coupon'

@@ -1,42 +1,48 @@
 import { useEffect } from 'react';
 
+const CHATBASE_SCRIPT_ID = 'wqtOEprlA4fTzBKY7_eHt';
+const CHATBASE_SCRIPT_SRC = 'https://www.chatbase.co/embed.min.js';
+const CHATBASE_DOMAIN = 'www.chatbase.co';
+
 const ChatbaseWidget = () => {
     useEffect(() => {
-        // Check if configuration exists
-        const chatbotId = process.env.REACT_APP_CHATBASE_ID;
-        const host = process.env.REACT_APP_CHATBASE_HOST || "https://www.chatbase.co";
+        if (!window.chatbase || window.chatbase('getState') !== 'initialized') {
+            window.chatbase = (...args) => {
+                if (!window.chatbase.q) {
+                    window.chatbase.q = [];
+                }
+                window.chatbase.q.push(args);
+            };
 
-        if (!chatbotId) {
-            console.warn("Chatbase ID is missing in environment variables.");
-            return;
+            window.chatbase = new Proxy(window.chatbase, {
+                get(target, prop) {
+                    if (prop === 'q') {
+                        return target.q;
+                    }
+                    return (...args) => target(prop, ...args);
+                }
+            });
         }
 
-        // Set configuration on window object as required by Chatbase
-        window.chatbaseConfig = {
-            chatbotId: chatbotId,
-        };
+        if (document.getElementById(CHATBASE_SCRIPT_ID)) {
+            return undefined;
+        }
 
-        // Create script element
         const script = document.createElement("script");
-        script.src = `${host}/embed.min.js`;
-        script.id = chatbotId;
-        script.domain = host.replace("https://", "").replace("http://", "");
-        script.defer = true;
-
-        // Append script to document body
+        script.src = CHATBASE_SCRIPT_SRC;
+        script.id = CHATBASE_SCRIPT_ID;
+        script.domain = CHATBASE_DOMAIN;
         document.body.appendChild(script);
 
-        // Cleanup on unmount
         return () => {
-            const existingScript = document.getElementById(chatbotId);
+            const existingScript = document.getElementById(CHATBASE_SCRIPT_ID);
             if (existingScript) {
                 document.body.removeChild(existingScript);
             }
-            delete window.chatbaseConfig;
         };
     }, []);
 
-    return null; // This component doesn't render anything itself
+    return null;
 };
 
 export default ChatbaseWidget;

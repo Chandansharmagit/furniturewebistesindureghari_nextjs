@@ -38,6 +38,7 @@ const API_CONFIG = {
     PRODUCTS: {
       LIST: '/api/products',
       DETAIL: '/api/products/:id',
+      RESTOCK: '/api/products/:id/restock',
       SEARCH: '/api/products/search',
       CATEGORIES: '/api/categories'
     },
@@ -117,6 +118,7 @@ const API_CONFIG = {
       CONTACT_FORMS: '/api/customer-data/contact-forms',
       FEEDBACK: '/api/customer-data/feedback',
       ORDER_REQUESTS: '/api/customer-data/order-requests',
+      CONSULTATION_REQUESTS: '/api/customer-data/consultation-requests',
       SUMMARY: '/api/customer-data/summary',
       UPDATE_CONTACT_STATUS: '/api/customer-data/contact-forms/:id/status',
       UPDATE_FEEDBACK_STATUS: '/api/customer-data/feedback/:id/status',

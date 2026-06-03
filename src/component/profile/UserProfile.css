@@ -39,6 +39,7 @@
   min-height: 100vh;
   font-family: var(--font-sans);
   background-color: #fff5f5; /* PURE WHITE BACKGROUND */
+  overflow: visible;
   
 }
 
@@ -48,12 +49,15 @@
   grid-template-columns: 280px 1fr; /* Compact sidebar width */
   gap: 30px;
   align-items: start;
+  overflow: visible;
 }
 
 /* ---- Sidebar Panel ---- */
 .user-profile-sidebar {
   position: sticky;
   top: 100px;
+  align-self: start;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -516,8 +520,32 @@
 }
 
 .user-profile-sidebar {
+  position: sticky !important;
   top: 172px;
+  align-self: start;
+  height: fit-content;
+  max-height: calc(100vh - 188px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   gap: 14px;
+  z-index: 20;
+}
+
+@media (min-width: 1181px) {
+  .user-profile-content-wrapper {
+    align-items: start;
+    overflow: visible !important;
+    min-height: 120vh;
+  }
+
+  .user-profile-sidebar {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 172px !important;
+    align-self: start !important;
+    max-height: calc(100vh - 188px);
+    overflow-y: auto;
+  }
 }
 
 .user-profile-header-card,
@@ -952,4 +980,46 @@
   .user-profile-filter-select {
     width: 100%;
   }
+}
+.user-profile-loyalty-status {
+  width: fit-content;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+  padding: 9px 11px;
+  border: 1px solid #ead8b6;
+  border-radius: 8px;
+  background: #fff8e9;
+  color: #8a640d;
+}
+
+.user-profile-loyalty-status span {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.user-profile-loyalty-status small {
+  color: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.25;
+  opacity: .82;
+}
+
+.user-profile-loyalty-status.vip {
+  border-color: #c59c4a;
+  background: #111;
+  color: #f8d987;
+  box-shadow: 0 12px 24px rgba(17, 17, 17, .14);
+}
+
+.user-profile-loyalty-status.regular {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
 }

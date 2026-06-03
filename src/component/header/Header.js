@@ -1,5 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { User, Heart, ShoppingCart, Menu, X, Store, Search, Building2, HelpCircle, BadgePercent } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  User,
+  Heart,
+  ShoppingCart,
+  Menu,
+  X,
+  Store,
+  Search,
+  Building2,
+  HelpCircle,
+  BadgePercent,
+  LogIn,
+  UserPlus,
+  PackageCheck,
+  LogOut,
+  ChevronRight
+} from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import SearchFunctionality from '../navbar/search/SearchFunctionality';
 import { useCart } from '../../context/CartContext';
@@ -8,16 +24,50 @@ import useFavorites from '../../hooks/useFavorites';
 import { useAuth } from '../../context/AuthContext';
 import { API_BASE_URL, buildApiUrl } from '../../config/api';
 import couponService from '../../services/couponService';
+import { fetchLoyaltyStatus, getLoyaltyStatusClass } from '../../utils/loyaltyStatus';
 import './Header.css';
 
 const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [activeCoupon, setActiveCoupon] = useState(null);
+  const [loyaltyStatus, setLoyaltyStatus] = useState(null);
+  const userMenuRef = useRef(null);
+  const userMenuCloseTimerRef = useRef(null);
   const navigate = useNavigate();
   const { getCartItemsCount } = useCart();
   const { favoritesCount } = useFavorites();
   const { user, isAuthenticated, logout } = useAuth();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return undefined;
+    }
+
+    let isMounted = true;
+
+    fetchLoyaltyStatus({
+      id: user?.id || user?.user_id,
+      email: user?.email,
+      totalSpend: user?.total_spend || user?.totalSpend
+    })
+      .then((status) => {
+        if (isMounted) setLoyaltyStatus(status);
+      })
+      .catch(() => {
+        if (isMounted) {
+          setLoyaltyStatus({
+            status: 'Registered',
+            status_key: 'registered',
+            eligible_for_loyalty: false
+          });
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     let isMounted = true;
@@ -84,28 +134,18 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
         console.warn('Active coupon endpoint failed, falling back to coupon list:', error);
       }
 
-      const result = await couponService.getAllCoupons({ fresh: true });
+      let result = { success: false };
+      try {
+        result = await couponService.getAllCoupons({ fresh: true });
+      } catch {
+        result = { success: false };
+      }
       if (!isMounted || !result.success) return;
 
       const bestCoupon = pickBestCoupon(normalizeCouponList(result.data));
       if (bestCoupon) {
         setActiveCoupon(bestCoupon);
         return;
-      }
-
-      const featuredCode = process.env.NEXT_PUBLIC_FEATURED_COUPON_CODE || 'royal2026';
-      try {
-        const response = await fetch(buildApiUrl(`/api/products/coupons/validate/${featuredCode}?fresh=1&t=${Date.now()}`), {
-          cache: 'no-store',
-        });
-
-        if (response.ok) {
-          const coupon = await response.json();
-          setActiveCoupon(isCouponLive(coupon) ? coupon : null);
-          return;
-        }
-      } catch (error) {
-        console.warn('Featured coupon validation failed:', error);
       }
 
       setActiveCoupon(null);
@@ -130,6 +170,22 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setShowUserDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      if (userMenuCloseTimerRef.current) {
+        window.clearTimeout(userMenuCloseTimerRef.current);
+      }
+    };
+  }, []);
+
   const getProfileImageUrl = (path) => {
     if (!path) return null;
     if (path.startsWith('http')) return path;
@@ -140,6 +196,21 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
   const activeDiscount = activeCoupon ? Math.round(Number(
     activeCoupon.discount_percentage ?? activeCoupon.discount_value ?? activeCoupon.discount ?? 0
   )) : null;
+  const displayName = user?.name || user?.first_name || 'Customer';
+  const displayEmail = user?.email || 'Manage your Sindureghari account';
+
+  const openUserMenu = () => {
+    if (userMenuCloseTimerRef.current) {
+      window.clearTimeout(userMenuCloseTimerRef.current);
+    }
+    setShowUserDropdown(true);
+  };
+
+  const closeUserMenuSoon = () => {
+    userMenuCloseTimerRef.current = window.setTimeout(() => {
+      setShowUserDropdown(false);
+    }, 140);
+  };
 
   return (
     <header className={`premium-header ${isMobileSearchOpen ? 'mobile-search-active' : ''}`}>
@@ -215,10 +286,17 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
             {/* User Account */}
             <div
               className="action-item user-account"
-              onMouseEnter={() => setShowUserDropdown(true)}
-              onMouseLeave={() => setShowUserDropdown(false)}
+              ref={userMenuRef}
+              onMouseEnter={openUserMenu}
+              onMouseLeave={closeUserMenuSoon}
             >
-              <div className="action-icon-wrapper">
+              <button
+                type="button"
+                className={`action-icon-wrapper user-menu-trigger ${showUserDropdown ? 'active' : ''}`}
+                onClick={() => setShowUserDropdown(current => !current)}
+                aria-expanded={showUserDropdown}
+                aria-label="Open account menu"
+              >
                 {isAuthenticated && user?.profile_picture ? (
                   <img
                     src={getProfileImageUrl(user.profile_picture)}
@@ -228,25 +306,69 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
                 ) : (
                   <User size={18} strokeWidth={1.5} className="action-icon" />
                 )}
-              </div>
+              </button>
+              {isAuthenticated && loyaltyStatus?.status && (
+                <span className={`header-loyalty-pill ${getLoyaltyStatusClass(loyaltyStatus.status_key || loyaltyStatus.status)}`}>
+                  {loyaltyStatus.status}
+                </span>
+              )}
 
               {showUserDropdown && (
                   <div className="premium-dropdown">
-                    <div className="dropdown-header">
-                      {isAuthenticated ? `Hello, ${user?.name || user?.first_name || 'User'}` : 'Welcome'}
+                    <div className="dropdown-header account-menu-header">
+                      <div className="account-menu-avatar">
+                        {isAuthenticated && user?.profile_picture ? (
+                          <img src={getProfileImageUrl(user.profile_picture)} alt="Profile" />
+                        ) : (
+                          <User size={22} />
+                        )}
+                      </div>
+                      <div className="account-menu-identity">
+                        <strong>{isAuthenticated ? displayName : 'Welcome'}</strong>
+                        <span>{isAuthenticated ? displayEmail : 'Sign in for orders, wishlist and faster checkout'}</span>
+                        {isAuthenticated && loyaltyStatus?.status && (
+                          <em className={`account-status-badge ${getLoyaltyStatusClass(loyaltyStatus.status_key || loyaltyStatus.status)}`}>
+                            {loyaltyStatus.status}
+                            {loyaltyStatus.discount_percent ? ` - ${loyaltyStatus.discount_percent}% loyalty` : ''}
+                          </em>
+                        )}
+                      </div>
                     </div>
                     <div className="dropdown-links">
                       {!isAuthenticated ? (
                         <>
-                          <Link to="/login" className="drop-link">Login</Link>
-                          <Link to="/register" className="drop-link">Register</Link>
+                          <Link to="/login" className="drop-link account-menu-primary" onClick={() => setShowUserDropdown(false)}>
+                            <LogIn size={17} />
+                            <span>Login</span>
+                            <ChevronRight size={15} />
+                          </Link>
+                          <Link to="/register" className="drop-link" onClick={() => setShowUserDropdown(false)}>
+                            <UserPlus size={17} />
+                            <span>Create account</span>
+                            <ChevronRight size={15} />
+                          </Link>
                         </>
                       ) : (
                         <>
-                          <Link to="/profile" className="drop-link">My Profile</Link>
-                          <Link to="/orders" className="drop-link">Orders</Link>
-                          <Link to="/favorites" className="drop-link">Wishlist</Link>
-                          <button onClick={() => { logout(); navigate('/'); }} className="drop-link logout">Logout</button>
+                          <Link to="/profile" className="drop-link" onClick={() => setShowUserDropdown(false)}>
+                            <User size={17} />
+                            <span>My Profile</span>
+                            <ChevronRight size={15} />
+                          </Link>
+                          <Link to="/orders" className="drop-link" onClick={() => setShowUserDropdown(false)}>
+                            <PackageCheck size={17} />
+                            <span>Orders</span>
+                            <ChevronRight size={15} />
+                          </Link>
+                          <Link to="/favorites" className="drop-link" onClick={() => setShowUserDropdown(false)}>
+                            <Heart size={17} />
+                            <span>Wishlist</span>
+                            <ChevronRight size={15} />
+                          </Link>
+                          <button onClick={() => { logout(); setShowUserDropdown(false); navigate('/'); }} className="drop-link logout">
+                            <LogOut size={17} />
+                            <span>Logout</span>
+                          </button>
                         </>
                       )}
                     </div>

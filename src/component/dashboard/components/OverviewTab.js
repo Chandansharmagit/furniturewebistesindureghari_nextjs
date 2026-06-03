@@ -6,6 +6,12 @@ import {
 import { Line, Doughnut, Bar, Pie } from 'react-chartjs-2';
 import './OverviewTab.css';
 
+const ChartFrame = ({ hasData, children }) => (
+  <div className="ov-chart-frame">
+    {hasData ? children : <div className="ov-chart-empty">No data for selected period</div>}
+  </div>
+);
+
 const OverviewTab = ({ 
   dashboardData, 
   productData, 
@@ -49,12 +55,6 @@ const OverviewTab = ({
     if (s === 'cancelled') return 'ov-badge ov-badge--cancelled';
     return 'ov-badge ov-badge--pending';
   };
-
-  const ChartFrame = ({ hasData, children }) => (
-    <div className="ov-chart-frame">
-      {hasData ? children : <div className="ov-chart-empty">No data for selected period</div>}
-    </div>
-  );
 
   const categoryChartData = {
     labels: salesData?.sales_by_category?.map(item => item.category) || [],
@@ -182,7 +182,7 @@ const OverviewTab = ({
       </div>
 
       {/* Stats Bento Grid */}
-      <div className="ov-stats-grid">
+      <div className="ov-bento-stats-grid">
         <div className="ov-stat-card">
           <div className="ov-stat-icon"><MdAttachMoney /></div>
           <div>
@@ -246,9 +246,7 @@ const OverviewTab = ({
             <h3 className="ov-stat-value">{formatNumber(productData?.low_stock_count)}</h3>
           </div>
         </div>
-      </div>
 
-      <div className="ov-insights-grid">
         {insightCards.map((item) => (
           <div className={`ov-insight-card ov-insight-card--${item.tone}`} key={item.label}>
             <span className="ov-insight-label">{item.label}</span>
@@ -377,49 +375,6 @@ const OverviewTab = ({
         </div>
       </div>
 
-      {/* Recent Orders Table */}
-      <div className="ov-table-container">
-        <div className="ov-table-header">
-          <h4 className="ov-table-title">Real-time Registry</h4>
-          <button 
-            onClick={() => navigate('/admin/orders')} 
-            className="ov-btn-outline"
-          >
-            View All
-          </button>
-        </div>
-        <div className="ov-table-scroll">
-          <table className="ov-data-table">
-            <thead>
-              <tr>
-                <th>Order</th>
-                <th>Customer</th>
-                <th>Revenue</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dashboardData?.recent_orders?.slice(0, 5).map(order => (
-                <tr key={order.id}>
-                  <td>#{order.order_number}</td>
-                  <td>{order.customer_name}</td>
-                  <td>{formatCurrency(order.total_amount)}</td>
-                  <td>
-                    <span className={getStatusClass(order.status)}>
-                      {(order.status || '').toUpperCase()}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-              {!dashboardData?.recent_orders?.length && (
-                <tr>
-                  <td colSpan="4" className="ov-empty-cell">No recent orders found.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   );
 };

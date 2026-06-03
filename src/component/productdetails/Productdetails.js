@@ -74,6 +74,7 @@ export default function ProductDetails({ productId }) {
 
     useEffect(() => {
         if (id) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             getProductById();
         }
     }, [id, getProductById]);
@@ -290,12 +291,30 @@ Product Link: ${window.location.href}`;
         }
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/products/coupons/validate/${couponValidation}`);
+            let storedUser = {};
+            try {
+                storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+            } catch {
+                storedUser = {};
+            }
+
+            const authToken = localStorage.getItem('authToken');
+            const couponParams = new URLSearchParams();
+            const userEmail = storedUser.email || localStorage.getItem('userEmail');
+            const userId = storedUser.id || storedUser.user_id || storedUser.userId;
+
+            if (userEmail) couponParams.set('email', userEmail);
+            if (userId) couponParams.set('user_id', userId);
+
+            const couponUrl = `${API_BASE_URL}/api/products/coupons/validate/${encodeURIComponent(couponValidation.trim())}${couponParams.toString() ? `?${couponParams.toString()}` : ''}`;
+            const response = await fetch(couponUrl, {
+                headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined
+            });
             if (response.ok) {
                 const coupon = await response.json();
-                const expiryDate = new Date(coupon.expiry_date);
+                const expiryDate = coupon.expiry_date || coupon.expires_at ? new Date(coupon.expiry_date || coupon.expires_at) : null;
                 const now = new Date();
-                if (expiryDate < now) {
+                if (expiryDate && expiryDate < now) {
                     setValidationResult({ valid: false, message: 'Coupon has expired' });
                     setCouponDiscount(0);
                 } else {

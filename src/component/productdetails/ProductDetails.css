@@ -3141,3 +3141,145 @@
         height: 56px;
     }
 }
+
+/* Tablet / docked-devtools stability override.
+   Keeps sticky gallery/info panels from overlapping while scrolling. */
+@media (min-width: 761px) and (max-width: 1280px), (max-height: 860px) and (min-width: 761px) and (max-width: 1280px) {
+    body .product-details-container {
+        padding: 18px 22px 34px;
+        overflow: visible;
+    }
+
+    body .product-details-content {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        align-items: start;
+    }
+
+    body .product-details-content > .product-images-section,
+    body .product-images-section,
+    body .product-info-section {
+        position: static !important;
+        top: auto !important;
+        align-self: stretch;
+        width: 100%;
+        min-width: 0;
+        transform: none !important;
+    }
+
+    body .product-details-content > .product-images-section {
+        order: 1;
+        z-index: 1;
+    }
+
+    body .product-info-section {
+        order: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 20px;
+        border: 1px solid var(--pd-border, #e6e8ef);
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 14px 34px rgba(16, 24, 40, 0.08);
+        z-index: 2;
+    }
+
+    body .product-images-section .main-image-container {
+        width: 100%;
+        max-width: none;
+        aspect-ratio: 16 / 9;
+        max-height: min(58vh, 560px);
+        min-height: 360px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    body .product-images-section .main-product-image {
+        object-fit: cover;
+        object-position: center;
+    }
+
+    body .product-title {
+        font-size: clamp(28px, 4vw, 42px);
+        line-height: 1.05;
+    }
+
+    body .sku-container,
+    body .pd-status-row,
+    body .price-section,
+    body .coupon-section,
+    body .price-alert-section {
+        position: relative;
+        z-index: 3;
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) and (min-height: 861px) {
+    body .product-details-content {
+        grid-template-columns: minmax(0, 1fr) minmax(360px, 0.72fr);
+        gap: 22px;
+    }
+
+    body .product-details-content > .product-images-section {
+        position: static !important;
+        top: auto !important;
+    }
+
+    body .product-info-section {
+        position: static !important;
+        top: auto !important;
+    }
+
+    body .product-images-section .main-image-container {
+        aspect-ratio: 4 / 3;
+        min-height: 420px;
+    }
+}
+
+/* Desktop restore: keep large screens in a proper product/detail split even
+   when browser height is short or devtools is docked. */
+@media (min-width: 1281px) {
+    body .product-details-container {
+        padding: 18px 36px 34px;
+    }
+
+    body .product-details-content {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(410px, 0.95fr);
+        gap: 30px;
+        align-items: start;
+    }
+
+    body .product-details-content > .product-images-section {
+        position: sticky !important;
+        top: 178px !important;
+        width: 100%;
+        min-width: 0;
+        align-self: start;
+        z-index: 1;
+    }
+
+    body .product-info-section {
+        position: static !important;
+        top: auto !important;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        z-index: 2;
+    }
+
+    body .product-images-section .main-image-container {
+        width: 100%;
+        max-width: none;
+        aspect-ratio: 4 / 3;
+        min-height: 0;
+        max-height: none;
+        border-radius: 8px;
+    }
+}

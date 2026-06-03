@@ -47,11 +47,6 @@ const ChatbaseWidget = dynamic(() => import("../component/common/ChatbaseWidget"
   ssr: false,
 });
 
-const ZapierChatbot = dynamic(() => import("./ZapierChatbot"), {
-  loading: () => null,
-  ssr: false,
-});
-
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -123,7 +118,6 @@ export default function ClientLayout({ children }) {
         <PopupManager />
         <CookieConsentBanner />
         <ChatbaseWidget />
-        <ZapierChatbot />
       </CartProvider>
     </AuthProvider>
   );

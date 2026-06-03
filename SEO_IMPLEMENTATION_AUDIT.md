@@ -182,7 +182,7 @@ Findings:
 - Next image optimization is configured for AVIF/WebP.
 - Static assets are cached.
 - The site uses several client-heavy components and third-party scripts.
-- Zapier chatbot loads sitewide and may affect INP/LCP on mobile.
+- Chatbase chatbot loads sitewide and may affect INP/LCP on mobile.
 
 Recommended next:
 
@@ -489,4 +489,3 @@ Review strategy:
 98. Furniture Price Guide Nepal 2026
 99. Best Furniture Store in Nepal: Buyer Checklist
 100. Why Choose Sindureghari Furniture for Custom Furniture in Nepal
-

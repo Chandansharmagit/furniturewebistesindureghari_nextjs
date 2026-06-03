@@ -8,6 +8,7 @@ import {
   FaEnvelopeOpenText,
   FaHome,
   FaPenNib,
+  FaReceipt,
   FaShoppingCart,
   FaTicketAlt,
   FaUsers
@@ -17,10 +18,12 @@ const DashboardSidebar = ({
   activeTab,
   handleTabChange,
   navigate,
-  handleLogout
+  handleLogout,
+  notificationCounts = {}
 }) => {
   const primaryTabs = [
     { id: 'dashboard', label: 'Overview', icon: FaChartBar },
+    { id: 'orders', label: 'Order Control', icon: FaReceipt },
     { id: 'products', label: 'Products', icon: FaBox },
     { id: 'coupons', label: 'Coupons', icon: FaTicketAlt },
     { id: 'analytics', label: 'Analytics', icon: FaChartLine }
@@ -40,19 +43,23 @@ const DashboardSidebar = ({
   const renderNavGroup = (title, items) => (
     <div className="admin-sidebar-group">
       <p className="admin-sidebar-group-title">{title}</p>
-      {items.map(({ id, label, icon: Icon }) => (
-        <button
-          key={id}
-          type="button"
-          className={`admin-nav-item ${activeTab === id ? 'active' : ''}`}
-          onClick={() => handleTabChange(id)}
-        >
-          <span className="admin-nav-icon-wrap">
-            <Icon className="admin-nav-icon" />
-          </span>
-          <span>{label}</span>
-        </button>
-      ))}
+      {items.map(({ id, label, icon: Icon }) => {
+        const count = Number(notificationCounts[id] || 0);
+        return (
+          <button
+            key={id}
+            type="button"
+            className={`admin-nav-item ${activeTab === id ? 'active' : ''}`}
+            onClick={() => handleTabChange(id)}
+          >
+            <span className="admin-nav-icon-wrap">
+              <Icon className="admin-nav-icon" />
+            </span>
+            <span className="admin-nav-label">{label}</span>
+            {count > 0 && <span className="admin-nav-badge">+{count > 99 ? '99' : count}</span>}
+          </button>
+        );
+      })}
     </div>
   );
 

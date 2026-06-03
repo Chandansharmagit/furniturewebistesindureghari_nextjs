@@ -20,11 +20,13 @@ import { API_BASE_URL, CUSTOMER_DATA_ENDPOINTS } from '../../config/api';
 import ProductUploading from '../../dashboard/productUplaoding/ProductUploading';
 import UserActivityDashboard from '../../dashboard/analytics/UserActivityDashboard';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import AdminOrders from '../admin/AdminOrders';
 
 // Modular Components
 import DashboardSidebar from './components/DashboardSidebar';
 // Removed DashboardHeader import
 import OverviewTab from './components/OverviewTab';
+import RestockPanel from './components/RestockPanel';
 import CouponsTab from './components/CouponsTab';
 import UsersTab from './components/UsersTab';
 import SubmissionsTab from './components/SubmissionsTab';
@@ -65,6 +67,7 @@ const AdminDashboard = () => {
   const [contactSubmissions, setContactSubmissions] = useState([]);
   const [feedbackSubmissions, setFeedbackSubmissions] = useState([]);
   const [orderRequestSubmissions, setOrderRequestSubmissions] = useState([]);
+  const [notificationCounts, setNotificationCounts] = useState({});
 
   // Load dashboard metrics
   const loadDashboardData = useCallback(async (silentRefresh = false) => {
@@ -79,9 +82,49 @@ const AdminDashboard = () => {
         dashboardService.getProductAnalytics(selectedPeriod)
       ]);
 
-      setDashboardData(overviewRes.success ? overviewRes.data : {});
+      const overviewData = overviewRes.success ? overviewRes.data : {};
+      const productAnalytics = productRes.success ? productRes.data : {};
+
+      setDashboardData(overviewData);
       setSalesData(salesRes.success ? salesRes.data : {});
-      setProductData(productRes.success ? productRes.data : {});
+      setProductData(productAnalytics);
+
+      setNotificationCounts(prev => ({
+        ...prev,
+        dashboard: overviewData?.recent_orders?.length || 0,
+        orders: overviewData?.recent_orders?.length || 0,
+        users: overviewData?.kpis?.new_customers || 0,
+        products: productAnalytics?.low_stock_count || 0
+      }));
+
+      try {
+        const credentials = authService.getCredentials();
+        const summaryRes = await fetch(`${API_BASE_URL}${CUSTOMER_DATA_ENDPOINTS.SUMMARY}`, {
+          headers: { ...credentials, 'Content-Type': 'application/json' }
+        });
+        const abandonedRes = await dashboardService.getAbandonedCarts(selectedPeriod);
+
+        if (summaryRes.ok) {
+          const summary = await summaryRes.json();
+          const contactNew = Number(summary?.data?.contactForms?.new_count || 0);
+          const feedbackNew = Number(summary?.data?.feedback?.new_count || 0);
+          const orderRequestNew = Number(summary?.data?.orderRequests?.new_count || 0);
+          setNotificationCounts(prev => ({
+            ...prev,
+            'customer-data': contactNew + feedbackNew + orderRequestNew,
+            'leads-hub': orderRequestNew
+          }));
+        }
+
+        if (abandonedRes.success) {
+          setNotificationCounts(prev => ({
+            ...prev,
+            'abandoned-carts': Array.isArray(abandonedRes.data) ? abandonedRes.data.length : 0
+          }));
+        }
+      } catch (badgeError) {
+        console.warn('Sidebar badge counts unavailable:', badgeError);
+      }
     } catch (err) {
       console.error('Dashboard loading error:', err);
       setError(err.message || 'Failed to load dashboard data');
@@ -101,6 +144,7 @@ const AdminDashboard = () => {
       navigate('/');
       return;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadDashboardData();
   }, [navigate, loadDashboardData]);
 
@@ -167,6 +211,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (activeTab === 'coupons') loadCoupons();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (activeTab === 'users') loadUsersData();
     if (activeTab === 'customer-data') loadCustomerSubmissions();
   }, [activeTab, loadCoupons, loadUsersData, loadCustomerSubmissions]);
@@ -249,9 +294,12 @@ const AdminDashboard = () => {
               <h2>Product Management</h2>
               <p>Initialize and manage your product repository</p>
             </div>
+            <RestockPanel />
             <ProductUploading />
           </div>
         );
+      case 'orders':
+        return <AdminOrders />;
       case 'coupons':
         return <CouponsTab coupons={coupons} couponLoading={couponLoading} handleDeleteCoupon={handleDeleteCoupon} />;
       case 'analytics':
@@ -287,6 +335,7 @@ const AdminDashboard = () => {
         handleTabChange={handleTabChange} 
         navigate={navigate} 
         handleLogout={handleLogout} 
+        notificationCounts={notificationCounts}
       />
       <div className="admin-dashboard-main">
         <div className="admin-main-content">
