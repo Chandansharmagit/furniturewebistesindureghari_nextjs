@@ -201,10 +201,10 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
                   
                   <div className="drawer-divider" />
                   
+                  <Link to="/order-request" className="mobile-nav-link highlighted-link" onClick={() => setIsMobileMenuOpen(false)}>Order Request</Link>
                   <Link to="/stores" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Our Stores</Link>
                   <Link to="/orders" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Track Order</Link>
                   <Link to="/profile" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>My Account</Link>
-                  <Link to="/contact" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Contact Us</Link>
                   <Link to="/help-and-support" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>Help & Support</Link>
                 </div>
               </div>

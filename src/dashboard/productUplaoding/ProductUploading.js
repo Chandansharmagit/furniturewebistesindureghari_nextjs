@@ -767,7 +767,7 @@ const ProductUploading = () => {
       )}
 
       <AnimatePresence mode="wait">
-        {loading && (
+        {loading && products.length === 0 && (
           <motion.div
             className="pu-loading-royal"
             initial={{ opacity: 0 }}

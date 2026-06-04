@@ -9,8 +9,8 @@ export async function generateMetadata({ params }) {
 
   try {
     // Corrected backend endpoint from /products/:id to /api/products/:id
-    const res = await fetch(`${API_URL}/api/products/${id}`, {
-      next: { revalidate: 3600 }, // ISR: revalidate every hour
+    const res = await fetch(`${API_URL}/api/products/${id}?fresh=1`, {
+      cache: 'no-store',
     });
 
     if (!res.ok) {
@@ -134,8 +134,8 @@ export default async function Page({ params }) {
   let breadcrumbJsonLd = null;
 
   try {
-    const res = await fetch(`${API_URL}/api/products/${id}`, {
-      next: { revalidate: 3600 },
+    const res = await fetch(`${API_URL}/api/products/${id}?fresh=1`, {
+      cache: 'no-store',
     });
     if (res.ok) {
       const data = await res.json();
@@ -171,7 +171,7 @@ export default async function Page({ params }) {
           "url": canonicalUrl,
           "priceCurrency": "NPR",
           "price": price,
-          "availability": "https://schema.org/InStock",
+          "availability": Number(product.stock || 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
           "itemCondition": "https://schema.org/NewCondition"
         }
       };

@@ -67,6 +67,33 @@
   font-weight: 800;
 }
 
+.bkf-category__load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 28px 0 8px;
+}
+
+.bkf-category__load-more-btn {
+  min-height: 44px;
+  padding: 0 26px;
+  border: 1px solid var(--cat-gold);
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: transform var(--cat-transition), box-shadow var(--cat-transition), background var(--cat-transition);
+}
+
+.bkf-category__load-more-btn:hover {
+  background: var(--cat-gold-hover);
+  box-shadow: 0 14px 28px rgba(31, 21, 12, .14);
+  transform: translateY(-1px);
+}
+
 /* ---- IMMERSIVE HERO HEADER ---- */
 .bkf-category__header {
   position: relative;

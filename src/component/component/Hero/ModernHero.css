@@ -1,389 +1,293 @@
-/* ── MODERN LUXURY HERO SHOWCASE (WHITE THEME COMPLEMENT) ── */
-
 .modern-hero-section {
-  padding: 30px 0 50px 0;
-  background-color: #ffffff;
+  background: #f8f3ea;
+  padding: 0 0 42px;
 }
 
-.modern-hero-container {
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 0 40px;
-}
-
-.modern-hero-header {
-  text-align: center;
-  margin-bottom: 35px;
-}
-
-.modern-hero-h1 {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 3.5rem;
-  color: #111827;
-  font-weight: 700;
-  letter-spacing: -1px;
-  margin-bottom: 8px;
-}
-
-.modern-hero-lead {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.15rem;
-  color: #4b5563;
-  font-weight: 400;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-@media (max-width: 768px) {
-  .modern-hero-h1 {
-    font-size: 2.2rem;
-  }
-  .modern-hero-lead {
-    font-size: 0.95rem;
-    padding: 0 10px;
-  }
-  .modern-hero-header {
-    margin-bottom: 20px;
-  }
-}
-
-.modern-hero-grid {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 24px;
-  height: 520px;
-  min-height: 480px;
-}
-
-/* ── BANNER CARD BASICS ── */
-.hero-main-banner,
-.side-banner {
+.modern-hero-visual {
   position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 24px;
+  min-height: clamp(650px, 78vh, 860px);
   overflow: hidden;
-  box-shadow: 0 12px 35px rgba(17, 24, 39, 0.05);
-  border: 1px solid rgba(229, 231, 235, 0.8);
-  background-color: #f3f4f6; /* Premium grey load color */
-  cursor: pointer;
-  transform: translateZ(0);
+  isolation: isolate;
+  color: #fff;
 }
 
-.hero-side-banners {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  height: 100%;
-}
-
-.side-banner {
-  height: calc(50% - 12px);
-}
-
-/* ── PREMIUM ZOOM TRANSITION ── */
-.banner-img {
+.modern-hero-bg {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-  z-index: 0;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  object-position: center;
+  transform: scale(1.02);
+  filter: saturate(1.02) contrast(1.03);
 }
 
-.hero-main-banner:hover .banner-img,
-.side-banner:hover .banner-img {
-  transform: scale(1.05);
-}
-
-/* ── LUXURY SEMI-DARK GRADIENT MASK ── */
-.banner-overlay {
+.modern-hero-shade {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to top,
-    rgba(17, 24, 39, 0.85) 0%,
-    rgba(17, 24, 39, 0.35) 55%,
-    rgba(17, 24, 39, 0.05) 100%
-  );
+  inset: 0;
   z-index: 1;
   pointer-events: none;
-  transition: background 0.4s ease;
+  background:
+    linear-gradient(90deg, rgba(13, 11, 9, 0.78) 0%, rgba(13, 11, 9, 0.56) 38%, rgba(13, 11, 9, 0.12) 72%, rgba(13, 11, 9, 0.34) 100%),
+    linear-gradient(0deg, rgba(13, 11, 9, 0.72) 0%, rgba(13, 11, 9, 0.18) 44%, rgba(13, 11, 9, 0.06) 100%);
 }
 
-.hero-main-banner:hover .banner-overlay,
-.side-banner:hover .banner-overlay {
-  background: linear-gradient(
-    to top,
-    rgba(17, 24, 39, 0.92) 0%,
-    rgba(17, 24, 39, 0.45) 55%,
-    rgba(17, 24, 39, 0.1) 100%
-  );
-}
-
-/* ── CONTENT & TEXT STYLING ── */
-.banner-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  pointer-events: none;
+.modern-hero-content {
+  position: relative;
   z-index: 2;
+  width: min(860px, calc(100% - 48px));
+  padding: clamp(72px, 10vh, 128px) 0 230px;
+  margin-left: clamp(24px, 6vw, 92px);
 }
 
-.left-banner-content {
-  justify-content: flex-end;
-}
-
-.side-banner-content {
-  padding: 35px 40px;
-}
-
-/* Luxury badging */
-.banner-tag {
-  background: #af861d;
-  color: #ffffff;
-  padding: 4px 12px;
+.modern-hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.11);
+  color: #f8dfaa;
   font-family: 'Outfit', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  border-radius: 20px;
-  width: fit-content;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 10px rgba(175, 134, 29, 0.3);
-}
-
-.banner-tag.mini {
-  font-size: 0.65rem;
-  padding: 3px 10px;
-}
-
-.banner-subtitle {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 2.8rem;
-  color: #ffffff;
-  font-weight: 400;
-  margin-bottom: 4px;
-}
-
-.banner-highlight {
-  font-family: 'Outfit', sans-serif;
-  font-size: 3.2rem;
+  font-size: 12px;
   font-weight: 900;
-  color: #ffffff;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
 }
 
-.banner-title {
+.modern-hero-content h1 {
+  max-width: 820px;
+  margin: 22px 0 18px;
+  color: #fff;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(34px, 4.4vw, 68px);
+  line-height: 1;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-wrap: balance;
+  text-shadow: 0 22px 56px rgba(0, 0, 0, 0.28);
+}
+
+.modern-hero-content p {
+  max-width: 610px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.84);
   font-family: 'Outfit', sans-serif;
-  font-size: 2.4rem;
-  color: #ffffff;
-  font-weight: 700;
-  margin-bottom: 20px;
-  letter-spacing: -0.5px;
+  font-size: clamp(13px, 0.92vw, 15px);
+  line-height: 1.72;
+  font-weight: 500;
 }
 
-.banner-title-small {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.9rem;
-  color: #ffffff;
-  font-weight: 800;
-  margin-bottom: 6px;
-  letter-spacing: -0.5px;
-}
-
-.banner-desc {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.95rem;
-  color: rgba(243, 244, 246, 0.85);
-  margin-bottom: 18px;
-  max-width: 80%;
-  font-weight: 400;
-}
-
-/* Luxury boutique price tags */
-.banner-price-tag {
-  background: rgba(255, 255, 255, 0.95);
-  color: #111827;
-  padding: 12px 24px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  width: fit-content;
-  border-radius: 12px;
-  border-left: 4px solid #af861d;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.hero-main-banner:hover .banner-price-tag,
-.side-banner:hover .banner-price-tag {
-  background: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-}
-
-.small-tag {
-  font-size: 0.9rem;
-  padding: 10px 20px;
-  border-radius: 10px;
-}
-
-/* ── MODERN MINIMAL INTERACTIVE CONTROLS ── */
-.carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(229, 231, 235, 0.5);
-  border-radius: 50%;
-  font-size: 1.8rem;
+.modern-hero-actions {
   display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.modern-hero-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  color: #111827;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 5;
-  pointer-events: auto;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-  opacity: 0;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
 }
 
-.hero-main-banner:hover .carousel-arrow {
-  opacity: 1;
+.modern-hero-btn:hover {
+  transform: translateY(-2px);
 }
 
-.carousel-arrow:hover {
-  background: #af861d;
-  color: #ffffff;
-  border-color: #af861d;
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 8px 20px rgba(175, 134, 29, 0.3);
+.modern-hero-btn--primary {
+  background: #fff;
+  color: #19140f;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.2);
 }
 
-.left-arrow {
-  left: 24px;
+.modern-hero-btn--light {
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  backdrop-filter: blur(14px);
 }
 
-.right-arrow {
-  right: 24px;
+.modern-hero-proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  max-width: 720px;
+  margin-top: 34px;
 }
 
-.sr-only {
+.modern-hero-proof span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.84);
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 750;
+  backdrop-filter: blur(10px);
+}
+
+.modern-hero-rail {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
+  left: clamp(18px, 4vw, 72px);
+  right: clamp(18px, 4vw, 72px);
+  bottom: 28px;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.modern-hero-rail-item {
+  position: relative;
+  min-height: 132px;
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  grid-template-rows: auto auto auto;
+  column-gap: 14px;
+  align-content: center;
+  padding: 12px 14px 12px 12px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.13);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(18px);
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
 }
 
-.h1-visual {
-  font-size: inherit;
-  font-weight: inherit;
-  margin: inherit;
+.modern-hero-rail-item:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.19);
+  border-color: rgba(255, 255, 255, 0.38);
 }
 
-/* ── 9. MEDIA RESPONSIVE QUERIES ── */
-@media (max-width: 1200px) {
-  .modern-hero-grid {
-    grid-template-columns: 1.2fr 1fr;
-    height: 480px;
-  }
-  .banner-subtitle {
-    font-size: 2.4rem;
-  }
-  .banner-highlight {
-    font-size: 2.8rem;
-  }
-  .banner-title {
-    font-size: 2rem;
-  }
+.modern-hero-rail-item img {
+  grid-row: 1 / 4;
+  width: 112px;
+  height: 108px;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
-@media (max-width: 1024px) {
-  .modern-hero-section {
-    padding: 20px 0 40px 0;
+.modern-hero-rail-item span {
+  color: #f4cf80;
+  font-family: 'Outfit', sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.modern-hero-rail-item strong {
+  min-width: 0;
+  margin-top: 5px;
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(13px, 0.92vw, 15px);
+  line-height: 1.12;
+  font-weight: 900;
+}
+
+.modern-hero-rail-item small {
+  margin-top: 9px;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+@media (max-width: 1100px) {
+  .modern-hero-visual {
+    min-height: 860px;
   }
-  .modern-hero-grid {
+
+  .modern-hero-content {
+    padding-bottom: 430px;
+  }
+
+  .modern-hero-rail {
     grid-template-columns: 1fr;
-    height: auto;
-    max-height: none;
-    gap: 20px;
-  }
-  .hero-main-banner {
-    height: 400px;
-  }
-  .hero-side-banners {
-    gap: 20px;
-  }
-  .side-banner {
-    height: 280px;
-  }
-  .banner-content {
-    padding: 40px;
-  }
-  .carousel-arrow {
-    opacity: 1; /* Always visible on tablets */
   }
 }
 
-@media (max-width: 600px) {
-  .modern-hero-container {
-    padding: 0 15px;
+@media (max-width: 700px) {
+  .modern-hero-section {
+    padding-bottom: 28px;
   }
-  .hero-main-banner {
-    height: 320px;
-    border-radius: 16px;
+
+  .modern-hero-visual {
+    min-height: 900px;
   }
-  .side-banner {
-    height: 240px;
-    border-radius: 16px;
+
+  .modern-hero-shade {
+    background:
+      linear-gradient(0deg, rgba(13, 11, 9, 0.78) 0%, rgba(13, 11, 9, 0.38) 52%, rgba(13, 11, 9, 0.48) 100%);
   }
-  .banner-content {
-    padding: 24px;
+
+  .modern-hero-content {
+    width: calc(100% - 32px);
+    margin-left: 16px;
+    padding-top: 46px;
+    padding-bottom: 430px;
   }
-  .side-banner-content {
-    padding: 24px;
+
+  .modern-hero-content h1 {
+    font-size: clamp(30px, 9vw, 42px);
+    line-height: 1;
   }
-  .banner-subtitle {
-    font-size: 1.8rem;
+
+  .modern-hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
   }
-  .banner-highlight {
-    font-size: 2rem;
+
+  .modern-hero-btn {
+    width: 100%;
   }
-  .banner-title {
-    font-size: 1.6rem;
-    margin-bottom: 12px;
+
+  .modern-hero-proof {
+    gap: 7px;
   }
-  .banner-title-small {
-    font-size: 1.4rem;
+
+  .modern-hero-proof span {
+    min-height: 30px;
+    font-size: 12px;
   }
-  .banner-price-tag {
-    font-size: 0.9rem;
-    padding: 8px 16px;
-    border-radius: 8px;
+
+  .modern-hero-rail {
+    left: 14px;
+    right: 14px;
+    bottom: 16px;
+    gap: 10px;
   }
-  .small-tag {
-    font-size: 0.85rem;
-    padding: 8px 14px;
+
+  .modern-hero-rail-item {
+    min-height: 116px;
+    grid-template-columns: 92px minmax(0, 1fr);
+    border-radius: 14px;
+  }
+
+  .modern-hero-rail-item img {
+    width: 92px;
+    height: 92px;
+    border-radius: 10px;
   }
 }

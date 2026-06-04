@@ -308,6 +308,7 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [fastDelivery, setFastDelivery] = useState(false);
   const [adminCategories, setAdminCategories] = useState([]);
+  const [visibleProductBatch, setVisibleProductBatch] = useState({ key: '', count: 24 });
 
   useEffect(() => {
     let isMounted = true;
@@ -388,11 +389,12 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
 
           // Prefer admin taxonomy ID; fallback to legacy category names for old routes.
           const shouldFilterDescendants = activeAdminCategory?.id && activeCategoryIds.length > 1;
+          const categoryFetchLimit = 100;
           let url = shouldFilterDescendants
-            ? `${API_BASE_URL}/api/products?category=${activeAdminCategory.id}&includeChildren=true&page=${currentPage}&limit=12&sort=${sortBy}`
+            ? `${API_BASE_URL}/api/products?category=${activeAdminCategory.id}&includeChildren=true&page=${currentPage}&limit=${categoryFetchLimit}&sort=${sortBy}`
             : activeAdminCategory?.id
-            ? `${API_BASE_URL}/api/products?category=${activeAdminCategory.id}&page=${currentPage}&limit=12&sort=${sortBy}`
-            : `${API_BASE_URL}/api/products?categoryName=${categoryName}&page=${currentPage}&limit=12&sort=${sortBy}`;
+            ? `${API_BASE_URL}/api/products?category=${activeAdminCategory.id}&page=${currentPage}&limit=${categoryFetchLimit}&sort=${sortBy}`
+            : `${API_BASE_URL}/api/products?categoryName=${categoryName}&page=${currentPage}&limit=${categoryFetchLimit}&sort=${sortBy}`;
 
           if (priceRange.min || priceRange.max) {
             url += `&minPrice=${priceRange.min}&maxPrice=${priceRange.max}`;
@@ -423,7 +425,7 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
         if (fetchedProducts.length === 0 && !hasAdminCategoryMatch) {
           isFallback = true;
           // Fetch featured/recent general products
-          const fallbackUrl = `${API_BASE_URL}/api/products?page=1&limit=12&sort=newest`;
+          const fallbackUrl = `${API_BASE_URL}/api/products?page=1&limit=100&sort=newest`;
           const fallbackResponse = await fetch(fallbackUrl);
           if (fallbackResponse.ok) {
             const fallbackData = await fallbackResponse.json();
@@ -725,13 +727,31 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
     });
 
 
+  const visibleProductsKey = [
+    category,
+    subcategory,
+    keyword,
+    sortBy,
+    priceRange.min,
+    priceRange.max,
+    selectedMaterials.join('|'),
+    selectedBrands.join('|'),
+    fastDelivery,
+    products.length
+  ].join('::');
+  const effectiveVisibleProductCount = visibleProductBatch.key === visibleProductsKey
+    ? visibleProductBatch.count
+    : 24;
+  const visibleFilteredProducts = filteredProducts.slice(0, effectiveVisibleProductCount);
+  const hasMoreVisibleProducts = filteredProducts.length > effectiveVisibleProductCount;
+
   // Function to render products with discount banner
   const renderProductsWithDiscount = () => {
     // const productsPerRow = 5;
     const discountAfterProducts = 10;
     const result = [];
 
-    filteredProducts.forEach((product, index) => {
+    visibleFilteredProducts.forEach((product, index) => {
       // Add discount banner after every 10 products
       if (index === discountAfterProducts && index < products.length) {
         result.push(
@@ -972,6 +992,21 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
                         </div>
                       )}
                     </div>
+
+                    {hasMoreVisibleProducts && (
+                      <div className="bkf-category__load-more-wrap">
+                        <button
+                          type="button"
+                          className="bkf-category__load-more-btn"
+                          onClick={() => setVisibleProductBatch({
+                            key: visibleProductsKey,
+                            count: effectiveVisibleProductCount + 24
+                          })}
+                        >
+                          Load more products
+                        </button>
+                      </div>
+                    )}
 
                     {/* Pagination */}
                     {totalPages > 1 && (

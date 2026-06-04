@@ -1,0 +1,390 @@
+.mk-dashboard {
+  width: 100%;
+  color: #111827;
+  font-family: 'Outfit', sans-serif;
+}
+
+.mk-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.mk-kicker {
+  margin: 0 0 8px;
+  color: #87661c;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mk-header h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 32px;
+  line-height: 1.18;
+  font-weight: 800;
+}
+
+.mk-header p {
+  margin: 8px 0 0;
+  max-width: 760px;
+  color: #667085;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.mk-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid #e6e8ef;
+  border-radius: 8px;
+  background: #fff;
+  color: #343a40;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mk-header-badge svg {
+  color: #b19456;
+}
+
+.mk-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.mk-kpi,
+.mk-panel,
+.mk-roadmap-item,
+.mk-channel,
+.mk-category {
+  border: 1px solid #e6e8ef;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.mk-kpi {
+  min-height: 126px;
+  padding: 18px;
+}
+
+.mk-kpi span,
+.mk-category span {
+  display: block;
+  color: #667085;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mk-kpi strong {
+  display: block;
+  margin-top: 10px;
+  color: #07142b;
+  font-size: clamp(19px, 1.8vw, 28px);
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.mk-kpi p,
+.mk-category p {
+  margin: 10px 0 0;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.mk-section-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(340px, 0.65fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.mk-panel {
+  min-width: 0;
+  padding: 22px;
+}
+
+.mk-panel--wide {
+  grid-column: 1 / -1;
+}
+
+.mk-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.mk-panel-title svg {
+  color: #b19456;
+}
+
+.mk-panel-title h3 {
+  margin: 0;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mk-roadmap {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.mk-roadmap-item {
+  padding: 18px;
+}
+
+.mk-roadmap-item > span {
+  display: inline-flex;
+  margin-bottom: 12px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: #f5f1e9;
+  color: #87661c;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.mk-roadmap-item h4 {
+  margin: 0;
+  color: #111827;
+  font-size: 16px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.mk-roadmap-item p {
+  margin: 10px 0 12px;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.mk-roadmap-item ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.mk-roadmap-item li {
+  margin: 8px 0;
+  color: #343a40;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.mk-decision-list,
+.mk-product-list,
+.mk-checklist,
+.mk-channel-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.mk-decision {
+  padding: 14px;
+  border: 1px solid #edf0f4;
+  border-radius: 8px;
+  background: #fbfbfb;
+}
+
+.mk-decision > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mk-decision strong,
+.mk-channel strong,
+.mk-product-row strong {
+  color: #111827;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.mk-decision span,
+.mk-channel span {
+  color: #87661c;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.mk-decision p,
+.mk-channel p,
+.mk-product-row p {
+  margin: 8px 0 0;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.mk-table-wrap {
+  overflow-x: auto;
+}
+
+.mk-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mk-table th {
+  padding: 12px;
+  background: #f8f9fa;
+  color: #343a40;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.mk-table td {
+  padding: 14px 12px;
+  border-top: 1px solid #edf0f4;
+  color: #343a40;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.mk-checklist label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 13px 0;
+  border-bottom: 1px solid #edf0f4;
+  color: #343a40;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.mk-checklist label:last-child {
+  border-bottom: 0;
+}
+
+.mk-checklist input {
+  margin-top: 2px;
+  accent-color: #b19456;
+}
+
+.mk-channel {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+}
+
+.mk-channel > svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #b19456;
+  font-size: 18px;
+}
+
+.mk-product-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #edf0f4;
+  border-radius: 8px;
+}
+
+.mk-product-row > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #343a40;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mk-product-row strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mk-category-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.mk-category {
+  padding: 16px;
+}
+
+.mk-category strong {
+  display: block;
+  margin-top: 8px;
+  color: #07142b;
+  font-size: 18px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.mk-empty {
+  padding: 18px;
+  border: 1px dashed #d9dee3;
+  border-radius: 8px;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.5;
+  background: #fbfbfb;
+}
+
+@media (max-width: 1200px) {
+  .mk-kpi-grid,
+  .mk-roadmap,
+  .mk-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mk-section-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .mk-header {
+    flex-direction: column;
+  }
+
+  .mk-header h2 {
+    font-size: 25px;
+  }
+
+  .mk-kpi-grid,
+  .mk-roadmap,
+  .mk-category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mk-panel {
+    padding: 16px;
+  }
+}

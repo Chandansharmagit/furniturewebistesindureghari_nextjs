@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   FaBox,
+  FaBullhorn,
   FaChartBar,
   FaChartLine,
   FaCommentDots,
@@ -26,7 +27,8 @@ const DashboardSidebar = ({
     { id: 'orders', label: 'Order Control', icon: FaReceipt },
     { id: 'products', label: 'Products', icon: FaBox },
     { id: 'coupons', label: 'Coupons', icon: FaTicketAlt },
-    { id: 'analytics', label: 'Analytics', icon: FaChartLine }
+    { id: 'analytics', label: 'Analytics', icon: FaChartLine },
+    { id: 'marketing', label: 'Marketing', icon: FaBullhorn }
   ];
 
   const customerTabs = [

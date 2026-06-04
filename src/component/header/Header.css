@@ -99,6 +99,16 @@
   color: #ffffff !important;
 }
 
+.header-utility-link-strong {
+  background: rgba(243, 193, 95, 0.14);
+  border: 1px solid rgba(243, 193, 95, 0.24);
+  color: #fff5d7 !important;
+}
+
+.header-utility-link-strong:hover {
+  background: rgba(243, 193, 95, 0.24);
+}
+
 .header-top-bar {
   background: #FAF6ED;
   border-bottom: 1px solid rgba(197, 160, 89, 0.12);

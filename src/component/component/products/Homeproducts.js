@@ -30,6 +30,7 @@ const FurnitureProductCatalog = () => {
   const [selectedWood, setSelectedWood] = useState('all');
   const [inStockOnly, setInStockOnly] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showRecommendations, setShowRecommendations] = useState(false);
 
   // Fetch products from the centralized backend endpoint
   const fetchProducts = async () => {
@@ -80,15 +81,39 @@ const FurnitureProductCatalog = () => {
 
   useEffect(() => {
     fetchProducts();
+  }, [filterCategory, selectedWood]);
+
+  useEffect(() => {
     fetchCategories();
-    
+
     // Smooth scroll configuration
     document.documentElement.style.scrollBehavior = 'smooth';
     return () => {
       document.documentElement.style.scrollBehavior = 'auto';
       document.body.style.overflow = '';
     };
-  }, [filterCategory, selectedWood]);
+  }, []);
+
+  useEffect(() => {
+    let idleTaskId;
+    let timeoutId;
+    const revealRecommendations = () => setShowRecommendations(true);
+
+    if ('requestIdleCallback' in window) {
+      idleTaskId = window.requestIdleCallback(revealRecommendations, { timeout: 4500 });
+    } else {
+      timeoutId = window.setTimeout(revealRecommendations, 2400);
+    }
+
+    return () => {
+      if (idleTaskId && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleTaskId);
+      }
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, []);
 
   const formatPrice = (price) => {
     return Number.isFinite(Number(price)) 
@@ -421,21 +446,23 @@ const FurnitureProductCatalog = () => {
       </div>
 
       {/* ── TWIN RECOMMENDATION ARRAYS ── */}
-      <section className="recommendations-showcase-section">
-        <ProductRecommendations
-          type="trending"
-          limit={4}
-          title="Trending Masterpieces"
-          className="home-recommendations-premium"
-        />
+      {showRecommendations && (
+        <section className="recommendations-showcase-section">
+          <ProductRecommendations
+            type="trending"
+            limit={4}
+            title="Trending Masterpieces"
+            className="home-recommendations-premium"
+          />
 
-        <ProductRecommendations
-          type="personalized"
-          limit={4}
-          title="Curated Recommendations"
-          className="home-recommendations-premium"
-        />
-      </section>
+          <ProductRecommendations
+            type="personalized"
+            limit={4}
+            title="Curated Recommendations"
+            className="home-recommendations-premium"
+          />
+        </section>
+      )}
 
     </div>
   );

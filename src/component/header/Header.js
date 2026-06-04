@@ -158,7 +158,7 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
       }
     };
 
-    const refreshTimer = window.setInterval(loadActiveCoupon, 60 * 1000);
+    const refreshTimer = window.setInterval(loadActiveCoupon, 5 * 60 * 1000);
     window.addEventListener('focus', loadActiveCoupon);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
@@ -226,6 +226,10 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
             <Link to="/become-a-franchise" className="header-utility-link">
               <Building2 size={14} />
               <span>Become a Franchise</span>
+            </Link>
+            <Link to="/order-request" className="header-utility-link header-utility-link-strong">
+              <PackageCheck size={14} />
+              <span>Order Request</span>
             </Link>
             <Link to="/orders" className="header-utility-link">
               <Store size={14} />

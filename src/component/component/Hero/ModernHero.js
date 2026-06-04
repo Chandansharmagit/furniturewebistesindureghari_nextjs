@@ -1,75 +1,72 @@
 import React from 'react';
 import './ModernHero.css';
 
+const heroCollections = [
+  {
+    label: 'Royal Sofas',
+    title: 'Carved solid wood seating',
+    price: 'From Rs 45,999',
+    href: '/sofas',
+    image: 'https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&q=82&w=520',
+  },
+  {
+    label: 'Artisan Storage',
+    title: 'Wardrobes made to measure',
+    price: 'From Rs 25,000',
+    href: '/wardrobes',
+    image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=82&w=520',
+  },
+  {
+    label: 'Comfort Suites',
+    title: 'Handcrafted wooden beds',
+    price: 'From Rs 35,000',
+    href: '/beds',
+    image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&q=82&w=520',
+  },
+];
+
 const ModernHero = () => {
   return (
-    <section className="modern-hero-section">
-      <div className="modern-hero-container">
-        {/* Brand-focused visually prominent H1 (Technical SEO & Accessibility aligned) */}
-        {/* <div className="modern-hero-header">
-          <h1 className="modern-hero-h1">Bishwokarma Furniture | Premium Solid Wood Furniture Nepal</h1>
-          <p className="modern-hero-lead">Handcrafted Wooden Furniture & Royal Home Decor in Kathmandu, Pokhara, & Across Nepal</p>
-        </div> */}
-        
-        <div className="modern-hero-grid">
-          {/* Left Column: Huge Main Banner */}
-          <div className="hero-main-banner">
-            <img 
-              src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&q=80&w=1200" 
-              alt="Premium handcrafted royal sofa set in Nepal starting Rs 45,999" 
-              className="banner-img"
-              loading="eager"
-            />
-            <div className="banner-overlay"></div>
-            <div className="banner-content left-banner-content">
-              <span className="banner-tag">Exquisite Craft</span>
-              <h2 className="banner-subtitle">The <span className="banner-highlight">ROYAL</span> Collection</h2>
-              <div className="banner-title h1-visual">Royal Sofa Sets</div>
-              <div className="banner-price-tag">Starting From Rs 45,999*</div>
-            </div>
-            {/* Carousel Arrows (Visual only for now) */}
-            <button className="carousel-arrow left-arrow" aria-label="Previous slide">‹</button>
-            <button className="carousel-arrow right-arrow" aria-label="Next slide">›</button>
+    <section className="modern-hero-section" aria-label="Sindureghari handmade luxury furniture">
+      <div className="modern-hero-visual">
+        <img
+          src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&q=84&w=2200"
+          alt="Luxury handmade Sindureghari furniture living room collection"
+          className="modern-hero-bg"
+          loading="eager"
+        />
+        <div className="modern-hero-shade"></div>
+
+        <div className="modern-hero-content">
+          <span className="modern-hero-kicker">Handmade furniture from Nepal</span>
+          <h1>Luxury that still carries the maker&apos;s hand.</h1>
+          <p>
+            Slow-built sofas, beds, wardrobes, and custom pieces for homes that want real wood,
+            quiet detail, and furniture with a story.
+          </p>
+
+          <div className="modern-hero-actions">
+            <a href="/products" className="modern-hero-btn modern-hero-btn--primary">Shop handmade collections</a>
+            <a href="/custom-furniture-nepal" className="modern-hero-btn modern-hero-btn--light">Start a custom piece</a>
           </div>
 
-          {/* Right Column: Two Stacked Banners */}
-          <div className="hero-side-banners">
-            
-            {/* Top Side Banner */}
-            <div className="side-banner top-banner">
-              <img 
-                src="https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=80&w=800" 
-                alt="Luxury wooden wardrobes and bedroom furniture Kathmandu" 
-                className="banner-img"
-                loading="eager"
-              />
-              <div className="banner-overlay"></div>
-              <div className="banner-content side-banner-content top-right-content">
-                <span className="banner-tag mini">Artisan Storage</span>
-                <h2 className="banner-title-small">Organize. Style. Live.</h2>
-                <p className="banner-desc">Premium wooden wardrobes and storage</p>
-                <div className="banner-price-tag small-tag">Starting From Rs 25,000*</div>
-              </div>
-            </div>
-
-            {/* Bottom Side Banner */}
-            <div className="side-banner bottom-banner">
-              <img 
-                src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&q=80&w=800" 
-                alt="Solid wood king size beds in Nepal" 
-                className="banner-img"
-                loading="eager"
-              />
-              <div className="banner-overlay"></div>
-              <div className="banner-content side-banner-content bottom-right-content">
-                <span className="banner-tag mini">Comfort Suite</span>
-                <h2 className="banner-title-small">Rest. Dream. Recharge.</h2>
-                <p className="banner-desc">Handcrafted solid wood king size beds</p>
-                <div className="banner-price-tag small-tag">Starting From Rs 35,000*</div>
-              </div>
-            </div>
-
+          <div className="modern-hero-proof" aria-label="Craft proof points">
+            <span>Solid wood</span>
+            <span>Hand finished</span>
+            <span>Custom sizing</span>
+            <span>White-glove delivery</span>
           </div>
+        </div>
+
+        <div className="modern-hero-rail" aria-label="Featured collections">
+          {heroCollections.map((collection) => (
+            <a href={collection.href} className="modern-hero-rail-item" key={collection.label}>
+              <img src={collection.image} alt={collection.title} loading="eager" />
+              <span>{collection.label}</span>
+              <strong>{collection.title}</strong>
+              <small>{collection.price}</small>
+            </a>
+          ))}
         </div>
       </div>
     </section>

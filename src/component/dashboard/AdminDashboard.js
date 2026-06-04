@@ -33,6 +33,7 @@ import SubmissionsTab from './components/SubmissionsTab';
 import AdminBlogsTab from './components/AdminBlogsTab';
 import AbandonedCartsTab from './components/AbandonedCartsTab';
 import LeadsHubTab from './components/LeadsHubTab';
+import MarketingDashboard from './components/MarketingDashboard';
 
 import './AdminDashboard.css';
 
@@ -304,6 +305,15 @@ const AdminDashboard = () => {
         return <CouponsTab coupons={coupons} couponLoading={couponLoading} handleDeleteCoupon={handleDeleteCoupon} />;
       case 'analytics':
         return <UserActivityDashboard />;
+      case 'marketing':
+        return (
+          <MarketingDashboard
+            dashboardData={dashboardData}
+            productData={productData}
+            salesData={salesData}
+            formatCurrency={formatCurrency}
+          />
+        );
       case 'users':
         return <UsersTab usersData={usersData} usersLoading={usersLoading} usersStatistics={usersStatistics} formatCurrency={formatCurrency} />;
       case 'customer-data':

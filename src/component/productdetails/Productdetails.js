@@ -8,9 +8,10 @@ import { API_BASE_URL } from '../../config/api';
 import ProductTabs from './ProductTabs';
 import EMIPlansModal from './Emi/Emiplan';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 import useActivityTracking from '../../hooks/useActivityTracking';
 import FavoriteButton from '../common/FavoriteButton';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
+import LoginPromptPopup from '../popup/LoginPromptPopup';
 import {
     Activity,
     BadgeCheck,
@@ -37,6 +38,7 @@ export default function ProductDetails({ productId }) {
     const id = productId || routeParams?.id;
     const navigate = useNavigate();
     const { addToCart } = useCart();
+    const { isAuthenticated } = useAuth();
     const { trackProductView, trackAddToCart } = useActivityTracking();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -54,16 +56,23 @@ export default function ProductDetails({ productId }) {
     const [shareMessage, setShareMessage] = useState('');
     const [isEMIPlansModalOpen, setIsEMIPlansModalOpen] = useState(false);
     const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
     // Get product by ID
     const getProductById = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await axios.get(`${API_BASE_URL}/api/products/${id}`);
-            setProduct(response.data);
+            const response = await axios.get(`${API_BASE_URL}/api/products/${id}`, {
+                params: { fresh: '1', t: Date.now() }
+            });
+            const productData = response.data?.product || response.data;
+            setProduct({
+                ...productData,
+                stock: Number(productData?.stock ?? productData?.stock_quantity ?? productData?.available_stock ?? 0)
+            });
             setSelectedImageIndex(0);
-            console.log('Product Details:', response.data);
+            console.log('Product Details:', productData);
         } catch (error) {
             console.error('Error fetching product:', error);
             setError('Failed to load product details');
@@ -198,8 +207,11 @@ export default function ProductDetails({ productId }) {
 
     // Handle quantity change
     const handleQuantityChange = (type) => {
+        const currentStock = Number(product?.stock || 0);
+        if (currentStock <= 0) return;
+
         if (type === 'increase') {
-            setQuantity(prev => prev + 1);
+            setQuantity(prev => Math.min(prev + 1, currentStock));
         } else if (type === 'decrease' && quantity > 1) {
             setQuantity(prev => prev - 1);
         }
@@ -207,6 +219,16 @@ export default function ProductDetails({ productId }) {
 
     // Handle add to cart
     const handleAddToCart = async () => {
+        if (Number(product?.stock || 0) <= 0) {
+            setPriceAlertMessage('This piece is currently out of stock. Share your email below and we will mail you when it arrives.');
+            return;
+        }
+
+        if (!isAuthenticated) {
+            setShowLoginPrompt(true);
+            return;
+        }
+
         setIsAddingToCart(true);
         try {
             // Track add to cart activity
@@ -274,6 +296,23 @@ Product Link: ${window.location.href}`;
         }
 
         try {
+            if (Number(product?.stock || 0) <= 0) {
+                const response = await fetch(`${API_BASE_URL}/api/products/${product.id}/restock-alert`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const payload = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(payload.message || 'Failed to save restock alert');
+                }
+
+                setPriceAlertMessage(payload.message || 'Thank you. We will mail you when this product arrives.');
+                setEmail('');
+                return;
+            }
+
             await new Promise(resolve => setTimeout(resolve, 1000));
             setPriceAlertMessage('You will be notified when the price drops!');
             setEmail('');
@@ -438,13 +477,66 @@ Product Link: ${window.location.href}`;
     // Loading state
     if (loading) {
         return (
-            <div className="product-details-loading">
-                <LoadingSpinner
-                    size="large"
-                    type="pulse"
-                    message="Loading product details..."
-                    color="primary"
-                />
+            <div className="product-details-container">
+                <div className="pd-loading-shell" aria-label="Loading product details">
+                    <div className="pd-loading-breadcrumb">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <div className="pd-loading-grid">
+                        <section className="pd-loading-gallery">
+                            <div className="pd-loading-badge"></div>
+                            <div className="pd-loading-image">
+                                <div className="pd-loading-image-mark">
+                                    <span></span>
+                                    <strong>Loading crafted details</strong>
+                                </div>
+                            </div>
+                            <div className="pd-loading-thumbs">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </section>
+
+                        <section className="pd-loading-info">
+                            <div className="pd-loading-pills">
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div className="pd-loading-title"></div>
+                            <div className="pd-loading-sku"></div>
+                            <div className="pd-loading-stars"></div>
+                            <div className="pd-loading-copy"></div>
+                            <div className="pd-loading-copy short"></div>
+
+                            <div className="pd-loading-services">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+
+                            <div className="pd-loading-price-card">
+                                <div></div>
+                                <strong></strong>
+                                <span></span>
+                            </div>
+
+                            <div className="pd-loading-controls">
+                                <span></span>
+                                <span></span>
+                            </div>
+
+                            <div className="pd-loading-actions">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </section>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -466,6 +558,8 @@ Product Link: ${window.location.href}`;
         ? Math.round(((parseFloat(product.old_price) - parseFloat(product.new_price)) / parseFloat(product.old_price)) * 100)
         : 0;
     const productSku = product?.sku || `SF-${product?.id || '000'}`;
+    const productStock = Number(product.stock || 0);
+    const isOutOfStock = productStock <= 0;
 
     const copySku = async () => {
         try {
@@ -650,8 +744,8 @@ Product Link: ${window.location.href}`;
                     <div className="product-header">
                         <div className="pd-status-row">
                             <span className="pd-category-pill">{product.category || product.categoryName || 'Furniture'}</span>
-                            <span className={`pd-stock-pill ${Number(product.stock || 0) > 0 ? 'in-stock' : 'out-stock'}`}>
-                                {Number(product.stock || 0) > 0 ? 'In stock' : 'Made to order'}
+                            <span className={`pd-stock-pill ${isOutOfStock ? 'out-stock' : 'in-stock'}`}>
+                                {isOutOfStock ? 'Out of stock' : 'In stock'}
                             </span>
                         </div>
                         <h1 className="product-title">{product.name || product.title}</h1>
@@ -710,9 +804,15 @@ Product Link: ${window.location.href}`;
                         {hasDiscount && (
                             <p className="pd-mrp-line">MRP <span>₹{formatPrice(product.old_price)}</span></p>
                         )}
-                        <p className="pd-unlock-line">
-                            Get today&apos;s instant extra discount on this product <button type="button" onClick={() => setCouponValidation('')}>Unlock Now!</button>
-                        </p>
+                        {isOutOfStock ? (
+                            <p className="pd-stock-arrival-note">
+                                This handmade piece is sold out right now. Leave your email below and we will mail you when it arrives.
+                            </p>
+                        ) : (
+                            <p className="pd-unlock-line">
+                                Get today&apos;s instant extra discount on this product <button type="button" onClick={() => setCouponValidation('')}>Unlock Now!</button>
+                            </p>
+                        )}
                     </div>
 
                     <div className="pd-choice-panel">
@@ -808,20 +908,20 @@ Product Link: ${window.location.href}`;
 
                     {/* Price Drop Alert */}
                     <div className="price-alert-section">
-                        <label className="price-alert-label">Price Drop Alert:</label>
+                        <label className="price-alert-label">{isOutOfStock ? 'Restock Alert:' : 'Price Drop Alert:'}</label>
                         <div className="price-alert-controls">
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Enter your email"
+                                placeholder={isOutOfStock ? 'Email for arrival update' : 'Enter your email'}
                                 className="price-alert-input"
                             />
                             <button
                                 className="price-alert-btn"
                                 onClick={handlePriceAlert}
                             >
-                                Notify Me
+                                {isOutOfStock ? 'Mail Me' : 'Notify Me'}
                             </button>
                         </div>
                         {priceAlertMessage && (
@@ -878,7 +978,7 @@ Product Link: ${window.location.href}`;
                             <button
                                 className="quantity-btn"
                                 onClick={() => handleQuantityChange('decrease')}
-                                disabled={quantity <= 1}
+                                disabled={isOutOfStock || quantity <= 1}
                             >
                                 -
                             </button>
@@ -886,6 +986,7 @@ Product Link: ${window.location.href}`;
                             <button
                                 className="quantity-btn"
                                 onClick={() => handleQuantityChange('increase')}
+                                disabled={isOutOfStock || quantity >= productStock}
                             >
                                 +
                             </button>
@@ -896,14 +997,19 @@ Product Link: ${window.location.href}`;
                     <div className="cart-section">
                         <div className="cart-buttons-container">
                             <button
-                                className={`add-to-cart-btn ${isAddingToCart ? 'loading' : ''}`}
+                                className={`add-to-cart-btn ${isAddingToCart ? 'loading' : ''} ${isOutOfStock ? 'out-of-stock' : ''}`}
                                 onClick={handleAddToCart}
-                                disabled={isAddingToCart}
+                                disabled={isAddingToCart || isOutOfStock}
                             >
                                 {isAddingToCart ? (
                                     <>
                                         <div className="pd-btn-spinner"></div>
                                         Adding...
+                                    </>
+                                ) : isOutOfStock ? (
+                                    <>
+                                        <Headphones size={20} />
+                                        Out of Stock
                                     </>
                                 ) : (
                                     <>
@@ -1084,6 +1190,10 @@ Product Link: ${window.location.href}`;
                     )}
                 </div>
             )}
+            <LoginPromptPopup
+                isOpen={showLoginPrompt}
+                onClose={() => setShowLoginPrompt(false)}
+            />
         </div>
     );
 }
