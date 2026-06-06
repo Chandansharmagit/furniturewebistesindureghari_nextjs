@@ -10,11 +10,18 @@ import {
   FaClock,
   FaTruck,
   FaCheckCircle,
-  FaRupeeSign
+  FaRupeeSign,
+  FaBoxOpen,
+  FaChevronDown,
+  FaChevronUp,
+  FaImage,
+  FaMagic,
+  FaTimes
 } from 'react-icons/fa';
 import orderService from '../../services/orderService';
 import authService from '../../services/authService';
 import { buildApiUrl } from '../../config/api';
+import aiService from '../../services/aiService';
 import './AdminOrders.css';
 
 const AdminOrders = () => {
@@ -173,6 +180,57 @@ const AdminOrders = () => {
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [deletingOrderId, setDeletingOrderId] = useState(null);
+  const [aiOrderInsight, setAiOrderInsight] = useState('');
+  const [aiOrderLoading, setAiOrderLoading] = useState(false);
+  const [aiOrderError, setAiOrderError] = useState('');
+
+  // Expanded row and Modal state
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [selectedOrderModal, setSelectedOrderModal] = useState(null);
+  const [orderDetails, setOrderDetails] = useState({});
+  const [detailLoading, setDetailLoading] = useState({});
+
+  // Parse items from an order
+  const parseOrderItems = (order) => {
+    const rawItems = order.items || order.order_items || order.products || order.product_details || [];
+    if (typeof rawItems === 'string') {
+      try { return JSON.parse(rawItems); } catch { return []; }
+    }
+    return Array.isArray(rawItems) ? rawItems : [];
+  };
+
+  // Load detailed order info (items) for an expanded order
+  const loadOrderDetails = useCallback(async (orderId) => {
+    if (orderDetails[orderId]) return; // already loaded
+
+    setDetailLoading(prev => ({ ...prev, [orderId]: true }));
+    try {
+      const result = await orderService.getOrderDetails(orderId);
+      if (result.success) {
+        setOrderDetails(prev => ({ ...prev, [orderId]: result.data }));
+      }
+    } catch (err) {
+      console.error('Error loading order details:', err);
+    } finally {
+      setDetailLoading(prev => ({ ...prev, [orderId]: false }));
+    }
+  }, [orderDetails]);
+
+  // Toggle expand for an order row
+  const toggleExpand = (orderId) => {
+    if (expandedOrderId === orderId) {
+      setExpandedOrderId(null);
+    } else {
+      setExpandedOrderId(orderId);
+      loadOrderDetails(orderId);
+    }
+  };
+
+  const getItemsForOrder = (order) => {
+    const detail = orderDetails[order.id];
+    if (detail?.items?.length > 0) return detail.items;
+    return parseOrderItems(order);
+  };
 
   // Load orders data
   const loadOrders = useCallback(async () => {
@@ -224,7 +282,6 @@ const AdminOrders = () => {
   // Load orders on component mount and when dependencies change
   useEffect(() => {
     if (authService.isAuthenticatedWithContext()) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       loadOrders();
     } else {
       navigate('/login');
@@ -280,7 +337,11 @@ const AdminOrders = () => {
 
   // Handle view order details
   const handleViewOrder = (orderId) => {
-    navigate(`/admin/orders/${orderId}`);
+    const order = orders.find(o => String(o.id) === String(orderId));
+    if (order) {
+      setSelectedOrderModal(order);
+      loadOrderDetails(orderId);
+    }
   };
 
   const handleDeleteOrder = async (order) => {
@@ -504,6 +565,35 @@ const AdminOrders = () => {
       }));
     }
   };
+  const handleAiOrderInsight = async () => {
+    setAiOrderLoading(true);
+    setAiOrderError('');
+
+    const orderLines = orders.slice(0, 12).map((order, index) => (
+      `${index + 1}. ${order.order_number || order.id} | ${order.customer_name || order.name || 'Customer'} | ${order.status || 'pending'} | Rs. ${Number(order.total_amount || order.totalAmount || 0).toLocaleString('en-IN')} | ${order.created_at || order.order_date || ''}`
+    )).join('\n');
+
+    const result = await aiService.chat({
+      context: 'Admin is managing Sindureghari Furniture order control. Use only the visible order data.',
+      prompt: `Analyze the visible order registry.
+Visible revenue: ${formatCompactCurrency(visibleRevenue)}
+Pending: ${pendingOrders}
+Processing: ${processingOrders}
+Delivered: ${deliveredOrders}
+Orders:
+${orderLines || 'No visible orders'}
+
+Return 4 compact bullets: urgent orders, delivery focus, revenue signal, next admin action.`
+    });
+
+    if (result.success) {
+      setAiOrderInsight(result.message);
+    } else {
+      setAiOrderError(result.error);
+    }
+
+    setAiOrderLoading(false);
+  };
   const filteredCustomerLookupRows = customerLookupRows.filter((customer) => {
     const identityNeedles = [
       customerLookupFilter.name,
@@ -549,11 +639,23 @@ const AdminOrders = () => {
           <p>Manage and track all customer orders</p>
         </div>
         <div className="ao-header-actions">
+          <button className="ao-ai-btn" onClick={handleAiOrderInsight} disabled={aiOrderLoading}>
+            <FaMagic /> {aiOrderLoading ? 'Thinking...' : 'AI Order Summary'}
+          </button>
           <button className="ao-export-btn">
             <FaDownload /> Export Orders
           </button>
         </div>
       </div>
+
+      {(aiOrderInsight || aiOrderError || aiOrderLoading) && (
+        <div className="ao-ai-panel">
+          <span><FaMagic /> OpenRouter Order Advisor</span>
+          {aiOrderLoading && <p>Reviewing visible orders and customer signals...</p>}
+          {aiOrderError && <p className="ao-ai-error">{aiOrderError}</p>}
+          {aiOrderInsight && <p>{aiOrderInsight}</p>}
+        </div>
+      )}
 
       {/* Filters and Search */}
       <div className="ao-control-tabs" role="tablist" aria-label="Order control views">
@@ -938,69 +1040,142 @@ const AdminOrders = () => {
                 const isCompleted = String(order.status || '').toLowerCase() === 'delivered';
 
                 return (
-                  <tr key={order.id} className={isCompleted ? 'ao-order-completed-row' : ''}>
-                    <td>
-                      <span className="ao-order-id">#{order.order_number}</span>
-                    </td>
-                    <td>
-                      <div className="ao-customer-info">
-                        <span className="ao-customer-name">{order.customer_name}</span>
-                        <span className="ao-customer-email">{order.email}</span>
-                        {order.phone && <span className="ao-customer-email">{order.phone}</span>}
-                      </div>
-                    </td>
-                    <td>
-                      <span className="ao-order-amount">{formatCurrency(order.total_amount)}</span>
-                    </td>
-                    <td>
-                      <div className="ao-status-control">
-                        <select
-                          className={`ao-status-select ao-${order.status}`}
-                          value={order.status}
-                          onChange={(e) => handleOrderStatusUpdate(order.id, e.target.value)}
-                          disabled={isCompleted}
-                          aria-label={isCompleted ? 'Order completed' : 'Update order status'}
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="confirmed">Confirmed</option>
-                          <option value="processing">Processing</option>
-                          <option value="shipped">Shipped</option>
-                          <option value="delivered">Delivered</option>
-                          <option value="cancelled">Cancelled</option>
-                          <option value="refunded">Refunded</option>
-                        </select>
-                        {isCompleted && (
-                          <span className="ao-completed-badge">
-                            <FaCheckCircle /> Completed
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td>
-                      <span className="ao-order-date">
-                        {new Date(order.created_at).toLocaleDateString()}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="ao-order-actions">
-                        <button
-                          className="ao-action-btn ao-view-btn"
-                          onClick={() => handleViewOrder(order.id)}
-                          title="View Order Details"
-                        >
-                          <FaEye />
-                        </button>
-                        <button
-                          className="ao-action-btn ao-delete-btn"
-                          onClick={() => handleDeleteOrder(order)}
-                          title="Delete Order"
-                          disabled={deletingOrderId === order.id}
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                  <React.Fragment key={order.id}>
+                    <tr className={isCompleted ? 'ao-order-completed-row' : ''}>
+                      <td>
+                        <span className="ao-order-id">#{order.order_number}</span>
+                      </td>
+                      <td>
+                        <div className="ao-customer-info">
+                          <span className="ao-customer-name">{order.customer_name}</span>
+                          <span className="ao-customer-email">{order.email}</span>
+                          {order.phone && <span className="ao-customer-email">{order.phone}</span>}
+                        </div>
+                      </td>
+                      <td>
+                        <span className="ao-order-amount">{formatCurrency(order.total_amount)}</span>
+                      </td>
+                      <td>
+                        <div className="ao-status-control">
+                          <select
+                            className={`ao-status-select ao-${order.status}`}
+                            value={order.status}
+                            onChange={(e) => handleOrderStatusUpdate(order.id, e.target.value)}
+                            disabled={isCompleted}
+                            aria-label={isCompleted ? 'Order completed' : 'Update order status'}
+                          >
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="refunded">Refunded</option>
+                          </select>
+                          {isCompleted && (
+                            <span className="ao-completed-badge">
+                              <FaCheckCircle /> Completed
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <span className="ao-order-date">
+                          {new Date(order.created_at).toLocaleDateString()}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="ao-order-actions">
+                          <button
+                            className={`ao-action-btn ao-view-btn ${expandedOrderId === order.id ? 'active' : ''}`}
+                            onClick={() => toggleExpand(order.id)}
+                            title={expandedOrderId === order.id ? 'Hide Products' : 'View Products'}
+                          >
+                            {expandedOrderId === order.id ? <FaChevronUp /> : <FaBoxOpen />}
+                          </button>
+                          <button
+                            className="ao-action-btn ao-view-btn"
+                            onClick={() => handleViewOrder(order.id)}
+                            title="View Full Order Details"
+                          >
+                            <FaEye />
+                          </button>
+                          <button
+                            className="ao-action-btn ao-delete-btn"
+                            onClick={() => handleDeleteOrder(order)}
+                            title="Delete Order"
+                            disabled={deletingOrderId === order.id}
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {expandedOrderId === order.id && (
+                      <tr className="ao-expanded-row">
+                        <td colSpan="6">
+                          <div className="ao-expanded-panel">
+                            {detailLoading[order.id] ? (
+                              <div className="ao-detail-loading">
+                                <div className="ao-spinner small"></div>
+                                <span>Loading products...</span>
+                              </div>
+                            ) : (() => {
+                              const items = getItemsForOrder(order);
+                              if (items.length === 0) {
+                                return (
+                                  <div className="ao-no-items">
+                                    <FaBoxOpen />
+                                    <p>No product details available for this order.</p>
+                                  </div>
+                                );
+                              }
+                              return (
+                                <div className="ao-products-grid">
+                                  {items.map((item, idx) => (
+                                    <div className="ao-product-card" key={item.product_id || item.id || idx}>
+                                      <div className="ao-product-image">
+                                        {item.product_image || item.image || item.image_url ? (
+                                          <img
+                                            src={item.product_image || item.image || item.image_url}
+                                            alt={item.product_name || item.name || 'Product'}
+                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                          />
+                                        ) : (
+                                          <div className="ao-product-placeholder">
+                                            <FaImage />
+                                          </div>
+                                        )}
+                                      </div>
+                                      <div className="ao-product-info">
+                                        <h4>{item.product_name || item.name || 'Unknown Product'}</h4>
+                                        <div className="ao-product-meta">
+                                          {(item.sku || item.product_sku) && (
+                                            <span className="ao-sku-tag">SKU: {item.sku || item.product_sku}</span>
+                                          )}
+                                        </div>
+                                        <div className="ao-product-stats">
+                                          <div><small>Qty</small><strong>{item.quantity || 1}</strong></div>
+                                          <div><small>Price</small><strong>{formatCurrency(item.price || item.unit_price || 0)}</strong></div>
+                                          <div><small>Total</small><strong>{formatCurrency((item.price || item.unit_price || 0) * (item.quantity || 1))}</strong></div>
+                                        </div>
+                                        {(item.color || item.size || item.variant) && (
+                                          <div className="ao-product-variants">
+                                            {item.color && <span>Color: <strong>{item.color}</strong></span>}
+                                            {item.size && <span>Size: <strong>{item.size}</strong></span>}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
                 );
               })
             )}
@@ -1038,6 +1213,132 @@ const AdminOrders = () => {
           >
             Next
           </button>
+        </div>
+      )}
+      {/* Detail Modal */}
+      {selectedOrderModal && (
+        <div className="ao-modal-overlay" onClick={() => setSelectedOrderModal(null)}>
+          <div className="ao-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="ao-modal-header">
+              <div>
+                <span className="ao-eyebrow">Order Details</span>
+                <h2>Order #{selectedOrderModal.order_number || selectedOrderModal.id}</h2>
+              </div>
+              <button className="ao-modal-close" onClick={() => setSelectedOrderModal(null)}>
+                <FaTimes />
+              </button>
+            </div>
+
+            <div className="ao-modal-body">
+              {/* Customer Info */}
+              <div className="ao-modal-section">
+                <h3>Customer Information</h3>
+                <div className="ao-modal-grid">
+                  <div><small>Name</small><strong>{selectedOrderModal.customer_name || selectedOrderModal.name || 'Guest'}</strong></div>
+                  <div><small>Email</small><strong>{selectedOrderModal.email || 'N/A'}</strong></div>
+                  <div><small>Phone</small><strong>{selectedOrderModal.phone || 'N/A'}</strong></div>
+                  <div><small>Order Date</small><strong>{new Date(selectedOrderModal.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</strong></div>
+                  <div><small>Total Amount</small><strong className="ao-highlight-amount">{formatCurrency(selectedOrderModal.total_amount || selectedOrderModal.totalAmount)}</strong></div>
+                  <div><small>Status</small><strong>{String(selectedOrderModal.status || 'pending').toUpperCase()}</strong></div>
+                </div>
+              </div>
+
+              {/* Products */}
+              <div className="ao-modal-section">
+                <h3>Products Ordered</h3>
+                {detailLoading[selectedOrderModal.id] ? (
+                  <div className="ao-detail-loading">
+                    <div className="ao-spinner small"></div>
+                    <span>Loading products...</span>
+                  </div>
+                ) : (
+                  (() => {
+                    const modalItems = getItemsForOrder(selectedOrderModal);
+                    return modalItems.length === 0 ? (
+                      <div className="ao-no-items">
+                        <FaImage />
+                        <p>No product details available.</p>
+                      </div>
+                    ) : (
+                      <div className="ao-modal-products">
+                        {modalItems.map((item, idx) => (
+                          <div className="ao-modal-product-row" key={item.product_id || item.id || idx}>
+                            <div className="ao-modal-product-img">
+                              {item.product_image || item.image || item.image_url ? (
+                                <img
+                                  src={item.product_image || item.image || item.image_url}
+                                  alt={item.product_name || item.name || 'Product'}
+                                  onError={(e) => { e.target.style.display = 'none'; }}
+                                />
+                              ) : (
+                                <div className="ao-product-placeholder small"><FaImage /></div>
+                              )}
+                            </div>
+                            <div className="ao-modal-product-info">
+                              <h4>{item.product_name || item.name || 'Unknown Product'}</h4>
+                              <div className="ao-modal-product-meta">
+                                {(item.sku || item.product_sku) && <span className="ao-sku-tag">SKU: {item.sku || item.product_sku}</span>}
+                                {item.category && <span className="ao-category-tag">{item.category}</span>}
+                                {item.color && <span>Color: {item.color}</span>}
+                                {item.size && <span>Size: {item.size}</span>}
+                              </div>
+                            </div>
+                            <div className="ao-modal-product-qty">
+                              <small>Qty</small>
+                              <strong>{item.quantity || 1}</strong>
+                            </div>
+                            <div className="ao-modal-product-price">
+                              <small>Price</small>
+                              <strong>{formatCurrency(item.price || item.unit_price || 0)}</strong>
+                            </div>
+                            <div className="ao-modal-product-total">
+                              <small>Total</small>
+                              <strong>{formatCurrency((item.price || item.unit_price || 0) * (item.quantity || 1))}</strong>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()
+                )}
+              </div>
+
+              {/* Shipping */}
+              {(selectedOrderModal.shipping_address || selectedOrderModal.address) && (
+                <div className="ao-modal-section">
+                  <h3>Shipping Address</h3>
+                  <div className="ao-modal-shipping">
+                    <FaTruck />
+                    <p>
+                      {typeof (selectedOrderModal.shipping_address || selectedOrderModal.address) === 'string'
+                        ? (selectedOrderModal.shipping_address || selectedOrderModal.address)
+                        : (() => {
+                            const addr = selectedOrderModal.shipping_address || selectedOrderModal.address;
+                            return [addr.street, addr.city, addr.state, addr.pincode, addr.country]
+                              .filter(Boolean).join(', ');
+                          })()
+                      }
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Payment Info */}
+              {(selectedOrderModal.payment_method || selectedOrderModal.payment_status) && (
+                <div className="ao-modal-section">
+                  <h3>Payment Information</h3>
+                  <div className="ao-modal-grid">
+                    {selectedOrderModal.payment_method && (
+                      <div><small>Payment Method</small><strong>{selectedOrderModal.payment_method}</strong></div>
+                    )}
+                    {selectedOrderModal.payment_status && (
+                      <div><small>Payment Status</small><strong>{selectedOrderModal.payment_status}</strong></div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>

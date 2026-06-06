@@ -1,35 +1,19 @@
-export const SITE_URL = "https://sinduregharifurniture.shop";
+import { SITE_URL, prioritySitelinks } from "./enterpriseSeo";
+
+export { SITE_URL };
 
 export const seoSitelinks = [
+  ...prioritySitelinks.map((item, index) => ({
+    name: item.name,
+    path: item.path,
+    description: item.metaDescription,
+    priority: Math.max(0.88, 0.98 - index * 0.02),
+  })),
   {
     name: "All Furniture Products",
     path: "/products",
     description: "Browse sofas, beds, dining tables, wardrobes, lighting and office furniture online in Nepal.",
     priority: 0.96,
-  },
-  {
-    name: "Sofas & Living Room Furniture",
-    path: "/sofas",
-    description: "Shop wooden sofa sets, L-shape sofas, recliners, coffee tables and living room furniture.",
-    priority: 0.94,
-  },
-  {
-    name: "Wooden Beds",
-    path: "/beds",
-    description: "King size, queen size, hydraulic storage and solid wood bed designs in Nepal.",
-    priority: 0.94,
-  },
-  {
-    name: "Dining Tables",
-    path: "/dining-tables",
-    description: "4, 6 and 8 seater solid wood dining table sets with chairs for Nepali homes.",
-    priority: 0.92,
-  },
-  {
-    name: "Wardrobes",
-    path: "/wardrobes",
-    description: "Modern wooden wardrobes, sliding wardrobes and custom storage cabinets.",
-    priority: 0.9,
   },
   {
     name: "Office Furniture",

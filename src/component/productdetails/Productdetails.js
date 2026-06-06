@@ -25,13 +25,65 @@ import {
     Share2,
     ShieldCheck,
     ShoppingCart,
+    Sparkles,
     Truck,
     Wrench,
     X,
 } from 'lucide-react';
 import { FaChevronLeft, FaChevronRight, FaShareAlt } from 'react-icons/fa';
-import gsap from 'gsap';
+import aiService from '../../services/aiService';
 import './ProductDetails.css';
+
+const getProductInternalLinks = (product = {}) => {
+    const text = `${product.category || ''} ${product.categoryName || ''} ${product.name || ''} ${product.title || ''} ${product.description || ''}`.toLowerCase();
+
+    if (text.includes('sofa') || text.includes('living')) {
+        return [
+            ['Sofa Sets', '/category/living-room/sofa-sets'],
+            ['Living Room Furniture', '/category/living-room'],
+            ['Coffee Tables', '/category/living-room/coffee-tables'],
+            ['TV Units', '/category/living-room/tv-units'],
+        ];
+    }
+    if (text.includes('bed') || text.includes('bedroom')) {
+        return [
+            ['Beds', '/category/bedroom/beds'],
+            ['Bedroom Furniture', '/category/bedroom'],
+            ['Wardrobes', '/category/bedroom/wardrobes'],
+            ['Dressing Tables', '/category/bedroom/dressing-tables'],
+        ];
+    }
+    if (text.includes('wardrobe') || text.includes('almirah')) {
+        return [
+            ['Wardrobes', '/category/bedroom/wardrobes'],
+            ['Bedroom Furniture', '/category/bedroom'],
+            ['Beds', '/category/bedroom/beds'],
+            ['Dressing Tables', '/category/bedroom/dressing-tables'],
+        ];
+    }
+    if (text.includes('dining')) {
+        return [
+            ['Dining Tables', '/category/dining-room/dining-tables'],
+            ['Dining Room', '/category/dining-room'],
+            ['Dining Chairs', '/category/dining-room/dining-chairs'],
+            ['Dining Sets', '/category/dining-room/dining-sets'],
+        ];
+    }
+    if (text.includes('study') || text.includes('office') || text.includes('desk')) {
+        return [
+            ['Study Tables', '/category/study-room/study-tables'],
+            ['Study Room Furniture', '/category/study-room'],
+            ['Office Chairs', '/category/study-room/office-chairs'],
+            ['Bookshelves', '/category/study-room/bookshelves'],
+        ];
+    }
+    return [
+        ['Furniture Nepal', '/products'],
+        ['Living Room Furniture', '/category/living-room'],
+        ['Bedroom Furniture', '/category/bedroom'],
+        ['Custom Furniture Nepal', '/custom-furniture-nepal'],
+    ];
+};
 
 export default function ProductDetails({ productId }) {
     const routeParams = useParams();
@@ -57,6 +109,9 @@ export default function ProductDetails({ productId }) {
     const [isEMIPlansModalOpen, setIsEMIPlansModalOpen] = useState(false);
     const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
     const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+    const [aiProductAdvice, setAiProductAdvice] = useState('');
+    const [aiProductLoading, setAiProductLoading] = useState(false);
+    const [aiProductError, setAiProductError] = useState('');
 
     // Get product by ID
     const getProductById = useCallback(async () => {
@@ -91,28 +146,39 @@ export default function ProductDetails({ productId }) {
     // GSAP Animations
     useEffect(() => {
         if (!loading && product) {
-            const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 } });
+            let animationContext;
 
-            tl.fromTo(".main-image-container",
-                { opacity: 0, x: -50 },
-                { opacity: 1, x: 0 }
-            )
-                .fromTo(".product-header",
-                    { opacity: 0, y: 30 },
-                    { opacity: 1, y: 0 },
-                    "-=0.7"
-                )
-                .fromTo(".product-description, .product-pricing",
-                    { opacity: 0, y: 20 },
-                    { opacity: 1, y: 0, stagger: 0.2 },
-                    "-=0.6"
-                )
-                .fromTo(".cart-section, .trust-section",
-                    { opacity: 0, y: 20 },
-                    { opacity: 1, y: 0, stagger: 0.15 },
-                    "-=0.5"
-                );
+            import('gsap').then(({ default: gsap }) => {
+                animationContext = gsap.context(() => {
+                    const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 } });
+
+                    tl.fromTo(".main-image-container",
+                        { opacity: 0, x: -50 },
+                        { opacity: 1, x: 0 }
+                    )
+                        .fromTo(".product-header",
+                            { opacity: 0, y: 30 },
+                            { opacity: 1, y: 0 },
+                            "-=0.7"
+                        )
+                        .fromTo(".product-description, .product-pricing",
+                            { opacity: 0, y: 20 },
+                            { opacity: 1, y: 0, stagger: 0.2 },
+                            "-=0.6"
+                        )
+                        .fromTo(".cart-section, .trust-section",
+                            { opacity: 0, y: 20 },
+                            { opacity: 1, y: 0, stagger: 0.15 },
+                            "-=0.5"
+                        );
+                });
+            });
+
+            return () => {
+                if (animationContext) animationContext.revert();
+            };
         }
+        return undefined;
     }, [loading, product]);
 
     // Track product view when component mounts and product is loaded
@@ -560,6 +626,7 @@ Product Link: ${window.location.href}`;
     const productSku = product?.sku || `SF-${product?.id || '000'}`;
     const productStock = Number(product.stock || 0);
     const isOutOfStock = productStock <= 0;
+    const internalLinks = getProductInternalLinks(product);
 
     const copySku = async () => {
         try {
@@ -570,6 +637,32 @@ Product Link: ${window.location.href}`;
             setShareMessage('Unable to copy SKU right now');
         }
         setTimeout(() => setShareMessage(''), 3000);
+    };
+
+    const handleProductAiAdvice = async () => {
+        setAiProductLoading(true);
+        setAiProductError('');
+
+        const result = await aiService.chat({
+            context: 'Customer is viewing a Sindureghari Furniture product details page. Give product-fit advice only from the supplied product data.',
+            prompt: `Advise a shopper about this furniture product.
+Product: ${product.name || product.title}
+Category: ${product.category || product.categoryName || 'Furniture'}
+SKU: ${productSku}
+Price: Rs. ${Number(product.new_price || 0).toLocaleString('en-IN')}
+Stock: ${isOutOfStock ? 'Out of stock' : `${productStock} units in stock`}
+Description: ${sanitizeDescription(product.description) || 'Premium handmade wooden furniture'}
+
+Write 3 compact bullets: best room fit, why it is worth buying, and one buying caution or measurement tip.`
+        });
+
+        if (result.success) {
+            setAiProductAdvice(result.message);
+        } else {
+            setAiProductError(result.error);
+        }
+
+        setAiProductLoading(false);
     };
 
 
@@ -769,6 +862,31 @@ Product Link: ${window.location.href}`;
                     <div className="product-description">
                         <p>{sanitizeDescription(product.description) || 'Premium quality product designed for your comfort and style.'}</p>
                     </div>
+
+                    <div className="pd-ai-advisor">
+                        <div className="pd-ai-advisor-head">
+                            <span><Sparkles size={15} /> AI Product Advisor</span>
+                            <button type="button" onClick={handleProductAiAdvice} disabled={aiProductLoading}>
+                                {aiProductLoading ? 'Thinking...' : 'Ask about this product'}
+                            </button>
+                        </div>
+                        {(aiProductAdvice || aiProductError || aiProductLoading) && (
+                            <div className="pd-ai-advisor-body">
+                                {aiProductLoading && <p>Checking fit, value, and buying tips...</p>}
+                                {aiProductError && <p className="pd-ai-error">{aiProductError}</p>}
+                                {aiProductAdvice && <p>{aiProductAdvice}</p>}
+                            </div>
+                        )}
+                    </div>
+
+                    <nav className="pd-internal-links" aria-label="Related furniture categories">
+                        <span>Shop related collections</span>
+                        <div>
+                            {internalLinks.map(([label, href]) => (
+                                <a href={href} key={href}>{label}</a>
+                            ))}
+                        </div>
+                    </nav>
 
                     <div className="pd-service-strip">
                         <div>

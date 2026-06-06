@@ -81,13 +81,13 @@ export const mapCategoriesToNavigation = (categories = []) =>
       name: category.name,
       slug,
       path: `/category/${slug}`,
-      desc: `Browse ${category.name} products`,
+      desc: category.metaDescription || category.seoDescription || `Browse ${category.name} products`,
       subLinks: children.map((child) => ({
         id: child.id,
         name: child.name,
         slug: child.slug || slugifyCategory(child.name),
         path: `/category/${slug}/${child.slug || slugifyCategory(child.name)}`,
-        desc: `Shop ${child.name}`,
+        desc: child.metaDescription || child.seoDescription || `Shop ${child.name}`,
       })),
     };
   });

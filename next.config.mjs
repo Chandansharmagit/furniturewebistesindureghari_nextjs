@@ -6,6 +6,16 @@ const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "react-icons/fa",
+      "react-icons/md",
+      "framer-motion",
+      "react-chartjs-2",
+    ],
+  },
   /* ── SEO: Trailing Slash Normalization ── */
   trailingSlash: false,
 

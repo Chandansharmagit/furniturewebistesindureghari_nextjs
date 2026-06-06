@@ -118,11 +118,13 @@ const API_CONFIG = {
       CONTACT_FORMS: '/api/customer-data/contact-forms',
       FEEDBACK: '/api/customer-data/feedback',
       ORDER_REQUESTS: '/api/customer-data/order-requests',
+      COMPLAINTS: '/api/customer-data/complaints',
       CONSULTATION_REQUESTS: '/api/customer-data/consultation-requests',
       SUMMARY: '/api/customer-data/summary',
       UPDATE_CONTACT_STATUS: '/api/customer-data/contact-forms/:id/status',
       UPDATE_FEEDBACK_STATUS: '/api/customer-data/feedback/:id/status',
-      UPDATE_ORDER_REQUEST_STATUS: '/api/customer-data/order-requests/:id/status'
+      UPDATE_ORDER_REQUEST_STATUS: '/api/customer-data/order-requests/:id/status',
+      UPDATE_COMPLAINT_STATUS: '/api/customer-data/complaints/:id/status'
     },
  
     // Blog endpoints
@@ -134,6 +136,11 @@ const API_CONFIG = {
       CREATE: '/api/blogs',
       UPDATE: '/api/blogs/:id',
       DELETE: '/api/blogs/:id'
+    },
+
+    // AI assistant endpoints
+    AI: {
+      CHAT: '/api/ai/chat'
     }
   }
 };
@@ -158,3 +165,4 @@ export const COUPON_ENDPOINTS = API_CONFIG.ENDPOINTS.COUPONS;
 export const ACTIVITY_ENDPOINTS = API_CONFIG.ENDPOINTS.ACTIVITY;
 export const CUSTOMER_DATA_ENDPOINTS = API_CONFIG.ENDPOINTS.CUSTOMER_DATA;
 export const BLOG_ENDPOINTS = API_CONFIG.ENDPOINTS.BLOG;
+export const AI_ENDPOINTS = API_CONFIG.ENDPOINTS.AI;

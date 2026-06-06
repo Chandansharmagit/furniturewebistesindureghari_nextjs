@@ -3,10 +3,18 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import Header from "../component/header/Header";
-import Navbar from "../component/navbar/Navbar";
 import { AuthProvider } from "../context/AuthContext";
 import { CartProvider } from "../context/CartContext";
+
+const Header = dynamic(() => import("../component/header/Header"), {
+  loading: () => null,
+  ssr: false,
+});
+
+const Navbar = dynamic(() => import("../component/navbar/Navbar"), {
+  loading: () => null,
+  ssr: false,
+});
 
 const Footer = dynamic(() => import("../component/footer/footer"), {
   loading: () => null,
@@ -61,7 +69,7 @@ export default function ClientLayout({ children }) {
     <AuthProvider>
       <CartProvider>
         {/* Navigation & Header - Hide on Admin Pages */}
-        {!isAdminPage && loadNonCriticalUi && (
+        {!isAdminPage && (
           <>
             <Header
               isMobileMenuOpen={isMobileMenuOpen}
@@ -80,7 +88,7 @@ export default function ClientLayout({ children }) {
         </main>
 
         {/* Footer - Hide on Admin Pages */}
-        {!isAdminPage && <Footer />}
+        {!isAdminPage && loadNonCriticalUi && <Footer />}
 
         {/* Global Popup Overlays & Cookies */}
         {loadNonCriticalUi && (

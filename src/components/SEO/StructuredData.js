@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 
 const SITE_URL = 'https://sinduregharifurniture.shop';
 const SITE_NAME = 'Sindureghari Furniture';
-const SITE_ICON_URL = `${SITE_URL}/sf-icon.png`;
+const SITE_ICON_URL = `${SITE_URL}/icon.png`;
 
 const StructuredData = ({ data, type = "default" }) => {
   if (!data) return null;

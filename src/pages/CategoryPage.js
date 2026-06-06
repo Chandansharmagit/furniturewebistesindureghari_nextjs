@@ -41,6 +41,11 @@ const categoryInfo = {
     description: 'Boost productivity with our ergonomic office chairs, functional desks, and storage solutions designed for modern workspaces.',
     keywords: 'office furniture Nepal, office chairs Nepal, office tables Nepal, study furniture Nepal'
   },
+  'study-room': {
+    title: 'Study Room Furniture',
+    description: 'Shop premium study tables, office chairs, bookshelves and home office furniture handcrafted for productive workspaces in Nepal.',
+    keywords: 'study room furniture Nepal, study table Nepal, office chair Nepal, bookshelf Nepal'
+  },
   'modular-kitchens': {
     title: 'Modular Kitchens',
     description: 'Design your dream kitchen with our modular kitchen solutions. Choose from L-shaped, U-shaped, parallel, and island kitchen designs.',
@@ -56,6 +61,11 @@ const categoryInfo = {
     description: 'Illuminate your home with our diverse lighting collection including ceiling lights, table lamps, floor lamps, and decorative lighting.',
     keywords: 'lighting Nepal, ceiling lights Nepal, table lamps Nepal, floor lamps Nepal, pendant lights Nepal'
   },
+  'lighting': {
+    title: 'Lighting Solutions',
+    description: 'Shop chandeliers, floor lamps, wall lights and decorative lighting for premium home interiors in Nepal.',
+    keywords: 'lighting Nepal, chandeliers Nepal, floor lamps Nepal, wall lights Nepal'
+  },
   'decor': {
     title: 'Home Decor',
     description: 'Add personality to your space with our curated collection of wall art, vases, cushions, rugs, and decorative accessories.',
@@ -65,6 +75,11 @@ const categoryInfo = {
     title: 'Outdoor Furniture',
     description: 'Extend your living space outdoors with our weather-resistant garden furniture, outdoor dining sets, and patio accessories.',
     keywords: 'outdoor furniture Nepal, garden furniture Nepal, patio furniture Nepal, outdoor dining Nepal'
+  },
+  'outdoor-furniture': {
+    title: 'Outdoor Furniture',
+    description: 'Shop garden swings, outdoor chairs and patio sets made for terraces, gardens and balconies in Nepal.',
+    keywords: 'outdoor furniture Nepal, garden swing Nepal, patio sets Nepal, outdoor chairs Nepal'
   },
   'all-products': {
     title: 'All Furniture Products',

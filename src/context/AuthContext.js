@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import authService from '../services/authService';
 
 const AuthContext = createContext();
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   // Clear auth data helper function
-  const clearAuthData = () => {
+  const clearAuthData = useCallback(() => {
     console.log('🧹 Clearing auth data');
     localStorage.removeItem('user');
     localStorage.removeItem('authToken');
@@ -29,16 +29,13 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     // Sync with authService
     authService.setAuthState(false, null);
-  };
+  }, []);
 
   // Initialize auth state from localStorage
   useEffect(() => {
     const initializeAuth = async () => {
       try {
         console.log('🔄 Initializing auth state...');
-        
-        // Add a small delay to ensure localStorage is ready
-        await new Promise(resolve => setTimeout(resolve, 100));
         
         const storedUser = localStorage.getItem('user');
         const authToken = localStorage.getItem('authToken');
@@ -88,9 +85,9 @@ export const AuthProvider = ({ children }) => {
     };
 
     initializeAuth();
-  }, []);
+  }, [clearAuthData]);
 
-  const login = async (credentials) => {
+  const login = useCallback(async (credentials) => {
     try {
       setIsLoading(true);
       console.log('🔐 Attempting login...');
@@ -131,21 +128,21 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     console.log('🚪 Logging out...');
     authService.logout();
     clearAuthData();
     console.log('✅ Logout complete');
-  };
+  }, [clearAuthData]);
 
   const updateUser = useCallback((userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
   }, []);
 
-  const checkAuthStatus = () => {
+  const checkAuthStatus = useCallback(() => {
     if (typeof window === 'undefined') {
       return false;
     }
@@ -165,9 +162,9 @@ export const AuthProvider = ({ children }) => {
       console.error('Error checking auth status:', error);
       return false;
     }
-  };
+  }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     user,
     isAuthenticated,
     isLoading,
@@ -175,7 +172,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateUser,
     checkAuthStatus
-  };
+  }), [user, isAuthenticated, isLoading, login, logout, updateUser, checkAuthStatus]);
 
   return (
     <AuthContext.Provider value={value}>

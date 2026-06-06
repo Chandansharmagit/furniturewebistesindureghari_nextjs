@@ -19,6 +19,7 @@
   --admin-radius: 8px;
   --admin-transition: 160ms ease;
   --admin-sidebar-width: 292px;
+  --admin-sidebar-collapsed-width: 88px;
 }
 
 * {
@@ -193,6 +194,7 @@ button {
   place-items: center;
   border-radius: 7px;
   color: inherit;
+  position: relative;
 }
 
 .admin-nav-item.active .admin-nav-icon-wrap {
@@ -243,6 +245,70 @@ button {
 .admin-dashboard-main {
   min-height: 100vh;
   margin-left: var(--admin-sidebar-width);
+  transition: var(--admin-transition);
+}
+
+.sidebar-collapsed .admin-dashboard-sidebar {
+  width: var(--admin-sidebar-collapsed-width);
+}
+
+.sidebar-collapsed .admin-dashboard-main {
+  margin-left: var(--admin-sidebar-collapsed-width);
+}
+
+.admin-sidebar-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--admin-muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--admin-transition);
+  margin-left: auto;
+}
+
+.admin-sidebar-toggle-btn:hover {
+  background: var(--admin-surface-soft);
+  color: var(--admin-primary-strong);
+}
+
+.admin-sidebar-action.collapsed {
+  justify-content: center;
+  padding: 10px 0;
+}
+.admin-sidebar-action.collapsed span {
+  display: none;
+}
+.admin-nav-item.collapsed {
+  justify-content: center;
+  padding: 10px 0;
+}
+.admin-nav-item.collapsed .admin-nav-label,
+.admin-nav-item.collapsed .admin-nav-badge {
+  display: none;
+}
+.admin-nav-badge-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: #b91c1c;
+  border-radius: 50%;
+  border: 2px solid var(--admin-surface);
+}
+
+.sidebar-collapsed .admin-sidebar-header {
+  padding: 20px 14px;
+  flex-direction: column;
+  gap: 16px;
+}
+.sidebar-collapsed .admin-sidebar-toggle-btn {
+  margin: 0;
 }
 
 .admin-main-content {

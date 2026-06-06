@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   MdRefresh, MdAttachMoney, MdInventory2, MdPeople, MdChair,
-  MdPersonAdd, MdTrendingUp, MdAccountBalanceWallet
+  MdPersonAdd, MdTrendingUp, MdAccountBalanceWallet, MdAutoAwesome
 } from 'react-icons/md';
 import { Line, Doughnut, Bar, Pie } from 'react-chartjs-2';
+import aiService from '../../../services/aiService';
 import './OverviewTab.css';
 
 const ChartFrame = ({ hasData, children }) => (
@@ -27,6 +28,10 @@ const OverviewTab = ({
   selectedPeriod,
   setSelectedPeriod
 }) => {
+  const [aiInsight, setAiInsight] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState('');
+
   const trendData = [...(salesData?.sales_trend || [])].sort((a, b) => (
     String(a.period || '').localeCompare(String(b.period || ''))
   ));
@@ -157,6 +162,47 @@ const OverviewTab = ({
     { label: 'Best Seller', value: topProduct ? truncateLabel(topProduct.name, 34) : 'No sales yet', tone: 'neutral' }
   ];
 
+  const handleGenerateAiInsight = async () => {
+    setAiLoading(true);
+    setAiError('');
+
+    const productSummary = topProducts.slice(0, 5).map((item, index) => (
+      `${index + 1}. ${item.name || 'Product'} | sold: ${item.total_sold || 0} | revenue: Rs. ${Number(item.revenue || 0).toFixed(0)} | avg price: Rs. ${Number(item.avg_selling_price || 0).toFixed(0)}`
+    )).join('\n');
+
+    const inventorySummary = attentionNeeded.slice(0, 5).map((item, index) => (
+      `${index + 1}. ${item.name || 'Product'} | stock: ${item.stock || 0} | recent sales: ${item.recent_sales || 0} | issue: ${item.issue_type || 'watch'}`
+    )).join('\n');
+
+    const result = await aiService.chat({
+      context: 'Admin dashboard for Sindureghari Furniture in Nepal. Give operations advice only from the provided dashboard numbers.',
+      prompt: `Create a compact executive insight for the admin dashboard.
+Period: ${selectedPeriod}
+Revenue: Rs. ${Number(dashboardData?.kpis?.total_revenue || 0).toFixed(0)}
+Orders: ${dashboardData?.kpis?.total_orders || 0}
+Average order value: Rs. ${Number(dashboardData?.kpis?.avg_order_value || 0).toFixed(0)}
+Customers: ${dashboardData?.kpis?.total_customers || 0}
+Inventory value: Rs. ${Number(productData?.total_stock_value || 0).toFixed(0)}
+Low stock items: ${productData?.low_stock_count || 0}
+Revenue growth: ${formatPercent(revenueGrowth)}
+Order growth: ${formatPercent(ordersGrowth)}
+Top products:
+${productSummary || 'No top product data'}
+Inventory attention:
+${inventorySummary || 'No inventory alerts'}
+
+Return 4 short bullets: revenue signal, inventory risk, best product action, next admin action.`
+    });
+
+    if (result.success) {
+      setAiInsight(result.message);
+    } else {
+      setAiError(result.error);
+    }
+
+    setAiLoading(false);
+  };
+
   return (
     <div className="ov-overview-panel">
       {/* Page Header */}
@@ -178,8 +224,24 @@ const OverviewTab = ({
           <button className="ov-btn-refresh" onClick={handleRefresh} disabled={refreshing}>
             <MdRefresh className={refreshing ? 'fa-spin' : ''} /> Refresh
           </button>
+          <button className="ov-btn-ai" onClick={handleGenerateAiInsight} disabled={aiLoading}>
+            <MdAutoAwesome /> {aiLoading ? 'Thinking' : 'AI Insight'}
+          </button>
         </div>
       </div>
+
+      {(aiInsight || aiLoading || aiError) && (
+        <div className="ov-ai-panel">
+          <div className="ov-ai-panel__icon"><MdAutoAwesome /></div>
+          <div className="ov-ai-panel__body">
+            <span className="ov-ai-panel__eyebrow">OpenRouter AI Advisor</span>
+            <h3>Executive action note</h3>
+            {aiLoading && <p className="ov-ai-panel__muted">Reading sales, inventory, and product signals...</p>}
+            {aiError && <p className="ov-ai-panel__error">{aiError}</p>}
+            {aiInsight && <div className="ov-ai-panel__content">{aiInsight}</div>}
+          </div>
+        </div>
+      )}
 
       {/* Stats Bento Grid */}
       <div className="ov-bento-stats-grid">

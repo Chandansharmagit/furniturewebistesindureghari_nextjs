@@ -10,6 +10,8 @@ import {
   Building2,
   HelpCircle,
   BadgePercent,
+  AlertTriangle,
+  Images,
   LogIn,
   UserPlus,
   PackageCheck,
@@ -26,6 +28,9 @@ import { API_BASE_URL, buildApiUrl } from '../../config/api';
 import couponService from '../../services/couponService';
 import { fetchLoyaltyStatus, getLoyaltyStatusClass } from '../../utils/loyaltyStatus';
 import './Header.css';
+
+const ACTIVE_COUPON_CACHE_KEY = 'sf_active_coupon_cache';
+const ACTIVE_COUPON_CACHE_TTL = 10 * 60 * 1000;
 
 const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
@@ -119,6 +124,21 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
 
     const loadActiveCoupon = async () => {
       try {
+        const cachedCoupon = JSON.parse(localStorage.getItem(ACTIVE_COUPON_CACHE_KEY) || 'null');
+        if (
+          cachedCoupon?.coupon &&
+          cachedCoupon?.savedAt &&
+          Date.now() - Number(cachedCoupon.savedAt) < ACTIVE_COUPON_CACHE_TTL &&
+          isCouponLive(cachedCoupon.coupon)
+        ) {
+          if (isMounted) setActiveCoupon(cachedCoupon.coupon);
+          return;
+        }
+      } catch {
+        localStorage.removeItem(ACTIVE_COUPON_CACHE_KEY);
+      }
+
+      try {
         const response = await fetch(buildApiUrl(`/api/products/coupons/active?fresh=1&t=${Date.now()}`), {
           cache: 'no-store',
         });
@@ -127,6 +147,10 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
           const data = await response.json();
           if (isMounted && data?.coupon && isCouponLive(data.coupon)) {
             setActiveCoupon(data.coupon);
+            localStorage.setItem(ACTIVE_COUPON_CACHE_KEY, JSON.stringify({
+              coupon: data.coupon,
+              savedAt: Date.now()
+            }));
             return;
           }
         }
@@ -145,10 +169,15 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
       const bestCoupon = pickBestCoupon(normalizeCouponList(result.data));
       if (bestCoupon) {
         setActiveCoupon(bestCoupon);
+        localStorage.setItem(ACTIVE_COUPON_CACHE_KEY, JSON.stringify({
+          coupon: bestCoupon,
+          savedAt: Date.now()
+        }));
         return;
       }
 
       setActiveCoupon(null);
+      localStorage.removeItem(ACTIVE_COUPON_CACHE_KEY);
     };
 
     loadActiveCoupon();
@@ -158,14 +187,10 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
       }
     };
 
-    const refreshTimer = window.setInterval(loadActiveCoupon, 5 * 60 * 1000);
-    window.addEventListener('focus', loadActiveCoupon);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       isMounted = false;
-      window.clearInterval(refreshTimer);
-      window.removeEventListener('focus', loadActiveCoupon);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
@@ -230,6 +255,14 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
             <Link to="/order-request" className="header-utility-link header-utility-link-strong">
               <PackageCheck size={14} />
               <span>Order Request</span>
+            </Link>
+            <Link to="/complaint-box" className="header-utility-link">
+              <AlertTriangle size={14} />
+              <span>Complaint Box</span>
+            </Link>
+            <Link to="/product-gallery" className="header-utility-link">
+              <Images size={14} />
+              <span>Gallery</span>
             </Link>
             <Link to="/orders" className="header-utility-link">
               <Store size={14} />
@@ -397,6 +430,35 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
             </Link>
           </div>
         </div>
+      </div>
+
+      <div className="mobile-utility-row">
+        <nav className="mobile-utility-links" aria-label="Mobile quick header links">
+          <Link to="/become-a-franchise" className="mobile-utility-link">
+            <Building2 size={13} />
+            <span>Franchise</span>
+          </Link>
+          <Link to="/order-request" className="mobile-utility-link mobile-utility-link-strong">
+            <PackageCheck size={13} />
+            <span>Order Request</span>
+          </Link>
+          <Link to="/complaint-box" className="mobile-utility-link">
+            <AlertTriangle size={13} />
+            <span>Complaint Box</span>
+          </Link>
+          <Link to="/product-gallery" className="mobile-utility-link">
+            <Images size={13} />
+            <span>Gallery</span>
+          </Link>
+          <Link to="/orders" className="mobile-utility-link">
+            <Store size={13} />
+            <span>Track</span>
+          </Link>
+          <Link to="/help-and-support" className="mobile-utility-link">
+            <HelpCircle size={13} />
+            <span>Help</span>
+          </Link>
+        </nav>
       </div>
 
       {/* Mobile Search Overlay */}

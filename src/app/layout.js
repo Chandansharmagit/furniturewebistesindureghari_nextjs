@@ -2,9 +2,10 @@ import { Suspense } from "react";
 import "./globals.css";
 import ClientLayout from "./ClientLayout";
 import { getSiteNavigationJsonLd } from "@/component/seo/SiteLinksJsonLd";
+import { enterpriseCategories } from "@/data/enterpriseSeo";
 
 const SITE_URL = "https://sinduregharifurniture.shop";
-const SITE_ICON_URL = `${SITE_URL}/sf-icon.png`;
+const SITE_ICON_URL = `${SITE_URL}/icon.png`;
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -12,12 +13,13 @@ export const metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
       { url: "/icon.png", type: "image/png", sizes: "512x512" },
-      { url: "/sf-icon.png", type: "image/png", sizes: "512x512" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
     ],
-    shortcut: "/icon.png",
+    shortcut: "/favicon.ico",
     apple: [
-      { url: "/apple-icon.png", type: "image/png", sizes: "512x512" },
+      { url: "/apple-icon.png", type: "image/png", sizes: "180x180" },
     ],
   },
   title: {
@@ -170,13 +172,16 @@ const siteJsonLd = {
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Sindureghari Furniture Collection",
-        itemListElement: [
-          { "@type": "OfferCatalog", name: "Living Room Furniture", url: `${SITE_URL}/living-room-furniture` },
-          { "@type": "OfferCatalog", name: "Sofas", url: `${SITE_URL}/sofas` },
-          { "@type": "OfferCatalog", name: "Beds", url: `${SITE_URL}/beds` },
-          { "@type": "OfferCatalog", name: "Dining Tables", url: `${SITE_URL}/dining-tables` },
-          { "@type": "OfferCatalog", name: "Special Offers", url: `${SITE_URL}/special-offers-all` },
-        ],
+        itemListElement: enterpriseCategories.map((category) => ({
+          "@type": "OfferCatalog",
+          name: category.name,
+          url: `${SITE_URL}${category.path}`,
+          itemListElement: category.children.map((child) => ({
+            "@type": "OfferCatalog",
+            name: child.name,
+            url: `${SITE_URL}${child.path}`,
+          })),
+        })),
       },
     },
     {

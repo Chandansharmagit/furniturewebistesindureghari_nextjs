@@ -1,14 +1,31 @@
 /* eslint-disable react-hooks/set-state-in-effect, react/no-unescaped-entities, @next/next/no-html-link-for-pages */
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Star, Filter, ChevronRight } from 'lucide-react';
+import { Star, Filter, ChevronRight, Images, Grid3X3, Sparkles, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEOComponent from '../../components/SEO/SEOComponent';
 import { API_BASE_URL } from '../../config/api';
 import ProductCard from '../common/ProductCard/ProductCard';
 import { flattenCategories } from '../../utils/categoryHelpers';
+import aiService from '../../services/aiService';
 import './SearchResults.css';
+
+const parseProductImages = (product = {}) => {
+    const images = [];
+    if (Array.isArray(product.images)) images.push(...product.images);
+    if (product.imageUrl) images.push(product.imageUrl);
+    if (product.image_url) images.push(product.image_url);
+    if (product.imageUrls) {
+        try {
+            const parsed = typeof product.imageUrls === 'string' ? JSON.parse(product.imageUrls) : product.imageUrls;
+            if (Array.isArray(parsed)) images.push(...parsed);
+        } catch {
+            // Ignore older malformed image JSON and fall back to primary image.
+        }
+    }
+    return [...new Set(images.filter(Boolean))];
+};
 
 const SearchResults = () => {
     const location = useLocation();
@@ -22,6 +39,10 @@ const SearchResults = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(12);
     const [categoryOptions, setCategoryOptions] = useState([]);
+    const [activeView, setActiveView] = useState('gallery');
+    const [aiRecommendation, setAiRecommendation] = useState('');
+    const [aiRecommendationLoading, setAiRecommendationLoading] = useState(false);
+    const [aiRecommendationError, setAiRecommendationError] = useState('');
 
     // Animation variants
     const containerVariants = {
@@ -73,6 +94,8 @@ const SearchResults = () => {
 
     // Fetch search results
     useEffect(() => {
+        setActiveView('gallery');
+
         const fetchSearchResults = async () => {
             if (!searchQuery) {
                 setProducts([]);
@@ -90,7 +113,8 @@ const SearchResults = () => {
                 const searchResults = response.data.products || [];
 
                 const transformedProducts = searchResults.map(product => {
-                    const imageUrl = product.imageUrl || (product.imageUrls ? JSON.parse(product.imageUrls)[0] : 'https://via.placeholder.com/300x200');
+                    const images = parseProductImages(product);
+                    const imageUrl = images[0] || 'https://via.placeholder.com/300x200';
 
                     return {
                         id: product.id || product._id,
@@ -102,7 +126,9 @@ const SearchResults = () => {
                         rating: 4.5,
                         category: product.categoryName || 'Furniture',
                         imageUrl: imageUrl,
+                        images,
                         image1: imageUrl,
+                        sku: product.sku,
                         availability: product.stock > 0 ? 'in-stock' : 'out-of-stock'
                     };
                 });
@@ -179,6 +205,70 @@ const SearchResults = () => {
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
     const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+    const galleryImages = useMemo(() => filteredProducts.flatMap((product) => (
+        parseProductImages(product).map((image, index) => ({
+            id: `${product.id || product._id}-${index}-${image}`,
+            productId: product.id || product._id,
+            image,
+            name: product.name,
+            category: product.category,
+            sku: product.sku,
+            price: product.price
+        }))
+    )), [filteredProducts]);
+    const recommendedProducts = useMemo(() => (
+        [...filteredProducts]
+            .sort((a, b) => {
+                if (a.availability !== b.availability) return a.availability === 'in-stock' ? -1 : 1;
+                return (b.rating || 0) - (a.rating || 0) || (a.price || 0) - (b.price || 0);
+            })
+            .slice(0, 3)
+    ), [filteredProducts]);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        const generateSearchRecommendation = async () => {
+            if (!searchQuery || recommendedProducts.length === 0) {
+                setAiRecommendation('');
+                setAiRecommendationError('');
+                setAiRecommendationLoading(false);
+                return;
+            }
+
+            setAiRecommendationLoading(true);
+            setAiRecommendationError('');
+
+            const productLines = recommendedProducts.map((product, index) => (
+                `${index + 1}. ${product.name} | category: ${product.category} | price: Rs. ${product.price} | sku: ${product.sku || 'N/A'} | ${product.availability}`
+            )).join('\n');
+
+            const result = await aiService.chat({
+                context: 'Customer is searching the Sindureghari Furniture website. Recommend only from the provided product list.',
+                prompt: `The customer searched for "${searchQuery}".
+Available recommended products:
+${productLines}
+
+Write a luxury furniture shopping recommendation in 2 short sentences, then one short "Best pick" line. Mention handmade/premium wooden value only if it fits naturally.`
+            });
+
+            if (cancelled) return;
+
+            if (result.success) {
+                setAiRecommendation(result.message);
+            } else {
+                setAiRecommendationError(result.error);
+            }
+
+            setAiRecommendationLoading(false);
+        };
+
+        generateSearchRecommendation();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [searchQuery, recommendedProducts]);
 
     const handleFilterChange = (filterType, value) => {
         setFilters(prev => ({ ...prev, [filterType]: value }));
@@ -451,8 +541,94 @@ const SearchResults = () => {
                                 </div>
                             </div>
 
+                            <div className="bkf-search__view-tabs" role="tablist" aria-label="Search result views">
+                                <button
+                                    type="button"
+                                    role="tab"
+                                    aria-selected={activeView === 'gallery'}
+                                    className={`bkf-search__view-tab ${activeView === 'gallery' ? 'is-active' : ''}`}
+                                    onClick={() => setActiveView('gallery')}
+                                >
+                                    <Images size={17} />
+                                    <span>Gallery</span>
+                                    <em>{galleryImages.length}</em>
+                                </button>
+                                <button
+                                    type="button"
+                                    role="tab"
+                                    aria-selected={activeView === 'products'}
+                                    className={`bkf-search__view-tab ${activeView === 'products' ? 'is-active' : ''}`}
+                                    onClick={() => setActiveView('products')}
+                                >
+                                    <Grid3X3 size={17} />
+                                    <span>Products</span>
+                                    <em>{filteredProducts.length}</em>
+                                </button>
+                            </div>
+
+                            {(recommendedProducts.length > 0 || aiRecommendationLoading || aiRecommendationError) && (
+                                <section className="bkf-search__ai-advisor" aria-label="AI product recommendations">
+                                    <div className="bkf-search__ai-copy">
+                                        <span className="bkf-search__ai-kicker"><Sparkles size={15} /> AI Furniture Advisor</span>
+                                        <h2>Best matches for "{searchQuery}"</h2>
+                                        {aiRecommendationLoading && <p>Reading your search and comparing the closest products...</p>}
+                                        {aiRecommendationError && <p className="bkf-search__ai-error">{aiRecommendationError}</p>}
+                                        {aiRecommendation && <p>{aiRecommendation}</p>}
+                                    </div>
+                                    <div className="bkf-search__ai-products">
+                                        {recommendedProducts.map((product) => (
+                                            <a href={`/product/${product.id || product._id}`} className="bkf-search__ai-product" key={product.id || product._id}>
+                                                <img src={product.imageUrl} alt={product.name} loading="lazy" />
+                                                <span>
+                                                    <strong>{product.name}</strong>
+                                                    <small>Rs. {Number(product.price || 0).toLocaleString('en-IN')} · {product.availability === 'in-stock' ? 'In stock' : 'Out of stock'}</small>
+                                                </span>
+                                                <ArrowRight size={16} />
+                                            </a>
+                                        ))}
+                                    </div>
+                                </section>
+                            )}
+
+                            {activeView === 'gallery' && (
+                                <motion.div
+                                    className="bkf-search__gallery-priority"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.28 }}
+                                >
+                                    <div className="bkf-search__gallery-head">
+                                        <span>Visual results first</span>
+                                        <h2>Gallery matches for "{searchQuery}"</h2>
+                                        <p>Open any image to view the product details, price, stock, and full product gallery.</p>
+                                    </div>
+
+                                    {galleryImages.length === 0 ? (
+                                        <div className="bkf-search__gallery-empty">
+                                            <Images size={34} />
+                                            <h3>No gallery images found</h3>
+                                            <p>Try clearing filters or searching a broader furniture keyword.</p>
+                                        </div>
+                                    ) : (
+                                        <div className="bkf-search__gallery-grid">
+                                            {galleryImages.map((item) => (
+                                                <a href={`/product/${item.productId}`} className="bkf-search__gallery-card" key={item.id}>
+                                                    <span className="bkf-search__gallery-image">
+                                                        <img src={item.image} alt={`${item.name} gallery result`} loading="lazy" />
+                                                    </span>
+                                                    <span className="bkf-search__gallery-meta">
+                                                        <strong>{item.name}</strong>
+                                                        <small>{item.sku || item.category}</small>
+                                                    </span>
+                                                </a>
+                                            ))}
+                                        </div>
+                                    )}
+                                </motion.div>
+                            )}
+
                             {/* Products Grid */}
-                            <motion.div
+                            {activeView === 'products' && <motion.div
                                 className="bkf-search__products-grid"
                                 variants={containerVariants}
                                 initial="hidden"
@@ -531,7 +707,7 @@ const SearchResults = () => {
                                         )}
                                     </>
                                 )}
-                            </motion.div>
+                            </motion.div>}
                         </div>
                     </div>
                 </div>

@@ -824,20 +824,15 @@ const ProductUploading = () => {
                 )}
               </motion.div>
             ) : (
-              <motion.div
+              <div
                 className="pu-products-grid-royal"
-                layout
               >
                 {filteredProducts.map(product => {
                   const isOutOfStock = !product.stock || parseInt(product.stock) === 0;
                   return (
-                    <motion.div
+                    <div
                       key={product.id}
                       className={`pu-product-card-royal ${isOutOfStock ? 'out-of-stock' : ''}`}
-                      layout
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      whileHover={{ y: -5 }}
                     >
                       <div className="pu-card-visual">
                         {product.imageUrl ? (
@@ -881,10 +876,10 @@ const ProductUploading = () => {
                           </button>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   );
                 })}
-              </motion.div>
+              </div>
             )}
           </AnimatePresence>
         </motion.div>

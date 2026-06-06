@@ -116,6 +116,96 @@
   font-size: 14px;
 }
 
+.ov-btn-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 54px;
+  padding: 0 22px;
+  border: 1px solid rgba(177, 148, 86, 0.38);
+  border-radius: 8px;
+  color: #2c1f0b;
+  background: linear-gradient(135deg, #fff8e8 0%, #ffffff 100%);
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.ov-btn-ai:hover {
+  border-color: #B19456;
+  box-shadow: 0 12px 26px rgba(177, 148, 86, 0.16);
+  transform: translateY(-1px);
+}
+
+.ov-btn-ai:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.ov-ai-panel {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 14px;
+  margin: -6px 0 20px;
+  padding: 16px;
+  border: 1px solid rgba(177, 148, 86, 0.3);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 96% 14%, rgba(177, 148, 86, 0.16), transparent 30%),
+    #ffffff;
+  box-shadow: 0 16px 36px rgba(16, 24, 40, 0.06);
+}
+
+.ov-ai-panel__icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: #B19456;
+  background: #f7f0df;
+}
+
+.ov-ai-panel__body {
+  min-width: 0;
+}
+
+.ov-ai-panel__eyebrow {
+  display: block;
+  margin-bottom: 3px;
+  color: #9b761f;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ov-ai-panel h3 {
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.ov-ai-panel__content,
+.ov-ai-panel__muted,
+.ov-ai-panel__error {
+  margin: 0;
+  color: #4b5563;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.ov-ai-panel__error {
+  color: #b42318;
+  font-weight: 700;
+}
+
 /* ─── KPI Stats Grid ─── */
 .ov-stats-grid,
 .ov-bento-stats-grid {

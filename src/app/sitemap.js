@@ -5,6 +5,7 @@
  */
 
 import { seoSitelinks } from "@/data/seoSitelinks";
+import { getAllEnterpriseCategoryPages, getProgrammaticLocalPages } from "@/data/enterpriseSeo";
 
 const SITE_URL = "https://sinduregharifurniture.shop";
 const API_URL = process.env.NEXT_PUBLIC_PROD_API_URL || "https://furnituresinduregharibackend.vercel.app";
@@ -49,6 +50,16 @@ const STATIC_PAGES = [
   })),
   ...SEO_MONEY_PAGES.map((loc) => ({ loc, priority: 0.92, changefreq: "weekly" })),
   ...CITY_PAGES.map((loc) => ({ loc, priority: 0.86, changefreq: "weekly" })),
+  ...getAllEnterpriseCategoryPages().map((page) => ({
+    loc: page.path,
+    priority: page.parent ? 0.88 : page.sitelinkPriority || 0.9,
+    changefreq: "weekly",
+  })),
+  ...getProgrammaticLocalPages().map((page) => ({
+    loc: page.path,
+    priority: 0.84,
+    changefreq: "weekly",
+  })),
 ];
 
 const flattenCategories = (categories = [], parent = null, list = []) => {

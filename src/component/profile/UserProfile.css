@@ -912,7 +912,9 @@
   }
 
   .user-profile-sidebar {
-    position: static;
+    position: static !important;
+    max-height: none;
+    overflow-y: visible;
   }
 
   .user-profile-header-card {

@@ -3,7 +3,7 @@
 const SITE_URL = 'https://sinduregharifurniture.shop';
 const SITE_NAME = 'Sindureghari Furniture';
 const BRAND_FULL = 'Sindureghari Furniture';
-const SITE_ICON_URL = `${SITE_URL}/sf-icon.png`;
+const SITE_ICON_URL = `${SITE_URL}/icon.png`;
 
 export class MetaTagManager {
   static generateProductMeta(product) {

@@ -30,6 +30,7 @@ import RestockPanel from './components/RestockPanel';
 import CouponsTab from './components/CouponsTab';
 import UsersTab from './components/UsersTab';
 import SubmissionsTab from './components/SubmissionsTab';
+import ComplaintBoxTab from './components/ComplaintBoxTab';
 import AdminBlogsTab from './components/AdminBlogsTab';
 import AbandonedCartsTab from './components/AbandonedCartsTab';
 import LeadsHubTab from './components/LeadsHubTab';
@@ -69,6 +70,7 @@ const AdminDashboard = () => {
   const [feedbackSubmissions, setFeedbackSubmissions] = useState([]);
   const [orderRequestSubmissions, setOrderRequestSubmissions] = useState([]);
   const [notificationCounts, setNotificationCounts] = useState({});
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   // Load dashboard metrics
   const loadDashboardData = useCallback(async (silentRefresh = false) => {
@@ -110,9 +112,11 @@ const AdminDashboard = () => {
           const contactNew = Number(summary?.data?.contactForms?.new_count || 0);
           const feedbackNew = Number(summary?.data?.feedback?.new_count || 0);
           const orderRequestNew = Number(summary?.data?.orderRequests?.new_count || 0);
+          const complaintNew = Number(summary?.data?.complaints?.new_count || 0);
           setNotificationCounts(prev => ({
             ...prev,
             'customer-data': contactNew + feedbackNew + orderRequestNew,
+            'complaint-box': complaintNew,
             'leads-hub': orderRequestNew
           }));
         }
@@ -324,6 +328,8 @@ const AdminDashboard = () => {
             orderRequestSubmissions={orderRequestSubmissions} 
           />
         );
+      case 'complaint-box':
+        return <ComplaintBoxTab />;
       case 'blogs':
         return <AdminBlogsTab />;
       case 'abandoned-carts':
@@ -339,13 +345,15 @@ const AdminDashboard = () => {
   if (error) return <div className="admin-dashboard-error"><h2>System Offline</h2><p>{error}</p><button onClick={handleRefresh}>RETRY</button></div>;
 
   return (
-    <div className="admin-dashboard-container">
+    <div className={`admin-dashboard-container ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <DashboardSidebar 
         activeTab={activeTab} 
         handleTabChange={handleTabChange} 
         navigate={navigate} 
         handleLogout={handleLogout} 
         notificationCounts={notificationCounts}
+        isSidebarCollapsed={isSidebarCollapsed}
+        setIsSidebarCollapsed={setIsSidebarCollapsed}
       />
       <div className="admin-dashboard-main">
         <div className="admin-main-content">

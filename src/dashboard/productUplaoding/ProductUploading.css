@@ -233,14 +233,19 @@
 
 /* Filter Panel Royal */
 .pu-filter-panel-royal {
-  background: #ffffff;
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 8px;
   padding: 24px;
   display: flex;
   align-items: center;
   gap: 24px;
-  margin-bottom: 48px;
+  margin: 16px 0 48px 0;
   border: 1px solid var(--royal-glass-border);
+  position: sticky;
+  top: 16px;
+  z-index: 100;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
 }
 
 .pu-filter-label {
@@ -307,7 +312,7 @@
   border: 1px solid var(--royal-glass-border);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  opacity: 1;
+  opacity: 1 !important;
   box-shadow: 0 14px 30px rgba(15, 23, 42, 0.07);
 }
 

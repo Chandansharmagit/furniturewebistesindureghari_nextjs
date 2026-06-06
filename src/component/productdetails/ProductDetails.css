@@ -282,6 +282,70 @@
     line-height: 1.7;
 }
 
+.pd-ai-advisor {
+    margin: 0 0 16px;
+    padding: 14px;
+    border: 1px solid rgba(176, 138, 46, 0.28);
+    border-radius: 10px;
+    background:
+        radial-gradient(circle at 96% 18%, rgba(176, 138, 46, 0.14), transparent 32%),
+        #fffdfa;
+}
+
+.pd-ai-advisor-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.pd-ai-advisor-head span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--pd-primary-dark);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.pd-ai-advisor-head button {
+    min-height: 38px;
+    border: 1px solid rgba(176, 138, 46, 0.38);
+    border-radius: 8px;
+    background: var(--pd-text);
+    color: #fff;
+    padding: 0 13px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.pd-ai-advisor-head button:disabled {
+    opacity: 0.68;
+    cursor: wait;
+}
+
+.pd-ai-advisor-body {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(176, 138, 46, 0.18);
+}
+
+.pd-ai-advisor-body p {
+    margin: 0;
+    color: #4b5563;
+    font-size: 13px;
+    line-height: 1.58;
+    white-space: pre-line;
+}
+
+.pd-ai-advisor-body .pd-ai-error {
+    color: #b42318;
+    font-weight: 800;
+}
+
 .pd-service-strip {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -3637,4 +3701,46 @@
 
 .quantity-btn:disabled {
     opacity: 0.45;
+}
+.pd-internal-links {
+  margin: 16px 0 18px;
+  padding: 14px;
+  border: 1px solid #eadfcd;
+  border-radius: 14px;
+  background: #fffaf2;
+}
+
+.pd-internal-links > span {
+  display: block;
+  margin-bottom: 9px;
+  color: #8a640d;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pd-internal-links div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pd-internal-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #e7dcc9;
+  color: #5f3f0e;
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.pd-internal-links a:hover {
+  border-color: #c09128;
+  color: #24170f;
 }

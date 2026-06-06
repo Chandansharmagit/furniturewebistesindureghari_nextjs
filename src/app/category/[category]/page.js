@@ -1,4 +1,6 @@
 import CategoryPage from '@/pages/CategoryPage';
+import CategoryAuthorityContent, { getCategorySchema } from '@/component/seo/CategoryAuthorityContent';
+import { findEnterpriseCategory } from '@/data/enterpriseSeo';
 
 const SITE_URL = "https://sinduregharifurniture.shop";
 
@@ -63,24 +65,32 @@ const CATEGORY_META = {
 
 export async function generateMetadata({ params }) {
   const slug = (await params).category;
+  const enterpriseMeta = findEnterpriseCategory(slug);
   const meta = CATEGORY_META[slug] || {
     label: slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
     desc: `Shop premium ${slug.replace(/-/g, " ")} furniture in Nepal. Handcrafted with solid wood. Free delivery to Kathmandu, Lalitpur, Pokhara.`,
     keywords: `${slug.replace(/-/g, " ")} furniture Nepal`,
   };
+  const title = enterpriseMeta?.title || `${meta.label} | Sindureghari Furniture Nepal`;
+  const description = enterpriseMeta?.metaDescription || meta.desc;
 
   return {
-    title: `${meta.label} | Sindureghari Furniture Nepal`,
-    description: meta.desc,
-    keywords: meta.keywords,
+    title,
+    description,
+    keywords: enterpriseMeta?.keywords || meta.keywords,
     alternates: {
-      canonical: `${SITE_URL}/category/${slug}`,
+      canonical: `${SITE_URL}${enterpriseMeta?.path || `/category/${slug}`}`,
     },
     openGraph: {
-      title: `${meta.label} | Sindureghari Furniture Nepal`,
-      description: meta.desc,
-      url: `${SITE_URL}/category/${slug}`,
+      title,
+      description,
+      url: `${SITE_URL}${enterpriseMeta?.path || `/category/${slug}`}`,
       type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
     robots: {
       index: true,
@@ -92,6 +102,7 @@ export async function generateMetadata({ params }) {
 
 export default async function Page({ params }) {
   const slug = (await params).category;
+  const enterpriseMeta = findEnterpriseCategory(slug);
   const meta = CATEGORY_META[slug] || {
     label: slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
   };
@@ -116,19 +127,24 @@ export default async function Page({ params }) {
       {
         "@type": "ListItem",
         position: 3,
-        name: meta.label,
-        item: `${SITE_URL}/category/${slug}`,
+        name: enterpriseMeta?.name || meta.label,
+        item: `${SITE_URL}${enterpriseMeta?.path || `/category/${slug}`}`,
       },
     ],
   };
+  const schema = enterpriseMeta ? [breadcrumbJsonLd, ...getCategorySchema(enterpriseMeta)] : [breadcrumbJsonLd];
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      {schema.map((item, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(item) }}
+        />
+      ))}
       <CategoryPage />
+      <CategoryAuthorityContent category={enterpriseMeta} />
     </>
   );
 }

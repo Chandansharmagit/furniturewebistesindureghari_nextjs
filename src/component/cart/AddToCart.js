@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
-import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import aiService from '../../services/aiService';
 import './AddToCart.css';
 
 const AddToCart = () => {
   const { items, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
   const navigate = useNavigate();
+  const [aiCartAdvice, setAiCartAdvice] = useState('');
+  const [aiCartLoading, setAiCartLoading] = useState(false);
+  const [aiCartError, setAiCartError] = useState('');
 
   const handleQuantityChange = (productId, newQuantity) => {
     if (newQuantity <= 0) {
@@ -18,6 +22,32 @@ const AddToCart = () => {
 
   const formatPrice = (price) => {
     return `NPR ${(price || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+
+  const handleCartAiAdvice = async () => {
+    setAiCartLoading(true);
+    setAiCartError('');
+
+    const itemLines = items.map((item, index) => (
+      `${index + 1}. ${item.title || item.name || 'Furniture'} | qty: ${item.quantity || 1} | price: NPR ${Number(item.price || 0).toLocaleString('en-IN')}`
+    )).join('\n');
+
+    const result = await aiService.chat({
+      context: 'Customer is reviewing their Sindureghari Furniture cart. Suggest practical furniture pairing and purchase guidance.',
+      prompt: `Cart items:
+${itemLines}
+Cart total: NPR ${Number(getCartTotal() || 0).toLocaleString('en-IN')}
+
+Give 3 compact suggestions: one matching product/category to add, one room styling note, and one checkout confidence note.`
+    });
+
+    if (result.success) {
+      setAiCartAdvice(result.message);
+    } else {
+      setAiCartError(result.error);
+    }
+
+    setAiCartLoading(false);
   };
 
   if (items.length === 0) {
@@ -78,6 +108,20 @@ const AddToCart = () => {
             <span>Cart</span>
             <span>Delivery Details</span>
             <span>Order Confirmation</span>
+          </div>
+          <div className="cart-ai-advisor">
+            <div>
+              <span><Sparkles size={15} /> AI Cart Stylist</span>
+              <strong>Get pairing ideas before checkout</strong>
+            </div>
+            <button type="button" onClick={handleCartAiAdvice} disabled={aiCartLoading}>
+              {aiCartLoading ? 'Thinking...' : 'Suggest Add-ons'}
+            </button>
+            {(aiCartAdvice || aiCartError || aiCartLoading) && (
+              <p className={aiCartError ? 'cart-ai-error' : ''}>
+                {aiCartLoading ? 'Reading your cart and matching furniture...' : aiCartError || aiCartAdvice}
+              </p>
+            )}
           </div>
           {items.map((item) => (
             <div key={item.id} className="cart-item">

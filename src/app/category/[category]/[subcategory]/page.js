@@ -1,4 +1,6 @@
 import CategoryPage from '@/pages/CategoryPage';
+import CategoryAuthorityContent, { getCategorySchema } from '@/component/seo/CategoryAuthorityContent';
+import { findEnterpriseCategory } from '@/data/enterpriseSeo';
 
 const SITE_URL = "https://sinduregharifurniture.shop";
 
@@ -192,6 +194,7 @@ const SUBCATEGORY_META = {
 
 export async function generateMetadata({ params }) {
   const { category, subcategory } = await params;
+  const enterpriseMeta = findEnterpriseCategory(category, subcategory);
   
   const subMeta = SUBCATEGORY_META[subcategory];
   const catMeta = CATEGORY_META[category] || {
@@ -213,19 +216,26 @@ export async function generateMetadata({ params }) {
     desc = `Shop premium ${parsedSub} in the ${parsedCat} collection online in Nepal. Handcrafted solid wood furniture with free delivery.`;
     keywords = `${parsedSub} Nepal, buy ${parsedSub} Kathmandu, ${parsedSub} price Nepal, ${parsedSub} bishwokarma`;
   }
+  const title = enterpriseMeta?.title || `${label} | Sindureghari Furniture Nepal`;
+  const description = enterpriseMeta?.metaDescription || desc;
   
   return {
-    title: `${label} | Sindureghari Furniture Nepal`,
-    description: desc,
-    keywords: keywords,
+    title,
+    description,
+    keywords: enterpriseMeta?.keywords || keywords,
     alternates: {
-      canonical: `${SITE_URL}/category/${category}/${subcategory}`,
+      canonical: `${SITE_URL}${enterpriseMeta?.path || `/category/${category}/${subcategory}`}`,
     },
     openGraph: {
-      title: `${label} | Sindureghari Furniture Nepal`,
-      description: desc,
-      url: `${SITE_URL}/category/${category}/${subcategory}`,
+      title,
+      description,
+      url: `${SITE_URL}${enterpriseMeta?.path || `/category/${category}/${subcategory}`}`,
       type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
     robots: {
       index: true,
@@ -235,6 +245,45 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function Page() {
-  return <CategoryPage />;
+export default async function Page({ params }) {
+  const { category, subcategory } = await params;
+  const enterpriseMeta = findEnterpriseCategory(category, subcategory);
+  const parent = enterpriseMeta?.parent;
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Furniture", item: `${SITE_URL}/products` },
+      parent && {
+        "@type": "ListItem",
+        position: 3,
+        name: parent.name,
+        item: `${SITE_URL}${parent.path}`
+      },
+      {
+        "@type": "ListItem",
+        position: parent ? 4 : 3,
+        name: enterpriseMeta?.name || subcategory.replace(/-/g, " "),
+        item: `${SITE_URL}${enterpriseMeta?.path || `/category/${category}/${subcategory}`}`
+      }
+    ].filter(Boolean)
+  };
+
+  const schema = enterpriseMeta ? [breadcrumbJsonLd, ...getCategorySchema(enterpriseMeta)] : [breadcrumbJsonLd];
+
+  return (
+    <>
+      {schema.map((item, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(item) }}
+        />
+      ))}
+      <CategoryPage />
+      <CategoryAuthorityContent category={enterpriseMeta || parent} />
+    </>
+  );
 }
