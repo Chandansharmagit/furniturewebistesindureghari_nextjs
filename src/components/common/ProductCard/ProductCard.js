@@ -6,7 +6,25 @@ import { Star, Eye, X, Heart, ShoppingCart, Shield, Truck, Wrench } from 'lucide
 import Link from 'next/link';
 import { useCart } from '../../../context/CartContext';
 import { productSeoPath } from '../../../data/nepalSeo';
+import { API_BASE_URL } from '../../../config/api';
 import './ProductCard.css';
+
+const FALLBACK_IMAGE = '/images/placeholder.svg';
+
+const resolveImageUrl = (imagePath) => {
+    if (!imagePath || typeof imagePath !== 'string') return FALLBACK_IMAGE;
+    if (imagePath.startsWith('data:') || imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
+    if (imagePath.startsWith('/assets/') || imagePath.startsWith('/images/')) return imagePath;
+    if (imagePath.startsWith('/')) return `${API_BASE_URL}${imagePath}`;
+    return imagePath;
+};
+
+const useFallbackImage = (event) => {
+    const image = event.currentTarget;
+    if (image.src.endsWith(FALLBACK_IMAGE)) return;
+    image.onerror = null;
+    image.src = FALLBACK_IMAGE;
+};
 
 const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
     const {
@@ -38,7 +56,7 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
     const productHref = productSeoPath(product);
 
     // Resolve image from multiple possible shapes
-    let displayImage = imageUrl || image1 || '/images/placeholder.jpg';
+    let displayImage = imageUrl || image1 || FALLBACK_IMAGE;
     if (images && images.length > 0) displayImage = images[0];
     if (imageUrls) {
         try {
@@ -46,6 +64,7 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
             if (parsed.length > 0) displayImage = parsed[0];
         } catch (e) { /* keep existing */ }
     }
+    displayImage = resolveImageUrl(displayImage);
 
     const displayRating = rating || 4.9;
     const displayReviews = reviewCount || 42;
@@ -105,7 +124,7 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
                         src={displayImage}
                         alt={name}
                         loading="lazy"
-                        onError={(e) => { e.target.src = '/images/placeholder.jpg'; }}
+                        onError={useFallbackImage}
                     />
                     <div className="card-overlay"></div>
                 </div>
@@ -188,12 +207,10 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
                                 <div className="modal-gallery-pane">
                                     <div className="modal-main-image-wrapper">
                                         <img
-                                            src={activeImage || displayImage}
+                                            src={activeImage ? resolveImageUrl(activeImage) : displayImage}
                                             alt={name}
                                             className="modal-view-image"
-                                            onError={(e) => {
-                                                e.target.src = '/images/placeholder.jpg';
-                                            }}
+                                            onError={useFallbackImage}
                                         />
                                     </div>
                                     {/* Thumbnails array if multiple exist */}
@@ -215,7 +232,7 @@ const ProductCard = ({ product, hideInfo = false, hidePrice = false }) => {
                                                                 setActiveImage(img);
                                                             }}
                                                         >
-                                                            <img src={img} alt={`thumbnail-${idx}`} onError={(e) => { e.target.src = '/images/placeholder.jpg'; }} />
+                                                            <img src={resolveImageUrl(img)} alt={`thumbnail-${idx}`} onError={useFallbackImage} />
                                                         </button>
                                                     ))}
                                                 </div>

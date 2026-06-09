@@ -199,8 +199,8 @@
     transform: translateY(-5px);
 }
 
-.royal-hero-image-left img,
-.royal-hero-image-right img {
+  .royal-hero-image-left img,
+  .royal-hero-image-right img {
     width: 100%;
     height: 200px;
     object-fit: cover;
@@ -571,5 +571,60 @@
 
     .dashain-featured-image {
         height: 200px;
+    }
+}
+
+/* Bento layout for older royal product grids */
+@media (min-width: 761px) {
+    .royal-products-grid {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        grid-auto-rows: 156px;
+        grid-auto-flow: dense;
+        gap: 22px;
+    }
+
+    .royal-product-card {
+        grid-column: span 4;
+        grid-row: span 3;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .royal-product-image-wrapper {
+        height: 232px;
+        flex: 0 0 auto;
+    }
+
+    .royal-product-info {
+        flex: 1;
+    }
+
+    .royal-product-card:nth-child(8n + 1) {
+        grid-column: span 6;
+    }
+
+    .royal-product-card:nth-child(8n + 2),
+    .royal-product-card:nth-child(8n + 3) {
+        grid-column: span 3;
+    }
+
+    .royal-product-card:nth-child(8n + 7) {
+        grid-column: span 5;
+    }
+
+    .royal-product-card:nth-child(8n + 8) {
+        grid-column: span 7;
+    }
+}
+
+@media (min-width: 761px) and (max-width: 1400px) {
+    .royal-products-grid {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+
+    .royal-product-card,
+    .royal-product-card:nth-child(n) {
+        grid-column: span 4;
     }
 }

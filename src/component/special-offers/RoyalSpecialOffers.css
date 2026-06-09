@@ -445,6 +445,40 @@
 
   .royal-special-view-all-btn,
   .royal-special-banner-button {
-    width: 100%;
+      width: 100%;
+    }
+  }
+
+/* Landing page royal offers should fill every row cleanly */
+@media (min-width: 761px) {
+  .royal-special-products-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: auto;
+    grid-auto-flow: row;
+    gap: 18px;
+  }
+
+  .royal-special-product-card {
+    grid-column: auto;
+    grid-row: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .royal-special-product-image-wrapper {
+    height: 230px;
+    aspect-ratio: auto;
+    flex: 0 0 auto;
+  }
+
+  .royal-special-product-info {
+    flex: 1;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1400px) {
+  .royal-special-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

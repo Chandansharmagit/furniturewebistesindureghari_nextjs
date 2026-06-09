@@ -1,8 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import SEOComponent from '../../components/SEO/SEOComponent';
 import { Link } from 'react-router-dom';
-import { buildApiUrl, PRODUCT_ENDPOINTS } from '../../config/api';
+import { API_BASE_URL, buildApiUrl, PRODUCT_ENDPOINTS } from '../../config/api';
 import './SpecialOffersAll.css';
+
+const FALLBACK_IMAGE = '/images/placeholder.svg';
+
+const resolveOfferImage = (product) => {
+    const image = product?.imageUrl || product?.image1 || product?.image_paths?.[0] || product?.images?.[0];
+    if (!image || typeof image !== 'string') return FALLBACK_IMAGE;
+    if (image.startsWith('data:') || image.startsWith('http://') || image.startsWith('https://')) return image;
+    if (image.startsWith('/assets/') || image.startsWith('/images/')) return image;
+    if (image.startsWith('/')) return `${API_BASE_URL}${image}`;
+    return image;
+};
+
+const useFallbackImage = (event) => {
+    const image = event.currentTarget;
+    if (image.src.endsWith(FALLBACK_IMAGE)) return;
+    image.onerror = null;
+    image.src = FALLBACK_IMAGE;
+};
 
 const SpecialOffersAll = () => {
     const [products, setProducts] = useState([]);
@@ -125,17 +143,26 @@ const SpecialOffersAll = () => {
                 {/* Header Section */}
                 <div className="special-all-header">
                     <div className="special-all-header-content">
+                        <span className="special-all-eyebrow">Limited edition furniture deals</span>
                         <h1 className="special-all-title">Royal Special Offers</h1>
                         <p className="special-all-subtitle">
-                            Discover all our exclusive deals with amazing discounts on premium furniture
+                            Curated premium sofas, beds, dining sets and statement pieces with refined finishes, better pricing and delivery support across Nepal.
                         </p>
+                        <div className="special-all-hero-actions" aria-label="Offer highlights">
+                            <span>Handcrafted wood</span>
+                            <span>Best-value bundles</span>
+                            <span>Until stock lasts</span>
+                        </div>
                     </div>
                 </div>
 
                 {/* Products Grid */}
                 <div className="special-all-products-section">
                     <div className="special-all-section-header">
-                        <h2 className="special-all-section-title">All Premium Special Offers ({products.length} items)</h2>
+                        <div>
+                            <span className="special-all-section-kicker">Selected for this season</span>
+                            <h2 className="special-all-section-title">Premium Special Offers ({products.length} items)</h2>
+                        </div>
                     </div>
                     {products.length === 0 ? (
                         <div className="special-all-error">
@@ -151,10 +178,11 @@ const SpecialOffersAll = () => {
                             <div key={product.id} className="special-all-product-card">
                                 <div className="special-all-product-image-wrapper">
                                     <img
-                                        src={product.imageUrl || '/api/placeholder/300/250'}
+                                        src={resolveOfferImage(product)}
                                         alt={product.name || 'Product'}
                                         className="special-all-product-image"
                                         loading="lazy"
+                                        onError={useFallbackImage}
                                     />
                                     {product.old_price && product.new_price && parseFloat(product.old_price) > parseFloat(product.new_price) && (
                                         <div className="special-all-discount-badge">
@@ -202,8 +230,8 @@ const SpecialOffersAll = () => {
                 {products.length > 0 && (
                     <div className="special-all-special-banner">
                     <div className="special-all-banner-content">
-                        <h3>🎉 Limited Time Premium Offers!</h3>
-                        <p>Do not miss out on these exclusive deals. Offer valid until stocks last!</p>
+                        <h3>Limited Time Premium Offers</h3>
+                        <p>Reserve the pieces you love before the current batch sells out.</p>
                         <Link to="/contact" className="special-all-contact-btn">
                             Contact Us for More Deals
                         </Link>

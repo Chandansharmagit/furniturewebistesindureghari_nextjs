@@ -100,6 +100,8 @@ export default function ProductDetails({ productId }) {
     const [isAddingToCart, setIsAddingToCart] = useState(false);
 
     const [email, setEmail] = useState('');
+    const [isCouponOpen, setIsCouponOpen] = useState(false);
+    const [isPriceAlertOpen, setIsPriceAlertOpen] = useState(false);
     const [priceAlertMessage, setPriceAlertMessage] = useState('');
     const [couponValidation, setCouponValidation] = useState('');
     const [validationResult, setValidationResult] = useState(null);
@@ -928,7 +930,7 @@ Write 3 compact bullets: best room fit, why it is worth buying, and one buying c
                             </p>
                         ) : (
                             <p className="pd-unlock-line">
-                                Get today&apos;s instant extra discount on this product <button type="button" onClick={() => setCouponValidation('')}>Unlock Now!</button>
+                                Get today&apos;s instant extra discount on this product <button type="button" onClick={() => setIsCouponOpen(true)}>Unlock Now!</button>
                             </p>
                         )}
                     </div>
@@ -999,54 +1001,82 @@ Write 3 compact bullets: best room fit, why it is worth buying, and one buying c
                     </div>
 
                     {/* Coupon Section */}
-                    <div className="coupon-section">
-                        <label className="coupon-label">Apply Coupon:</label>
-                        <div className="coupon-controls">
-                            <input
-                                type="text"
-                                value={couponValidation}
-                                onChange={(e) => setCouponValidation(e.target.value)}
-                                placeholder="Enter coupon code"
-                                className="coupon-input"
-                            />
-                            <button
-                                className="apply-coupon-btn"
-                                onClick={validateCoupon}
-                            >
-                                Apply
-                            </button>
+                    <div className={`coupon-section pd-expand-card ${isCouponOpen ? 'is-open' : ''}`}>
+                        <button
+                            type="button"
+                            className="pd-expand-trigger"
+                            onClick={() => setIsCouponOpen((open) => !open)}
+                            aria-expanded={isCouponOpen}
+                        >
+                            <span>
+                                <strong>Apply Coupon</strong>
+                                <small>{validationResult?.valid ? `${parseFloat(validationResult.coupon.discount_percentage)}% discount active` : 'Have a code? Add it here'}</small>
+                            </span>
+                            <ChevronDown size={20} />
+                        </button>
+                        <div className="pd-expand-body">
+                            <label className="coupon-label">Coupon code</label>
+                            <div className="coupon-controls">
+                                <input
+                                    type="text"
+                                    value={couponValidation}
+                                    onChange={(e) => setCouponValidation(e.target.value)}
+                                    placeholder="Enter coupon code"
+                                    className="coupon-input"
+                                />
+                                <button
+                                    className="apply-coupon-btn"
+                                    onClick={validateCoupon}
+                                >
+                                    Apply
+                                </button>
+                            </div>
+                            {validationResult && (
+                                <p className={`coupon-message ${validationResult.valid ? 'success' : 'error'}`}>
+                                    {validationResult.message}
+                                    {validationResult.valid && ` (${parseFloat(validationResult.coupon.discount_percentage)}% off)`}
+                                </p>
+                            )}
                         </div>
-                        {validationResult && (
-                            <p className={`coupon-message ${validationResult.valid ? 'success' : 'error'}`}>
-                                {validationResult.message}
-                                {validationResult.valid && ` (${parseFloat(validationResult.coupon.discount_percentage)}% off)`}
-                            </p>
-                        )}
                     </div>
 
                     {/* Price Drop Alert */}
-                    <div className="price-alert-section">
-                        <label className="price-alert-label">{isOutOfStock ? 'Restock Alert:' : 'Price Drop Alert:'}</label>
-                        <div className="price-alert-controls">
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder={isOutOfStock ? 'Email for arrival update' : 'Enter your email'}
-                                className="price-alert-input"
-                            />
-                            <button
-                                className="price-alert-btn"
-                                onClick={handlePriceAlert}
-                            >
-                                {isOutOfStock ? 'Mail Me' : 'Notify Me'}
-                            </button>
+                    <div className={`price-alert-section pd-expand-card ${isPriceAlertOpen ? 'is-open' : ''}`}>
+                        <button
+                            type="button"
+                            className="pd-expand-trigger"
+                            onClick={() => setIsPriceAlertOpen((open) => !open)}
+                            aria-expanded={isPriceAlertOpen}
+                        >
+                            <span>
+                                <strong>{isOutOfStock ? 'Restock Alert' : 'Price Drop Alert'}</strong>
+                                <small>{isOutOfStock ? 'Get mailed when this arrives' : 'Get mailed if the price changes'}</small>
+                            </span>
+                            <ChevronDown size={20} />
+                        </button>
+                        <div className="pd-expand-body">
+                            <label className="price-alert-label">{isOutOfStock ? 'Restock email' : 'Alert email'}</label>
+                            <div className="price-alert-controls">
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder={isOutOfStock ? 'Email for arrival update' : 'Enter your email'}
+                                    className="price-alert-input"
+                                />
+                                <button
+                                    className="price-alert-btn"
+                                    onClick={handlePriceAlert}
+                                >
+                                    {isOutOfStock ? 'Mail Me' : 'Notify Me'}
+                                </button>
+                            </div>
+                            {priceAlertMessage && (
+                                <p className={`price-alert-message ${priceAlertMessage.includes('Failed') ? 'error' : 'success'}`}>
+                                    {priceAlertMessage}
+                                </p>
+                            )}
                         </div>
-                        {priceAlertMessage && (
-                            <p className={`price-alert-message ${priceAlertMessage.includes('Failed') ? 'error' : 'success'}`}>
-                                {priceAlertMessage}
-                            </p>
-                        )}
                     </div>
 
                     {/* Product Details Section */}
@@ -1089,6 +1119,7 @@ Write 3 compact bullets: best room fit, why it is worth buying, and one buying c
                         </div>
                     </div>
 
+                    <div className="pd-sticky-purchase">
                     {/* Quantity Selector */}
                     <div className="quantity-section">
                         <label className="quantity-label">Quantity:</label>
@@ -1159,6 +1190,8 @@ Write 3 compact bullets: best room fit, why it is worth buying, and one buying c
                         <div className="total-price">
                             <span>Total: ₹{formatPrice(calculateFinalPrice())}</span>
                         </div>
+                    </div>
+
                     </div>
 
                     {/* EMI Plans Modal */}
