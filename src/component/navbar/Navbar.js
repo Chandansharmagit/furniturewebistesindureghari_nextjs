@@ -3,7 +3,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { FiChevronDown, FiChevronRight, FiArrowRight, FiGrid } from 'react-icons/fi';
 import { MdOutlineShoppingBag } from 'react-icons/md';
 import { buildApiUrl, PRODUCT_ENDPOINTS } from '../../config/api';
-import { mapCategoriesToNavigation, slugifyCategory } from '../../utils/categoryHelpers';
+import { enterpriseCategories } from '../../data/enterpriseSeo';
+import {
+  mapCategoriesToNavigation,
+  mapEnterpriseCategoriesToNavigation,
+  slugifyCategory,
+} from '../../utils/categoryHelpers';
 import './navbar.css';
 
 const utilityLinks = [
@@ -41,7 +46,9 @@ const Navbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
   }, []);
 
   const dynamicCategories = mapCategoriesToNavigation(adminCategories);
-  const categoryData = [...dynamicCategories, ...utilityLinks];
+  const fallbackCategories = mapEnterpriseCategoriesToNavigation(enterpriseCategories);
+  const navigationCategories = dynamicCategories.length > 0 ? dynamicCategories : fallbackCategories;
+  const categoryData = [...navigationCategories, ...utilityLinks];
 
   const getCategorySlug = (categoryName) => {
     return slugifyCategory(categoryName);

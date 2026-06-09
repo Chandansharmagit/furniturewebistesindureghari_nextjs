@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { ArrowRight, CheckCircle2, ClipboardList, ImageUp, Sparkles } from "lucide-react";
-import { buildApiUrl, CUSTOMER_DATA_ENDPOINTS } from "../../config/api";
+import { APP_ENDPOINTS, buildApiUrl } from "../../config/api";
 import "./OrderRequestPage.css";
 
 const initialForm = {
@@ -77,7 +77,7 @@ export default function OrderRequestPage() {
     setStatus({ type: "", message: "" });
 
     try {
-      const response = await fetch(buildApiUrl(CUSTOMER_DATA_ENDPOINTS.ORDER_REQUESTS), {
+      const response = await fetch(buildApiUrl(APP_ENDPOINTS.ORDER_REQUESTS), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

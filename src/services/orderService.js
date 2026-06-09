@@ -1,4 +1,4 @@
-import { ORDER_ENDPOINTS, buildApiUrl } from '../config/api';
+import { APP_ENDPOINTS, ORDER_ENDPOINTS, buildApiUrl } from '../config/api';
 
 class OrderService {
   // Get customer's orders with pagination and filtering
@@ -176,11 +176,11 @@ class OrderService {
   async trackBySku(sku) {
     try {
       const authToken = localStorage.getItem('authToken');
-      const response = await fetch(`${buildApiUrl(ORDER_ENDPOINTS.LIST)}/track-by-sku/${encodeURIComponent(sku)}`, {
+      const response = await fetch(buildApiUrl(APP_ENDPOINTS.TRACK_ORDER_BY_SKU.replace(':sku', encodeURIComponent(sku))), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
+          ...(authToken ? { Authorization: `Bearer ${authToken}` } : {})
         }
       });
 

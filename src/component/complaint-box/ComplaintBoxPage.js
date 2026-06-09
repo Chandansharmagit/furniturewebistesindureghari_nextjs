@@ -2,7 +2,7 @@
 
 import React, { useMemo, useRef, useState } from "react";
 import { AlertTriangle, ArrowRight, CheckCircle2, FileVideo, ImageUp, ShieldCheck } from "lucide-react";
-import { buildApiUrl, CUSTOMER_DATA_ENDPOINTS } from "../../config/api";
+import { APP_ENDPOINTS, buildApiUrl } from "../../config/api";
 import "./ComplaintBoxPage.css";
 
 const initialForm = {
@@ -60,7 +60,7 @@ export default function ComplaintBoxPage() {
       images.forEach((image) => payload.append("images", image));
       if (video) payload.append("video", video);
 
-      const response = await fetch(buildApiUrl(CUSTOMER_DATA_ENDPOINTS.COMPLAINTS), {
+      const response = await fetch(buildApiUrl(APP_ENDPOINTS.SUPPORT), {
         method: "POST",
         body: payload
       });

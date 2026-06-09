@@ -117,14 +117,24 @@ const API_CONFIG = {
     CUSTOMER_DATA: {
       CONTACT_FORMS: '/api/customer-data/contact-forms',
       FEEDBACK: '/api/customer-data/feedback',
-      ORDER_REQUESTS: '/api/customer-data/order-requests',
-      COMPLAINTS: '/api/customer-data/complaints',
+      ORDER_REQUESTS: '/api/order-requests',
+      COMPLAINTS: '/api/support',
+      SUPPORT: '/api/support',
       CONSULTATION_REQUESTS: '/api/customer-data/consultation-requests',
       SUMMARY: '/api/customer-data/summary',
       UPDATE_CONTACT_STATUS: '/api/customer-data/contact-forms/:id/status',
       UPDATE_FEEDBACK_STATUS: '/api/customer-data/feedback/:id/status',
       UPDATE_ORDER_REQUEST_STATUS: '/api/customer-data/order-requests/:id/status',
       UPDATE_COMPLAINT_STATUS: '/api/customer-data/complaints/:id/status'
+    },
+
+    // Public app feature endpoints
+    APP: {
+      ORDER_REQUESTS: '/api/order-requests',
+      SUPPORT: '/api/support',
+      TRACK_ORDER_BY_SKU: '/api/track-order/sku/:sku',
+      GALLERY: '/api/gallery',
+      GALLERY_DETAIL: '/api/gallery/:id'
     },
  
     // Blog endpoints
@@ -164,5 +174,6 @@ export const SALES_ENDPOINTS = API_CONFIG.ENDPOINTS.SALES;
 export const COUPON_ENDPOINTS = API_CONFIG.ENDPOINTS.COUPONS;
 export const ACTIVITY_ENDPOINTS = API_CONFIG.ENDPOINTS.ACTIVITY;
 export const CUSTOMER_DATA_ENDPOINTS = API_CONFIG.ENDPOINTS.CUSTOMER_DATA;
+export const APP_ENDPOINTS = API_CONFIG.ENDPOINTS.APP;
 export const BLOG_ENDPOINTS = API_CONFIG.ENDPOINTS.BLOG;
 export const AI_ENDPOINTS = API_CONFIG.ENDPOINTS.AI;

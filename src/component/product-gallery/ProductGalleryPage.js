@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ImageIcon, Search, Sparkles } from "lucide-react";
-import { buildApiUrl, PRODUCT_ENDPOINTS } from "../../config/api";
+import { APP_ENDPOINTS, buildApiUrl } from "../../config/api";
 import "./ProductGalleryPage.css";
 
 const parseImages = (product) => {
@@ -32,7 +32,7 @@ export default function ProductGalleryPage() {
 
     const loadProducts = async () => {
       try {
-        const response = await fetch(buildApiUrl(PRODUCT_ENDPOINTS.LIST), { cache: "no-store" });
+        const response = await fetch(buildApiUrl(APP_ENDPOINTS.GALLERY), { cache: "no-store" });
         const data = await response.json();
         const productList = Array.isArray(data) ? data : data.products || data.data || [];
         if (isMounted) setProducts(productList);

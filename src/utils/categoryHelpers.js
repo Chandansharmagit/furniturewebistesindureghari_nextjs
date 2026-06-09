@@ -71,6 +71,31 @@ export const getPublicCategories = (categories = []) =>
     })
     .filter(hasPublicProducts);
 
+export const mapEnterpriseCategoriesToNavigation = (categories = []) =>
+  categories.map((category) => {
+    const slug = category.slug || slugifyCategory(category.name);
+    const children = Array.isArray(category.children) ? category.children : [];
+
+    return {
+      id: category.id || slug,
+      name: category.name,
+      slug,
+      path: category.path || `/category/${slug}`,
+      desc: category.metaDescription || category.seoDescription || `Browse ${category.name} products`,
+      subLinks: children.map((child) => {
+        const childSlug = child.slug || slugifyCategory(child.name);
+
+        return {
+          id: child.id || `${slug}-${childSlug}`,
+          name: child.name,
+          slug: childSlug,
+          path: child.path || `/category/${slug}/${childSlug}`,
+          desc: child.metaDescription || child.seoDescription || `Shop ${child.name}`,
+        };
+      }),
+    };
+  });
+
 export const mapCategoriesToNavigation = (categories = []) =>
   getPublicCategories(categories).map((category) => {
     const slug = category.slug || slugifyCategory(category.name);
