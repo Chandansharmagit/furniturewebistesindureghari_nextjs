@@ -217,6 +217,220 @@
   color: #d32f2f;
 }
 
+.footer-app-download-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 24px;
+  padding: 16px;
+  border: 1px solid rgba(197, 160, 89, 0.16);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 94% 20%, rgba(197, 160, 89, 0.12), transparent 28%),
+    linear-gradient(135deg, #ffffff 0%, #fff9ed 100%);
+  box-shadow: 0 16px 42px rgba(64, 42, 13, 0.07);
+}
+
+.footer-app-icon {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #111111;
+  color: #ffffff;
+  font-size: 1.55rem;
+  box-shadow: 0 12px 24px rgba(17, 17, 17, 0.14);
+}
+
+.footer-app-copy {
+  min-width: 0;
+}
+
+.footer-app-copy span {
+  display: block;
+  margin-bottom: 3px;
+  color: #a1782a;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.footer-app-copy strong {
+  display: block;
+  color: #111111;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.footer-app-copy p {
+  max-width: 660px;
+  margin: 5px 0 0;
+  color: #5f5a51;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.footer-app-download-btn,
+.android-app-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #151515 0%, #3a2a13 100%);
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(17, 17, 17, 0.14);
+}
+
+.android-app-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(16, 12, 8, 0.44);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.android-app-bottom-sheet {
+  position: relative;
+  width: min(860px, 100%);
+  max-height: calc(100dvh - 28px);
+  overflow-y: auto;
+  border: 1px solid rgba(197, 160, 89, 0.22);
+  border-radius: 22px 22px 12px 12px;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(197, 160, 89, 0.16), transparent 28%),
+    #fffdf9;
+  box-shadow: 0 -24px 80px rgba(20, 14, 8, 0.28);
+  padding: 18px;
+}
+
+.android-app-sheet-handle {
+  width: 54px;
+  height: 5px;
+  margin: 0 auto 18px;
+  border-radius: 999px;
+  background: rgba(44, 33, 20, 0.22);
+}
+
+.android-app-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(44, 33, 20, 0.12);
+  border-radius: 50%;
+  background: #ffffff;
+  color: #111111;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(20, 14, 8, 0.08);
+}
+
+.android-app-modal-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 24px;
+  align-items: center;
+  padding: 0 8px 8px;
+}
+
+.android-app-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: #a1782a;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.android-app-modal-text h2 {
+  margin: 0;
+  color: #111111;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.05;
+}
+
+.android-app-modal-text p {
+  max-width: 560px;
+  margin: 12px 0 0;
+  color: #5d574e;
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+.android-app-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0;
+}
+
+.android-app-benefits span {
+  padding: 8px 11px;
+  border: 1px solid rgba(197, 160, 89, 0.18);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #5f4216;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.android-app-qr-panel {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.android-app-qr-frame {
+  width: 212px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(44, 33, 20, 0.1);
+  box-shadow: 0 18px 42px rgba(20, 14, 8, 0.1);
+  padding: 14px;
+}
+
+.android-app-qr-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.android-app-qr-panel small {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #6d6559;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
 /* Links Grid */
 .footer-links-grid {
   display: grid;
@@ -515,6 +729,59 @@
 
   .footer-newsletter-premium p {
     font-size: 0.74rem;
+  }
+
+  .footer-app-download-card {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 12px;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+
+  .footer-app-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 1.3rem;
+  }
+
+  .footer-app-copy strong {
+    font-size: 1rem;
+  }
+
+  .footer-app-copy p {
+    font-size: 0.76rem;
+  }
+
+  .footer-app-download-btn {
+    width: 100%;
+  }
+
+  .android-app-modal-overlay {
+    padding: 10px;
+  }
+
+  .android-app-bottom-sheet {
+    border-radius: 18px 18px 10px 10px;
+    padding: 14px;
+  }
+
+  .android-app-modal-content {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 0;
+  }
+
+  .android-app-qr-panel {
+    order: -1;
+  }
+
+  .android-app-qr-frame {
+    width: min(220px, 72vw);
+  }
+
+  .android-app-whatsapp {
+    width: 100%;
   }
 
   .footer-links-grid {

@@ -5,7 +5,6 @@ const SITE_URL = "https://sinduregharifurniture.shop";
 export const metadata = {
   title: "Ergonomic Office Chairs & Study Table Designs in Nepal | Sindureghari Furniture",
   description: "Shop premium office & study furniture in Nepal. Discover ergonomic office chairs, solid wood study tables, executive desks, and functional storage cabinet designs. High-end workspace solutions.",
-  keywords: "office chair Nepal, study table Kathmandu, office furniture price, executive desks Nepal, study desk designs, office table Nepal, bishwokarma, ergonomic chair Kathmandu",
   alternates: {
     canonical: `${SITE_URL}/office-furniture`,
   },

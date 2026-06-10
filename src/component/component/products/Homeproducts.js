@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Search, SlidersHorizontal, Grid3X3, Grid2X2, 
-  ChevronDown, RefreshCw, Layers, Check, X, Eye
+  ChevronDown, RefreshCw, Layers, Check, X, Eye, Star, MessageCircle, QrCode
 } from 'lucide-react';
 import { API_BASE_URL } from '@/config/api';
 import ProductCard from '../../common/ProductCard/ProductCard';
@@ -14,6 +14,8 @@ import { flattenCategories } from '@/utils/categoryHelpers';
 import './hproduct.css';
 
 const WOOD_TYPES = ['Sheesham Wood', 'Teak Wood', 'Mango Wood', 'Engineered Wood'];
+const GOOGLE_REVIEW_URL = 'https://g.page/r/CSk9ke0-YPVyEBM/review';
+const GOOGLE_REVIEW_QR = '/images/google-review-qr.png';
 
 const FurnitureProductCatalog = () => {
   const [products, setProducts] = useState([]);
@@ -203,6 +205,42 @@ const FurnitureProductCatalog = () => {
 
       {/* ── MAIN PRODUCTS VIEWPORT ── */}
       <div className="catalog-layout-container">
+        <section className="review-priority-panel" aria-labelledby="review-priority-title">
+          <div className="review-priority-copy">
+            <span className="review-priority-kicker">
+              <Star size={16} fill="currentColor" />
+              Customer reviews matter
+            </span>
+            <h2 id="review-priority-title">Happy with your furniture? Help others choose Sindureghari.</h2>
+            <p>
+              Scan the QR or open the review page to share your Google review. Your feedback helps new customers trust
+              our handcrafted furniture and delivery service.
+            </p>
+            <a
+              className="review-priority-link"
+              href={GOOGLE_REVIEW_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageCircle size={18} />
+              <span>Review us on Google</span>
+            </a>
+          </div>
+
+          <a
+            className="review-qr-card"
+            href={GOOGLE_REVIEW_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open Sindureghari Furniture Google review page"
+          >
+            <span className="review-qr-label">
+              <QrCode size={16} />
+              Scan for review
+            </span>
+            <img src={GOOGLE_REVIEW_QR} alt="QR code to review Sindureghari Furniture on Google" />
+          </a>
+        </section>
         
         {/* TOP BAR / CONTROL HUB */}
         <div className="catalog-topbar">

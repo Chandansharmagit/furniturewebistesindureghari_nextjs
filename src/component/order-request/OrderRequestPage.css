@@ -104,6 +104,34 @@
   padding: 26px;
 }
 
+.order-request-mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 6px;
+  border-radius: 16px;
+  background: #f7efe3;
+  border: 1px solid #eadcc9;
+}
+
+.order-request-mode button {
+  min-height: 42px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #705f4c;
+  font: 900 13px "Outfit", sans-serif;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.order-request-mode button.active {
+  background: #2a1a10;
+  color: #f4cf7a;
+  box-shadow: 0 10px 24px rgba(42, 26, 16, 0.16);
+}
+
 .order-request-card-head {
   display: flex;
   align-items: center;
@@ -111,6 +139,51 @@
   padding-bottom: 18px;
   border-bottom: 1px solid #efe5d7;
   margin-bottom: 18px;
+}
+
+.global-process-card {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 12px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(244, 207, 122, 0.18), transparent 34%),
+    #2a1a10;
+}
+
+.global-process-card div {
+  min-height: 82px;
+  padding: 12px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff7e8;
+}
+
+.global-process-card svg,
+.global-process-card strong,
+.global-process-card span {
+  display: block;
+}
+
+.global-process-card svg {
+  color: #f4cf7a;
+  margin-bottom: 8px;
+}
+
+.global-process-card strong {
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.global-process-card span {
+  margin-top: 4px;
+  color: rgba(255, 247, 232, 0.72);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .order-request-card-icon {
@@ -144,6 +217,12 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
+}
+
+.global-request-grid {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #efe5d7;
 }
 
 .order-request-card label {
@@ -343,7 +422,12 @@
   }
 
   .order-request-proof,
-  .order-request-grid {
+  .order-request-grid,
+  .global-process-card {
+    grid-template-columns: 1fr;
+  }
+
+  .order-request-mode {
     grid-template-columns: 1fr;
   }
 }

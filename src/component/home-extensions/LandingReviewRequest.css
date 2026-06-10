@@ -1,0 +1,118 @@
+.landing-review-request {
+  width: min(1500px, calc(100% - 80px));
+  margin: 64px auto -28px;
+  position: relative;
+  z-index: 2;
+  border: 1px solid rgba(219, 181, 103, 0.42);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(238, 188, 84, 0.18), transparent 34%),
+    linear-gradient(135deg, #3a2417 0%, #6a4427 100%);
+  box-shadow: 0 28px 70px rgba(48, 29, 15, 0.22);
+  color: #fff8e8;
+  padding: 34px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px;
+  gap: 32px;
+  align-items: center;
+}
+
+.landing-review-eyebrow {
+  color: #f4d489;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.landing-review-copy h2 {
+  color: #ffffff;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.04;
+  max-width: 820px;
+  margin: 0 0 14px;
+}
+
+.landing-review-copy p {
+  color: rgba(255, 248, 232, 0.82);
+  font-size: 1.02rem;
+  line-height: 1.7;
+  max-width: 760px;
+  margin: 0 0 22px;
+}
+
+.landing-review-button {
+  min-height: 48px;
+  width: fit-content;
+  padding: 0 22px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffe39a, #f3bc51);
+  color: #241408;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+}
+
+.landing-review-qr-card {
+  justify-self: end;
+  width: 154px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #2b1a10;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+}
+
+.landing-review-qr-card span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.landing-review-qr-card img {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+@media (max-width: 860px) {
+  .landing-review-request {
+    width: min(100% - 32px, 620px);
+    grid-template-columns: 1fr;
+    margin-top: 44px;
+    padding: 24px;
+  }
+
+  .landing-review-qr-card {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .landing-review-request {
+    margin-bottom: -12px;
+    padding: 22px;
+  }
+
+  .landing-review-button {
+    width: 100%;
+  }
+}

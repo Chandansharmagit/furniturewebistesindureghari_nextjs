@@ -9,10 +9,8 @@ import Homeappliances from "../component/Homeapplicances/Homeappliances";
 import InspirationGallery from "../component/home-extensions/InspirationGallery";
 import Newproduct from "../component/newproducts/Newproducts";
 import ShoppableRoom from "../component/home-extensions/ShoppableRoom";
-import GoogleReviews from "../component/home-extensions/GoogleReviews";
 import EMIPromo from "../component/emi-promo/EMIPromo";
-import Policy from "../component/component/privacypolicy/privacy";
-import EnterpriseSitelinkSection from "../component/seo/EnterpriseSitelinkSection";
+import LandingReviewRequest from "../component/home-extensions/LandingReviewRequest";
 
 export default function HomePage() {
   return (
@@ -28,10 +26,8 @@ export default function HomePage() {
       <InspirationGallery />
       <Newproduct />
       <ShoppableRoom />
-      <GoogleReviews />
       <EMIPromo />
-      <Policy />
-      <EnterpriseSitelinkSection />
+      <LandingReviewRequest />
     </>
   );
 }

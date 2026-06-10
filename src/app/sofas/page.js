@@ -5,7 +5,6 @@ const SITE_URL = "https://sinduregharifurniture.shop";
 export const metadata = {
   title: "Best Sofa Sets in Nepal | Teak & Wooden Sofa Designs | Sindureghari Furniture",
   description: "Buy premium solid wood sofa sets in Nepal at factory-direct prices. Discover luxury L-shape sofas, teak wood sofa designs, and comfortable recliners. Free home delivery and assembly to Kathmandu, Lalitpur, Pokhara.",
-  keywords: "best sofa set Nepal, wooden sofa design, L-shape sofa price in Nepal, living room furniture Kathmandu, best sofa Nepal, teak wood sofa design, bishwokarma furniture, local furniture showroom",
   alternates: {
     canonical: `${SITE_URL}/sofas`,
   },

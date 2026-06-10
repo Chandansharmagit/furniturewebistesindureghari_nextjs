@@ -1,19 +1,26 @@
 import FurnitureProductCatalog from '@/component/component/products/Homeproducts';
 
-/* ── SSR Metadata for /products ── */
+const SITE_URL = "https://sinduregharifurniture.shop";
+
 export const metadata = {
-  title: "Buy Furniture Online Nepal — Sofas, Beds, Tables",
+  title: "Shop Furniture Online in Nepal",
   description:
-    "Browse 500+ handcrafted wooden furniture pieces. Shop sofas, beds, dining tables, wardrobes & office chairs online. Free delivery to Kathmandu, Lalitpur, Pokhara. Best prices in Nepal.",
+    "Browse sofas, beds, dining tables, wardrobes, office furniture, lighting and home collections from Sindureghari Furniture Nepal.",
   alternates: {
-    canonical: "https://sinduregharifurniture.shop/products",
+    canonical: `${SITE_URL}/products`,
   },
   openGraph: {
-    title: "Shop All Furniture — Sindureghari Furniture Nepal",
+    title: "Shop All Furniture | Sindureghari Furniture Nepal",
     description:
-      "Explore our complete collection of premium handcrafted wooden furniture. Royal sofa sets, king size beds, dining tables & more.",
-    url: "https://sinduregharifurniture.shop/products",
+      "Explore premium furniture collections for Nepali homes, including sofas, beds, dining tables, wardrobes and office furniture.",
+    url: `${SITE_URL}/products`,
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shop Furniture Online in Nepal",
+    description:
+      "Browse premium furniture collections from Sindureghari Furniture Nepal.",
   },
   robots: {
     index: true,
@@ -31,23 +38,36 @@ export default function Page() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://sinduregharifurniture.shop",
+        item: SITE_URL,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "All Furniture",
-        item: "https://sinduregharifurniture.shop/products",
+        item: `${SITE_URL}/products`,
       },
     ],
   };
 
+  const collectionJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Sindureghari Furniture Catalogue",
+    url: `${SITE_URL}/products`,
+    description:
+      "Furniture catalogue for sofas, beds, dining tables, wardrobes, office furniture and lighting.",
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+  };
+
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      {[breadcrumbJsonLd, collectionJsonLd].map((item, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(item) }}
+        />
+      ))}
       <FurnitureProductCatalog />
     </>
   );

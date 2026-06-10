@@ -35,6 +35,11 @@ const ChatbaseWidget = dynamic(() => import("../component/common/ChatbaseWidget"
   ssr: false,
 });
 
+const ReviewPromptPopup = dynamic(() => import("../component/popup/ReviewPromptPopup"), {
+  loading: () => null,
+  ssr: false,
+});
+
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -95,6 +100,7 @@ export default function ClientLayout({ children }) {
           <>
             <PopupManager />
             <CookieConsentBanner />
+            {!isAdminPage && <ReviewPromptPopup />}
             <ChatbaseWidget />
           </>
         )}

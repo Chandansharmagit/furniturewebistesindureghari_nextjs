@@ -4,14 +4,13 @@ const SITE_URL = "https://sinduregharifurniture.shop";
 
 export const metadata = {
   title: "Best Sofa Sets & Living Room Furniture Design in Nepal",
-  description: "Shop the best sofa sets & luxury living room furniture designs in Nepal. Discover premium solid teak wood sofas, L-shape sofas, coffee tables & recliners at factory prices. Free shipping to Kathmandu, Lalitpur, Pokhara.",
-  keywords: "best sofa set Nepal, wooden sofa design, L-shape sofa price in Nepal, living room furniture Kathmandu, best sofa Nepal, teak wood sofa design, bishwokarma furniture, local furniture showroom",
+  description: "Shop premium sofa sets and living room furniture designs in Nepal, including solid wood sofas, L-shape sofas, coffee tables and recliners.",
   alternates: {
     canonical: `${SITE_URL}/living-room-furniture`,
   },
   openGraph: {
     title: "Best Sofa Sets & Living Room Furniture Design in Nepal",
-    description: "Shop the best sofa sets & luxury living room furniture designs in Nepal. Discover premium solid teak wood sofas, L-shape sofas, coffee tables & recliners at factory prices. Free shipping.",
+    description: "Shop premium sofa sets and living room furniture designs in Nepal, including solid wood sofas, L-shape sofas, coffee tables and recliners.",
     url: `${SITE_URL}/living-room-furniture`,
     type: "website",
   },

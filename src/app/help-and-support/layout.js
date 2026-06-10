@@ -2,14 +2,6 @@ export const metadata = {
   title: "Help Center",
   description:
     "Get help with Sindureghari Furniture delivery, EMI plans, warranty, custom furniture, returns, order tracking and customer support in Nepal.",
-  keywords: [
-    "Sindureghari support",
-    "furniture help Nepal",
-    "track furniture order Nepal",
-    "furniture warranty Nepal",
-    "furniture EMI Nepal",
-    "custom furniture help",
-  ],
   alternates: {
     canonical: "https://sinduregharifurniture.shop/help-and-support",
   },
@@ -83,7 +75,7 @@ export default function HelpSupportLayout({ children }) {
     contactPoint: [
       {
         "@type": "ContactPoint",
-        telephone: "+977-9855040000",
+        telephone: "+977-9845427041",
         contactType: "customer service",
         availableLanguage: ["Nepali", "Hindi", "English"],
       },

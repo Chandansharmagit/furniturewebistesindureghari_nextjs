@@ -18,9 +18,11 @@ import {
     ChevronDown,
     Copy,
     CreditCard,
+    Globe2,
     Headphones,
     LockKeyhole,
     MessageCircle,
+    PackageCheck,
     RotateCcw,
     Share2,
     ShieldCheck,
@@ -354,6 +356,19 @@ Product Link: ${window.location.href}`;
     // Handle EMI plan
     const handleEMI = () => {
         setIsEMIPlansModalOpen(true);
+    };
+
+    const handleGlobalQuote = () => {
+        const params = new URLSearchParams({
+            mode: 'international',
+            productId: String(product?.id || ''),
+            product: product?.title || product?.name || 'Furniture product',
+            sku: productSku || '',
+            qty: String(quantity || 1),
+            price: String(calculateFinalPrice() || '')
+        });
+
+        navigate(`/order-request?${params.toString()}`);
     };
 
     // Handle price drop alert
@@ -1193,6 +1208,28 @@ Write 3 compact bullets: best room fit, why it is worth buying, and one buying c
                     </div>
 
                     </div>
+
+                    <section className="pd-global-export" aria-label="International furniture shipping">
+                        <div className="pd-global-copy">
+                            <span className="pd-global-kicker">
+                                <Globe2 size={16} />
+                                Global buyers
+                            </span>
+                            <h3>Ship this furniture outside Nepal</h3>
+                            <p>
+                                Request an export quote with crate packing, freight coordination, documents,
+                                and destination guidance for your country before payment.
+                            </p>
+                        </div>
+                        <div className="pd-global-steps">
+                            <span><PackageCheck size={15} /> Export packing</span>
+                            <span><Truck size={15} /> Freight quote</span>
+                            <span><ShieldCheck size={15} /> Invoice support</span>
+                        </div>
+                        <button type="button" className="pd-global-btn" onClick={handleGlobalQuote}>
+                            Get international quote
+                        </button>
+                    </section>
 
                     {/* EMI Plans Modal */}
                     <EMIPlansModal

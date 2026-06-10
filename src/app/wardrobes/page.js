@@ -5,7 +5,6 @@ const SITE_URL = "https://sinduregharifurniture.shop";
 export const metadata = {
   title: "Wooden Wardrobes & Modular Almirah Designs in Nepal | Sindureghari Furniture",
   description: "Buy premium solid wood wardrobes and modern modular almirahs in Nepal. Custom handcrafted wardrobe designs in seasoned teak & sheesham wood with free delivery and assembly in Kathmandu, Lalitpur, Pokhara.",
-  keywords: "wardrobe design Nepal, wooden wardrobe price Nepal, custom wardrobes Kathmandu, modular almirah design, bedroom wardrobe showroom, bishwokarma furniture, wooden almirah",
   alternates: {
     canonical: `${SITE_URL}/wardrobes`,
   },

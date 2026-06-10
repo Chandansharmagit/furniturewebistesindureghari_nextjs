@@ -1,0 +1,176 @@
+.review-prompt-card,
+.review-prompt-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 96px;
+  z-index: 20020;
+  font-family: inherit;
+}
+
+.review-prompt-card {
+  width: min(360px, calc(100vw - 32px));
+  border: 1px solid rgba(244, 210, 139, 0.5);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 90% 12%, rgba(245, 196, 92, 0.22), transparent 32%),
+    linear-gradient(145deg, #3b2417 0%, #6a4528 100%);
+  box-shadow: 0 24px 60px rgba(35, 18, 8, 0.34);
+  color: #fffaf0;
+  padding: 18px;
+  animation: reviewPromptIn 0.28s ease-out;
+}
+
+.review-prompt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.review-prompt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #f9d98b;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.review-prompt-close {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fffaf0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.review-prompt-card h2 {
+  color: #fff;
+  font-size: 1.45rem;
+  line-height: 1.15;
+  margin: 0 0 10px;
+}
+
+.review-prompt-card p {
+  margin: 0;
+  color: rgba(255, 250, 240, 0.82);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.review-prompt-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.review-prompt-primary,
+.review-prompt-secondary,
+.review-prompt-launcher {
+  border: 0;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.review-prompt-primary {
+  flex: 1;
+  min-height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffe29a, #f3ba4f);
+  color: #231307;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  text-decoration: none;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+}
+
+.review-prompt-secondary {
+  min-height: 46px;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fffaf0;
+}
+
+.review-prompt-qr {
+  margin-top: 14px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #2b1a10;
+  text-decoration: none;
+  display: grid;
+  grid-template-columns: 1fr 86px;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-prompt-qr span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.review-prompt-qr img {
+  width: 86px;
+  height: 86px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.review-prompt-launcher {
+  min-height: 52px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #4a2c1b, #9a5e23);
+  color: #fff8e7;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  box-shadow: 0 16px 34px rgba(35, 18, 8, 0.3);
+}
+
+@keyframes reviewPromptIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .review-prompt-card,
+  .review-prompt-launcher {
+    right: 14px;
+    bottom: 88px;
+  }
+
+  .review-prompt-card {
+    padding: 16px;
+  }
+
+  .review-prompt-actions {
+    flex-direction: column;
+  }
+
+  .review-prompt-secondary {
+    width: 100%;
+  }
+}

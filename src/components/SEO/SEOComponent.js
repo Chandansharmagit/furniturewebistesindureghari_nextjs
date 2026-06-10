@@ -7,7 +7,7 @@ const DEFAULT_OG_IMAGE = 'https://res.cloudinary.com/db5okniim/image/upload/v175
 
 const SEOComponent = ({
   title = "Sindureghari Furniture | Nepal's #1 Premium Handcrafted Furniture Store",
-  description = "Shop Nepal's finest handcrafted furniture at Sindureghari Furniture (Bishwokarma). Premium wooden sofas, beds, dining tables & office furniture. ✓ Free Delivery ✓ EMI Available ✓ Custom Designs. Sindureghari, Chandrapur showroom.",
+  description = "Shop Nepal's finest handcrafted furniture at Sindureghari Furniture. Premium wooden sofas, beds, dining tables and office furniture. Free Delivery, EMI Available and Custom Designs from Sindureghari, Chandrapur.",
   keywords = "sindureghari furniture, bishwokarma furniture, furniture Nepal, sofa set Nepal, dining table Nepal, bedroom furniture Nepal, office furniture Nepal, wooden furniture Nepal, modern furniture Nepal, custom furniture Nepal, furniture Chandrapur, furniture Rautahat, buy furniture online Nepal",
   canonicalUrl,
   ogTitle,
@@ -41,12 +41,13 @@ const SEOComponent = ({
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "FurnitureStore",
-    "name": "Sindureghari Furniture Showroom",
-    "alternateName": ["Sindureghari Furniture", "सिन्दुरेघारी फर्निचर"],
+    "name": SITE_NAME,
+    "legalName": "New Sindureghari Furniture Pvt Ltd",
+    "alternateName": ["Sindureghari Furniture Nepal", "New Sindureghari Furniture", "Sindureghari Furniture Showroom"],
     "image": ogImage,
     "@id": SITE_URL,
     "url": SITE_URL,
-    "telephone": "+977-9800000000",
+    "telephone": "+977-9845427041",
     "priceRange": "Rs.5,000 - Rs.500,000",
     "address": {
       "@type": "PostalAddress",
@@ -72,8 +73,8 @@ const SEOComponent = ({
     "paymentAccepted": ["Cash", "Bank Transfer", "eSewa", "Khalti", "EMI"],
     "currenciesAccepted": "NPR",
     "sameAs": [
-      "https://www.facebook.com/furnituresindureghari",
-      "https://www.instagram.com/furnituresindureghari"
+      "https://www.facebook.com/bishwokarmafurniture",
+      "https://www.instagram.com/sinduregharifurniture"
     ]
   };
 
@@ -90,7 +91,7 @@ const SEOComponent = ({
         {/* Global SEO Tags */}
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content="#8B4513" />
-        <meta name="author" content="Sindureghari Furniture (Bishwokarma)" />
+        <meta name="author" content={SITE_NAME} />
 
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content={finalOgTitle} />

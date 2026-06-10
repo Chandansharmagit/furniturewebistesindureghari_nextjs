@@ -38,7 +38,7 @@ export const PopupProvider = ({ children }) => {
     setPopupData({});
   };
 
-  // Auto-show popups based on conditions (ONLY Login Prompt and Email Newsletter as requested)
+  // Auto-show lower-priority popups after the Google review prompt has had time to be seen.
   useEffect(() => {
     // Check if user is authenticated
     const isAuthenticated = authService.isAuthenticatedWithContext();
@@ -50,7 +50,7 @@ export const PopupProvider = ({ children }) => {
           setActivePopup('loginPrompt');
           setLoginPromptShown(true);
         }
-      }, 5000); // 5 seconds
+      }, 45000);
 
       return () => clearTimeout(loginTimer);
     }
@@ -62,7 +62,7 @@ export const PopupProvider = ({ children }) => {
           setActivePopup('newsletter');
           setNewsletterShown(true);
         }
-      }, 15000); // 15 seconds
+      }, 90000);
 
       return () => clearTimeout(newsletterTimer);
     }

@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 
 const SITE_URL = 'https://sinduregharifurniture.shop';
 const SITE_NAME = 'Sindureghari Furniture';
-const SITE_ICON_URL = `${SITE_URL}/icon.png`;
+const SITE_ICON_URL = `${SITE_URL}/icon-512.png`;
 
 const StructuredData = ({ data, type = "default" }) => {
   if (!data) return null;
@@ -123,7 +123,8 @@ export const OrganizationStructuredData = () => {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": SITE_NAME,
-    "alternateName": ["Sindureghari", "सिन्दुरेघारी फर्निचर"],
+    "legalName": "New Sindureghari Furniture Pvt Ltd",
+    "alternateName": ["Sindureghari Furniture Nepal", "New Sindureghari Furniture", "Sindureghari Furniture Showroom"],
     "url": SITE_URL,
     "logo": {
       "@type": "ImageObject",
@@ -134,7 +135,7 @@ export const OrganizationStructuredData = () => {
     "contactPoint": [
       {
         "@type": "ContactPoint",
-        "telephone": "+977-9800000000",
+        "telephone": "+977-9845427041",
         "contactType": "customer service",
         "areaServed": "NP",
         "availableLanguage": ["English", "Nepali", "Hindi"]
@@ -149,8 +150,8 @@ export const OrganizationStructuredData = () => {
       "addressCountry": "NP"
     },
     "sameAs": [
-      "https://www.facebook.com/furnituresindureghari",
-      "https://www.instagram.com/furnituresindureghari"
+      "https://www.facebook.com/bishwokarmafurniture",
+      "https://www.instagram.com/sinduregharifurniture"
     ],
     "foundingDate": "2020",
     "foundingLocation": "Sindureghari, Chandrapur, Nepal"
@@ -164,7 +165,7 @@ export const WebsiteStructuredData = () => {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": SITE_NAME,
-    "alternateName": "Sindureghari",
+    "alternateName": ["Sindureghari Furniture Nepal", "New Sindureghari Furniture"],
     "url": SITE_URL,
     "potentialAction": {
       "@type": "SearchAction",
@@ -183,12 +184,12 @@ export const LocalBusinessStructuredData = () => {
   const businessData = {
     "@context": "https://schema.org",
     "@type": "FurnitureStore",
-    "name": "Sindureghari Furniture Showroom",
-    "alternateName": "सिन्दुरेघारी फर्निचर",
+    "name": SITE_NAME,
+    "alternateName": ["New Sindureghari Furniture Pvt Ltd", "Sindureghari Furniture Showroom"],
     "description": "Nepal's premium handcrafted furniture store in Sindureghari, Chandrapur. Specializing in wooden sofas, beds, dining sets, office furniture & custom designs with free delivery across Nepal.",
     "url": SITE_URL,
-    "telephone": "+977-9800000000",
-    "email": "info@sinduregharifurniture.shop",
+    "telephone": "+977-9845427041",
+    "email": "support@sinduregharifurniture.shop",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Sindureghari, Chandrapur Municipality",

@@ -5,7 +5,6 @@ const SITE_URL = "https://sinduregharifurniture.shop";
 export const metadata = {
   title: "Grand Chandeliers & Luxury Home Lightings in Nepal | Sindureghari Furniture",
   description: "Explore crystal chandeliers, decorative table lamps, floor lamps, wall sconces & modern ceiling light fixtures. Elevate your home interiors with premium lighting in Nepal.",
-  keywords: "chandelier Nepal, decorative lights Kathmandu, ceiling light Nepal, table lamp, luxury home lights, lighting showroom Nepal, modern lighting Kathmandu",
   alternates: {
     canonical: `${SITE_URL}/lighting`,
   },

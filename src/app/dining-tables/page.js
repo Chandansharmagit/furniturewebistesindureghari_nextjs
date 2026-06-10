@@ -5,7 +5,6 @@ const SITE_URL = "https://sinduregharifurniture.shop";
 export const metadata = {
   title: "Premium Solid Wood Dining Table Sets | Wooden Dining Tables Nepal",
   description: "Shop premium solid wood dining table sets & chairs in Nepal. Handcrafted 4, 6 & 8-seater dining tables in seasoned teak wood at factory prices with free shipping to Kathmandu, Lalitpur, Pokhara.",
-  keywords: "best dining table sets, dining room furniture design, wooden dining table Nepal, 6 seater dining table price, luxury dining table design Kathmandu, teak wood dining set, custom dining furniture, dining chair price Nepal",
   alternates: {
     canonical: `${SITE_URL}/dining-tables`,
   },

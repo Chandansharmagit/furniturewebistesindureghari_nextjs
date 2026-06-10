@@ -5,33 +5,11 @@
  */
 
 import { seoSitelinks } from "@/data/seoSitelinks";
-import { getAllEnterpriseCategoryPages, getProgrammaticLocalPages } from "@/data/enterpriseSeo";
+import { getAllEnterpriseCategoryPages } from "@/data/enterpriseSeo";
+import { fetchGalleryBlogPosts } from "@/data/galleryBlogPosts";
 
 const SITE_URL = "https://sinduregharifurniture.shop";
 const API_URL = process.env.NEXT_PUBLIC_PROD_API_URL || "https://furnituresinduregharibackend.vercel.app";
-
-const SEO_MONEY_PAGES = [
-  "/sofa-set-price-nepal",
-  "/wooden-bed-nepal",
-  "/wardrobe-price-nepal",
-  "/dining-table-nepal",
-  "/office-furniture-nepal",
-  "/wooden-furniture-nepal",
-  "/custom-furniture-nepal",
-  "/sofa-set-nepal",
-  "/wooden-bed-design-nepal",
-  "/furniture-price-guide-nepal-2026",
-];
-
-const CITY_PAGES = [
-  "/furniture-shop-kathmandu",
-  "/furniture-shop-lalitpur",
-  "/furniture-shop-bhaktapur",
-  "/furniture-shop-pokhara",
-  "/furniture-shop-butwal",
-  "/furniture-shop-chitwan",
-  "/furniture-shop-biratnagar",
-];
 
 const STATIC_PAGES = [
   { loc: "/", priority: 1.0, changefreq: "daily" },
@@ -48,16 +26,9 @@ const STATIC_PAGES = [
       ? "daily"
       : "weekly",
   })),
-  ...SEO_MONEY_PAGES.map((loc) => ({ loc, priority: 0.92, changefreq: "weekly" })),
-  ...CITY_PAGES.map((loc) => ({ loc, priority: 0.86, changefreq: "weekly" })),
   ...getAllEnterpriseCategoryPages().map((page) => ({
     loc: page.path,
     priority: page.parent ? 0.88 : page.sitelinkPriority || 0.9,
-    changefreq: "weekly",
-  })),
-  ...getProgrammaticLocalPages().map((page) => ({
-    loc: page.path,
-    priority: 0.84,
     changefreq: "weekly",
   })),
 ];
@@ -109,6 +80,15 @@ export default async function sitemap() {
     priority: page.priority,
   }));
 
+  const galleryBlogEntries = (await fetchGalleryBlogPosts()).map((post) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: post.updated_at
+      ? new Date(post.updated_at).toISOString().split("T")[0]
+      : today,
+    changeFrequency: "monthly",
+    priority: 0.72,
+  }));
+
   // 2. Dynamic category pages from Admin taxonomy
   let categoryEntries = [];
   try {
@@ -131,36 +111,6 @@ export default async function sitemap() {
   } catch (error) {
     console.error("Sitemap: Failed to fetch categories from API:", error.message);
   }
-
-  // 3.5 Programmatic SEO pages (Keywords)
-  const seoKeywords = [
-    "sofas",
-    "sofa-sets",
-    "beds",
-    "wardrobes",
-    "dining-sets",
-    "dining-tables",
-    "dining-chairs",
-    "dressing-tables",
-    "study-tables",
-    "office-chairs",
-    "office-tables",
-    "tv-units",
-    "coffee-tables",
-    "mattresses",
-    "modular-kitchens",
-    "shoe-racks",
-    "computer-tables",
-    "wooden-beds",
-    "cupboards"
-  ];
-
-  const seoEntries = seoKeywords.map((keyword) => ({
-    url: `${SITE_URL}/best-${keyword}-nepal`,
-    lastModified: today,
-    changeFrequency: "weekly",
-    priority: 0.8,
-  }));
 
   // 4. Dynamic product pages from API
   let productEntries = [];
@@ -216,8 +166,8 @@ export default async function sitemap() {
 
   return uniqueSitemapEntries([
     ...staticEntries,
+    ...galleryBlogEntries,
     ...categoryEntries,
-    ...seoEntries,
     ...productEntries,
   ]);
 }

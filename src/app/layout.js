@@ -5,11 +5,13 @@ import { getSiteNavigationJsonLd } from "@/component/seo/SiteLinksJsonLd";
 import { enterpriseCategories } from "@/data/enterpriseSeo";
 
 const SITE_URL = "https://sinduregharifurniture.shop";
-const SITE_ICON_URL = `${SITE_URL}/icon.png`;
+const SITE_NAME = "Sindureghari Furniture";
+const SITE_ICON_URL = `${SITE_URL}/icon-512.png`;
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  applicationName: "Sindureghari Furniture",
+  applicationName: SITE_NAME,
+  referrer: "origin-when-cross-origin",
   manifest: "/manifest.json",
   icons: {
     icon: [
@@ -23,35 +25,20 @@ export const metadata = {
     ],
   },
   title: {
-    default: "Sindureghari Furniture - Buy Sofas, Beds & Wooden Furniture Online Nepal",
-    template: "%s | Sindureghari Furniture Nepal",
+    default: `${SITE_NAME} - Premium Furniture Store in Nepal`,
+    template: `%s | ${SITE_NAME} Nepal`,
   },
   description:
-    "Nepal's premium handcrafted furniture store. Buy wooden sofas, beds, dining tables, wardrobes, lighting and office furniture online with delivery to Kathmandu, Lalitpur, Bhaktapur, Pokhara and across Nepal.",
-  keywords: [
-    "sindureghari furniture",
-    "bishwokarma furniture",
-    "furniture Nepal",
-    "buy furniture online Nepal",
-    "wooden furniture Nepal",
-    "sofa set Nepal",
-    "wooden bed Nepal",
-    "dining table Nepal",
-    "wardrobe Nepal",
-    "office furniture Nepal",
-    "furniture shop Kathmandu",
-    "furniture shop Lalitpur",
-    "custom furniture Nepal",
-  ],
+    "Shop premium sofas, beds, dining tables, wardrobes, office furniture and custom furniture from Sindureghari Furniture with delivery support across Nepal.",
   alternates: {
     canonical: SITE_URL,
   },
   openGraph: {
-    title: "Sindureghari Furniture - Premium Handcrafted Wooden Furniture Nepal",
+    title: `${SITE_NAME} - Premium Furniture Store in Nepal`,
     description:
-      "Shop handcrafted solid wood sofas, luxury beds, dining sets, wardrobes, lighting and office furniture with delivery across Nepal.",
+      "Explore premium sofas, beds, dining sets, wardrobes, lighting and custom furniture with delivery support across Nepal.",
     url: SITE_URL,
-    siteName: "Sindureghari Furniture",
+    siteName: SITE_NAME,
     type: "website",
     locale: "en_NP",
     images: [
@@ -65,14 +52,14 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sindureghari Furniture - Buy Wooden Furniture Online Nepal",
+    title: `${SITE_NAME} - Premium Furniture Store in Nepal`,
     description:
-      "Shop custom handcrafted furniture for Nepali homes with delivery and assembly support.",
+      "Shop premium furniture for Nepali homes with delivery and assembly support.",
     images: ["/images/showroom-exterior.jpg"],
   },
   appleWebApp: {
     capable: true,
-    title: "Sindureghari Furniture",
+    title: SITE_NAME,
     statusBarStyle: "default",
   },
   robots: {
@@ -86,8 +73,9 @@ export const metadata = {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
   },
   other: {
-    "application-name": "Sindureghari Furniture",
-    "apple-mobile-web-app-title": "Sindureghari Furniture",
+    "application-name": SITE_NAME,
+    "apple-mobile-web-app-title": SITE_NAME,
+    "og:site_name": SITE_NAME,
     "geo.region": "NP",
     "geo.placename": "Chandrapur, Rautahat",
     "geo.position": "27.1352;85.2023",
@@ -101,8 +89,9 @@ const siteJsonLd = {
     {
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
-      name: "Sindureghari Furniture",
-      alternateName: ["Bishwokarma Furniture", "Bishwokarma Woodcraft", "Sindureghari Furniture Nepal"],
+      name: SITE_NAME,
+      legalName: "New Sindureghari Furniture Pvt Ltd",
+      alternateName: ["Sindureghari Furniture Nepal", "New Sindureghari Furniture", "Sindureghari Furniture Showroom"],
       url: SITE_URL,
       logo: {
         "@type": "ImageObject",
@@ -112,7 +101,7 @@ const siteJsonLd = {
       },
       description:
         "Nepal's premium handcrafted wooden furniture brand for sofas, beds, dining tables, wardrobes, lighting, office furniture and custom interiors.",
-      telephone: "+977-9855040000",
+      telephone: "+977-9845427041",
       email: "support@sinduregharifurniture.shop",
       address: {
         "@type": "PostalAddress",
@@ -130,13 +119,14 @@ const siteJsonLd = {
     {
       "@type": ["FurnitureStore", "LocalBusiness"],
       "@id": `${SITE_URL}/#furniturestore`,
-      name: "Sindureghari Furniture Showroom",
+      name: SITE_NAME,
+      alternateName: ["New Sindureghari Furniture Pvt Ltd", "Sindureghari Furniture Showroom"],
       url: SITE_URL,
       logo: SITE_ICON_URL,
       image: `${SITE_URL}/images/showroom-exterior.jpg`,
       description:
         "Visit Sindureghari Furniture showroom for solid wood sofa sets, beds, dining tables, wardrobes, office furniture, lighting and custom furniture in Nepal.",
-      telephone: "+977-9855040000",
+      telephone: "+977-9845427041",
       priceRange: "Rs 5,000 - Rs 5,00,000",
       currenciesAccepted: "NPR",
       paymentAccepted: "Cash, Bank Transfer, eSewa, Khalti, EMI",
@@ -188,10 +178,11 @@ const siteJsonLd = {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
       url: SITE_URL,
-      name: "Sindureghari Furniture",
-      alternateName: ["Bishwokarma Furniture", "Sindureghari Furniture Nepal"],
+      name: SITE_NAME,
+      alternateName: ["Sindureghari Furniture Nepal", "New Sindureghari Furniture"],
       description: "Buy premium handcrafted wooden furniture online in Nepal.",
       publisher: { "@id": `${SITE_URL}/#organization` },
+      inLanguage: "en-NP",
       potentialAction: {
         "@type": "SearchAction",
         target: {

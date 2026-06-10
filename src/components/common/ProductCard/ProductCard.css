@@ -625,6 +625,17 @@
     min-height: 0;
     max-height: none;
     aspect-ratio: auto;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.features-grid .card-media,
+.bkf-search__grid .card-media,
+.recommendations-grid .card-media,
+.features-grid .card-media img,
+.bkf-search__grid .card-media img,
+.recommendations-grid .card-media img {
+    border-radius: 12px;
 }
 
 .features-grid > :nth-child(8n + 1),

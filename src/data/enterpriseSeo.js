@@ -9,7 +9,6 @@ export const enterpriseCategories = [
     metaDescription:
       "Shop premium living room furniture in Nepal: wooden sofa sets, coffee tables, TV units, recliners and side tables handcrafted by Sindureghari Furniture.",
     h1: "Living Room Furniture in Nepal",
-    keywords: ["living room furniture Nepal", "sofa set Nepal", "coffee table Nepal", "TV unit Nepal"],
     sitelinkPriority: 0.96,
     intro:
       "A living room should feel welcoming, durable and worthy of daily family life. Sindureghari Furniture builds premium living room furniture in Nepal using seasoned hardwood, thoughtful proportions and finishes made for Nepali homes. From compact apartments in Kathmandu to larger family homes in Pokhara, our sofa sets, TV units, coffee tables, recliners and side tables are planned around comfort, visual balance and long-term strength.",
@@ -41,7 +40,6 @@ export const enterpriseCategories = [
     metaDescription:
       "Buy bedroom furniture in Nepal: solid wood beds, wardrobes, dressing tables and bedside tables handcrafted for premium homes.",
     h1: "Bedroom Furniture in Nepal",
-    keywords: ["bed Nepal", "wardrobe Nepal", "bedroom furniture Nepal", "wooden bed Nepal"],
     sitelinkPriority: 0.95,
     intro:
       "Bedroom furniture needs to support rest, storage and daily routine without making the room feel crowded. Sindureghari designs bedroom furniture in Nepal with solid construction, warm wood finishes and practical storage. Our beds, wardrobes, dressing tables and bedside tables are made for long-term use and can be coordinated as a complete set.",
@@ -72,7 +70,6 @@ export const enterpriseCategories = [
     metaDescription:
       "Shop dining room furniture in Nepal: solid wood dining tables, dining chairs and complete dining sets for family homes.",
     h1: "Dining Room Furniture in Nepal",
-    keywords: ["dining table Nepal", "dining room furniture Nepal", "dining set Nepal"],
     sitelinkPriority: 0.94,
     intro:
       "Dining furniture is where family habits, hosting and daily meals meet. Sindureghari Furniture offers dining room furniture in Nepal with strong table frames, comfortable dining chairs and finishes that suit traditional and modern interiors. Our dining tables and dining sets are built for everyday use, not just showroom looks.",
@@ -103,7 +100,6 @@ export const enterpriseCategories = [
     metaDescription:
       "Buy study room furniture in Nepal: study tables, office chairs and bookshelves for home offices, students and workspaces.",
     h1: "Study Room Furniture in Nepal",
-    keywords: ["study table Nepal", "office chair Nepal", "bookshelf Nepal"],
     sitelinkPriority: 0.92,
     intro:
       "A productive study room needs a comfortable desk, supportive seating and enough storage to keep work clear. Sindureghari Furniture builds study room furniture in Nepal for students, professionals and home offices. Our study tables, office chairs and bookshelves bring ergonomic planning together with a premium wooden character.",
@@ -134,7 +130,6 @@ export const enterpriseCategories = [
     metaDescription:
       "Shop outdoor furniture in Nepal: garden swings, outdoor chairs and patio sets built for balconies, gardens and terraces.",
     h1: "Outdoor Furniture in Nepal",
-    keywords: ["outdoor furniture Nepal", "garden swing Nepal", "patio furniture Nepal"],
     sitelinkPriority: 0.9,
     intro:
       "Outdoor furniture must handle sunlight, dust, moisture and regular movement while still feeling comfortable. Sindureghari Furniture makes outdoor furniture in Nepal for terraces, gardens, balconies and hospitality spaces. Our garden swings, patio sets and outdoor chairs are selected for durable structure and relaxed comfort.",
@@ -165,7 +160,6 @@ export const enterpriseCategories = [
     metaDescription:
       "Shop premium lighting in Nepal: chandeliers, floor lamps and wall lights for living rooms, bedrooms and dining spaces.",
     h1: "Lighting in Nepal",
-    keywords: ["lighting Nepal", "chandelier Nepal", "floor lamp Nepal", "wall light Nepal"],
     sitelinkPriority: 0.88,
     intro:
       "Lighting changes the mood of a room faster than any other interior element. Sindureghari offers chandeliers, floor lamps and wall lights in Nepal for premium homes, hotels and showrooms. The goal is not only brightness but warmth, proportion and atmosphere.",
@@ -199,47 +193,6 @@ export const prioritySitelinks = [
   enterpriseCategories[5]
 ];
 
-export const localSeoCities = [
-  { city: "Kathmandu", slug: "kathmandu" },
-  { city: "Lalitpur", slug: "lalitpur" },
-  { city: "Bhaktapur", slug: "bhaktapur" },
-  { city: "Pokhara", slug: "pokhara" },
-  { city: "Chitwan", slug: "chitwan" },
-  { city: "Butwal", slug: "butwal" },
-  { city: "Biratnagar", slug: "biratnagar" },
-  { city: "Birgunj", slug: "birgunj" },
-  { city: "Dharan", slug: "dharan" },
-  { city: "Itahari", slug: "itahari" },
-  { city: "Hetauda", slug: "hetauda" },
-  { city: "Janakpur", slug: "janakpur" },
-  { city: "Nepalgunj", slug: "nepalgunj" },
-  { city: "Dhangadhi", slug: "dhangadhi" },
-  { city: "Bharatpur", slug: "bharatpur" },
-  { city: "Banepa", slug: "banepa" },
-  { city: "Dhulikhel", slug: "dhulikhel" },
-  { city: "Birtamod", slug: "birtamod" },
-  { city: "Tulsipur", slug: "tulsipur" },
-  { city: "Ghorahi", slug: "ghorahi" },
-  { city: "Chandrapur", slug: "chandrapur" },
-  { city: "Rautahat", slug: "rautahat" },
-  { city: "Damak", slug: "damak" },
-  { city: "Kirtipur", slug: "kirtipur" }
-];
-
-export const localSeoCollections = [
-  { name: "Sofa Set", slug: "sofa-set", categoryPath: "/category/living-room/sofa-sets" },
-  { name: "Beds", slug: "beds", categoryPath: "/category/bedroom/beds" },
-  { name: "Wardrobes", slug: "wardrobes", categoryPath: "/category/bedroom/wardrobes" },
-  { name: "Dining Tables", slug: "dining-tables", categoryPath: "/category/dining-room/dining-tables" },
-  { name: "Dining Sets", slug: "dining-sets", categoryPath: "/category/dining-room/dining-sets" },
-  { name: "Study Tables", slug: "study-tables", categoryPath: "/category/study-room/study-tables" },
-  { name: "Office Chairs", slug: "office-chairs", categoryPath: "/category/study-room/office-chairs" },
-  { name: "Coffee Tables", slug: "coffee-tables", categoryPath: "/category/living-room/coffee-tables" },
-  { name: "TV Units", slug: "tv-units", categoryPath: "/category/living-room/tv-units" },
-  { name: "Outdoor Furniture", slug: "outdoor-furniture", categoryPath: "/category/outdoor-furniture" },
-  { name: "Lighting", slug: "lighting", categoryPath: "/category/lighting" }
-];
-
 export const getAllEnterpriseCategoryPages = () =>
   enterpriseCategories.flatMap((category) => [
     category,
@@ -256,26 +209,3 @@ export const findEnterpriseCategory = (categorySlug, subcategorySlug) => {
   const child = category.children.find((item) => item.slug === subcategorySlug);
   return child ? { ...child, parent: category } : null;
 };
-
-export const findProgrammaticLocalPage = (slug = "") => {
-  const normalizedSlug = String(slug);
-  const city = localSeoCities.find((item) => normalizedSlug.endsWith(`-in-${item.slug}`));
-  if (!city) return null;
-  const collectionSlug = normalizedSlug.replace(`-in-${city.slug}`, "");
-  const collection = localSeoCollections.find((item) => item.slug === collectionSlug);
-  if (!collection || !city) return null;
-  return {
-    slug: normalizedSlug,
-    collection,
-    city,
-    path: `/${normalizedSlug}`,
-    title: `${collection.name} in ${city.city} | Premium Wooden Furniture Nepal`,
-    h1: `${collection.name} in ${city.city}`,
-    metaDescription: `Shop premium ${collection.name.toLowerCase()} in ${city.city}. Sindureghari Furniture offers handcrafted wooden furniture, custom designs and delivery across Nepal.`,
-  };
-};
-
-export const getProgrammaticLocalPages = () =>
-  localSeoCollections.flatMap((collection) =>
-    localSeoCities.map((city) => findProgrammaticLocalPage(`${collection.slug}-in-${city.slug}`))
-  );
