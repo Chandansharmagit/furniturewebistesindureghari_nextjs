@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Search, ChevronRight, Grid3X3, Mic } from 'lucide-react';
+import { Search, ChevronRight, Grid3X3, Mic, Sparkles, SlidersHorizontal } from 'lucide-react';
 import { buildCategoryPath, flattenCategories } from '../../../utils/categoryHelpers';
 import '../navbar.css';
 
@@ -15,10 +15,91 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
     const [isListening, setIsListening] = useState(false);
     const [voiceSupported, setVoiceSupported] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [popularTerms, setPopularTerms] = useState([]);
+    const [keywordIndex, setKeywordIndex] = useState(0);
     const searchInputRef = useRef(null);
     const debounceTimeout = useRef(null);
     const recognitionRef = useRef(null);
     const navigate = useNavigate();
+
+    const fallbackKeywords = [
+        'sofa set price in Nepal',
+        'wooden bed with storage',
+        'teak dining table',
+        'custom wardrobe',
+        'office study table',
+        'living room furniture',
+        'furniture under Rs. 50000',
+        'handmade furniture Nepal'
+    ];
+
+    const aiPrompts = [
+        'Show sofa sets under Rs. 50000',
+        'Find teak wood dining tables',
+        'Best storage beds for bedroom',
+        'Custom wardrobe for small room',
+        'Premium living room furniture',
+        'In stock office study tables'
+    ];
+
+    const extractSmartFilters = (query) => {
+        const normalized = query.toLowerCase();
+        const filters = {};
+        const underMatch = normalized.match(/(?:under|below|less than|upto|up to)\s*(?:rs\.?|npr)?\s*([0-9,]+)/i);
+        const aboveMatch = normalized.match(/(?:above|over|more than)\s*(?:rs\.?|npr)?\s*([0-9,]+)/i);
+        const betweenMatch = normalized.match(/(?:between)\s*(?:rs\.?|npr)?\s*([0-9,]+)\s*(?:and|-|to)\s*(?:rs\.?|npr)?\s*([0-9,]+)/i);
+
+        if (betweenMatch) {
+            filters.minPrice = Number(betweenMatch[1].replace(/,/g, ''));
+            filters.maxPrice = Number(betweenMatch[2].replace(/,/g, ''));
+        } else {
+            if (underMatch) filters.maxPrice = Number(underMatch[1].replace(/,/g, ''));
+            if (aboveMatch) filters.minPrice = Number(aboveMatch[1].replace(/,/g, ''));
+        }
+
+        if (normalized.includes('in stock') || normalized.includes('available')) {
+            filters.inStock = true;
+        }
+
+        ['teak', 'sheesham', 'walnut', 'mango', 'sal'].forEach((wood) => {
+            if (normalized.includes(wood)) filters.wooden_type = wood;
+        });
+
+        return filters;
+    };
+
+    const cleanSmartQuery = (query) => {
+        const normalized = query.toLowerCase();
+        const productAliases = [
+            { test: /\bsofa|sofas|couch|sectional\b/, value: 'sofa' },
+            { test: /\bbed|beds|storage bed|bedroom\b/, value: 'bed' },
+            { test: /\bwardrobe|wardrobes|almirah|closet\b/, value: 'wardrobe' },
+            { test: /\bdining|dining table|table set\b/, value: 'dining table' },
+            { test: /\boffice|study table|desk\b/, value: 'study table' },
+            { test: /\bliving room|living\b/, value: 'living room' },
+            { test: /\bchair|chairs\b/, value: 'chair' },
+        ];
+
+        const alias = productAliases.find((item) => item.test.test(normalized));
+        if (alias) return alias.value;
+
+        return normalized
+            .replace(/(?:under|below|less than|upto|up to|above|over|more than|between)\s*(?:rs\.?|npr)?\s*[0-9,]+(?:\s*(?:and|-|to)\s*(?:rs\.?|npr)?\s*[0-9,]+)?/gi, ' ')
+            .replace(/\b(show|find|best|get|search|for|me|premium|available|in stock|with|from|your|my|room|small|large|custom)\b/gi, ' ')
+            .replace(/\b(rs|npr)\b/gi, ' ')
+            .replace(/[^\w\s-]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    };
+
+    const normalizeSearchProduct = (product = {}) => ({
+        id: product._id || product.id,
+        image: product.imageUrl || product.image || product.image1 || 'https://via.placeholder.com/80',
+        title: product.name || product.title || 'Furniture product',
+        price: product.new_price || product.salePrice || product.price,
+        oldPrice: product.old_price || product.originalPrice,
+        category: product.categoryName || product.category_name || product.category || 'Furniture',
+    });
 
     // Check browser support for SpeechRecognition
     useEffect(() => {
@@ -87,6 +168,24 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
 
         fetchCategories();
 
+        const fetchPopularTerms = async () => {
+            try {
+                const response = await axios.get(`${apiBaseUrl}/api/search/popular`, {
+                    params: { limit: 8 }
+                });
+                const terms = Array.isArray(response.data?.popular)
+                    ? response.data.popular.map((item) => item.text).filter(Boolean)
+                    : [];
+                if (isMounted && terms.length) {
+                    setPopularTerms(terms);
+                }
+            } catch (error) {
+                console.warn('Popular search terms failed to load:', error);
+            }
+        };
+
+        fetchPopularTerms();
+
         return () => {
             isMounted = false;
         };
@@ -103,7 +202,24 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
             path: buildCategoryPath(category, category.parent)
         }));
 
-    const trendingSearches = defaultCategories.slice(0, 5).map((category) => category.title);
+    const trendingSearches = [
+        ...popularTerms,
+        ...defaultCategories.slice(0, 5).map((category) => category.title),
+        ...fallbackKeywords
+    ].filter((term, index, list) => term && list.indexOf(term) === index).slice(0, 8);
+
+    const animatedKeywords = (trendingSearches.length ? trendingSearches : fallbackKeywords).slice(0, 8);
+    const animatedPlaceholder = `Search ${animatedKeywords[keywordIndex % animatedKeywords.length]}...`;
+
+    useEffect(() => {
+        if (!animatedKeywords.length || isSearchOpen) return undefined;
+
+        const intervalId = window.setInterval(() => {
+            setKeywordIndex((current) => (current + 1) % animatedKeywords.length);
+        }, 2200);
+
+        return () => window.clearInterval(intervalId);
+    }, [animatedKeywords.length, isSearchOpen]);
 
     // Debounced search function
     const debounceSearch = useCallback((query) => {
@@ -117,24 +233,27 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
             }
             setLoading(true);
             try {
+                const smartFilters = extractSmartFilters(query);
+                const cleanedQuery = cleanSmartQuery(query);
                 const searchResponse = await axios.get(`${apiBaseUrl}/api/search`, {
-                    params: { q: query, limit: 6 }
+                    params: {
+                        q: cleanedQuery || query,
+                        limit: 8,
+                        sortBy: 'relevance',
+                        ...smartFilters
+                    }
                 });
-                setSearchResults(searchResponse.data.products.map(product => ({
-                    id: product._id || product.id,
-                    image: product.imageUrl || 'https://via.placeholder.com/80',
-                    title: product.name,
-                    price: product.new_price || product.salePrice || product.price,
-                    oldPrice: product.old_price || product.originalPrice,
-                    category: product.categoryName || 'Furniture',
-                })));
+                const products = Array.isArray(searchResponse.data?.products)
+                    ? searchResponse.data.products
+                    : [];
+                setSearchResults(products.map(normalizeSearchProduct));
 
-                if (!searchResponse.data.products.length) {
+                if (!products.length) {
                     const allProducts = getAllProducts();
                     const filtered = allProducts.filter(product =>
-                        product.title.toLowerCase().includes(query.toLowerCase()) ||
-                        product.subtitle.toLowerCase().includes(query.toLowerCase()) ||
-                        product.categoryName.toLowerCase().includes(query.toLowerCase())
+                        (product.title || product.name || '').toLowerCase().includes(cleanedQuery || query.toLowerCase()) ||
+                        (product.subtitle || product.description || '').toLowerCase().includes(cleanedQuery || query.toLowerCase()) ||
+                        (product.categoryName || product.category || '').toLowerCase().includes(cleanedQuery || query.toLowerCase())
                     );
                     const sorted = filtered.sort((a, b) => (b.id || 0) - (a.id || 0));
                     setSearchResults(sorted.slice(0, 4));
@@ -142,10 +261,11 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
             } catch (err) {
                 console.error('Error fetching search results:', err);
                 const allProducts = getAllProducts();
+                const cleanedQuery = cleanSmartQuery(query);
                 const filtered = allProducts.filter(product =>
-                    product.title.toLowerCase().includes(query.toLowerCase()) ||
-                    product.subtitle.toLowerCase().includes(query.toLowerCase()) ||
-                    product.categoryName.toLowerCase().includes(query.toLowerCase())
+                    (product.title || product.name || '').toLowerCase().includes(cleanedQuery || query.toLowerCase()) ||
+                    (product.subtitle || product.description || '').toLowerCase().includes(cleanedQuery || query.toLowerCase()) ||
+                    (product.categoryName || product.category || '').toLowerCase().includes(cleanedQuery || query.toLowerCase())
                 );
                 const sorted = filtered.sort((a, b) => (b.id || 0) - (a.id || 0));
                 setSearchResults(sorted.slice(0, 4));
@@ -183,6 +303,7 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
     const handleTrendingClick = (term) => {
         setSearchQuery(term);
         debounceSearch(term);
+        setIsSearchOpen(true);
     };
 
     const handleKeyDown = (e) => {
@@ -248,7 +369,7 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
                 </div>
                 <input
                     type="text"
-                    placeholder="Search furniture..."
+                    placeholder={animatedPlaceholder}
                     readOnly
                     className="main-search-input mock-input"
                 />
@@ -287,7 +408,7 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
                                     <input
                                         ref={searchInputRef}
                                         type="text"
-                                        placeholder={isListening ? '🎙️ Listening...' : 'Type to search...'}
+                                        placeholder={isListening ? 'Listening...' : 'Ask AI search: sofa under 50000, teak dining table...'}
                                         value={searchQuery}
                                         onChange={handleSearchChange}
                                         onKeyDown={handleKeyDown}
@@ -313,6 +434,26 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
 
                                 {/* Modal Content Body */}
                                 <div className="bkf-palette__body">
+                                    <div className="bkf-palette__ai-strip">
+                                        <div className="bkf-palette__ai-title">
+                                            <Sparkles size={17} />
+                                            <span>AI Advanced Search</span>
+                                        </div>
+                                        <p>Use natural language: room, budget, material, stock and product type.</p>
+                                        <div className="bkf-palette__ai-chips">
+                                            {aiPrompts.map((prompt) => (
+                                                <button
+                                                    type="button"
+                                                    key={prompt}
+                                                    onClick={() => handleTrendingClick(prompt)}
+                                                >
+                                                    <SlidersHorizontal size={13} />
+                                                    {prompt}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
                                     {loading ? (
                                         <div className="bkf-palette__loading">
                                             <div className="royal-spinner-small" />
@@ -322,7 +463,7 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
                                         /* Default state: Categories & Trending Tags */
                                         <div className="bkf-palette__default-state">
                                             <div className="bkf-palette__section">
-                                                <h4 className="bkf-palette__section-title">Royal Categories</h4>
+                                                <h4 className="bkf-palette__section-title">Smart Categories</h4>
                                                 <div className="bkf-palette__list">
                                                     {defaultCategories.map((item, idx) => {
                                                         const isSelected = activeIndex === idx;
@@ -348,7 +489,7 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
                                             </div>
 
                                             <div className="bkf-palette__section spacing-top">
-                                                <h4 className="bkf-palette__section-title">Trending Inquiries</h4>
+                                                <h4 className="bkf-palette__section-title">Animating Product Keywords</h4>
                                                 <div className="bkf-palette__tags">
                                                     {trendingSearches.map((term, i) => (
                                                         <button
