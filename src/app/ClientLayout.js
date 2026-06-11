@@ -40,6 +40,11 @@ const ReviewPromptPopup = dynamic(() => import("../component/popup/ReviewPromptP
   ssr: false,
 });
 
+const AppDownloadPrompt = dynamic(() => import("../component/popup/AppDownloadPrompt"), {
+  loading: () => null,
+  ssr: false,
+});
+
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -104,6 +109,7 @@ export default function ClientLayout({ children }) {
             <ChatbaseWidget />
           </>
         )}
+        {!isAdminPage && <AppDownloadPrompt />}
       </CartProvider>
     </AuthProvider>
   );

@@ -1,6 +1,6 @@
 .design-template-section {
   background: #f7f4ee;
-  padding: 56px 0 86px;
+  padding: 58px 0 76px;
   scroll-margin-top: 160px;
 }
 
@@ -59,7 +59,7 @@
   overflow: hidden;
   min-height: 430px;
   border: 1px solid rgba(24, 24, 24, 0.12);
-  border-radius: 8px;
+  border-radius: 12px;
   background-position: center;
   background-size: cover;
   isolation: isolate;
@@ -108,7 +108,7 @@
   justify-content: center;
   gap: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
+  border-radius: 12px;
   background: rgba(12, 11, 10, 0.26);
   color: #fff;
   padding: 24px 22px;
@@ -147,7 +147,7 @@
   min-height: 40px;
   max-width: 100%;
   border: 0;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #fff;
   color: #171717;
   cursor: pointer;
@@ -185,7 +185,7 @@
   max-height: calc(100vh - 36px);
   overflow: auto;
   border: 1px solid #e1d8c8;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #fff;
   padding: 20px;
   box-shadow: 0 28px 90px rgba(20, 17, 13, 0.3);
@@ -417,7 +417,7 @@
   }
 
   .design-template-inner {
-    padding: 0 24px;
+    padding: 0 40px;
   }
 
   .design-template-cards {
@@ -443,7 +443,7 @@
   }
 
   .design-template-inner {
-    padding: 0 14px;
+    padding: 0 15px;
   }
 
   .design-template-cards,

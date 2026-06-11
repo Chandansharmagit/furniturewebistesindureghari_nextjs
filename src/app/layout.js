@@ -7,6 +7,7 @@ import { enterpriseCategories } from "@/data/enterpriseSeo";
 const SITE_URL = "https://sinduregharifurniture.shop";
 const SITE_NAME = "Sindureghari Furniture";
 const SITE_ICON_URL = `${SITE_URL}/icon-512.png`;
+const SITE_SOCIAL_IMAGE = `${SITE_URL}/assets/aurelian-hero.png`;
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -43,7 +44,7 @@ export const metadata = {
     locale: "en_NP",
     images: [
       {
-        url: "/images/showroom-exterior.jpg",
+        url: SITE_SOCIAL_IMAGE,
         width: 1200,
         height: 630,
         alt: "Sindureghari Furniture showroom - premium wooden furniture in Nepal",
@@ -55,7 +56,7 @@ export const metadata = {
     title: `${SITE_NAME} - Premium Furniture Store in Nepal`,
     description:
       "Shop premium furniture for Nepali homes with delivery and assembly support.",
-    images: ["/images/showroom-exterior.jpg"],
+    images: [SITE_SOCIAL_IMAGE],
   },
   appleWebApp: {
     capable: true,
@@ -123,7 +124,7 @@ const siteJsonLd = {
       alternateName: ["New Sindureghari Furniture Pvt Ltd", "Sindureghari Furniture Showroom"],
       url: SITE_URL,
       logo: SITE_ICON_URL,
-      image: `${SITE_URL}/images/showroom-exterior.jpg`,
+      image: SITE_SOCIAL_IMAGE,
       description:
         "Visit Sindureghari Furniture showroom for solid wood sofa sets, beds, dining tables, wardrobes, office furniture, lighting and custom furniture in Nepal.",
       telephone: "+977-9845427041",

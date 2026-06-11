@@ -3,7 +3,7 @@
 
 .homeappliances-section {
     max-width: 1600px;
-    margin: 80px auto;
+    margin: 64px auto;
     padding: 0 40px;
     font-family: 'Inter', sans-serif;
 }
@@ -12,7 +12,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     padding-bottom: 20px;
 }
@@ -55,14 +55,14 @@
 .homeappliances-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
+    gap: 18px;
 }
 
 /* Card Styling */
 .homeappliances-card {
     background: #fff;
     /* border: 1px solid rgba(0, 0, 0, 0.06); */
-    border-radius: 20px;
+    border-radius: 12px;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative;
@@ -151,7 +151,7 @@
     background: #0a0a0a;
     color: #fff;
     padding: 4px 10px;
-    border-radius: 30px;
+    border-radius: 8px;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -198,7 +198,7 @@
     }
 
     .homeappliances-section {
-        padding: 0 20px;
+        padding: 0 15px;
         margin: 40px auto;
     }
 }

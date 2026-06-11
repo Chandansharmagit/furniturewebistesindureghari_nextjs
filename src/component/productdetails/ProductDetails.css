@@ -3952,3 +3952,39 @@
     grid-template-columns: 1fr;
   }
 }
+
+.cart-buttons-secondary {
+  grid-template-columns: 58px repeat(3, minmax(0, 1fr));
+}
+
+.room-visualizer-btn {
+  height: 52px;
+  border-radius: 8px !important;
+  border: 1px solid #fed7aa;
+  background: #fff7ed;
+  color: #9a3412;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.room-visualizer-btn:hover {
+  background: #ffedd5;
+  border-color: #fdba74;
+  color: #7c2d12;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .cart-buttons-secondary {
+    grid-template-columns: 56px 1fr;
+  }
+
+  .room-visualizer-btn {
+    grid-column: 1 / -1;
+  }
+}

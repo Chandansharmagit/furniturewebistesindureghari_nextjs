@@ -1,7 +1,7 @@
 export const metadata = {
   title: "Chandan Sharma — Founder & CEO",
   description:
-    "Meet Chandan Sharma, founder and CEO of Sindureghari Furniture (Bishwokarma Woodcraft). Driving Nepal's premium handcrafted furniture heritage forward.",
+    "Meet Chandan Sharma, founder and CEO of Sindureghari Furniture. Driving Nepal's premium handcrafted furniture heritage forward.",
   alternates: {
     canonical: "https://sinduregharifurniture.shop/ceo",
   },

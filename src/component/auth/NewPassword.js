@@ -199,7 +199,7 @@ export default function NewPassword() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                Bishwokarma <br /> Furniture
+                Sindureghari <br /> Furniture
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0 }}
@@ -263,7 +263,7 @@ export default function NewPassword() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                Bishwokarma <br /> Furniture
+                Sindureghari <br /> Furniture
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0 }}
@@ -354,7 +354,7 @@ export default function NewPassword() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              Bishwokarma <br /> Furniture
+              Sindureghari <br /> Furniture
             </motion.h2>
             <motion.p
               initial={{ opacity: 0 }}

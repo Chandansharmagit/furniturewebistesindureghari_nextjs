@@ -12,6 +12,8 @@ import {
   BadgePercent,
   AlertTriangle,
   Images,
+  PhoneCall,
+  Globe2,
   LogIn,
   UserPlus,
   PackageCheck,
@@ -252,6 +254,10 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
               <Building2 size={14} />
               <span>Become a Franchise</span>
             </Link>
+            <Link to="/international-shipping" className="header-utility-link">
+              <Globe2 size={14} />
+              <span>International Shipping</span>
+            </Link>
             <Link to="/order-request" className="header-utility-link header-utility-link-strong">
               <PackageCheck size={14} />
               <span>Order Request</span>
@@ -271,6 +277,10 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
             <Link to="/help-and-support" className="header-utility-link">
               <HelpCircle size={14} />
               <span>Help Center</span>
+            </Link>
+            <Link to="/contact" className="header-utility-link header-utility-link-strong">
+              <PhoneCall size={14} />
+              <span>Contact Us</span>
             </Link>
           </nav>
         </div>
@@ -299,9 +309,10 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
           </div>
 
           {/* Center: Logo Section */}
-          <Link to="/" className="brand-logo" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link to="/" className="brand-logo" aria-label="Sindureghari Furniture home" onClick={() => setIsMobileMenuOpen(false)}>
+            <img src="/logo.png" alt="Sindureghari Furniture" className="brand-logo-mark" />
             <div className="logo-wrapper">
-              <h1 className="logo-text">Sindureghari</h1>
+              <span className="logo-text">Sindureghari Furniture</span>
               <div className="logo-badge">Furniture... bonded with love</div>
             </div>
           </Link>
@@ -438,6 +449,10 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
             <Building2 size={13} />
             <span>Franchise</span>
           </Link>
+          <Link to="/international-shipping" className="mobile-utility-link">
+            <Globe2 size={13} />
+            <span>Global</span>
+          </Link>
           <Link to="/order-request" className="mobile-utility-link mobile-utility-link-strong">
             <PackageCheck size={13} />
             <span>Order Request</span>
@@ -457,6 +472,10 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
           <Link to="/help-and-support" className="mobile-utility-link">
             <HelpCircle size={13} />
             <span>Help</span>
+          </Link>
+          <Link to="/contact" className="mobile-utility-link mobile-utility-link-strong">
+            <PhoneCall size={13} />
+            <span>Contact Us</span>
           </Link>
         </nav>
       </div>

@@ -11,8 +11,14 @@ export default function Checkout() {
   const navigate = useNavigate();
   const { items: cartItems, getCartTotal, clearCart } = useCart();
   const { trackPurchase } = useActivityTracking();
+  const [isMounted, setIsMounted] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [unavailablePayment, setUnavailablePayment] = useState('');
+  const [postalLookup, setPostalLookup] = useState({
+    status: 'idle',
+    message: ''
+  });
 
   const [formData, setFormData] = useState({
     // Personal Information
@@ -30,11 +36,15 @@ export default function Checkout() {
 
     // Payment Information
     paymentMethod: 'cod',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    cardName: ''
   });
+
+  useEffect(() => {
+    const mountTimer = window.setTimeout(() => {
+      setIsMounted(true);
+    }, 0);
+
+    return () => window.clearTimeout(mountTimer);
+  }, []);
 
   // Autofill user details
   useEffect(() => {
@@ -62,6 +72,84 @@ export default function Checkout() {
     loadUserData();
   }, []);
 
+  useEffect(() => {
+    const postalCode = formData.pincode.trim();
+
+    if (!/^[0-9]{5}$/.test(postalCode)) {
+      return undefined;
+    }
+
+    const controller = new AbortController();
+    const lookupTimer = window.setTimeout(async () => {
+      setPostalLookup({
+        status: 'loading',
+        message: 'Finding address from postal code...'
+      });
+
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?postalcode=${encodeURIComponent(postalCode)}&country=Nepal&format=json&addressdetails=1&limit=1`,
+          {
+            signal: controller.signal,
+            headers: {
+              Accept: 'application/json'
+            }
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Postal lookup failed');
+        }
+
+        const results = await response.json();
+        const place = Array.isArray(results) ? results[0] : null;
+
+        if (!place) {
+          setPostalLookup({
+            status: 'error',
+            message: 'No matching Nepal address found for this postal code.'
+          });
+          return;
+        }
+
+        const address = place.address || {};
+        const city = address.city || address.town || address.village || address.municipality || address.county || '';
+        const state = address.state || address.province || address.region || '';
+        const roadAddress = [
+          address.road,
+          address.suburb || address.neighbourhood,
+          city,
+          state,
+          address.country
+        ].filter(Boolean).join(', ');
+
+        setFormData(prev => ({
+          ...prev,
+          city: prev.city || city,
+          state: prev.state || state,
+          country: 'Nepal',
+          address: prev.address || roadAddress || place.display_name || prev.address
+        }));
+
+        setPostalLookup({
+          status: 'success',
+          message: `Address matched${city ? ` for ${city}` : ''}. Please review before placing order.`
+        });
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+        setPostalLookup({
+          status: 'error',
+          message: 'Could not fetch postal address right now. You can still enter it manually.'
+        });
+      }
+    }, 650);
+
+    return () => {
+      controller.abort();
+      window.clearTimeout(lookupTimer);
+    };
+  }, [formData.pincode]);
+
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
@@ -70,6 +158,10 @@ export default function Checkout() {
       ...prev,
       [name]: value
     }));
+
+    if (name === 'pincode' && !/^[0-9]{5}$/.test(value.trim())) {
+      setPostalLookup({ status: 'idle', message: '' });
+    }
 
     // Clear error when user starts typing
     if (errors[name]) {
@@ -95,21 +187,53 @@ export default function Checkout() {
     if (!formData.address.trim()) newErrors.address = 'Address is required';
     if (!formData.city.trim()) newErrors.city = 'City is required';
     if (!formData.state.trim()) newErrors.state = 'State is required';
-    if (!formData.pincode.trim()) newErrors.pincode = 'Pincode is required';
-    else if (!/^[0-9]{6}$/.test(formData.pincode)) newErrors.pincode = 'Pincode must be 6 digits';
-
-    // Payment Information (only for card payments)
-    if (formData.paymentMethod === 'card') {
-      if (!formData.cardNumber.trim()) newErrors.cardNumber = 'Card number is required';
-      else if (!/^[0-9]{16}$/.test(formData.cardNumber.replace(/\s/g, ''))) newErrors.cardNumber = 'Card number must be 16 digits';
-      if (!formData.expiryDate.trim()) newErrors.expiryDate = 'Expiry date is required';
-      if (!formData.cvv.trim()) newErrors.cvv = 'CVV is required';
-      else if (!/^[0-9]{3,4}$/.test(formData.cvv)) newErrors.cvv = 'CVV must be 3-4 digits';
-      if (!formData.cardName.trim()) newErrors.cardName = 'Cardholder name is required';
-    }
+    if (!formData.pincode.trim()) newErrors.pincode = 'Postal code is required';
+    else if (!/^[0-9]{5}$/.test(formData.pincode)) newErrors.pincode = 'Nepal postal code must be 5 digits';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const showUnavailablePaymentMessage = (method) => {
+    setUnavailablePayment(method);
+  };
+
+  const redirectToStripeCheckout = async () => {
+    const response = await fetch('/api/stripe/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        customer: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone
+        },
+        shipping: {
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          pincode: formData.pincode,
+          country: formData.country || 'Nepal'
+        },
+        items: cartItems.map(item => ({
+          id: item.id || item.product_id,
+          title: item.title || item.name || 'Sindureghari Furniture item',
+          price: Number(item.price || 0),
+          quantity: Number(item.quantity || 1),
+          image: item.image
+        })),
+        total: getCartTotal()
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.url) {
+      throw new Error(data.error || 'Unable to start Stripe checkout.');
+    }
+
+    window.location.href = data.url;
   };
 
   const handleSubmit = async (e) => {
@@ -142,6 +266,11 @@ export default function Checkout() {
     setIsProcessing(true);
 
     try {
+      if (formData.paymentMethod === 'card') {
+        await redirectToStripeCheckout();
+        return;
+      }
+
       // Prepare order data
       const orderData = {
         customer_info: {
@@ -216,6 +345,17 @@ export default function Checkout() {
   const formatPrice = (price) => {
     return (price || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
+
+  if (!isMounted) {
+    return (
+      <div className="checkout-container">
+        <div className="empty-checkout">
+          <h2>Loading checkout...</h2>
+          <p>Preparing your cart and secure order details.</p>
+        </div>
+      </div>
+    );
+  }
 
   if (cartItems.length === 0 && !orderPlaced) {
     return (
@@ -361,15 +501,23 @@ export default function Checkout() {
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Pincode *</label>
+                  <label>Postal Code *</label>
                   <input
                     type="text"
                     name="pincode"
                     value={formData.pincode}
                     onChange={handleInputChange}
                     className={errors.pincode ? 'error' : ''}
+                    placeholder="e.g. 44600"
+                    inputMode="numeric"
+                    maxLength="5"
                   />
                   {errors.pincode && <span className="error-message">{errors.pincode}</span>}
+                  {postalLookup.message && (
+                    <span className={`postal-lookup-message ${postalLookup.status}`}>
+                      {postalLookup.message}
+                    </span>
+                  )}
                 </div>
                 <div className="form-group">
                   <label>Country</label>
@@ -402,61 +550,50 @@ export default function Checkout() {
                     checked={formData.paymentMethod === 'card'}
                     onChange={handleInputChange}
                   />
-                  <span>Credit/Debit Card</span>
+                  <span>Secure Card Payment (Stripe)</span>
                 </label>
+                <button
+                  type="button"
+                  className="payment-option payment-option-unavailable"
+                  onClick={() => showUnavailablePaymentMessage('eSewa')}
+                >
+                  <span>eSewa</span>
+                  <em>Coming soon</em>
+                </button>
+                <button
+                  type="button"
+                  className="payment-option payment-option-unavailable"
+                  onClick={() => showUnavailablePaymentMessage('Local Bank Transfer')}
+                >
+                  <span>Local Bank Transfer</span>
+                  <em>Coming soon</em>
+                </button>
               </div>
 
+              {unavailablePayment && (
+                <div className="payment-building-popup" role="alert">
+                  <button
+                    type="button"
+                    onClick={() => setUnavailablePayment('')}
+                    aria-label="Close payment method message"
+                  >
+                    ×
+                  </button>
+                  <strong>{unavailablePayment} is still building</strong>
+                  <p>
+                    This payment method is not ready yet. Please select Cash on Delivery
+                    or Secure Card Payment with Stripe for now.
+                  </p>
+                </div>
+              )}
+
               {formData.paymentMethod === 'card' && (
-                <div className="card-details">
-                  <div className="form-group">
-                    <label>Card Number *</label>
-                    <input
-                      type="text"
-                      name="cardNumber"
-                      value={formData.cardNumber}
-                      onChange={handleInputChange}
-                      className={errors.cardNumber ? 'error' : ''}
-                      placeholder="1234 5678 9012 3456"
-                    />
-                    {errors.cardNumber && <span className="error-message">{errors.cardNumber}</span>}
-                  </div>
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>Expiry Date *</label>
-                      <input
-                        type="text"
-                        name="expiryDate"
-                        value={formData.expiryDate}
-                        onChange={handleInputChange}
-                        className={errors.expiryDate ? 'error' : ''}
-                        placeholder="MM/YY"
-                      />
-                      {errors.expiryDate && <span className="error-message">{errors.expiryDate}</span>}
-                    </div>
-                    <div className="form-group">
-                      <label>CVV *</label>
-                      <input
-                        type="text"
-                        name="cvv"
-                        value={formData.cvv}
-                        onChange={handleInputChange}
-                        className={errors.cvv ? 'error' : ''}
-                        placeholder="123"
-                      />
-                      {errors.cvv && <span className="error-message">{errors.cvv}</span>}
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label>Cardholder Name *</label>
-                    <input
-                      type="text"
-                      name="cardName"
-                      value={formData.cardName}
-                      onChange={handleInputChange}
-                      className={errors.cardName ? 'error' : ''}
-                    />
-                    {errors.cardName && <span className="error-message">{errors.cardName}</span>}
-                  </div>
+                <div className="stripe-checkout-note">
+                  <strong>Stripe secure checkout</strong>
+                  <p>
+                    You will be redirected to Stripe to enter card details. Sindureghari Furniture
+                    does not store your card number, CVV, or bank details.
+                  </p>
                 </div>
               )}
             </div>
@@ -466,7 +603,9 @@ export default function Checkout() {
               className={`place-order-btn ${isProcessing ? 'processing' : ''}`}
               disabled={isProcessing}
             >
-              {isProcessing ? 'Processing...' : `Place Order - NPR ${formatPrice(getCartTotal())}`}
+              {isProcessing
+                ? 'Processing...'
+                : `${formData.paymentMethod === 'card' ? 'Pay with Stripe' : 'Place Order'} - NPR ${formatPrice(getCartTotal())}`}
             </button>
           </form>
         </div>

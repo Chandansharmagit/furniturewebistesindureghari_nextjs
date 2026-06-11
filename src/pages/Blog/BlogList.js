@@ -39,8 +39,8 @@ const BlogList = () => {
   return (
     <div className="blog-page">
       <SEOComponent 
-        title="Bishwokarma Blog - Interior Design & Furniture Insights"
-        description="Expert advice on interior design, furniture craftsmanship, and home styling from the masters at Bishwokarma Furniture."
+        title="Sindureghari Furniture Blog - Interior Design & Furniture Insights"
+        description="Expert advice on interior design, furniture craftsmanship, and home styling from the masters at Sindureghari Furniture."
         keywords="interior design blog nepal, furniture tips, teak wood benefits, home decor trends 2024"
       />
 

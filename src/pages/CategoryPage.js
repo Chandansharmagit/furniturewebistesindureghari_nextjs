@@ -136,7 +136,7 @@ const DiscountBanner = () => {
 const seoContentData = {
   'living-room': {
     guideTitle: 'The Ultimate Guide to Selecting the Best Sofa and Living Room Furniture in Nepal',
-    guideText: 'Your living room is the center of your home, and finding the perfect sofa set in Nepal is key to balancing comfort, style, and utility. At Sindureghari Furniture (Bishwokarma), we manufacture premium living room sets using seasoned solid wood like Teak and Sheesham (Sisam) sourced from responsible local forestry. When picking a sofa, first evaluate your room dimensions. L-shape sofas are highly efficient for maximizing seating in corners, while traditional 3-1-1 royal sofa designs offer a grand, symmetrical layout. Teak wood frames provide lifelong durability, natural termite resistance, and elegant grain aesthetics. Every piece in our Rautahat factory undergoes modern kiln drying and advanced preservative seasoning, ensuring your furniture remains warp-free and strong for generations across Nepal.',
+    guideText: 'Your living room is the center of your home, and finding the perfect sofa set in Nepal is key to balancing comfort, style, and utility. At Sindureghari Furniture, we manufacture premium living room sets using seasoned solid wood like Teak and Sheesham (Sisam) sourced from responsible local forestry. When picking a sofa, first evaluate your room dimensions. L-shape sofas are highly efficient for maximizing seating in corners, while traditional 3-1-1 royal sofa designs offer a grand, symmetrical layout. Teak wood frames provide lifelong durability, natural termite resistance, and elegant grain aesthetics. Every piece in our Rautahat factory undergoes modern kiln drying and advanced preservative seasoning, ensuring your furniture remains warp-free and strong for generations across Nepal.',
     faqs: [
       {
         q: 'Which wood is best for sofa sets in Nepal?',
@@ -219,7 +219,7 @@ const seoContentData = {
 };
 
 const defaultSEOContent = {
-  guideTitle: 'Premium Solid Wood Furniture Handcrafted by Sindureghari Furniture (Bishwokarma)',
+  guideTitle: 'Premium Solid Wood Furniture Handcrafted by Sindureghari Furniture',
   guideText: 'For over three decades, Sindureghari Furniture has been synonymous with premium quality, exquisite woodwork design, and timeless craftsmanship. Handcrafted in our advanced manufacturing workshop along the Chandrapur highway in Rautahat, Nepal, our furniture collections include everything from royal sofa sets, luxury king beds, solid wood dining tables, to modern modular kitchens and ergonomic office spaces. We season all our timber using high-temperature steam kilns to prevent shrinking, splitting, or warping over time. We provide free shipping, lifetime wood assurance, custom design flexibility, and a dedicated team of master artisans to help bring your home interior dreams to life.',
   faqs: [
     {
@@ -811,10 +811,10 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
   return (
     <>
       <SEOComponent
-        title={`${currentCategoryInfo.title} | Bishwokarma Furniture - Premium Furniture in Nepal`}
+        title={`${currentCategoryInfo.title} | Sindureghari Furniture - Premium Furniture in Nepal`}
         description={currentCategoryInfo.description}
         keywords={currentCategoryInfo.keywords}
-        ogTitle={`${currentCategoryInfo.title} | Bishwokarma Furniture`}
+        ogTitle={`${currentCategoryInfo.title} | Sindureghari Furniture`}
         ogDescription={currentCategoryInfo.description}
         canonicalUrl={keyword ? `https://sinduregharifurniture.shop/best-${keyword}-nepal` : `https://sinduregharifurniture.shop/category/${category}${subcategory ? `/${subcategory}` : ''}`}
         structuredData={{

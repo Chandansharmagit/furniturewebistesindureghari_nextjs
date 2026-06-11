@@ -194,6 +194,26 @@
   font-weight: 500;
 }
 
+.postal-lookup-message {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.postal-lookup-message.loading {
+  color: #8a5b0f;
+}
+
+.postal-lookup-message.success {
+  color: #26734d;
+}
+
+.postal-lookup-message.error {
+  color: #b42318;
+}
+
 /* Payment Methods Grid */
 .payment-methods {
   display: flex;
@@ -236,12 +256,99 @@
   font-size: 13px;
 }
 
+.payment-option-unavailable {
+  border-style: dashed;
+  color: var(--primary-black);
+  font-family: var(--font-sans);
+  text-align: left;
+}
+
+.payment-option-unavailable em {
+  margin-left: auto;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #fff3d7;
+  color: #8a5b0f;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.payment-building-popup {
+  position: relative;
+  margin: 0 0 16px;
+  padding: 16px 46px 16px 16px;
+  border: 1px solid rgba(165, 103, 40, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, #fffdfa 0%, #fff3d7 100%);
+  color: #2b211b;
+  box-shadow: 0 14px 34px rgba(45, 28, 15, 0.08);
+}
+
+.payment-building-popup button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(45, 28, 15, 0.1);
+  border-radius: 50%;
+  background: #ffffff;
+  color: #2a190f;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.payment-building-popup strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #2a190f;
+  font-size: 0.94rem;
+}
+
+.payment-building-popup p {
+  margin: 0;
+  color: #6a5b4c;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
 .card-details {
   margin-top: 16px;
   padding: 18px;
   background: var(--gray-50);
   border-radius: var(--radius-md);
   border: 1px solid var(--gray-200);
+}
+
+.stripe-checkout-note {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #d9c9b3;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, #fffdfa 0%, #fff7ed 100%);
+  color: #2b211b;
+}
+
+.stripe-checkout-note strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #2a190f;
+  font-size: 0.95rem;
+}
+
+.stripe-checkout-note p {
+  margin: 0;
+  color: #6a5b4c;
+  font-size: 0.84rem;
+  line-height: 1.55;
 }
 
 /* Place Order CTA Button */
@@ -295,7 +402,7 @@
   border-radius: var(--radius-lg);
   padding: 24px;
   position: sticky;
-  top: 100px;
+  top: 170px;
   border: 1px solid rgba(197, 160, 89, 0.08);
   box-shadow: var(--shadow-md);
   animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -687,7 +794,7 @@
 }
 
 .order-summary {
-  top: 132px;
+  top: 172px;
   padding: 24px;
 }
 

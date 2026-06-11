@@ -130,7 +130,7 @@ const SpecialOffersAll = () => {
     return (
         <>
             <SEOComponent
-                title="All Royal Special Offers - Best Furniture Deals | Bishwokarma Furniture Nepal"
+                title="All Royal Special Offers - Best Furniture Deals | Sindureghari Furniture Nepal"
                 description="Explore all our exclusive Royal Special offers with amazing discounts on premium furniture. Find the best deals on sofas, beds, dining sets and more."
                 keywords="special offers Nepal, furniture deals Nepal, discount furniture Nepal, royal furniture sale, premium offers Nepal"
                 ogTitle="All Royal Special Offers - Best Furniture Deals"

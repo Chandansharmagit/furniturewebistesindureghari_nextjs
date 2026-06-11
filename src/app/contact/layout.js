@@ -19,7 +19,7 @@ export default function ContactLayout({ children }) {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": "https://sinduregharifurniture.shop/#localbusiness-contact",
-    name: "Sindureghari Furniture (Bishwokarma Woodcraft Showroom)",
+    name: "Sindureghari Furniture Showroom",
     url: "https://sinduregharifurniture.shop/contact",
     telephone: "+977-9855040000",
     email: "support@sinduregharifurniture.shop",

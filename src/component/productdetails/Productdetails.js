@@ -645,6 +645,17 @@ Product Link: ${window.location.href}`;
     const isOutOfStock = productStock <= 0;
     const internalLinks = getProductInternalLinks(product);
 
+    const handleRoomVisualizer = () => {
+        const params = new URLSearchParams({
+            productId: String(product?.id || ''),
+            name: product?.name || product?.title || 'Furniture product',
+            image: selectedImage || productImages[0] || '',
+            sku: productSku
+        });
+
+        navigate(`/room-visualizer?${params.toString()}`);
+    };
+
     const copySku = async () => {
         try {
             await navigator.clipboard.writeText(productSku);
@@ -1198,6 +1209,11 @@ Write 3 compact bullets: best room fit, why it is worth buying, and one buying c
                                 <button className="emi-btn" onClick={handleEMI}>
                                     <CreditCard size={18} />
                                     EMI Plan
+                                </button>
+
+                                <button className="room-visualizer-btn" onClick={handleRoomVisualizer}>
+                                    <Sparkles size={18} />
+                                    Try in Room
                                 </button>
                             </div>
                         </div>

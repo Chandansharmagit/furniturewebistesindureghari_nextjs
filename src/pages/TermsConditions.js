@@ -13,7 +13,7 @@ const TermsConditions = () => {
       id: 'sec-1',
       title: '1. Introduction',
       shortTitle: 'Introduction',
-      content: 'Welcome to Bishwokarma Furniture (Sindureghari Furniture). These Terms and Conditions govern your use of our website and the purchase of products from us. By accessing our website and placing an order, you accept these terms and conditions in full. If you disagree with any part of these terms, please do not use our website.',
+      content: 'Welcome to Sindureghari Furniture. These Terms and Conditions govern your use of our website and the purchase of products from us. By accessing our website and placing an order, you accept these terms and conditions in full. If you disagree with any part of these terms, please do not use our website.',
       bullets: []
     },
     {
@@ -22,7 +22,7 @@ const TermsConditions = () => {
       shortTitle: 'Definitions',
       content: 'To clarify the legal bounds, the following definitions apply across our service agreements:',
       bullets: [
-        '<strong>"We", "Us", "Our":</strong> Refers to Bishwokarma Furniture (Sindureghari Furniture).',
+        '<strong>"We", "Us", "Our":</strong> Refers to Sindureghari Furniture.',
         '<strong>"You", "Your":</strong> Refers to the user, guest visitor, or registered customer.',
         '<strong>"Products":</strong> Refers to furniture, appliances, custom carpentry, and related accessories sold on our website.',
         '<strong>"Website":</strong> Refers to sinduregharifurniture.shop and associated subdomains.',
@@ -132,7 +132,7 @@ const TermsConditions = () => {
           <span className="terms-badge">Legal Hub</span>
           <h1>Terms & Conditions</h1>
           <p>
-            Welcome to Bishwokarma Furniture. Please read these terms carefully. They outline the rights, rules, and guidelines that govern our premium services.
+            Welcome to Sindureghari Furniture. Please read these terms carefully. They outline the rights, rules, and guidelines that govern our premium services.
           </p>
         </div>
       </header>

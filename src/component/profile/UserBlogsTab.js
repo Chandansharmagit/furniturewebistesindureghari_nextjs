@@ -178,7 +178,7 @@ const UserBlogsTab = () => {
       <div className="user-profile-orders-header">
         <div>
           <h2>My Contributions</h2>
-          <p className="user-profile-email-display">Share your thoughts with the Bishwokarma community</p>
+          <p className="user-profile-email-display">Share your thoughts with the Sindureghari Furniture community</p>
         </div>
         <button onClick={handleAddNew} className="user-profile-view-details-btn" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <FaPlus size={12} /> Write Entry

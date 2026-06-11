@@ -29,7 +29,7 @@
   width: fit-content;
   min-height: 28px;
   padding: 0 11px;
-  border-radius: 999px;
+  border-radius: 8px;
   background: rgba(139, 69, 19, 0.1);
   color: #8b4513;
   font-size: 12px;
@@ -86,7 +86,7 @@
   justify-content: center;
   min-height: 42px;
   border: 1px solid #8b4513;
-  border-radius: 999px;
+  border-radius: 8px;
   background: #8b4513;
   color: #ffffff;
   padding: 0 18px;
@@ -99,7 +99,7 @@
   overflow: hidden;
   margin-bottom: 42px;
   border: 1px solid #eee4d8;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #fbfaf7;
   box-shadow: none;
 }
@@ -149,7 +149,7 @@
   min-height: 44px;
   padding: 10px 12px;
   border: 1px solid #eadfce;
-  border-radius: 8px;
+  border-radius: 10px;
   background: #ffffff;
   color: #43382f;
   font-size: 13px;
@@ -171,7 +171,7 @@
   position: relative;
   min-height: 240px;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 12px;
   color: #ffffff;
   text-decoration: none;
   background: #eee8df;
@@ -238,7 +238,7 @@
   gap: 6px;
   min-height: 42px;
   border: 1px solid #8b4513;
-  border-radius: 999px;
+  border-radius: 8px;
   background: #8b4513;
   color: #ffffff;
   padding: 0 17px;
@@ -257,7 +257,7 @@
 .royal-special-product-card {
   overflow: hidden;
   border: 1px solid #eee4d8;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #ffffff;
   box-shadow: 0 8px 22px rgba(31, 21, 12, 0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
@@ -292,7 +292,7 @@
   display: inline-flex;
   align-items: center;
   padding: 0 10px;
-  border-radius: 999px;
+  border-radius: 8px;
   background: #dc2626;
   color: #ffffff;
   font-size: 12px;
@@ -398,7 +398,7 @@
   align-items: center;
   justify-content: center;
   min-height: 42px;
-  border-radius: 999px;
+  border-radius: 8px;
   background: #151922;
   color: #ffffff;
   padding: 0 18px;
@@ -420,7 +420,7 @@
 
 @media (max-width: 760px) {
   .royal-special-container {
-    padding: 0 16px 36px;
+    padding: 0 15px 36px;
   }
 
   .royal-special-header {

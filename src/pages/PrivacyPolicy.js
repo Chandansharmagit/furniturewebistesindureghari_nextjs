@@ -13,7 +13,7 @@ const PrivacyPolicy = () => {
       id: 'sec-1',
       title: '1. Introduction',
       shortTitle: 'Introduction',
-      content: 'Welcome to Bishwokarma Furniture (Sindureghari Furniture). We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you about how we collect, handle, and safeguard your personal data when you visit our website, place custom carpentry requests, or communicate with our store representatives, and tell you about your privacy rights and how the law protects you.',
+      content: 'Welcome to Sindureghari Furniture. We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you about how we collect, handle, and safeguard your personal data when you visit our website, place custom carpentry requests, or communicate with our store representatives, and tell you about your privacy rights and how the law protects you.',
       bullets: []
     },
     {

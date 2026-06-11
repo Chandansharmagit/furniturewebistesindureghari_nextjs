@@ -310,10 +310,10 @@ Write a luxury furniture shopping recommendation in 2 short sentences, then one 
     return (
         <div className="bkf-search__container-fluid">
             <SEOComponent
-                title={`Search Results for "${searchQuery}" | Bishwokarma Furniture Nepal`}
+                title={`Search Results for "${searchQuery}" | Sindureghari Furniture Nepal`}
                 description={`Found ${filteredProducts.length} furniture products matching "${searchQuery}". Browse our collection of sofas, beds, dining sets, and more with competitive prices and free delivery in Nepal.`}
                 keywords={`${searchQuery}, furniture search Nepal, ${searchQuery} furniture, furniture store Nepal, buy ${searchQuery} online, furniture shopping Nepal`}
-                ogTitle={`Search Results for "${searchQuery}" | Bishwokarma Furniture`}
+                ogTitle={`Search Results for "${searchQuery}" | Sindureghari Furniture`}
                 ogDescription={`Found ${filteredProducts.length} furniture products matching "${searchQuery}". Browse our collection with competitive prices.`}
                 ogImage="https://sinduregharifurniture.shop/images/search-banner.jpg"
                 ogType="website"

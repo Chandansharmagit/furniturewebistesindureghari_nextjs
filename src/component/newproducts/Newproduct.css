@@ -8,7 +8,7 @@
 }
 
 .newproduct-royal-section {
-    padding: 120px 0;
+    padding: 76px 0;
     background-color: #ffffff;
     position: relative;
     overflow: hidden;
@@ -39,8 +39,8 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 80px;
-    gap: 60px;
+    margin-bottom: 42px;
+    gap: 40px;
 }
 
 .editorial-eyebrow {
@@ -116,7 +116,7 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     cursor: grab;
-    padding: 20px 0 60px 0;
+    padding: 14px 0 46px 0;
 }
 
 .newproduct-scroll-wrapper::-webkit-scrollbar {
@@ -129,7 +129,7 @@
 
 .newproduct-grid {
     display: flex;
-    gap: 32px;
+    gap: 18px;
     width: max-content;
 }
 
@@ -186,11 +186,15 @@
     }
 
     .newproduct-container {
-        padding: 0 25px;
+        padding: 0 40px;
     }
 }
 
 @media (max-width: 650px) {
+    .newproduct-container {
+        padding: 0 15px;
+    }
+
     .newproduct-card {
         flex: 0 0 280px;
     }

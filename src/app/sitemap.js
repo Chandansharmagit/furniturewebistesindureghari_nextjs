@@ -16,6 +16,7 @@ const STATIC_PAGES = [
   { loc: "/blog", priority: 0.7, changefreq: "weekly" },
   { loc: "/ceo", priority: 0.6, changefreq: "monthly" },
   { loc: "/careers", priority: 0.5, changefreq: "monthly" },
+  { loc: "/international-shipping", priority: 0.72, changefreq: "monthly" },
   { loc: "/search", priority: 0.5, changefreq: "weekly" },
   { loc: "/privacy-policy", priority: 0.3, changefreq: "yearly" },
   { loc: "/terms-conditions", priority: 0.3, changefreq: "yearly" },

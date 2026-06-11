@@ -163,7 +163,7 @@ const LoginPromptPopup = ({ isOpen, onClose }) => {
             {success && (
               <div className="success-banner-container">
                 <span className="banner-icon">✨</span>
-                <span className="banner-text"><strong>Access Granted!</strong> Welcome to Bishwokarma Luxury Lounge. Synchronizing secure profile details...</span>
+                <span className="banner-text"><strong>Access Granted!</strong> Welcome to the Sindureghari Furniture lounge. Synchronizing secure profile details...</span>
               </div>
             )}
 

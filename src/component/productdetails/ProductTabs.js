@@ -451,7 +451,7 @@ const ProductTabs = ({ productId, category, generateRandomRating, renderStars, f
                                     <span className="trust-badge">🪵 Solid Wood Guarantee</span>
                                     <h4>Lifetime Anti-Termite Treatment</h4>
                                 </div>
-                                <p>Every single luxury product handcrafted in our Bishwokarma woodworking warehouse goes through active anti-termite thermal processing backed by certificates.</p>
+                                <p>Every single luxury product handcrafted in our Sindureghari Furniture woodworking workshop goes through active anti-termite thermal processing backed by certificates.</p>
                             </div>
                             <div className="trust-pill-card">
                                 <div className="pill-header">

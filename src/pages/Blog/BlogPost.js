@@ -57,11 +57,11 @@ const BlogPost = () => {
     "image": post.image_url ? [post.image_url] : [],
     "author": {
       "@type": "Person",
-      "name": `${post.first_name || ''} ${post.last_name || ''}`.trim() || 'Bishwokarma Furniture'
+      "name": `${post.first_name || ''} ${post.last_name || ''}`.trim() || 'Sindureghari Furniture'
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Bishwokarma Furniture",
+      "name": "Sindureghari Furniture",
       "logo": {
         "@type": "ImageObject",
         "url": "https://sinduregharifurniture.shop/logo.png"
@@ -74,7 +74,7 @@ const BlogPost = () => {
   return (
     <div className="blog-post-page">
       <SEOComponent 
-        title={`${post.title} | Bishwokarma Furniture Journal`}
+        title={`${post.title} | Sindureghari Furniture Journal`}
         description={post.excerpt}
         ogImage={post.image_url}
         ogType="article"
@@ -135,7 +135,7 @@ const BlogPost = () => {
           
           <div className="post-footer">
             <div className="post-tags">
-              <span>#BishwokarmaDesign</span>
+              <span>#SindureghariDesign</span>
               <span>#FurnitureJournal</span>
               <span>#NepalCraft</span>
             </div>

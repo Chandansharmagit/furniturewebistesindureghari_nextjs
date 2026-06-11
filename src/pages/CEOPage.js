@@ -14,7 +14,7 @@ const CEOPage = () => {
     "jobTitle": "Founder & Chief Executive Officer",
     "worksFor": {
       "@type": "FurnitureStore",
-      "name": "Sindureghari Furniture (Bishwokarma)",
+      "name": "Sindureghari Furniture",
       "url": "https://sinduregharifurniture.shop"
     },
     "description": "Founder & CEO of Sindureghari Furniture, pioneering luxury Nepalese woodcraft with modern design and customized royal collections.",
@@ -140,7 +140,7 @@ const CEOPage = () => {
                   "We believe your home should be an extension of your character," Chandan notes. "By leveraging digital visualizations and direct customer feedback, we allow our clients to co-design their spaces. It's not just about selling furniture; it's about curated, personal experiences that start from the very first click on our website."
                 </p>
                 <p>
-                  Under his tech-enabled leadership, Bishwokarma / Sharma Furniture has expanded its presence across Nepal, introducing premium virtual catalog consulting, digital material previews, and a sophisticated customization portal.
+                  Under his tech-enabled leadership, Sindureghari Furniture has expanded its presence across Nepal, introducing premium virtual catalog consulting, digital material previews, and a sophisticated customization portal.
                 </p>
               </motion.div>
 

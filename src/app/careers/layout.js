@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Careers — Join Bishwokarma Woodcraft Team",
+  title: "Careers — Join Sindureghari Furniture Team",
   description:
     "Join Nepal's leading furniture brand. Open positions for master carpenters, 3D kitchen designers & showroom consultants at Sindureghari Furniture, Chandrapur.",
   alternates: {

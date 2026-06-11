@@ -7,6 +7,7 @@ import ProductCard from '../common/ProductCard/ProductCard';
 const ProductRecommendations = ({ 
   type = 'personalized', // 'personalized', 'similar', 'trending'
   productId = null, // Required for 'similar' type
+  currentProduct = null,
   limit = 6,
   title = null,
   className = '',
@@ -16,7 +17,7 @@ const ProductRecommendations = ({
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { trackProductView, trackProductClick, trackAddToCart } = useActivityTracking();
+  const { trackProductView, trackProductClick } = useActivityTracking();
 
   // Default titles based on type
   const getDefaultTitle = () => {
@@ -34,6 +35,25 @@ const ProductRecommendations = ({
   const displayTitle = title || getDefaultTitle();
 
   useEffect(() => {
+    let isMounted = true;
+
+    const applyFallbackRecommendations = async () => {
+      if (!currentProduct) return false;
+
+      const catalogProducts = await RecommendationService.getCatalogProducts(Math.max(80, limit * 8));
+      const fallbackRecommendations = RecommendationService.getContextualRecommendations(
+        currentProduct,
+        catalogProducts,
+        limit
+      );
+
+      if (isMounted) {
+        setRecommendations(fallbackRecommendations);
+      }
+
+      return fallbackRecommendations.length > 0;
+    };
+
     const fetchRecommendations = async () => {
       try {
         setLoading(true);
@@ -46,31 +66,64 @@ const ProductRecommendations = ({
               throw new Error('Product ID is required for similar products');
             }
             response = await RecommendationService.getSimilarProducts(productId, limit);
-            setRecommendations(response.similar_products || []);
+            if (isMounted) {
+              const products = response.similar_products || [];
+              if (products.length > 0) {
+                setRecommendations(products);
+              } else {
+                await applyFallbackRecommendations();
+              }
+            }
             break;
             
           case 'trending':
             response = await RecommendationService.getTrendingProducts(limit);
-            setRecommendations(response.trending_products || []);
+            if (isMounted) {
+              setRecommendations(response.trending_products || []);
+            }
             break;
             
           case 'personalized':
           default:
             response = await RecommendationService.getPersonalizedRecommendations(null, limit);
-            setRecommendations(response.recommendations || []);
+            if (isMounted) {
+              const products = response.recommendations || [];
+              if (products.length > 0) {
+                setRecommendations(products);
+              } else {
+                await applyFallbackRecommendations();
+              }
+            }
             break;
         }
       } catch (err) {
         console.error('Error fetching recommendations:', err);
-        setError('Failed to load recommendations');
-        setRecommendations([]);
+        try {
+          const recovered = await applyFallbackRecommendations();
+          if (isMounted && !recovered) {
+            setError('Failed to load recommendations');
+            setRecommendations([]);
+          }
+        } catch (fallbackError) {
+          console.error('Error loading fallback recommendations:', fallbackError);
+          if (isMounted) {
+            setError('Failed to load recommendations');
+            setRecommendations([]);
+          }
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchRecommendations();
-  }, [type, productId, limit]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [type, productId, currentProduct, limit]);
 
   // Handle product view tracking when product comes into view
   const handleProductView = (product) => {
@@ -80,25 +133,6 @@ const ProductRecommendations = ({
   // Handle product click
   const handleProductClick = (product, clickType = 'card') => {
     trackProductClick(product.id, product.categoryId, clickType);
-  };
-
-  // Handle add to cart
-  // eslint-disable-next-line no-unused-vars
-  const handleAddToCart = (product, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    trackAddToCart(product.id, 1, product.new_price);
-    // You can add actual cart logic here
-    console.log('Added to cart:', product.name);
-  };
-
-  // Format price
-  // eslint-disable-next-line no-unused-vars
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(price);
   };
 
   if (loading) {

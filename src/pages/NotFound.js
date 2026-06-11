@@ -41,7 +41,7 @@ const NotFound = () => {
       </div>
 
       <div className="notfound-footer">
-        <p>© Bishwokarma Furniture — Pure craftsmanship, timeless design.</p>
+        <p>© Sindureghari Furniture — Pure craftsmanship, timeless design.</p>
       </div>
     </div>
   );

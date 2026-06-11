@@ -214,11 +214,11 @@ Crawl-delay: 10`;
     <loc>${this.baseUrl}/product/${product.id}/${SEOHelpers.generateSlug(product.name)}</loc>
     <news:news>
       <news:publication>
-        <news:name>Bishwokarma Furniture</news:name>
+        <news:name>Sindureghari Furniture</news:name>
         <news:language>en</news:language>
       </news:publication>
       <news:publication_date>${product.createdAt || new Date().toISOString()}</news:publication_date>
-      <news:title>${product.name} - New Arrival at Bishwokarma Furniture</news:title>
+      <news:title>${product.name} - New Arrival at Sindureghari Furniture</news:title>
     </news:news>
   </url>`).join('');
 

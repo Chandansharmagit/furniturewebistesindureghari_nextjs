@@ -1,0 +1,464 @@
+.room-visualizer-page {
+  min-height: 100vh;
+  padding: 24px clamp(16px, 3vw, 42px) 42px;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 242, 0.92), rgba(242, 235, 224, 0.98)),
+    #f4eee5;
+  color: #24170f;
+}
+
+.rv-header {
+  max-width: 1480px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.rv-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #9a5a1f;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.rv-header h1 {
+  margin: 0;
+  max-width: 820px;
+  font-size: clamp(2rem, 3.4vw, 4.1rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+  color: #21140d;
+}
+
+.rv-header p {
+  max-width: 610px;
+  margin: 10px 0 0;
+  color: #6d5b4c;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.rv-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.rv-whatsapp-btn,
+.rv-secondary-btn,
+.rv-stage-toolbar button,
+.rv-controls button,
+.rv-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  font-weight: 900;
+  letter-spacing: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.rv-whatsapp-btn {
+  padding: 0 18px;
+  background: #26170f;
+  color: #fffaf4;
+  white-space: nowrap;
+}
+
+.rv-secondary-btn {
+  padding: 0 18px;
+  background: #fffaf4;
+  color: #352218;
+  border: 1px solid rgba(88, 56, 31, 0.2);
+}
+
+.rv-whatsapp-btn:hover,
+.rv-secondary-btn:hover,
+.rv-stage-toolbar button:hover,
+.rv-controls button:hover,
+.rv-actions button:hover {
+  transform: translateY(-1px);
+}
+
+.rv-whatsapp-btn:hover {
+  background: #6f421c;
+}
+
+.rv-secondary-btn:hover {
+  background: #fff3e2;
+  border-color: rgba(154, 90, 31, 0.35);
+}
+
+.rv-layout {
+  max-width: 1480px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 18px;
+  align-items: start;
+}
+
+.rv-stage-wrap,
+.rv-controls {
+  border: 1px solid rgba(72, 45, 26, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 253, 249, 0.92);
+  box-shadow: 0 18px 55px rgba(65, 39, 19, 0.13);
+}
+
+.rv-stage-wrap {
+  overflow: hidden;
+}
+
+.rv-stage-toolbar {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  background: #21140d;
+  color: #fff6e8;
+}
+
+.rv-stage-toolbar div {
+  display: grid;
+  gap: 3px;
+}
+
+.rv-stage-toolbar span {
+  color: rgba(255, 246, 232, 0.66);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.rv-stage-toolbar strong {
+  max-width: 720px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1rem;
+}
+
+.rv-stage-toolbar button {
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff6e8;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.rv-stage {
+  position: relative;
+  overflow: hidden;
+  min-height: min(66vh, 720px);
+  aspect-ratio: 16 / 9;
+  background: #d8cec1;
+  touch-action: none;
+  user-select: none;
+}
+
+.rv-room-image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+}
+
+.rv-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), inset 0 -120px 90px rgba(21, 13, 9, 0.18);
+}
+
+.rv-product-layer {
+  position: absolute;
+  z-index: 2;
+  cursor: grab;
+  filter: drop-shadow(0 26px 24px rgba(0, 0, 0, 0.34));
+}
+
+.rv-product-layer:active {
+  cursor: grabbing;
+}
+
+.rv-product-layer img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.rv-product-layer.is-placeholder {
+  width: 260px !important;
+  filter: none;
+}
+
+.rv-product-upload-card {
+  width: 100%;
+  min-height: 145px;
+  padding: 18px;
+  border: 1px dashed rgba(128, 83, 43, 0.42) !important;
+  background: rgba(255, 250, 244, 0.92) !important;
+  color: #6f421c !important;
+  flex-direction: column;
+  text-align: center;
+}
+
+.rv-stage-hint {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 13px;
+  border-radius: 8px;
+  background: rgba(33, 20, 13, 0.76);
+  color: #fff6e8;
+  font-size: 0.86rem;
+  font-weight: 800;
+  backdrop-filter: blur(10px);
+}
+
+.rv-controls {
+  padding: 16px;
+  position: sticky;
+  top: 16px;
+}
+
+.rv-product-card {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  background: #21140d;
+  color: #fff6e8;
+  margin-bottom: 14px;
+}
+
+.rv-product-preview {
+  width: 88px;
+  height: 76px;
+  border-radius: 8px;
+  background: #fffaf4;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.rv-product-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.rv-product-card span {
+  color: rgba(255, 246, 232, 0.64);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rv-product-card h2 {
+  margin: 4px 0 0;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.rv-control-group {
+  padding: 0 0 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eadccf;
+}
+
+.rv-control-group label,
+.rv-slider-group label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  margin-bottom: 8px;
+  font-weight: 900;
+  color: #2b1b12;
+}
+
+.rv-slider-group label span {
+  color: #8a5a30;
+  font-size: 0.82rem;
+}
+
+.rv-button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.rv-controls button {
+  width: 100%;
+  padding: 0 12px;
+  background: #2b1b12;
+  color: #fffaf4;
+}
+
+.rv-controls input,
+.rv-control-group select {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #d9c5b2;
+  border-radius: 8px;
+  padding: 0 12px;
+  background: #fffaf4;
+  color: #24170f;
+  font-weight: 700;
+}
+
+.rv-control-group select {
+  cursor: pointer;
+}
+
+.rv-controls button:hover {
+  background: #7b4a22;
+}
+
+.rv-product-thumbs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.rv-product-thumbs button {
+  min-height: 54px;
+  padding: 4px;
+  background: #fffaf4;
+  border: 1px solid #e3d4c5;
+}
+
+.rv-product-thumbs button.active {
+  border-color: #9a5a1f;
+  box-shadow: 0 0 0 2px rgba(154, 90, 31, 0.14);
+}
+
+.rv-product-thumbs img {
+  width: 100%;
+  height: 44px;
+  object-fit: contain;
+}
+
+.rv-slider-group {
+  margin-bottom: 16px;
+}
+
+.rv-slider-group input {
+  width: 100%;
+  accent-color: #8a5a30;
+}
+
+.rv-tip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff3e5;
+  color: #67452c;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.rv-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.rv-actions button {
+  min-height: 48px;
+  background: #2b1b12;
+  color: #fffaf4;
+}
+
+.rv-actions button:last-child {
+  background: #128c4c;
+}
+
+.rv-actions button:last-child:hover {
+  background: #0d6f3c;
+}
+
+.rv-message {
+  margin: 12px 0 0;
+  color: #67452c;
+  font-weight: 800;
+}
+
+@media (max-width: 1100px) {
+  .rv-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .rv-controls {
+    position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  .room-visualizer-page {
+    padding: 16px 12px 28px;
+  }
+
+  .rv-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .rv-header-actions {
+    width: 100%;
+  }
+
+  .rv-header-actions button {
+    flex: 1;
+  }
+
+  .rv-stage-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .rv-stage-toolbar button {
+    width: 100%;
+  }
+
+  .rv-stage {
+    min-height: 360px;
+    aspect-ratio: 4 / 5;
+  }
+
+  .rv-button-row {
+    grid-template-columns: 1fr;
+  }
+}

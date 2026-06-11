@@ -65,7 +65,7 @@ export default function ChangePasswordPage() {
             <p>Every key, every wooden details, crafted with absolute devotion and timeless elegance.</p>
           </div>
           <div className="sidebar-footer">
-            <p>&copy; {new Date().getFullYear()} Bishwokarma Furniture Pvt. Ltd. | Traditional... bonded with love</p>
+            <p>&copy; {new Date().getFullYear()} Sindureghari Furniture Pvt. Ltd. | Traditional... bonded with love</p>
           </div>
         </div>
       </div>
