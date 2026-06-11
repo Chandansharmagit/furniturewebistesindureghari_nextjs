@@ -1,5 +1,6 @@
 import ProductDetails from "@/component/productdetails/Productdetails";
 import { slugifyText } from "@/data/nepalSeo";
+import { redirect } from "next/navigation";
 
 const SITE_URL = "https://sinduregharifurniture.shop";
 const API_URL =
@@ -79,7 +80,7 @@ export async function generateMetadata({ params }) {
     const images = normalizeProductImages(product, name);
     const title = `${name} | Sindureghari Furniture Nepal`;
     const cleanTitle = title.length > 60 ? `${title.substring(0, 57)}...` : title;
-    const canonicalSlug = slug || `${slugifyText(name)}-price-in-nepal`;
+    const canonicalSlug = `${slugifyText(name)}-price-in-nepal`;
     const canonicalUrl = `${SITE_URL}/product/${id}/${canonicalSlug}`;
 
     return {
@@ -142,6 +143,7 @@ export default async function Page({ params }) {
 
   let productJsonLd = null;
   let breadcrumbJsonLd = null;
+  let canonicalRedirectPath = null;
 
   try {
     const res = await fetch(`${API_URL}/api/products/${id}?fresh=1`, {
@@ -154,10 +156,14 @@ export default async function Page({ params }) {
       const name = product.name || product.title || "Furniture";
       const price = product.new_price || product.salePrice || product.price || "0";
       const description = productDescription(product, name);
-      const canonicalSlug = slug || `${slugifyText(name)}-price-in-nepal`;
+      const canonicalSlug = `${slugifyText(name)}-price-in-nepal`;
       const canonicalUrl = `${SITE_URL}/product/${id}/${canonicalSlug}`;
       const images = normalizeProductImages(product, name);
       const imageUrl = images[0]?.url || `${SITE_URL}/logo.png`;
+
+      if (slug !== canonicalSlug) {
+        canonicalRedirectPath = `/product/${id}/${canonicalSlug}`;
+      }
 
       productJsonLd = {
         "@context": "https://schema.org/",
@@ -209,6 +215,10 @@ export default async function Page({ params }) {
     }
   } catch (error) {
     console.error("Failed to generate Product JSON-LD:", error);
+  }
+
+  if (canonicalRedirectPath) {
+    redirect(canonicalRedirectPath);
   }
 
   return (

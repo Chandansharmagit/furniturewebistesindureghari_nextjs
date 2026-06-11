@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import SEOComponent from '../../components/SEO/SEOComponent';
 import { API_BASE_URL } from '../../config/api';
+import { productSeoPath } from '../../data/nepalSeo';
 import ProductTabs from './ProductTabs';
 import EMIPlansModal from './Emi/Emiplan';
 import { useCart } from '../../context/CartContext';
@@ -707,7 +708,7 @@ Write 3 compact bullets: best room fit, why it is worth buying, and one buying c
                 price={product?.new_price}
                 priceCurrency="NPR"
                 sku={product?.sku || `SF-${product?.id || '000'}`}
-                canonicalUrl={`https://sinduregharifurniture.shop/product/${id}`}
+                canonicalUrl={`https://sinduregharifurniture.shop${productSeoPath(product)}`}
                 structuredData={{
                     "@context": "https://schema.org",
                     "@type": "Product",

@@ -78,6 +78,9 @@ const Footer = () => {
   return (
     <footer className="royal-footer">
       <div className="footer-luxury-border"></div>
+      <div className="footer-kathmandu-marquee" aria-hidden="true">
+        <div className="footer-kathmandu-track"></div>
+      </div>
 
       <motion.div
         className="royal-footer-container"

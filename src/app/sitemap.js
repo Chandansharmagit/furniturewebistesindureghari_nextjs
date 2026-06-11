@@ -128,17 +128,6 @@ export default async function sitemap() {
       const data = await res.json();
       const products = Array.isArray(data) ? data : data.products || [];
       productEntries = products
-        .filter((p) => p && (p._id || p.id))
-        .map((product) => ({
-          url: `${SITE_URL}/product/${product._id || product.id}`,
-          lastModified: product.updated_at
-            ? new Date(product.updated_at).toISOString().split("T")[0]
-            : today,
-          changeFrequency: "weekly",
-          priority: 0.8,
-        }));
-
-      const productSlugEntries = products
         .filter((p) => p && (p._id || p.id) && (p.name || p.title))
         .map((product) => {
           const productName = product.name || product.title || "furniture";
@@ -158,8 +147,6 @@ export default async function sitemap() {
             priority: 0.82,
           };
         });
-
-      productEntries.push(...productSlugEntries);
     }
   } catch (error) {
     console.error("Sitemap: Failed to fetch products from API:", error.message);
