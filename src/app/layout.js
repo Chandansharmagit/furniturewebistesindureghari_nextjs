@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Script from "next/script";
 import "./globals.css";
 import ClientLayout from "./ClientLayout";
 import { getSiteNavigationJsonLd } from "@/component/seo/SiteLinksJsonLd";
@@ -71,7 +72,7 @@ export const metadata = {
     "max-video-preview": -1,
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "wkl4rN4P3zwUIQKPoXuSAtutC6m5az8rYWP76Puwvbw",
   },
   other: {
     "application-name": SITE_NAME,
@@ -222,6 +223,18 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-21VHK885PN"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics-gtag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-21VHK885PN');
+          `}
+        </Script>
         <Suspense fallback={null}>
           <ClientLayout>{children}</ClientLayout>
         </Suspense>
