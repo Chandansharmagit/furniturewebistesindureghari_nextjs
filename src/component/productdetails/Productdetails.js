@@ -118,6 +118,31 @@ export default function ProductDetails({ productId }) {
     const [aiProductLoading, setAiProductLoading] = useState(false);
     const [aiProductError, setAiProductError] = useState('');
 
+    // Real Customer Reviews / Feedback State
+    const [reviews, setReviews] = useState([]);
+    const [reviewsLoading, setReviewsLoading] = useState(false);
+
+    // Fetch product reviews from database
+    const fetchProductReviews = useCallback(async () => {
+        if (!id) return;
+        try {
+            setReviewsLoading(true);
+            const res = await axios.get(`${API_BASE_URL}/api/customer-data/feedback`, {
+                params: { product_id: id }
+            });
+            if (res.data && res.data.success) {
+                setReviews(res.data.data || []);
+            } else {
+                setReviews([]);
+            }
+        } catch (err) {
+            console.error('Error fetching product reviews:', err);
+            setReviews([]);
+        } finally {
+            setReviewsLoading(false);
+        }
+    }, [id]);
+
     // Get product by ID
     const getProductById = useCallback(async () => {
         try {
@@ -145,8 +170,10 @@ export default function ProductDetails({ productId }) {
         if (id) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
             getProductById();
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            fetchProductReviews();
         }
-    }, [id, getProductById]);
+    }, [id, getProductById, fetchProductReviews]);
 
     // GSAP Animations
     useEffect(() => {
@@ -635,8 +662,12 @@ Product Link: ${window.location.href}`;
         );
     }
 
-    const rating = generateRandomRating(product.id);
-    const reviewCount = Math.floor((product.id * 7 + 123) % 50) + 10;
+    // Calculate rating and reviewCount from real database feedback entries
+    const dbProductReviews = reviews.filter(r => r.feedback_type?.toLowerCase() === 'product' || r.rating > 0);
+    const reviewCount = dbProductReviews.length;
+    const rating = dbProductReviews.length > 0
+        ? Math.round((dbProductReviews.reduce((sum, r) => sum + Number(r.rating || 5), 0) / dbProductReviews.length) * 10) / 10
+        : 0;
     const hasDiscount = product.old_price && parseFloat(product.old_price) > parseFloat(product.new_price);
     const discountPercent = hasDiscount
         ? Math.round(((parseFloat(product.old_price) - parseFloat(product.new_price)) / parseFloat(product.old_price)) * 100)
@@ -830,6 +861,7 @@ Write 3 compact bullets: best room fit, why it is worth buying, and one buying c
                                             <img
                                                 src={imageUrl}
                                                 alt={`${product.name || product.title} ${index + 1}`}
+                                                loading="lazy"
                                                 onError={(e) => {
                                                     e.currentTarget.src = '/api/placeholder/90/90';
                                                 }}
@@ -1335,6 +1367,9 @@ Write 3 compact bullets: best room fit, why it is worth buying, and one buying c
                 formatPrice={formatPrice}
                 API_BASE={API_BASE_URL}
                 product={product}
+                dbFeedback={reviews}
+                fetchDbFeedback={fetchProductReviews}
+                loadingFeedback={reviewsLoading}
             />
 
             {isImageViewerOpen && selectedImage && (

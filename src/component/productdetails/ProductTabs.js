@@ -33,15 +33,29 @@ const DEFAULT_VERIFIED_FEEDBACK = [
     }
 ];
 
-const ProductTabs = ({ productId, category, generateRandomRating, renderStars, formatPrice, API_BASE, product }) => {
+const ProductTabs = ({ 
+    productId, 
+    category, 
+    generateRandomRating, 
+    renderStars, 
+    formatPrice, 
+    API_BASE, 
+    product,
+    dbFeedback: propDbFeedback,
+    fetchDbFeedback: propFetchDbFeedback,
+    loadingFeedback: propLoadingFeedback
+}) => {
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [loadingRelated, setLoadingRelated] = useState(false);
     const [relatedError, setRelatedError] = useState(null);
 
     // Tab and Dynamic Feedback State
     const [activeTab, setActiveTab] = useState('details');
-    const [dbFeedback, setDbFeedback] = useState([]);
-    const [loadingFeedback, setLoadingFeedback] = useState(false);
+    const [localDbFeedback, setLocalDbFeedback] = useState([]);
+    const [localLoadingFeedback, setLocalLoadingFeedback] = useState(false);
+
+    const dbFeedback = propDbFeedback !== undefined ? propDbFeedback : localDbFeedback;
+    const loadingFeedback = propLoadingFeedback !== undefined ? propLoadingFeedback : localLoadingFeedback;
 
     // Form inputs state
     const [userName, setUserName] = useState('');
@@ -93,32 +107,33 @@ const ProductTabs = ({ productId, category, generateRandomRating, renderStars, f
 
     // Fetch complaints/feedbacks dynamically from SQL Database
     const fetchDbFeedback = async () => {
+        if (propFetchDbFeedback) {
+            await propFetchDbFeedback();
+            return;
+        }
         if (!productId) return;
         try {
-            setLoadingFeedback(true);
+            setLocalLoadingFeedback(true);
             // Fetch dynamically using our customized product_id filter on the feedback endpoint
             const res = await axios.get(`${API_BASE}/api/customer-data/feedback?product_id=${productId}`);
             if (res.data && res.data.success) {
-                const list = res.data.data || [];
-                // If database is empty, merge with default premium entries so page looks rich and professional
-                if (list.length === 0) {
-                    setDbFeedback(DEFAULT_VERIFIED_FEEDBACK);
-                } else {
-                    setDbFeedback(list);
-                }
+                setLocalDbFeedback(res.data.data || []);
             } else {
-                setDbFeedback(DEFAULT_VERIFIED_FEEDBACK);
+                setLocalDbFeedback([]);
             }
         } catch (err) {
-            console.warn('Could not load feedback from database, using trust fallback logs:', err.message);
-            setDbFeedback(DEFAULT_VERIFIED_FEEDBACK);
+            console.warn('Could not load feedback from database:', err.message);
+            setLocalDbFeedback([]);
         } finally {
-            setLoadingFeedback(false);
+            setLocalLoadingFeedback(false);
         }
     };
 
     useEffect(() => {
-        fetchDbFeedback();
+        if (!propFetchDbFeedback) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            fetchDbFeedback();
+        }
         fetchRelatedProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [productId, category]);
@@ -400,7 +415,7 @@ const ProductTabs = ({ productId, category, generateRandomRating, renderStars, f
                                                             </span>
                                                         </div>
                                                         <h4 className="entry-title-text">{item.title}</h4>
-                                                        <p className="entry-body-text">"{item.message}"</p>
+                                                        <p className="entry-body-text">&ldquo;{item.message}&rdquo;</p>
                                                         
                                                         <div className="entry-footer-row">
                                                             <span className="entry-user-name">By {item.name}</span>

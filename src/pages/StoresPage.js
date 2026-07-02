@@ -74,7 +74,7 @@ const StoresPage = () => {
                 className={`store-card ${store.isPremium ? 'premium' : ''}`}
               >
                 <div className="store-card-image">
-                  <img src={store.image} alt={store.name} />
+                  <img src={store.image} alt={store.name} loading="lazy" />
                   {store.isPremium && <span className="premium-tag">Flagship Store</span>}
                 </div>
                 
@@ -109,12 +109,10 @@ const StoresPage = () => {
           </div>
         </div>
       </section>
-
-      {/* Simple Contact Footer */}
       <section className="stores-cta-section">
         <div className="stores-container">
           <div className="stores-cta-card">
-            <h2 className="serif">Can't visit in person?</h2>
+            <h2 className="serif">Can&apos;t visit in person?</h2>
             <p>Our design consultants are available for virtual appointments and home visits.</p>
             <button className="consultation-btn">Book a Design Consultation</button>
           </div>

@@ -25,41 +25,46 @@ const DashboardSidebar = ({
   handleLogout,
   notificationCounts = {},
   isSidebarCollapsed,
-  setIsSidebarCollapsed
+  setIsSidebarCollapsed,
+  tabOrder = []
 }) => {
-  const primaryTabs = [
-    { id: 'dashboard', label: 'Overview', icon: FaChartBar },
-    { id: 'orders', label: 'Order Control', icon: FaReceipt },
-    { id: 'products', label: 'Products', icon: FaBox },
-    { id: 'coupons', label: 'Coupons', icon: FaTicketAlt },
-    { id: 'analytics', label: 'Analytics', icon: FaChartLine },
-    { id: 'marketing', label: 'Marketing', icon: FaBullhorn }
+  const allTabs = [
+    { id: 'dashboard', label: 'Overview', icon: FaChartBar, group: 'Store' },
+    { id: 'orders', label: 'Order Control', icon: FaReceipt, group: 'Store' },
+    { id: 'products', label: 'Products', icon: FaBox, group: 'Store' },
+    { id: 'coupons', label: 'Coupons', icon: FaTicketAlt, group: 'Store' },
+    { id: 'analytics', label: 'Analytics', icon: FaChartLine, group: 'Store' },
+    { id: 'marketing', label: 'Marketing', icon: FaBullhorn, group: 'Store' },
+    { id: 'users', label: 'Customers', icon: FaUsers, group: 'Customers' },
+    { id: 'customer-data', label: 'Inquiries', icon: FaCommentDots, group: 'Customers' },
+    { id: 'complaint-box', label: 'Complaint Box', icon: FaExclamationTriangle, group: 'Customers' },
+    { id: 'abandoned-carts', label: 'Abandoned Carts', icon: FaShoppingCart, group: 'Customers' },
+    { id: 'leads-hub', label: 'Leads Hub', icon: FaEnvelopeOpenText, group: 'Customers' },
+    { id: 'blogs', label: 'Blogs', icon: FaPenNib, group: 'Content' }
   ];
 
-  const customerTabs = [
-    { id: 'users', label: 'Customers', icon: FaUsers },
-    { id: 'customer-data', label: 'Inquiries', icon: FaCommentDots },
-    { id: 'complaint-box', label: 'Complaint Box', icon: FaExclamationTriangle },
-    { id: 'abandoned-carts', label: 'Abandoned Carts', icon: FaShoppingCart },
-    { id: 'leads-hub', label: 'Leads Hub', icon: FaEnvelopeOpenText }
+  const defaultTabOrder = [
+    'dashboard', 'orders', 'products', 'coupons', 'analytics', 'marketing',
+    'users', 'customer-data', 'complaint-box', 'abandoned-carts', 'leads-hub', 'blogs'
   ];
 
-  const contentTabs = [
-    { id: 'blogs', label: 'Blogs', icon: FaPenNib }
-  ];
+  const activeOrder = tabOrder.length > 0 ? tabOrder : defaultTabOrder;
+  const orderedTabs = activeOrder.map(tabId => allTabs.find(t => t.id === tabId)).filter(Boolean);
 
   const renderNavGroup = (title, items) => (
     <div className="admin-sidebar-group">
       {!isSidebarCollapsed && <p className="admin-sidebar-group-title">{title}</p>}
-      {items.map(({ id, label, icon: Icon }) => {
+      {items.map(({ id, label, icon: Icon, group }) => {
         const count = Number(notificationCounts[id] || 0);
+        const isRecentlyActive = activeOrder.indexOf(id) === 0 && count > 0;
+        
         return (
           <button
             key={id}
             type="button"
-            className={`admin-nav-item ${activeTab === id ? 'active' : ''} ${isSidebarCollapsed ? 'collapsed' : ''}`}
+            className={`admin-nav-item ${activeTab === id ? 'active' : ''} ${isSidebarCollapsed ? 'collapsed' : ''} ${isRecentlyActive ? 'recently-active-pulse' : ''}`}
             onClick={() => handleTabChange(id)}
-            title={isSidebarCollapsed ? label : undefined}
+            title={isSidebarCollapsed ? `${label} (${group})` : undefined}
           >
             <span className="admin-nav-icon-wrap">
               <Icon className="admin-nav-icon" />
@@ -67,7 +72,10 @@ const DashboardSidebar = ({
             </span>
             {!isSidebarCollapsed && (
               <>
-                <span className="admin-nav-label">{label}</span>
+                <span className="admin-nav-label-wrap" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1, textAlign: 'left' }}>
+                  <span className="admin-nav-label" style={{ lineHeight: '1.2' }}>{label}</span>
+                  <span className={`admin-nav-group-badge badge-${group.toLowerCase()}`}>{group}</span>
+                </span>
                 {count > 0 && <span className="admin-nav-badge">+{count > 99 ? '99' : count}</span>}
               </>
             )}
@@ -97,9 +105,7 @@ const DashboardSidebar = ({
       </div>
 
       <nav className="admin-sidebar-nav" aria-label="Admin navigation">
-        {renderNavGroup('Store', primaryTabs)}
-        {renderNavGroup('Customers', customerTabs)}
-        {renderNavGroup('Content', contentTabs)}
+        {renderNavGroup('Navigation Menu', orderedTabs)}
       </nav>
 
       <div className="admin-sidebar-footer">

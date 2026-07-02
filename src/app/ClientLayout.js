@@ -35,6 +35,11 @@ const ChatbaseWidget = dynamic(() => import("../component/common/ChatbaseWidget"
   ssr: false,
 });
 
+const WhatsAppFloat = dynamic(() => import("../component/common/WhatsAppFloat"), {
+  loading: () => null,
+  ssr: false,
+});
+
 const ReviewPromptPopup = dynamic(() => import("../component/popup/ReviewPromptPopup"), {
   loading: () => null,
   ssr: false,
@@ -107,6 +112,7 @@ export default function ClientLayout({ children }) {
             <CookieConsentBanner />
             {!isAdminPage && <ReviewPromptPopup />}
             <ChatbaseWidget />
+            {!isAdminPage && <WhatsAppFloat />}
           </>
         )}
         {!isAdminPage && <AppDownloadPrompt />}

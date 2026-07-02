@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Chart as ChartJS,
@@ -51,6 +51,19 @@ ChartJS.register(
   ArcElement
 );
 
+// ─── Module-level API Cache (90 second TTL) ───────────────────────────
+const _apiCache = new Map();
+const CACHE_TTL = 90_000;
+const getCached = (key) => {
+  const entry = _apiCache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.ts > CACHE_TTL) { _apiCache.delete(key); return null; }
+  return entry.data;
+};
+const setCache = (key, data) => _apiCache.set(key, { data, ts: Date.now() });
+const clearCache = () => _apiCache.clear();
+// ──────────────────────────────────────────────────────────────────────
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
@@ -63,6 +76,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [coupons, setCoupons] = useState([]);
   const [couponLoading, setCouponLoading] = useState(false);
+  const [submissionsLoading, setSubmissionsLoading] = useState(false);
   const [usersData, setUsersData] = useState([]);
   const [usersStatistics, setUsersStatistics] = useState(null);
   const [usersLoading, setUsersLoading] = useState(false);
@@ -71,25 +85,62 @@ const AdminDashboard = () => {
   const [orderRequestSubmissions, setOrderRequestSubmissions] = useState([]);
   const [notificationCounts, setNotificationCounts] = useState({});
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [tabOrder, setTabOrder] = useState([
+    'dashboard', 'orders', 'products', 'coupons', 'analytics', 'marketing',
+    'users', 'customer-data', 'complaint-box', 'abandoned-carts', 'leads-hub', 'blogs'
+  ]);
+  // Track which tabs have already loaded their data
+  const loadedTabsRef = useRef(new Set(['dashboard']));
 
-  // Load dashboard metrics
+  const registerTabActivity = useCallback((tabId) => {
+    setTabOrder(prevOrder => {
+      if (prevOrder[0] === tabId) return prevOrder; // Already at the top
+      const filtered = prevOrder.filter(id => id !== tabId);
+      return [tabId, ...filtered];
+    });
+  }, []);
+
+  const prevCountsRef = useRef({});
+  useEffect(() => {
+    let changed = false;
+    Object.keys(notificationCounts).forEach(tabId => {
+      const prev = prevCountsRef.current[tabId] || 0;
+      const current = notificationCounts[tabId] || 0;
+      if (current > prev) {
+        registerTabActivity(tabId);
+        changed = true;
+      }
+    });
+    prevCountsRef.current = { ...notificationCounts };
+  }, [notificationCounts, registerTabActivity]);
+
+  // ── Load overview + sidebar badge counts only (fast, lightweight) ──
   const loadDashboardData = useCallback(async (silentRefresh = false) => {
     try {
       if (!silentRefresh) setLoading(true);
       else setRefreshing(true);
       setError(null);
 
-      const [overviewRes, salesRes, productRes] = await Promise.all([
-        dashboardService.getOverview(selectedPeriod),
-        salesService.getAnalytics(selectedPeriod),
-        dashboardService.getProductAnalytics(selectedPeriod)
-      ]);
+      const cacheKey = `overview-${selectedPeriod}`;
+      let overviewData, salesDataResult, productAnalytics;
 
-      const overviewData = overviewRes.success ? overviewRes.data : {};
-      const productAnalytics = productRes.success ? productRes.data : {};
+      const cached = getCached(cacheKey);
+      if (cached && !silentRefresh) {
+        ({ overviewData, salesDataResult, productAnalytics } = cached);
+      } else {
+        const [overviewRes, salesRes, productRes] = await Promise.all([
+          dashboardService.getOverview(selectedPeriod),
+          salesService.getAnalytics(selectedPeriod),
+          dashboardService.getProductAnalytics(selectedPeriod)
+        ]);
+        overviewData = overviewRes.success ? overviewRes.data : {};
+        salesDataResult = salesRes.success ? salesRes.data : {};
+        productAnalytics = productRes.success ? productRes.data : {};
+        setCache(cacheKey, { overviewData, salesDataResult, productAnalytics });
+      }
 
       setDashboardData(overviewData);
-      setSalesData(salesRes.success ? salesRes.data : {});
+      setSalesData(salesDataResult);
       setProductData(productAnalytics);
 
       setNotificationCounts(prev => ({
@@ -100,12 +151,15 @@ const AdminDashboard = () => {
         products: productAnalytics?.low_stock_count || 0
       }));
 
+      // Load sidebar badge counts in background (non-blocking)
       try {
         const credentials = authService.getCredentials();
-        const summaryRes = await fetch(`${API_BASE_URL}${CUSTOMER_DATA_ENDPOINTS.SUMMARY}`, {
-          headers: { ...credentials, 'Content-Type': 'application/json' }
-        });
-        const abandonedRes = await dashboardService.getAbandonedCarts(selectedPeriod);
+        const [summaryRes, abandonedRes] = await Promise.all([
+          fetch(`${API_BASE_URL}${CUSTOMER_DATA_ENDPOINTS.SUMMARY}`, {
+            headers: { ...credentials, 'Content-Type': 'application/json' }
+          }),
+          dashboardService.getAbandonedCarts(selectedPeriod)
+        ]);
 
         if (summaryRes.ok) {
           const summary = await summaryRes.json();
@@ -120,7 +174,6 @@ const AdminDashboard = () => {
             'leads-hub': orderRequestNew
           }));
         }
-
         if (abandonedRes.success) {
           setNotificationCounts(prev => ({
             ...prev,
@@ -154,17 +207,30 @@ const AdminDashboard = () => {
   }, [navigate, loadDashboardData]);
 
 
-  const loadCoupons = useCallback(async () => {
+  const loadCoupons = useCallback(async (force = false) => {
+    if (!force && getCached('coupons')) {
+      setCoupons(getCached('coupons'));
+      return;
+    }
     try {
       setCouponLoading(true);
       const result = await couponService.getAllCoupons();
-      if (result.success) setCoupons(result.data || []);
+      if (result.success) {
+        setCoupons(result.data || []);
+        setCache('coupons', result.data || []);
+      }
     } finally {
       setCouponLoading(false);
     }
   }, []);
 
-  const loadUsersData = useCallback(async () => {
+  const loadUsersData = useCallback(async (force = false) => {
+    if (!force && getCached('users')) {
+      const c = getCached('users');
+      setUsersData(c.users);
+      setUsersStatistics(c.statistics);
+      return;
+    }
     setUsersLoading(true);
     try {
       const credentials = authService.getCredentials();
@@ -175,6 +241,7 @@ const AdminDashboard = () => {
         const data = await response.json();
         setUsersData(data.users || []);
         setUsersStatistics(data.statistics || null);
+        setCache('users', { users: data.users || [], statistics: data.statistics || null });
       }
     } finally {
       setUsersLoading(false);
@@ -183,7 +250,7 @@ const AdminDashboard = () => {
 
   const loadCustomerSubmissions = useCallback(async () => {
     try {
-      setLoading(true);
+      setSubmissionsLoading(true);
       const credentials = authService.getCredentials();
       const headers = { ...credentials, 'Content-Type': 'application/json' };
       
@@ -197,26 +264,32 @@ const AdminDashboard = () => {
       if (feedbackRes.ok) setFeedbackSubmissions((await feedbackRes.json()).data || []);
       if (orderRequestsRes.ok) setOrderRequestSubmissions((await orderRequestsRes.json()).data || []);
     } finally {
-      setLoading(false);
+      setSubmissionsLoading(false);
     }
   }, []);
 
-  const handleLogout = () => { authService.logout(); navigate('/login'); };
-  const handleTabChange = (tab) => setActiveTab(tab);
-  const handleRefresh = () => loadDashboardData();
+  const handleLogout = () => { authService.logout(); clearCache(); navigate('/login'); };
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    registerTabActivity(tab);
+  };
+  // Force-refresh clears cache so fresh data is always fetched
+  const handleRefresh = () => { clearCache(); loadedTabsRef.current.clear(); loadDashboardData(true); };
   const formatCurrency = (amount) => `Rs. ${Number(amount || 0).toLocaleString('en-IN')}`;
   const formatNumber = (number) => new Intl.NumberFormat('en-US').format(number || 0);
 
   const handleDeleteCoupon = async (id) => {
     if (window.confirm('Delete coupon?')) {
       const res = await couponService.deleteCoupon(id);
-      if (res.success) loadCoupons();
+      if (res.success) { _apiCache.delete('coupons'); loadCoupons(true); }
     }
   };
 
+  // ── Lazy tab data loading — only fetch on first visit ──────────────
   useEffect(() => {
+    if (loadedTabsRef.current.has(activeTab)) return; // already loaded
+    loadedTabsRef.current.add(activeTab);
     if (activeTab === 'coupons') loadCoupons();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (activeTab === 'users') loadUsersData();
     if (activeTab === 'customer-data') loadCustomerSubmissions();
   }, [activeTab, loadCoupons, loadUsersData, loadCustomerSubmissions]);
@@ -325,7 +398,8 @@ const AdminDashboard = () => {
           <SubmissionsTab 
             contactSubmissions={contactSubmissions} 
             feedbackSubmissions={feedbackSubmissions} 
-            orderRequestSubmissions={orderRequestSubmissions} 
+            orderRequestSubmissions={orderRequestSubmissions}
+            isLoading={submissionsLoading}
           />
         );
       case 'complaint-box':
@@ -354,6 +428,7 @@ const AdminDashboard = () => {
         notificationCounts={notificationCounts}
         isSidebarCollapsed={isSidebarCollapsed}
         setIsSidebarCollapsed={setIsSidebarCollapsed}
+        tabOrder={tabOrder}
       />
       <div className="admin-dashboard-main">
         <div className="admin-main-content">

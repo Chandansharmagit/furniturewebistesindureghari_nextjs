@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { MdAttachment, MdAutoAwesome, MdOutlineReportProblem, MdRefresh } from 'react-icons/md';
+import { MdAttachment, MdAutoAwesome, MdOutlineReportProblem, MdRefresh, MdEmail } from 'react-icons/md';
 import { API_BASE_URL, CUSTOMER_DATA_ENDPOINTS } from '../../../config/api';
 import authService from '../../../services/authService';
 import aiService from '../../../services/aiService';
+import ReplyEmailModal from './ReplyEmailModal';
 import './ComplaintBoxTab.css';
 
 const statuses = ['new', 'reviewing', 'resolved', 'closed'];
@@ -13,6 +14,19 @@ const ComplaintBoxTab = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [aiTriage, setAiTriage] = useState({});
+  
+  // Reply modal states
+  const [replyModalOpen, setReplyModalOpen] = useState(false);
+  const [replyRecipient, setReplyRecipient] = useState('');
+  const [replySubject, setReplySubject] = useState('');
+  const [replyRefId, setReplyRefId] = useState('');
+
+  const openReply = (email, issueType, id) => {
+    setReplyRecipient(email);
+    setReplySubject(`Response regarding Complaint - Issue: ${issueType || 'General'}`);
+    setReplyRefId(id);
+    setReplyModalOpen(true);
+  };
 
   const fetchComplaints = useCallback(async () => {
     try {
@@ -181,17 +195,38 @@ Return 3 compact lines: urgency, likely department, suggested first reply/action
               </div>
             )}
 
-            <label className="cb-status-control">
-              Update status
-              <select value={complaint.status || 'new'} onChange={(event) => updateStatus(complaint.id, event.target.value)}>
-                {statuses.map((status) => (
-                  <option value={status} key={status}>{status}</option>
-                ))}
-              </select>
-            </label>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginTop: '12px' }}>
+              <label className="cb-status-control" style={{ flex: 1, margin: 0 }}>
+                Update status
+                <select value={complaint.status || 'new'} onChange={(event) => updateStatus(complaint.id, event.target.value)}>
+                  {statuses.map((status) => (
+                    <option value={status} key={status}>{status}</option>
+                  ))}
+                </select>
+              </label>
+              
+              <button 
+                type="button" 
+                className="btn-icon-royal"
+                style={{ alignSelf: 'flex-end', height: '38px', width: '38px', borderRadius: '6px' }}
+                onClick={() => openReply(complaint.email, complaint.issue_type, complaint.id)}
+                title="Reply via Email"
+              >
+                <MdEmail />
+              </button>
+            </div>
           </article>
         ))}
       </div>
+
+      <ReplyEmailModal 
+        isOpen={replyModalOpen}
+        onClose={() => setReplyModalOpen(false)}
+        to={replyRecipient}
+        defaultSubject={replySubject}
+        referenceType="complaint"
+        referenceId={replyRefId}
+      />
     </div>
   );
 };

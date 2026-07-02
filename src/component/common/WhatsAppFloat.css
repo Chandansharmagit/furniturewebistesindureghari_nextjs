@@ -1,0 +1,133 @@
+/* ═══════════════════════════════════════════════════════
+   WhatsApp Floating Button — Sindureghari Furniture
+   ═══════════════════════════════════════════════════════ */
+
+.waf-wrapper {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* ── Main Button ── */
+.waf-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45);
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease,
+              background 0.22s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.waf-btn:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 12px 36px rgba(37, 211, 102, 0.55);
+  background: linear-gradient(135deg, #2fe070, #1aaa7a);
+}
+
+.waf-btn:active {
+  transform: scale(0.97);
+}
+
+.waf-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.waf-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+/* ── Pulse animation (fires for first 8s) ── */
+.waf-pulse .waf-btn {
+  animation: wafPulseRing 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes wafPulseRing {
+  0%   { box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45), 0 0 0 0 rgba(37, 211, 102, 0.55); }
+  60%  { box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45), 0 0 0 14px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45), 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+/* ── Tooltip Card ── */
+.waf-tooltip {
+  background: #fff;
+  border-radius: 14px;
+  padding: 12px 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+  min-width: 165px;
+  animation: wafSlideIn 0.22s ease forwards;
+  border: 1px solid rgba(37, 211, 102, 0.18);
+}
+
+@keyframes wafSlideIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.waf-tooltip-status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #128C7E;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.waf-tooltip-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 2px;
+}
+
+.waf-tooltip-sub {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ── Mobile: shrink to icon only ── */
+@media (max-width: 480px) {
+  .waf-wrapper {
+    bottom: 20px;
+    right: 16px;
+  }
+
+  .waf-btn {
+    padding: 14px;
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    justify-content: center;
+  }
+
+  .waf-label {
+    display: none;
+  }
+
+  .waf-icon {
+    width: 26px;
+    height: 26px;
+  }
+}

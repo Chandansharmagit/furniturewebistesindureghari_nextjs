@@ -100,7 +100,7 @@ const BlogList = () => {
                 className={`blog-card ${index % 7 === 0 ? 'blog-card-featured' : ''} ${index % 7 === 3 ? 'blog-card-tall' : ''}`}
               >
                 <Link href={`/blog/${post.slug}`} className="blog-card-image">
-                  <img src={post.image_url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1600&q=80'} alt={post.title} />
+                  <img src={post.image_url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1600&q=80'} alt={post.title} loading="lazy" />
                   <span className="blog-category">{post.category}</span>
                 </Link>
                 <div className="blog-card-body">

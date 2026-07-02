@@ -76,6 +76,7 @@ const CEOPage = () => {
                   src="/assets/images/ceo.jpg" 
                   alt="Chandan Sharma - Founder & CEO of Sharma Furniture" 
                   className="ceo-img"
+                  loading="lazy"
                 />
                 <div className="ceo-img-border-top"></div>
                 <div className="ceo-img-border-bottom"></div>
@@ -96,7 +97,7 @@ const CEOPage = () => {
               >
                 <Quote className="quote-icon" size={40} />
                 <p className="ceo-quote serif-italic">
-                  "We do not merely shape wood; we sculpt sanctuaries of comfort and legacy. Every grain holds a story, and every piece of furniture is a testament to timeless Nepalese craftsmanship."
+                  &ldquo;We do not merely shape wood; we sculpt sanctuaries of comfort and legacy. Every grain holds a story, and every piece of furniture is a testament to timeless Nepalese craftsmanship.&rdquo;
                 </p>
               </motion.div>
 
@@ -114,7 +115,7 @@ const CEOPage = () => {
                   However, Chandan saw a deeper calling. His vision was to take this unmatched 30-year legacy of family carpentry in Rautahat and elevate it into a modern, direct-to-consumer luxury experience. Under his leadership, the brand launched <strong>Sindureghari Furniture</strong>, marrying traditional joinery and 100% solid-wood longevity with contemporary minimalist geometry, ergonomic comfort, and premium glassmorphic accents.
                 </p>
                 <p>
-                  "Our mission is to replace disposable, mass-produced furniture with heritage items that you'll proudly pass down through generations," Chandan explains. "We source only premium, responsibly seasoned wood like Grade-A Teak and Sisau, ensuring each sofa, bed, and dining table stands as a monument of durability."
+                  &ldquo;Our mission is to replace disposable, mass-produced furniture with heritage items that you&apos;ll proudly pass down through generations,&rdquo; Chandan explains. &ldquo;We source only premium, responsibly seasoned wood like Grade-A Teak and Sisau, ensuring each sofa, bed, and dining table stands as a monument of durability.&rdquo;
                 </p>
               </motion.div>
             </div>
@@ -137,7 +138,7 @@ const CEOPage = () => {
                   Innovation is at the heart of our operations. In his modern workspace, Chandan leads design sessions, reviews digital 3D models of bespoke customer commissions, and ensures every detail is in sync with modern standards. He actively collaborates with international design consultants to bring a global perspective to local wood species.
                 </p>
                 <p>
-                  "We believe your home should be an extension of your character," Chandan notes. "By leveraging digital visualizations and direct customer feedback, we allow our clients to co-design their spaces. It's not just about selling furniture; it's about curated, personal experiences that start from the very first click on our website."
+                  &ldquo;We believe your home should be an extension of your character,&rdquo; Chandan notes. &ldquo;By leveraging digital visualizations and direct customer feedback, we allow our clients to co-design their spaces. It&apos;s not just about selling furniture; it&apos;s about curated, personal experiences that start from the very first click on our website.&rdquo;
                 </p>
                 <p>
                   Under his tech-enabled leadership, Sindureghari Furniture has expanded its presence across Nepal, introducing premium virtual catalog consulting, digital material previews, and a sophisticated customization portal.
@@ -172,6 +173,7 @@ const CEOPage = () => {
                   src="/assets/images/ceo_workspace.jpg" 
                   alt="Chandan Sharma in his creative workspace" 
                   className="ceo-img"
+                  loading="lazy"
                 />
                 <div className="ceo-img-border-top"></div>
                 <div className="ceo-img-border-bottom"></div>
@@ -267,7 +269,7 @@ const CEOPage = () => {
             transition={{ duration: 0.8 }}
             className="ceo-cta-card"
           >
-            <h2 className="serif">Let's Co-Create Your Sanctuary</h2>
+            <h2 className="serif">Let&apos;s Co-Create Your Sanctuary</h2>
             <p>
               Whether you want to furnish a majestic penthouse, design an elegant office space, or commission a fully customized royal teak sofa set, our dedicated design team and I are ready to bring your vision to life.
             </p>

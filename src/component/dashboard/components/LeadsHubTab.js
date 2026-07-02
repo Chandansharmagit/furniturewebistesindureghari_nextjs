@@ -6,6 +6,7 @@ import {
 } from 'react-icons/md';
 import { API_BASE_URL } from '../../../config/api';
 import authService from '../../../services/authService';
+import ReplyEmailModal from './ReplyEmailModal';
 import './LeadsHubTab.css';
 
 const LeadsHubTab = () => {
@@ -13,6 +14,10 @@ const LeadsHubTab = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
+
+  // Reply modal states
+  const [replyModalOpen, setReplyModalOpen] = useState(false);
+  const [replyRecipient, setReplyRecipient] = useState('');
 
   const fetchLeads = useCallback(async () => {
     try {
@@ -195,7 +200,14 @@ const LeadsHubTab = () => {
                     </td>
                     <td>{formatDate(lead.created_at)}</td>
                     <td>
-                      <button className="lh-action-btn" title="Send Email">
+                      <button 
+                        className="lh-action-btn" 
+                        title="Send Email"
+                        onClick={() => {
+                          setReplyRecipient(lead.email);
+                          setReplyModalOpen(true);
+                        }}
+                      >
                         <MdEmail />
                       </button>
                     </td>
@@ -206,6 +218,15 @@ const LeadsHubTab = () => {
           </div>
         )}
       </div>
+
+      <ReplyEmailModal 
+        isOpen={replyModalOpen}
+        onClose={() => setReplyModalOpen(false)}
+        to={replyRecipient}
+        defaultSubject="Message from Sindureghari Furniture"
+        referenceType="lead"
+        referenceId={replyRecipient}
+      />
     </div>
   );
 };
