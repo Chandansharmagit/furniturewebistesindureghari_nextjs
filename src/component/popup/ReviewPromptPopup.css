@@ -156,7 +156,12 @@
 }
 
 @media (max-width: 640px) {
-  .review-prompt-card,
+  .review-prompt-card {
+    right: 14px;
+    top: 130px;
+    bottom: auto;
+  }
+
   .review-prompt-launcher {
     right: 14px;
     bottom: 88px;

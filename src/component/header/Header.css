@@ -225,15 +225,26 @@
 
 .logo-text {
   display: block;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap;
+}
+
+.logo-brand-primary {
   font-family: 'Playfair Display', serif;
   font-size: 1.48rem;
   font-weight: 700;
   color: #2a1a10;
   line-height: 1;
-  letter-spacing: 0;
-  margin: 0 !important;
-  padding: 0 !important;
-  white-space: nowrap;
+}
+
+.logo-brand-secondary {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.48rem;
+  font-weight: 700;
+  color: #8b5a2b;
+  line-height: 1;
+  margin-left: 6px;
 }
 
 .logo-badge {
@@ -602,20 +613,29 @@ button.action-icon-wrapper {
 .header-left-area {
   display: none;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
 .mobile-toggle, .mobile-search-toggle {
   display: none;
-  background: white;
-  border: 1px solid rgba(0,0,0,0.08);
+  background: transparent;
+  border: none;
   color: var(--p-brown-dark);
   padding: 8px;
-  border-radius: 8px;
+  border-radius: 50%;
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-toggle:hover, .mobile-search-toggle:hover {
+  background: rgba(139, 69, 19, 0.05);
+}
+
+.mobile-toggle:active, .mobile-search-toggle:active {
+  background: rgba(139, 69, 19, 0.09);
+  transform: scale(0.92);
 }
 
 .mobile-search-toggle {
@@ -631,6 +651,10 @@ button.action-icon-wrapper {
 @media (max-width: 768px) {
   .premium-header {
     --header-h: 116px;
+    background: rgba(255, 255, 255, 0.88) !important;
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border-bottom: 1px solid rgba(139, 69, 19, 0.05);
   }
 
   .header-left-area {
@@ -654,12 +678,31 @@ button.action-icon-wrapper {
   .brand-logo-mark {
     width: 34px;
     height: 34px;
+    filter: drop-shadow(0 2px 4px rgba(42, 26, 16, 0.08));
   }
 
   .logo-text {
-    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    line-height: 1;
+    line-height: 1.1;
+  }
+
+  .logo-brand-primary {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #2a1a10;
+  }
+
+  .logo-brand-secondary {
+    font-size: 0.62rem;
+    font-weight: 750;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #b59978;
+    margin-left: 0;
+    margin-top: 1px;
   }
 
   .logo-badge {
@@ -676,8 +719,21 @@ button.action-icon-wrapper {
   }
 
   .action-icon-wrapper {
-    width: 34px;
-    height: 34px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .action-item:hover .action-icon-wrapper {
+    background: rgba(139, 69, 19, 0.04);
+  }
+
+  .action-item:active .action-icon-wrapper {
+    background: rgba(139, 69, 19, 0.08);
+    transform: scale(0.92);
   }
 
   .mobile-utility-row {
@@ -732,12 +788,96 @@ button.action-icon-wrapper {
 }
 
 @media (max-width: 480px) {
-  .logo-text {
-    font-size: 0.92rem;
+  .logo-brand-primary {
+    font-size: 0.88rem;
+  }
+
+  .logo-brand-secondary {
+    font-size: 0.58rem;
   }
   
   .header-actions {
     gap: 8px;
+  }
+  
+  .header-container-fluid {
+    padding: 0 10px;
+    gap: 8px;
+  }
+  
+  .header-left-area {
+    gap: 4px;
+  }
+}
+
+@media (max-width: 375px) {
+  .header-container-fluid {
+    padding: 0 6px;
+    gap: 4px;
+  }
+  
+  .header-left-area {
+    gap: 3px;
+  }
+  
+  .mobile-toggle, .mobile-search-toggle {
+    padding: 5px;
+    border-radius: 50%;
+  }
+  
+  .mobile-toggle svg, .mobile-search-toggle svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .brand-logo {
+    gap: 4px;
+  }
+  
+  .brand-logo-mark {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .logo-brand-primary {
+    font-size: 0.8rem;
+  }
+
+  .logo-brand-secondary {
+    font-size: 0.52rem;
+  }
+  
+  .header-actions {
+    gap: 4px;
+  }
+  
+  .action-icon-wrapper {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+  
+  .action-icon-wrapper svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+  
+  .header-loyalty-pill {
+    right: -4px;
+    top: -6px;
+    min-width: 28px;
+    height: 14px;
+    padding: 0 4px;
+    font-size: 7.5px;
+  }
+
+  .badge-count {
+    top: -4px;
+    right: -4px;
+    min-width: 13px;
+    height: 13px;
+    font-size: 0.55rem;
+    padding: 0 3px;
   }
 }
 

@@ -312,7 +312,10 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
           <Link to="/" className="brand-logo" aria-label="Sindureghari Furniture home" onClick={() => setIsMobileMenuOpen(false)}>
             <img src="/logo.png" alt="Sindureghari Furniture" className="brand-logo-mark" />
             <div className="logo-wrapper">
-              <span className="logo-text">Sindureghari Furniture</span>
+              <span className="logo-text">
+                <span className="logo-brand-primary">Sindureghari</span>
+                <span className="logo-brand-secondary">Furniture</span>
+              </span>
               <div className="logo-badge">Furniture... bonded with love</div>
             </div>
           </Link>
