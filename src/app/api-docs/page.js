@@ -64,6 +64,7 @@ export default function ApiDocsPage() {
   const [codeLanguage, setCodeLanguage] = useState('curl'); // 'curl' | 'js' | 'node' | 'python' | 'php' | 'go'
   const [adminToken, setAdminToken] = useState('');
   const [showToken, setShowToken] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -132,7 +133,8 @@ export default function ApiDocsPage() {
 
   useEffect(() => {
     // Auto-detect admin session if logged in
-    if (authService.isAuthenticatedWithContext()) {
+    if (typeof window !== 'undefined' && authService.isAuthenticatedWithContext()) {
+      setIsLoggedIn(true);
       const creds = authService.getCredentials();
       if (creds.Authorization) {
         setAdminToken(creds.Authorization.replace('Bearer ', ''));
@@ -492,7 +494,7 @@ func main() {
             <p>
               To protect database integrity, the bulk upload endpoint requires an authenticated Admin Bearer token header.
             </p>
-            {authService.isAuthenticatedWithContext() ? (
+            {isLoggedIn ? (
               <div className="auth-status-badge active">
                 <FaCheckCircle /> Session Active (Role: {userRole || 'Admin'})
               </div>
@@ -829,7 +831,7 @@ func main() {
               <div className="sandbox-token-card">
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
                   <label style={{ margin: 0 }}><FaKey /> Admin / Developer Bearer Token:</label>
-                  {authService.isAuthenticatedWithContext() && (
+                  {isLoggedIn && (
                     <button 
                       type="button"
                       onClick={() => {

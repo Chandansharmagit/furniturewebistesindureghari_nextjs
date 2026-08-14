@@ -12,9 +12,11 @@ const apiClient = axios.create({
 // Request interceptor to add JWT Authorization header
 apiClient.interceptors.request.use(
   (config) => {
-    const authToken = localStorage.getItem('authToken');
-    if (authToken) {
-      config.headers.Authorization = `Bearer ${authToken}`;
+    if (typeof window !== 'undefined') {
+      const authToken = localStorage.getItem('authToken');
+      if (authToken) {
+        config.headers.Authorization = `Bearer ${authToken}`;
+      }
     }
     return config;
   },
@@ -27,7 +29,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
+    if ((error.response?.status === 401 || error.response?.status === 403) && typeof window !== 'undefined') {
       // Only redirect if we're not already on the login page and not in the middle of a login attempt
       const currentPath = window.location.pathname;
       const isAuthPage = currentPath === '/login' || currentPath === '/register' || currentPath === '/forgot-password' || currentPath === '/new-password';
@@ -52,8 +54,6 @@ apiClient.interceptors.response.use(
           localStorage.removeItem('userEmail');
           localStorage.removeItem('userPassword');
 
-          // Use React Router navigation instead of window.location to prevent full page refresh
-          // This will be handled by the component that receives the error
           console.log('Auth token expired, user should be redirected to login');
         }
       }
@@ -304,6 +304,7 @@ class AuthService {
 
   // Check if user is authenticated
   isAuthenticated() {
+    if (typeof window === 'undefined') return false;
     const email = localStorage.getItem('userEmail');
     const password = localStorage.getItem('userPassword');
     const user = localStorage.getItem('user');
@@ -347,6 +348,7 @@ class AuthService {
 
   // Check authentication with context awareness
   isAuthenticatedWithContext() {
+    if (typeof window === 'undefined') return false;
     // If we have recent context state, use it
     if (this._contextAuthState &&
       (Date.now() - this._contextAuthState.timestamp) < 5000) { // 5 second window
@@ -359,6 +361,7 @@ class AuthService {
 
   // Validate current token
   validateToken() {
+    if (typeof window === 'undefined') return false;
     const token = localStorage.getItem('authToken');
     const user = localStorage.getItem('user');
 
@@ -388,18 +391,21 @@ class AuthService {
 
   // Get current user from localStorage
   getCurrentUser() {
+    if (typeof window === 'undefined') return null;
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
   }
 
   // Get stored credentials
   getCredentials() {
+    if (typeof window === 'undefined') return {};
     const authToken = localStorage.getItem('authToken');
     return authToken ? { Authorization: `Bearer ${authToken}` } : {};
   }
 
   // Get authentication token (for compatibility with components expecting JWT)
   getToken() {
+    if (typeof window === 'undefined') return null;
     // First try to get JWT token if available
     const authToken = localStorage.getItem('authToken');
     if (authToken) {
