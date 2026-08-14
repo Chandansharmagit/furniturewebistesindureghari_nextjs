@@ -954,8 +954,8 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
                 {/* Products Content */}
                 {isFallbackActive && (
                   <div className="bkf-category__fallback-banner" style={{
-                    background: 'rgba(197, 160, 89, 0.08)',
-                    borderLeft: '4px solid #C5A059',
+                    background: 'rgba(156, 90, 51, 0.08)',
+                    borderLeft: '4px solid #9c5a33',
                     padding: '20px 25px',
                     borderRadius: '8px',
                     marginBottom: '30px',
@@ -966,7 +966,7 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
                       fontSize: '11px',
                       fontWeight: '700',
                       letterSpacing: '1.5px',
-                      color: '#C5A059',
+                      color: '#9c5a33',
                       marginBottom: '6px',
                       textTransform: 'uppercase'
                     }}>RECOMMENDED FOR YOU</span>
@@ -974,7 +974,7 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
                       margin: 0,
                       fontSize: '1.1rem',
                       fontWeight: '500',
-                      color: '#1a1a1a',
+                      color: '#1a202c',
                       lineHeight: '1.5'
                     }}>
                       We are currently updating our <strong>{categoryLabel || (keyword ? keyword.replace(/-/g, ' ') : 'furniture')}</strong> collection. In the meantime, explore our finest handcrafted furniture pieces below:

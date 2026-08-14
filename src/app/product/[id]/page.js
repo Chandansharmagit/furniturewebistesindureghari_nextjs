@@ -1,6 +1,7 @@
 import ProductDetails from "@/component/productdetails/Productdetails";
 import { slugifyText } from "@/data/nepalSeo";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
 const SITE_URL = "https://sinduregharifurniture.shop";
 const API_URL =
@@ -8,9 +9,30 @@ const API_URL =
   process.env.REACT_APP_PROD_API_URL ||
   "https://furnituresinduregharibackend.vercel.app";
 
+const getProduct = cache(async (id) => {
+  try {
+    const res = await fetch(`${API_URL}/api/products/${id}?fresh=1`, {
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (error) {
+    console.error(`Error fetching product ${id}:`, error);
+    return null;
+  }
+});
+
+const generateImageAlt = (product, name) => {
+  if (product.image_alt) return product.image_alt;
+  const color = product.product_color ? `${product.product_color} ` : '';
+  const material = product.wooden_type ? `${product.wooden_type} ` : '';
+  return `${color}${material}${name}`.trim() || "Sindureghari Furniture";
+};
+
 const normalizeProductImages = (product = {}, name = "Sindureghari Furniture") => {
   const images = [];
   let parsedImageUrls = [];
+  const altText = generateImageAlt(product, name);
 
   if (product.imageUrls) {
     try {
@@ -25,60 +47,70 @@ const normalizeProductImages = (product = {}, name = "Sindureghari Furniture") =
 
   if (Array.isArray(parsedImageUrls)) {
     parsedImageUrls.forEach((url) => {
-      if (url) images.push({ url, width: 1200, height: 630, alt: name });
+      if (url) images.push({ url, width: 1200, height: 630, alt: altText });
     });
   }
 
   if (product.imageUrl) {
-    images.push({ url: product.imageUrl, width: 1200, height: 630, alt: name });
+    images.push({ url: product.imageUrl, width: 1200, height: 630, alt: altText });
   }
 
   if (Array.isArray(product.image_paths)) {
     product.image_paths.forEach((path) => {
       if (!path) return;
       const cleanPath = path.startsWith("/") ? path : `/${path}`;
-      images.push({ url: `${API_URL}${cleanPath}`, width: 1200, height: 630, alt: name });
+      images.push({ url: `${API_URL}${cleanPath}`, width: 1200, height: 630, alt: altText });
     });
   }
 
   if (product.image) {
-    images.push({ url: product.image, width: 1200, height: 630, alt: name });
+    images.push({ url: product.image, width: 1200, height: 630, alt: altText });
   }
 
   return images;
 };
 
-const productDescription = (product = {}, name = "Furniture") =>
-  product.description
-    ? `${String(product.description).substring(0, 155).trim()}...`
-    : `Explore ${name} at Sindureghari Furniture Nepal with product details, pricing and delivery support.`;
+const generateSmartTitle = (product, name) => {
+  if (product.seo_title) return product.seo_title;
+  
+  let title = name;
+  if (product.product_color) title = `${product.product_color} ${title}`;
+  if (product.wooden_type) title = `${title} in ${product.wooden_type}`;
+  
+  const categoryStr = product.categoryName || product.categorySlug ? ` — ${product.categoryName || (product.categorySlug && product.categorySlug.replace(/-/g, ' '))}` : '';
+  return `${title}${categoryStr} | Sindureghari Furniture Nepal`;
+};
+
+const generateSmartDescription = (product, name) => {
+  if (product.seo_description) return product.seo_description;
+  
+  const price = product.new_price || product.salePrice || product.price;
+  const priceStr = price ? ` at Rs. ${price}` : '';
+  const colorStr = product.product_color ? ` in ${product.product_color}` : '';
+  const materialStr = product.wooden_type ? ` made of ${product.wooden_type}` : '';
+  const categoryStr = product.categoryName ? ` Explore our ${product.categoryName} collection.` : '';
+  
+  return `Buy ${name}${colorStr}${materialStr}${priceStr} from Sindureghari Furniture Nepal.${categoryStr} Delivery across Nepal.`;
+};
 
 export async function generateMetadata({ params }) {
   const { id, slug } = await params;
 
   try {
-    const res = await fetch(`${API_URL}/api/products/${id}?fresh=1`, {
-      cache: "no-store",
-    });
-
-    if (!res.ok) {
-      console.warn(`Product metadata fetch failed for ID: ${id}. Status: ${res.status}`);
+    const data = await getProduct(id);
+    if (!data) {
       return {
         title: "Product Not Found",
         description: "The requested product could not be found.",
-        robots: {
-          index: false,
-          follow: false,
-        },
+        robots: { index: false, follow: false },
       };
     }
 
-    const data = await res.json();
     const product = data.product || data;
     const name = product.name || product.title || "Furniture";
-    const description = productDescription(product, name);
+    const description = generateSmartDescription(product, name);
     const images = normalizeProductImages(product, name);
-    const title = `${name} | Sindureghari Furniture Nepal`;
+    const title = generateSmartTitle(product, name);
     const cleanTitle = title.length > 60 ? `${title.substring(0, 57)}...` : title;
     const canonicalSlug = `${slugifyText(name)}-price-in-nepal`;
     const canonicalUrl = `${SITE_URL}/product/${id}/${canonicalSlug}`;
@@ -90,7 +122,7 @@ export async function generateMetadata({ params }) {
         canonical: canonicalUrl,
       },
       openGraph: {
-        title: `${name} | Sindureghari Furniture Nepal`,
+        title: cleanTitle,
         description,
         url: canonicalUrl,
         type: "website",
@@ -146,16 +178,13 @@ export default async function Page({ params }) {
   let canonicalRedirectPath = null;
 
   try {
-    const res = await fetch(`${API_URL}/api/products/${id}?fresh=1`, {
-      cache: "no-store",
-    });
+    const data = await getProduct(id);
 
-    if (res.ok) {
-      const data = await res.json();
+    if (data) {
       const product = data.product || data;
       const name = product.name || product.title || "Furniture";
       const price = product.new_price || product.salePrice || product.price || "0";
-      const description = productDescription(product, name);
+      const description = generateSmartDescription(product, name);
       const canonicalSlug = `${slugifyText(name)}-price-in-nepal`;
       const canonicalUrl = `${SITE_URL}/product/${id}/${canonicalSlug}`;
       const images = normalizeProductImages(product, name);
@@ -171,9 +200,13 @@ export default async function Page({ params }) {
         name,
         image: imageUrl,
         description,
+        sku: product.sku || "SKU-DEFAULT",
+        color: product.product_color || undefined,
+        material: product.wooden_type || undefined,
+        category: product.categoryName || product.categorySlug || undefined,
         brand: {
           "@type": "Brand",
-          name: "Sindureghari Furniture",
+          name: product.manufacturer || "Sindureghari Furniture",
         },
         offers: {
           "@type": "Offer",

@@ -15,7 +15,8 @@ import {
   FaTicketAlt,
   FaUsers,
   FaChevronLeft,
-  FaChevronRight
+  FaChevronRight,
+  FaCloudUploadAlt
 } from 'react-icons/fa';
 
 const DashboardSidebar = ({
@@ -25,13 +26,13 @@ const DashboardSidebar = ({
   handleLogout,
   notificationCounts = {},
   isSidebarCollapsed,
-  setIsSidebarCollapsed,
-  tabOrder = []
+  setIsSidebarCollapsed
 }) => {
   const allTabs = [
     { id: 'dashboard', label: 'Overview', icon: FaChartBar, group: 'Store' },
     { id: 'orders', label: 'Order Control', icon: FaReceipt, group: 'Store' },
     { id: 'products', label: 'Products', icon: FaBox, group: 'Store' },
+    { id: 'bulk-upload', label: 'Bulk API Upload', icon: FaCloudUploadAlt, group: 'Store' },
     { id: 'coupons', label: 'Coupons', icon: FaTicketAlt, group: 'Store' },
     { id: 'analytics', label: 'Analytics', icon: FaChartLine, group: 'Store' },
     { id: 'marketing', label: 'Marketing', icon: FaBullhorn, group: 'Store' },
@@ -43,26 +44,17 @@ const DashboardSidebar = ({
     { id: 'blogs', label: 'Blogs', icon: FaPenNib, group: 'Content' }
   ];
 
-  const defaultTabOrder = [
-    'dashboard', 'orders', 'products', 'coupons', 'analytics', 'marketing',
-    'users', 'customer-data', 'complaint-box', 'abandoned-carts', 'leads-hub', 'blogs'
-  ];
-
-  const activeOrder = tabOrder.length > 0 ? tabOrder : defaultTabOrder;
-  const orderedTabs = activeOrder.map(tabId => allTabs.find(t => t.id === tabId)).filter(Boolean);
-
   const renderNavGroup = (title, items) => (
     <div className="admin-sidebar-group">
       {!isSidebarCollapsed && <p className="admin-sidebar-group-title">{title}</p>}
       {items.map(({ id, label, icon: Icon, group }) => {
         const count = Number(notificationCounts[id] || 0);
-        const isRecentlyActive = activeOrder.indexOf(id) === 0 && count > 0;
-        
+
         return (
           <button
             key={id}
             type="button"
-            className={`admin-nav-item ${activeTab === id ? 'active' : ''} ${isSidebarCollapsed ? 'collapsed' : ''} ${isRecentlyActive ? 'recently-active-pulse' : ''}`}
+            className={`admin-nav-item ${activeTab === id ? 'active' : ''} ${isSidebarCollapsed ? 'collapsed' : ''}`}
             onClick={() => handleTabChange(id)}
             title={isSidebarCollapsed ? `${label} (${group})` : undefined}
           >
@@ -105,7 +97,7 @@ const DashboardSidebar = ({
       </div>
 
       <nav className="admin-sidebar-nav" aria-label="Admin navigation">
-        {renderNavGroup('Navigation Menu', orderedTabs)}
+        {renderNavGroup('Navigation Menu', allTabs)}
       </nav>
 
       <div className="admin-sidebar-footer">

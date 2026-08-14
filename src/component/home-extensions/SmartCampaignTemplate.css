@@ -1,6 +1,7 @@
 .smart-campaign-section {
-  background: #ffffff;
+  background: #fdfcf9;
   padding: 8px 0 48px;
+  font-family: 'Outfit', sans-serif;
 }
 
 .smart-campaign-inner {
@@ -14,17 +15,17 @@
   grid-template-columns: 230px minmax(0, 1fr) 280px;
   gap: 1px;
   overflow: hidden;
-  border: 1px solid #e8dfd2;
-  border-radius: 12px;
-  background: #e8dfd2;
-  box-shadow: 0 10px 28px rgba(31, 21, 12, 0.06);
+  border: 1px solid rgba(156, 90, 51, 0.15);
+  border-radius: 16px;
+  background: rgba(156, 90, 51, 0.15);
+  box-shadow: 0 12px 40px rgba(26, 32, 44, 0.06);
 }
 
 .smart-campaign-ticket,
 .smart-campaign-main,
 .smart-campaign-links,
 .smart-campaign-note {
-  background: #fffdfa;
+  background: #ffffff;
 }
 
 .smart-campaign-ticket {
@@ -34,8 +35,8 @@
   justify-content: center;
   min-height: 180px;
   padding: 24px;
-  background: #22150d;
-  color: #fff7e8;
+  background: #f3ede4;
+  color: #1a202c;
 }
 
 .smart-campaign-ticket::before,
@@ -46,7 +47,8 @@
   width: 24px;
   height: 24px;
   border-radius: 999px;
-  background: #e8dfd2;
+  background: #ffffff; /* matches the adjacent cell bg conceptually, but might need to match border color or just #fdfcf9 */
+  border: 1px solid rgba(156, 90, 51, 0.15);
 }
 
 .smart-campaign-ticket::before {
@@ -60,7 +62,7 @@
 .smart-campaign-ticket-label {
   width: fit-content;
   margin-bottom: 10px;
-  color: #f6c76f;
+  color: #9c5a33;
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.12em;
@@ -68,7 +70,7 @@
 }
 
 .smart-campaign-ticket strong {
-  color: #ffffff;
+  color: #1a202c;
   font-size: clamp(24px, 2.2vw, 32px);
   font-weight: 950;
   letter-spacing: 0.04em;
@@ -77,7 +79,7 @@
 .smart-campaign-ticket small {
   max-width: 170px;
   margin-top: 8px;
-  color: rgba(255, 247, 232, 0.72);
+  color: #4a5568;
   font-size: 12px;
   line-height: 1.35;
 }
@@ -98,8 +100,8 @@
   padding: 0 10px;
   margin-bottom: 12px;
   border-radius: 8px;
-  background: #f6efe4;
-  color: #8b4513;
+  background: rgba(156, 90, 51, 0.1);
+  color: #9c5a33;
   font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
@@ -108,7 +110,7 @@
 .smart-campaign-main h2 {
   max-width: 740px;
   margin: 0;
-  color: #171b24;
+  color: #1a202c;
   font-size: clamp(24px, 2.2vw, 36px);
   font-weight: 900;
   line-height: 1.08;
@@ -120,14 +122,14 @@
   margin-top: 18px;
   overflow: hidden;
   border-radius: 999px;
-  background: #eee7dd;
+  background: #f3ede4;
 }
 
 .smart-campaign-meter span {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #8b4513, #ee7426);
+  background: #9c5a33;
 }
 
 .smart-campaign-stats {
@@ -142,19 +144,19 @@
   gap: 2px;
   min-height: 58px;
   padding: 10px 12px;
-  border: 1px solid #eee4d8;
+  border: 1px solid rgba(156, 90, 51, 0.15);
   border-radius: 10px;
   background: #ffffff;
 }
 
 .smart-campaign-stats strong {
-  color: #171b24;
+  color: #1a202c;
   font-size: 18px;
   font-weight: 950;
 }
 
 .smart-campaign-stats span {
-  color: #76685f;
+  color: #4a5568;
   font-size: 12px;
   font-weight: 700;
 }
@@ -166,30 +168,48 @@
   padding: 20px;
 }
 
-.smart-campaign-chip,
+.smart-campaign-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 42px;
+  border-radius: 30px;
+  padding: 0 20px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid rgba(156, 90, 51, 0.3);
+  background: transparent;
+  color: #1a202c;
+  transition: all 0.3s ease;
+}
+
+.smart-campaign-chip:hover {
+  background: rgba(156, 90, 51, 0.05);
+  border-color: #9c5a33;
+}
+
 .smart-campaign-all {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
   min-height: 42px;
-  border-radius: 10px;
-  padding: 0 13px;
+  border-radius: 30px;
+  padding: 0 20px;
   text-decoration: none;
   font-size: 13px;
-  font-weight: 850;
-}
-
-.smart-campaign-chip {
-  border: 1px solid #eee4d8;
-  background: #ffffff;
-  color: #3b3029;
-}
-
-.smart-campaign-all {
-  border: 1px solid #8b4513;
-  background: #8b4513;
+  font-weight: 500;
+  border: 1px solid #9c5a33;
+  background: #9c5a33;
   color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.smart-campaign-all:hover {
+  background: #7a4627;
+  border-color: #7a4627;
 }
 
 .smart-campaign-note {
@@ -198,13 +218,13 @@
   align-items: center;
   gap: 8px;
   padding: 12px 18px;
-  color: #6a5b51;
+  color: #4a5568;
   font-size: 13px;
   font-weight: 700;
 }
 
 .smart-campaign-note svg {
-  color: #8b4513;
+  color: #9c5a33;
   flex-shrink: 0;
 }
 

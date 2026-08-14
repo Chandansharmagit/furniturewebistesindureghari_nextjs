@@ -1,27 +1,22 @@
-/* Newproduct.css - ROYAL MASTERPIECE THEME */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-:root {
-    --royal-gold: #c5a059;
-    --royal-black: #0a0a0a;
-    --royal-border: rgba(197, 160, 89, 0.2);
-}
+/* Newproduct.css - Modern Luxury Furniture */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 .newproduct-royal-section {
     padding: 76px 0;
-    background-color: #ffffff;
+    background-color: #fdfcf9;
     position: relative;
     overflow: hidden;
+    font-family: 'Outfit', sans-serif;
 }
 
 .newproduct-watermark {
     position: absolute;
     top: 40px;
     right: -2%;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 15rem;
-    font-weight: 900;
-    color: rgba(0, 0, 0, 0.02);
+    font-weight: 700;
+    color: rgba(156, 90, 51, 0.03);
     pointer-events: none;
     z-index: 0;
     white-space: nowrap;
@@ -34,7 +29,7 @@
     padding: 0 40px;
 }
 
-/* Header Section - Editorial Style */
+/* Header Section */
 .newproduct-header-editorial {
     display: flex;
     justify-content: space-between;
@@ -45,29 +40,27 @@
 
 .editorial-eyebrow {
     display: block;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.85rem;
+    font-size: 14px;
     text-transform: uppercase;
-    letter-spacing: 4px;
-    color: #c5a059;
+    letter-spacing: 2px;
+    color: #9c5a33;
     margin-bottom: 20px;
     font-weight: 600;
 }
 
 .newproduct-title {
-    font-family: 'Playfair Display', serif !important;
+    font-family: 'Outfit', sans-serif !important;
     font-size: clamp(2.5rem, 5vw, 4rem);
-    color: #1a1a1a;
-    font-weight: 700;
+    color: #1a202c;
+    font-weight: 600;
     margin: 0;
     line-height: 1.1;
-    letter-spacing: -0.03em;
 }
 
 .title-gold-accent {
     height: 4px;
     width: 120px;
-    background: linear-gradient(90deg, #c5a059, transparent);
+    background: linear-gradient(90deg, #9c5a33, transparent);
     margin-top: 30px;
 }
 
@@ -76,38 +69,37 @@
     padding-bottom: 20px;
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* Force right alignment */
-    text-align: right;    /* Modern right-aligned text pillar */
+    align-items: flex-end; 
+    text-align: right;    
     gap: 25px;
 }
 
 .newproduct-subtitle {
-    font-size: 1.1rem;
-    color: #555;
+    font-size: 16px;
+    color: #4a5568;
     line-height: 1.8;
     margin: 0;
 }
 
 .newproduct-view-all {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #1a1a1a;
-    text-decoration: none;
+    background: transparent;
+    color: #1a202c;
+    padding: 14px 32px;
+    border-radius: 30px;
+    border: 1px solid #c9b1a1;
     font-weight: 600;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    width: fit-content;
-    padding: 12px 0;
-    margin-right: -4px; /* Precision adjustment for SVG arrow tip */
-    border-bottom: 1.5px solid #c5a059;
+    font-size: 15px;
+    cursor: pointer;
     transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
 }
 
 .newproduct-view-all:hover {
-    gap: 20px;
-    color: #c5a059;
+    background: rgba(156, 90, 51, 0.05);
+    border-color: #9c5a33;
 }
 
 /* Scroll Wrapper */
@@ -129,21 +121,17 @@
 
 .newproduct-grid {
     display: flex;
-    gap: 18px;
+    gap: 24px;
     width: max-content;
 }
 
-/* Set specific width for ProductCard in this section */
 .newproduct-grid>div {
-    flex: 0 0 350px; /* Increased width for better space distribution */
+    flex: 0 0 350px; 
 }
 
 .newproduct-grid .card-media {
     aspect-ratio: 1 / 1;
-    /* Square for a tighter look in horizontal scroll */
 }
-
-/* Removing redundant card styles - now handled by ProductCard.css */
 
 /* Loading State */
 .newproduct-loading {
@@ -152,33 +140,35 @@
     flex-direction: column;
     align-items: center;
     gap: 30px;
+    background-color: #fdfcf9;
+    color: #9c5a33;
+    font-family: 'Outfit', sans-serif;
 }
 
 .royal-spinner {
     width: 60px;
     height: 60px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid var(--royal-gold);
+    border: 3px solid #f3ede4;
+    border-top: 3px solid #9c5a33;
     border-radius: 50%;
     animation: royalSpin 1s linear infinite;
 }
 
 @keyframes royalSpin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Responsive */
 @media (max-width: 1000px) {
-    .newproduct-header {
+    .newproduct-header-editorial {
         flex-direction: column;
         align-items: flex-start;
         gap: 25px;
+    }
+    .editorial-right {
+        align-items: flex-start;
+        text-align: left;
     }
 
     .newproduct-title {
@@ -195,19 +185,7 @@
         padding: 0 15px;
     }
 
-    .newproduct-card {
+    .newproduct-grid>div {
         flex: 0 0 280px;
-    }
-
-    .card-content {
-        padding: 20px;
-    }
-
-    .card-name {
-        font-size: 18px;
-    }
-
-    .new-val {
-        font-size: 20px;
     }
 }

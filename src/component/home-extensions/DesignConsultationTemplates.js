@@ -133,7 +133,7 @@ export default function DesignConsultationTemplates() {
               <article
                 className={`design-template-card ${selectedTemplate === template.id ? "active" : ""}`}
                 key={template.id}
-                style={{ "--template-accent": template.accent, backgroundImage: `url(${template.image})` }}
+                style={{ backgroundImage: `url(${template.image})` }}
               >
                 <span className="design-template-card-shade" />
                 <span className="design-template-card-panel">
@@ -155,7 +155,7 @@ export default function DesignConsultationTemplates() {
               <button className="design-template-modal-backdrop" type="button" onClick={closeConsultationForm} aria-label="Close consultation form" />
               <form className="design-template-form" onSubmit={handleSubmit}>
                 <div className="design-template-form-top">
-                  <span style={{ backgroundColor: activeTemplate.accent }}>
+                  <span>
                     <ImagePlus size={18} />
                   </span>
                   <div>

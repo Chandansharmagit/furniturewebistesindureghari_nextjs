@@ -160,6 +160,7 @@ const Footer = () => {
               <li><Link href="/our-vision">Our Vision & Plan</Link></li>
               <li><Link href="/contact">Imperial Contact</Link></li>
               <li><Link href="/help-and-support">Help & Support</Link></li>
+              <li><Link href="/api-docs" style={{ color: '#d4af37', fontWeight: 800 }}>⚡ Developer API & Sync</Link></li>
               <li><Link href="/careers">Royal Careers</Link></li>
             </ul>
           </motion.div>
@@ -230,8 +231,27 @@ const Footer = () => {
         <motion.div variants={itemVariants} className="royal-footer-bottom">
           <div className="footer-bottom-content">
             <p>&copy; {new Date().getFullYear()} Sindureghari Furniture Showroom | All Rights Reserved</p>
-            <div className="legal-links">
+            <div className="legal-links" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <Link href="/terms-conditions">Terms of Excellence</Link>
+              <Link 
+                href="/api-docs" 
+                className="footer-api-highlight-pill"
+                style={{
+                  background: 'linear-gradient(135deg, #b87333 0%, #9c5a33 100%)',
+                  color: '#ffffff',
+                  padding: '5px 14px',
+                  borderRadius: '20px',
+                  fontWeight: 800,
+                  fontSize: '12px',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 4px 12px rgba(156, 90, 51, 0.3)'
+                }}
+              >
+                ⚡ Developer API Docs (/api-docs)
+              </Link>
             </div>
           </div>
         </motion.div>

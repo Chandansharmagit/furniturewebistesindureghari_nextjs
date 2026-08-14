@@ -80,7 +80,7 @@ const Newproduct = () => {
             <div className="newproduct-header-editorial">
                 <div className="editorial-left">
                     <span className="editorial-eyebrow">The Royal Collection</span>
-                    <h2 className="newproduct-title serif">Exquisite Living <br/>Masterpieces</h2>
+                    <h2 className="newproduct-title">Exquisite Living <br/>Masterpieces</h2>
                     <div className="title-gold-accent"></div>
                 </div>
                 

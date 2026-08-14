@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from "react";
 // import useActivityTracking from '../../../hooks/useActivityTracking'; // Removed due to unused warning
 import { API_BASE_URL } from '../../../config/api';

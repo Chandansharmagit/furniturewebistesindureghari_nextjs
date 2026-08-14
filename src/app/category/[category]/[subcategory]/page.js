@@ -1,8 +1,25 @@
 import CategoryPage from '@/pages/CategoryPage';
 import CategoryAuthorityContent, { getCategorySchema } from '@/component/seo/CategoryAuthorityContent';
 import { findEnterpriseCategory } from '@/data/enterpriseSeo';
+import { cache } from 'react';
 
 const SITE_URL = "https://sinduregharifurniture.shop";
+const API_URL =
+  process.env.NEXT_PUBLIC_DEV_API_URL ||
+  process.env.REACT_APP_PROD_API_URL ||
+  "https://furnituresinduregharibackend.vercel.app";
+
+const fetchCategorySeo = cache(async (slug) => {
+  try {
+    const res = await fetch(`${API_URL}/api/categories/slug/${slug}`, {
+      next: { revalidate: 1800 }
+    });
+    if (res.ok) return await res.json();
+  } catch (err) {
+    console.error("Error fetching category seo", err);
+  }
+  return null;
+});
 
 const CATEGORY_META = {
   "living-room": { label: "Living Room Furniture" },
@@ -163,6 +180,7 @@ const SUBCATEGORY_META = {
 export async function generateMetadata({ params }) {
   const { category, subcategory } = await params;
   const enterpriseMeta = findEnterpriseCategory(category, subcategory);
+  const dbCategory = await fetchCategorySeo(subcategory);
   
   const subMeta = SUBCATEGORY_META[subcategory];
   const catMeta = CATEGORY_META[category] || {
@@ -181,8 +199,9 @@ export async function generateMetadata({ params }) {
     label = `Premium ${parsedSub} — ${parsedCat} Collection`;
     desc = `Explore premium ${parsedSub} in the ${parsedCat} collection from Sindureghari Furniture Nepal, with design support and delivery coordination.`;
   }
-  const title = enterpriseMeta?.title || `${label} | Sindureghari Furniture Nepal`;
-  const description = enterpriseMeta?.metaDescription || desc;
+  
+  const title = dbCategory?.seo_title || enterpriseMeta?.title || `${dbCategory?.name || label} | Sindureghari Furniture Nepal`;
+  const description = dbCategory?.seo_description || enterpriseMeta?.metaDescription || desc;
   
   return {
     title,
@@ -212,7 +231,24 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const { category, subcategory } = await params;
   const enterpriseMeta = findEnterpriseCategory(category, subcategory);
+  const dbCategory = await fetchCategorySeo(subcategory);
   const parent = enterpriseMeta?.parent;
+
+  const subMeta = SUBCATEGORY_META[subcategory];
+  const catMeta = CATEGORY_META[category] || {
+    label: category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+  };
+  
+  let label = "";
+  if (subMeta) {
+    label = `${subMeta.label} — ${catMeta.label}`;
+  } else {
+    const parsedSub = subcategory.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    const parsedCat = category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    label = `Premium ${parsedSub} — ${parsedCat} Collection`;
+  }
+
+  const name = dbCategory?.name || enterpriseMeta?.name || label;
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -229,7 +265,7 @@ export default async function Page({ params }) {
       {
         "@type": "ListItem",
         position: parent ? 4 : 3,
-        name: enterpriseMeta?.name || subcategory.replace(/-/g, " "),
+        name: name,
         item: `${SITE_URL}${enterpriseMeta?.path || `/category/${category}/${subcategory}`}`
       }
     ].filter(Boolean)

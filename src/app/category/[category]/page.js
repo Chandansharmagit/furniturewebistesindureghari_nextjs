@@ -1,8 +1,25 @@
 import CategoryPage from '@/pages/CategoryPage';
 import CategoryAuthorityContent, { getCategorySchema } from '@/component/seo/CategoryAuthorityContent';
 import { findEnterpriseCategory } from '@/data/enterpriseSeo';
+import { cache } from 'react';
 
 const SITE_URL = "https://sinduregharifurniture.shop";
+const API_URL =
+  process.env.NEXT_PUBLIC_DEV_API_URL ||
+  process.env.REACT_APP_PROD_API_URL ||
+  "https://furnituresinduregharibackend.vercel.app";
+
+const fetchCategorySeo = cache(async (slug) => {
+  try {
+    const res = await fetch(`${API_URL}/api/categories/slug/${slug}`, {
+      next: { revalidate: 1800 }
+    });
+    if (res.ok) return await res.json();
+  } catch (err) {
+    console.error("Error fetching category seo", err);
+  }
+  return null;
+});
 
 /* Human-friendly category labels & SEO descriptions */
 const CATEGORY_META = {
@@ -55,12 +72,15 @@ const CATEGORY_META = {
 export async function generateMetadata({ params }) {
   const slug = (await params).category;
   const enterpriseMeta = findEnterpriseCategory(slug);
+  const dbCategory = await fetchCategorySeo(slug);
+  
   const meta = CATEGORY_META[slug] || {
     label: slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
     desc: `Explore premium ${slug.replace(/-/g, " ")} furniture from Sindureghari Furniture Nepal, with design support and delivery coordination for Nepali homes.`,
   };
-  const title = enterpriseMeta?.title || `${meta.label} | Sindureghari Furniture Nepal`;
-  const description = enterpriseMeta?.metaDescription || meta.desc;
+  
+  const title = dbCategory?.seo_title || enterpriseMeta?.title || `${dbCategory?.name || meta.label} | Sindureghari Furniture Nepal`;
+  const description = dbCategory?.seo_description || enterpriseMeta?.metaDescription || meta.desc;
 
   return {
     title,
@@ -90,9 +110,13 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const slug = (await params).category;
   const enterpriseMeta = findEnterpriseCategory(slug);
+  const dbCategory = await fetchCategorySeo(slug);
+  
   const meta = CATEGORY_META[slug] || {
     label: slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
   };
+
+  const name = dbCategory?.name || enterpriseMeta?.name || meta.label;
 
   // BreadcrumbList JSON-LD — Shows "Sindureghari Furniture > Category" in Google
   const breadcrumbJsonLd = {
@@ -114,7 +138,7 @@ export default async function Page({ params }) {
       {
         "@type": "ListItem",
         position: 3,
-        name: enterpriseMeta?.name || meta.label,
+        name: name,
         item: `${SITE_URL}${enterpriseMeta?.path || `/category/${slug}`}`,
       },
     ],

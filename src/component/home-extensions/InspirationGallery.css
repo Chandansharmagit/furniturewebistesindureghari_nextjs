@@ -1,8 +1,12 @@
+/* InspirationGallery.css - Modern Luxury Furniture */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
 .inspiration-container {
     max-width: 1600px;
     margin: 80px auto;
-    padding: 0 40px;
-    font-family: 'Inter', sans-serif;
+    padding: 64px 40px;
+    font-family: 'Outfit', sans-serif;
+    background-color: #f3ede4;
 }
 
 .inspiration-header {
@@ -12,26 +16,26 @@
 
 .inspiration-subtitle {
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #c5a059; /* Accent gold */
+    color: #9c5a33; 
     display: block;
     margin-bottom: 15px;
 }
 
 .inspiration-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 48px;
-    font-weight: 700;
-    color: #111;
+    font-weight: 600;
+    color: #1a202c;
     margin: 0 0 20px 0;
 }
 
 .inspiration-desc {
     max-width: 600px;
     margin: 0 auto;
-    color: #666;
+    color: #4a5568;
     line-height: 1.6;
     font-size: 16px;
 }
@@ -45,11 +49,12 @@
 
 .bento-card {
     position: relative;
-    border-radius: 24px;
+    border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    background: #fcfcfc;
+    box-shadow: 0 12px 40px rgba(26, 32, 44, 0.06);
+    background: #ffffff;
+    border: 1px solid rgba(156, 90, 51, 0.15);
 }
 
 .bento-image-wrapper {
@@ -58,7 +63,9 @@
     left: 0;
     width: 100%;
     height: 100%;
-    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: transform 0.8s ease;
+    overflow: hidden;
+    border-radius: 16px;
 }
 
 .bento-card:hover .bento-image-wrapper {
@@ -77,15 +84,16 @@
     left: 0;
     width: 100%;
     height: 60%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+    background: linear-gradient(to top, rgba(26,32,44,0.6), transparent);
     display: flex;
     align-items: flex-end;
     padding: 40px;
     box-sizing: border-box;
+    border-radius: 0 0 16px 16px;
 }
 
 .bento-content {
-    color: #fff;
+    color: #ffffff;
     transform: translateY(10px);
     transition: transform 0.4s ease;
 }
@@ -95,7 +103,7 @@
 }
 
 .bento-content h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 32px;
     margin: 0 0 10px 0;
     font-weight: 600;
@@ -103,7 +111,7 @@
 
 .bento-content p {
     font-size: 15px;
-    opacity: 0.85;
+    opacity: 0.9;
     margin: 0 0 20px 0;
 }
 
@@ -112,10 +120,10 @@
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #fff;
+    color: #ffffff;
     border-bottom: 1px solid rgba(255, 255, 255, 0.4);
     padding-bottom: 4px;
     transition: border-color 0.3s;
@@ -126,7 +134,7 @@
 }
 
 .bento-card:hover .bento-btn {
-    border-color: #fff;
+    border-color: #ffffff;
 }
 
 .bento-card:hover .arrow {
@@ -172,7 +180,7 @@
 }
 
 @media (max-width: 768px) {
-    .inspiration-container { padding: 0 20px; margin: 50px auto; }
+    .inspiration-container { padding: 64px 20px; margin: 50px auto; }
     .inspiration-title { font-size: 36px; }
     .bento-grid {
         grid-template-columns: 1fr;

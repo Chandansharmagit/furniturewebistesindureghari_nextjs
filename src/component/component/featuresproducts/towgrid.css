@@ -1,5 +1,4 @@
-/* Premium Featured Products - Brown Theme */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 .furniture-trusted-showcase {
   max-width: 1600px;
@@ -7,63 +6,9 @@
   padding: 100px 40px;
   box-sizing: border-box;
   position: relative;
-  background: #ffffff;
+  background: #fdfcf9;
   overflow: hidden;
-  font-family: 'Inter', sans-serif;
-}
-
-/* Animated Background */
-.showcase-animated-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 0;
-  pointer-events: none;
-  display: none;
-  /* Hidden for white background */
-}
-
-.showcase-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.3;
-  animation: float 15s ease-in-out infinite;
-  display: none;
-  /* Hidden for white background */
-}
-
-.showcase-orb-1 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(139, 69, 19, 0.3) 0%, rgba(139, 69, 19, 0) 70%);
-  top: 10%;
-  right: 10%;
-  animation-delay: 0s;
-}
-
-.showcase-orb-2 {
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, rgba(205, 133, 63, 0.25) 0%, rgba(205, 133, 63, 0) 70%);
-  bottom: 20%;
-  left: 15%;
-  animation-delay: 7s;
-}
-
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate(30px, -30px) scale(1.1);
-  }
+  font-family: 'Outfit', sans-serif;
 }
 
 /* Header Section */
@@ -77,14 +22,15 @@
 
 .furniture-showcase-title {
   font-size: 56px;
-  color: var(--aether-primary);
+  color: #1a202c;
   margin: 0 0 16px 0;
   line-height: 1.1;
+  font-family: 'Outfit', sans-serif;
 }
 
 .furniture-showcase-subtitle {
   font-size: 1.1rem;
-  color: var(--aether-text-muted);
+  color: #4a5568;
   line-height: 1.6;
   margin: 0;
 }
@@ -103,9 +49,9 @@
 
 .features-grid .card-media {
   aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 12px;
 }
-
-/* Removing redundant styles - now handled by ProductCard.css */
 
 /* Loading State */
 .furniture-showcase-loading {
@@ -114,34 +60,13 @@
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
-  color: var(--aether-text-muted);
+  color: #4a5568;
+  background: #fdfcf9;
+  font-family: 'Outfit', sans-serif;
 }
 
 @media (max-width: 1024px) {
   .furniture-showcase-title {
     font-size: 42px;
   }
-}
-
-/* Accessibility */
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-
-  .showcase-orb {
-    animation: none;
-  }
-}
-
-/* High contrast mode */
-@media (prefers-contrast: high) {
-  .furniture-showcase-link {
-    border: 2px solid currentColor;
-  }
-}
+}

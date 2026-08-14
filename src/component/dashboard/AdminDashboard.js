@@ -35,6 +35,7 @@ import AdminBlogsTab from './components/AdminBlogsTab';
 import AbandonedCartsTab from './components/AbandonedCartsTab';
 import LeadsHubTab from './components/LeadsHubTab';
 import MarketingDashboard from './components/MarketingDashboard';
+import BulkUploadTool from './components/BulkUploadTool';
 
 import './AdminDashboard.css';
 
@@ -85,34 +86,8 @@ const AdminDashboard = () => {
   const [orderRequestSubmissions, setOrderRequestSubmissions] = useState([]);
   const [notificationCounts, setNotificationCounts] = useState({});
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [tabOrder, setTabOrder] = useState([
-    'dashboard', 'orders', 'products', 'coupons', 'analytics', 'marketing',
-    'users', 'customer-data', 'complaint-box', 'abandoned-carts', 'leads-hub', 'blogs'
-  ]);
   // Track which tabs have already loaded their data
   const loadedTabsRef = useRef(new Set(['dashboard']));
-
-  const registerTabActivity = useCallback((tabId) => {
-    setTabOrder(prevOrder => {
-      if (prevOrder[0] === tabId) return prevOrder; // Already at the top
-      const filtered = prevOrder.filter(id => id !== tabId);
-      return [tabId, ...filtered];
-    });
-  }, []);
-
-  const prevCountsRef = useRef({});
-  useEffect(() => {
-    let changed = false;
-    Object.keys(notificationCounts).forEach(tabId => {
-      const prev = prevCountsRef.current[tabId] || 0;
-      const current = notificationCounts[tabId] || 0;
-      if (current > prev) {
-        registerTabActivity(tabId);
-        changed = true;
-      }
-    });
-    prevCountsRef.current = { ...notificationCounts };
-  }, [notificationCounts, registerTabActivity]);
 
   // ── Load overview + sidebar badge counts only (fast, lightweight) ──
   const loadDashboardData = useCallback(async (silentRefresh = false) => {
@@ -271,7 +246,6 @@ const AdminDashboard = () => {
   const handleLogout = () => { authService.logout(); clearCache(); navigate('/login'); };
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    registerTabActivity(tab);
   };
   // Force-refresh clears cache so fresh data is always fetched
   const handleRefresh = () => { clearCache(); loadedTabsRef.current.clear(); loadDashboardData(true); };
@@ -373,9 +347,12 @@ const AdminDashboard = () => {
               <p>Initialize and manage your product repository</p>
             </div>
             <RestockPanel />
+            <BulkUploadTool />
             <ProductUploading />
           </div>
         );
+      case 'bulk-upload':
+        return <BulkUploadTool />;
       case 'orders':
         return <AdminOrders />;
       case 'coupons':
@@ -428,7 +405,6 @@ const AdminDashboard = () => {
         notificationCounts={notificationCounts}
         isSidebarCollapsed={isSidebarCollapsed}
         setIsSidebarCollapsed={setIsSidebarCollapsed}
-        tabOrder={tabOrder}
       />
       <div className="admin-dashboard-main">
         <div className="admin-main-content">

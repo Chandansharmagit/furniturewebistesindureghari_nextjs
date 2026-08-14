@@ -1,8 +1,9 @@
 .shoppable-section {
     max-width: 1600px;
     margin: 80px auto;
-    padding: 0 40px;
-    font-family: 'Inter', sans-serif;
+    padding: 40px;
+    font-family: 'Outfit', sans-serif;
+    background: #fdfcf9;
 }
 
 .shoppable-header {
@@ -13,14 +14,14 @@
 }
 
 .shoppable-header h2 {
-    font-family: 'Playfair Display', serif;
     font-size: 42px;
-    color: #111;
+    color: #1a202c;
     margin-bottom: 15px;
+    font-weight: 500;
 }
 
 .shoppable-header p {
-    color: #666;
+    color: #4a5568;
     font-size: 16px;
     line-height: 1.6;
 }
@@ -29,15 +30,17 @@
     position: relative;
     width: 100%;
     height: 700px;
-    border-radius: 24px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    box-shadow: 0 12px 40px rgba(26, 32, 44, 0.06);
+    background: #ffffff;
 }
 
 .shoppable-bg {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 12px;
 }
 
 .hotspot-wrapper {
@@ -49,13 +52,13 @@
 .hotspot-pulse {
     width: 36px;
     height: 36px;
-    background: rgba(255, 255, 255, 0.9);
+    background: #9c5a33;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 12px 40px rgba(26, 32, 44, 0.06);
     position: relative;
     transition: transform 0.3s;
 }
@@ -65,7 +68,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(156, 90, 51, 0.4);
     border-radius: 50%;
     animation: pulse 2s infinite;
     z-index: -1;
@@ -73,13 +76,13 @@
 
 .hotspot-pulse:hover {
     transform: scale(1.1);
-    background: #fff;
+    background: #7a4627;
 }
 
 .hotspot-pulse .plus {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 20px;
-    color: #111;
+    color: #fff;
 }
 
 @keyframes pulse {
@@ -94,18 +97,18 @@
     transform: translateX(-50%) translateY(20px);
     opacity: 0;
     visibility: hidden;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.6);
-    border-radius: 16px;
-    padding: 12px;
+    background: #ffffff;
+    border: 1px solid rgba(156, 90, 51, 0.15);
+    border-radius: 12px;
+    padding: 16px;
     display: flex;
     gap: 15px;
     align-items: center;
     width: max-content;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 12px 40px rgba(26, 32, 44, 0.06);
+    transition: all 0.3s ease;
     pointer-events: none;
+    font-family: 'Outfit', sans-serif;
 }
 
 .hotspot-wrapper:hover .hotspot-tooltip,
@@ -116,57 +119,48 @@
     pointer-events: auto;
 }
 
-.hotspot-tooltip::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 8px;
-    border-style: solid;
-    border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent;
-}
-
 .hotspot-tooltip img {
     width: 60px;
     height: 60px;
-    border-radius: 10px;
+    border-radius: 12px;
     object-fit: cover;
+    overflow: hidden;
 }
 
 .tooltip-info h4 {
     margin: 0 0 5px 0;
-    font-size: 14px;
-    font-weight: 700;
-    color: #111;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a202c;
 }
 
 .tooltip-info .price {
     display: block;
-    color: #c5a059;
-    font-weight: 700;
-    font-size: 13px;
-    margin-bottom: 8px;
+    color: #9c5a33;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 12px;
 }
 
 .tooltip-info button {
-    background: #111;
+    background: #9c5a33;
     color: #fff;
-    border: none;
-    padding: 6px 15px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid #9c5a33;
+    font-weight: 500;
+    font-size: 13px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.3s ease;
 }
 
 .tooltip-info button:hover {
-    background: #333;
+    background: #7a4627;
+    border-color: #7a4627;
 }
 
 @media (max-width: 768px) {
-    .shoppable-container { height: 450px; border-radius: 16px; }
+    .shoppable-container { height: 450px; border-radius: 12px; }
     .shoppable-header h2 { font-size: 32px; }
     .hotspot-pulse { width: 30px; height: 30px; }
 }

@@ -62,8 +62,8 @@ export default function Homeappliances() {
                 <header className="homeappliances-header">
                     <div className="header-content">
                         <div className="editorial-badge">Collection 2024</div>
-                        <h1 className="homeappliances-title serif">
-                            The Modern <span className="serif-italic">Appliance</span>
+                        <h1 className="homeappliances-title">
+                            The Modern Appliance
                         </h1>
                         <p className="homeappliances-subtitle">
                             Elevating everyday living with a curated selection of high-performance appliances, 
