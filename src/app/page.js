@@ -1,40 +1,30 @@
 import dynamic from 'next/dynamic';
 import ModernHero from "../component/component/Hero/ModernHero";
+import { getHomeData } from "../component/home/homeData";
+import { NewArrivals, BestDeals, CategoryShelf } from "../component/home/HomeSections";
 
-// Lazy load all below-the-fold components to massively improve initial page load performance
-const RoyalSpecialOffers = dynamic(() => import("../component/special-offers/RoyalSpecialOffers"), { ssr: true });
-const GalleryEntryPoint = dynamic(() => import("../component/home-extensions/GalleryEntryPoint"), { ssr: true });
-const CategoryLandingGrid = dynamic(() => import("../component/home-extensions/CategoryLandingGrid"), { ssr: true });
-const SmartCampaignTemplate = dynamic(() => import("../component/home-extensions/SmartCampaignTemplate"), { ssr: true });
-const DesignConsultationTemplates = dynamic(() => import("../component/home-extensions/DesignConsultationTemplates"), { ssr: true });
-const LoyaltySchemeShowcase = dynamic(() => import("../component/home-extensions/LoyaltySchemeShowcase"), { ssr: true });
-const Homeappliances = dynamic(() => import("../component/Homeapplicances/Homeappliances"), { ssr: true });
-const InspirationGallery = dynamic(() => import("../component/home-extensions/InspirationGallery"), { ssr: true });
-const Newproduct = dynamic(() => import("../component/newproducts/Newproducts"), { ssr: true });
-const ShoppableRoom = dynamic(() => import("../component/home-extensions/ShoppableRoom"), { ssr: true });
-const EMIPromo = dynamic(() => import("../component/emi-promo/EMIPromo"), { ssr: true });
-const LandingReviewRequest = dynamic(() => import("../component/home-extensions/LandingReviewRequest"), { ssr: true });
+// Interactive / below-the-fold client sections are code-split
+const RoyalSpecialOffers = dynamic(() => import("../component/special-offers/RoyalSpecialOffers"));
+const CategoryLandingGrid = dynamic(() => import("../component/home-extensions/CategoryLandingGrid"));
+const EMIPromo = dynamic(() => import("../component/emi-promo/EMIPromo"));
+const LandingReviewRequest = dynamic(() => import("../component/home-extensions/LandingReviewRequest"));
 
-// Newly added components for expanded homepage content
-const Featuresproducts = dynamic(() => import("../component/component/featuresproducts/Featuresproducts"), { ssr: true });
-const Furniturebrand = dynamic(() => import("../component/component/furniturebrand/Furniturebrand"), { ssr: true });
+// Re-fetch product data from the backend at most once a minute
+export const revalidate = 60;
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { newArrivals, deals, maxDiscount, shelves } = await getHomeData();
+
   return (
     <>
       <ModernHero />
-      <Featuresproducts />
-      <GalleryEntryPoint />
-      <CategoryLandingGrid />
-      <DesignConsultationTemplates />
-      <LoyaltySchemeShowcase />
-      <SmartCampaignTemplate />
+      <NewArrivals items={newArrivals} />
       <RoyalSpecialOffers />
-      <Furniturebrand />
-      <Homeappliances />
-      <InspirationGallery />
-      <Newproduct />
-      <ShoppableRoom />
+      <BestDeals items={deals} maxDiscount={maxDiscount} />
+      {shelves.map((shelf, index) => (
+        <CategoryShelf key={shelf.name} shelf={shelf} index={index} />
+      ))}
+      <CategoryLandingGrid />
       <EMIPromo />
       <LandingReviewRequest />
     </>

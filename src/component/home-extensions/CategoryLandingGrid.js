@@ -17,8 +17,8 @@ export default function CategoryLandingGrid() {
     const loadCategories = async () => {
       try {
         const [categoryResponse, productResponse] = await Promise.all([
-          fetch(buildApiUrl(PRODUCT_ENDPOINTS.CATEGORIES), { cache: "no-store" }),
-          fetch(buildApiUrl(PRODUCT_ENDPOINTS.LIST), { cache: "no-store" }),
+          fetch(buildApiUrl(PRODUCT_ENDPOINTS.CATEGORIES)),
+          fetch(buildApiUrl(PRODUCT_ENDPOINTS.LIST) + (PRODUCT_ENDPOINTS.LIST.includes("?") ? "&" : "?") + "limit=200"),
         ]);
 
         if (!categoryResponse.ok) return;

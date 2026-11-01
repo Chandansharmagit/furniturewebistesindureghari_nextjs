@@ -216,7 +216,7 @@ const SearchFunctionality = ({ apiBaseUrl, getAllProducts, isMobile = false, onC
 
         const intervalId = window.setInterval(() => {
             setKeywordIndex((current) => (current + 1) % animatedKeywords.length);
-        }, 2200);
+        }, 4000);
 
         return () => window.clearInterval(intervalId);
     }, [animatedKeywords.length, isSearchOpen]);

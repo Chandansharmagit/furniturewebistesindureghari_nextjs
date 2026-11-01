@@ -110,12 +110,12 @@ export default function ClientLayout({ children }) {
           <>
             <PopupManager />
             <CookieConsentBanner />
-            {!isAdminPage && <ReviewPromptPopup />}
+
             <ChatbaseWidget />
             {!isAdminPage && <WhatsAppFloat />}
           </>
         )}
-        {!isAdminPage && <AppDownloadPrompt />}
+
       </CartProvider>
     </AuthProvider>
   );

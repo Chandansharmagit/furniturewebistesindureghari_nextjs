@@ -1,0 +1,396 @@
+/* Home page product sections. Container matches navbar (1600px / 40px). */
+
+.hs-section {
+  padding: 72px 0;
+  font-family: 'Outfit', system-ui, sans-serif;
+  content-visibility: auto;
+  contain-intrinsic-size: 700px;
+}
+
+.hs-section--white { background: #fff; }
+.hs-section--cream { background: #f7f1e7; }
+.hs-section--dark { background: #17110d; color: #fff; }
+
+.hs-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+/* Shared heading pieces */
+.hs-bar,
+.hs-cat__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.hs-kicker {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #b27222;
+  margin-bottom: 8px;
+}
+
+.hs-kicker--gold { color: #e5b25d; }
+
+.hs-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(30px, 3.6vw, 44px);
+  line-height: 1.1;
+  margin: 0;
+  color: #1f1610;
+}
+
+.hs-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f1610;
+  text-decoration: none;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #1f1610;
+  transition: gap 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.hs-link:hover { gap: 14px; color: #b27222; border-color: #b27222; }
+
+/* ============ 1. New Arrivals - bento ============ */
+.hs-bento {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 290px;
+  gap: 18px;
+}
+
+.hs-tile {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #3a2a1c;
+  color: #fff;
+  text-decoration: none;
+  isolation: isolate;
+}
+
+.hs-tile--lg { grid-column: span 2; grid-row: span 2; }
+
+.hs-tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.hs-tile:hover img { transform: scale(1.07); }
+
+.hs-tile__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(15, 9, 4, 0) 35%, rgba(15, 9, 4, 0.82) 100%);
+}
+
+.hs-tile__badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: #fff;
+  color: #a8541f;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+.hs-tile__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+
+.hs-tile__info small {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.hs-tile__info strong {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.3;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hs-tile--lg .hs-tile__info { padding: 30px 32px; }
+.hs-tile--lg .hs-tile__info strong { font-size: 28px; -webkit-line-clamp: 3; }
+
+.hs-tile__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.hs-tile__price { font-size: 17px; font-weight: 700; }
+.hs-tile__price s { margin-left: 10px; font-size: 13px; font-weight: 400; opacity: 0.65; }
+
+.hs-tile__go {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.hs-tile:hover .hs-tile__go { background: #fff; color: #1f1610; transform: rotate(45deg); }
+
+/* ============ 2. Best Deals - intro + ranked list ============ */
+.hs-deals {
+  display: grid;
+  grid-template-columns: 0.8fr 1.5fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.hs-deals__big {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(40px, 5vw, 68px);
+  line-height: 1.05;
+  margin: 0 0 18px;
+  color: #fff;
+}
+
+.hs-deals__big em { font-style: italic; color: #e5b25d; }
+
+.hs-deals__intro p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 28px;
+  max-width: 420px;
+}
+
+.hs-btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #e5b25d;
+  color: #1a120b;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 14px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.hs-btn-gold:hover { transform: translateY(-2px); background: #f0c47a; }
+
+.hs-deals__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 24px;
+}
+
+.hs-deal {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px 14px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.hs-deal:hover {
+  background: rgba(229, 178, 93, 0.1);
+  border-color: rgba(229, 178, 93, 0.5);
+  transform: translateX(4px);
+}
+
+.hs-deal__rank {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.28);
+  width: 30px;
+  flex-shrink: 0;
+}
+
+.hs-deal img {
+  width: 92px;
+  height: 92px;
+  border-radius: 14px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #3a2a1c;
+}
+
+.hs-deal__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.hs-deal__info small {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c9b49b;
+}
+
+.hs-deal__info strong {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hs-deal__price { font-size: 15px; font-weight: 700; color: #f2c976; }
+.hs-deal__price s { margin-left: 8px; font-size: 12px; font-weight: 400; color: #8f7d6b; }
+
+.hs-deal__off {
+  flex-shrink: 0;
+  background: #e5b25d;
+  color: #1a120b;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 7px 10px;
+  border-radius: 10px;
+}
+
+/* ============ 3. Category shelf - catalogue ============ */
+.hs-cat__title { display: flex; align-items: flex-end; gap: 20px; }
+
+.hs-cat__no {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(54px, 6vw, 84px);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1.5px #c9a874;
+}
+
+.hs-cat__row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.hs-plate {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #1f1610;
+  text-decoration: none;
+}
+
+.hs-plate__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #ece2d2;
+  margin-bottom: 8px;
+}
+
+.hs-plate__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.hs-plate:hover .hs-plate__media img { transform: scale(1.06); }
+
+.hs-plate__off {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: #1f1610;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 999px;
+}
+
+.hs-plate__name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.2s ease;
+}
+
+.hs-plate:hover .hs-plate__name { color: #b27222; }
+
+.hs-plate__price { font-size: 16px; font-weight: 700; color: #1f1610; }
+.hs-plate__price s { margin-left: 8px; font-size: 13px; font-weight: 400; color: #a39282; }
+
+/* ============ Responsive ============ */
+@media (max-width: 1200px) {
+  .hs-deals { grid-template-columns: 1fr; gap: 36px; }
+  .hs-bento { grid-auto-rows: 240px; }
+}
+
+@media (max-width: 860px) {
+  .hs-bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 220px; gap: 12px; }
+  .hs-tile--lg { grid-column: span 2; grid-row: span 1; }
+  .hs-tile--lg .hs-tile__info strong { font-size: 22px; }
+  .hs-deals__list { grid-template-columns: 1fr; }
+  .hs-cat__row { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+
+@media (max-width: 600px) {
+  .hs-section { padding: 44px 0; }
+  .hs-container { padding: 0 16px; }
+  .hs-bar, .hs-cat__head { flex-direction: column; align-items: flex-start; margin-bottom: 22px; }
+  .hs-tile__info { padding: 14px 16px; }
+  .hs-tile__info strong { font-size: 15px; }
+  .hs-deal img { width: 76px; height: 76px; }
+  .hs-deal__rank { display: none; }
+  .hs-plate__name { font-size: 15px; }
+  .hs-cat__no { font-size: 48px; }
+}
