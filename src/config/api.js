@@ -7,11 +7,13 @@ const isLocalhost = typeof window !== 'undefined'
     )
   : false;
 
+export const CLOUD_API_BASE = 'https://furnituresinduregharibackend.vercel.app';
+
 // Respect explicit environment overrides, otherwise fall back to localhost-based auto-detection
 const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || process.env.REACT_APP_ENVIRONMENT || (isLocalhost ? 'development' : 'production');
 
 const BASE_URL = environment === 'production'
-  ? (process.env.NEXT_PUBLIC_PROD_API_URL || process.env.REACT_APP_PROD_API_URL || 'https://furnituresinduregharibackend.vercel.app')
+  ? (process.env.NEXT_PUBLIC_PROD_API_URL || process.env.REACT_APP_PROD_API_URL || CLOUD_API_BASE)
   : (process.env.NEXT_PUBLIC_DEV_API_URL || process.env.REACT_APP_DEV_API_URL || 'http://localhost:5000');
 
 const API_CONFIG = {
@@ -158,6 +160,40 @@ const API_CONFIG = {
 // Helper function to build full URL
 export const buildApiUrl = (endpoint) => {
   return `${API_CONFIG.BASE_URL}${endpoint}`;
+};
+
+/**
+ * Resilient fetch that automatically falls back to production cloud backend
+ * if local backend (localhost:5000) is unreachable or offline.
+ */
+export const fetchWithFallback = async (endpointOrUrl, options = {}) => {
+  const primaryUrl = endpointOrUrl.startsWith('http')
+    ? endpointOrUrl
+    : buildApiUrl(endpointOrUrl);
+
+  try {
+    const res = await fetch(primaryUrl, options);
+    if (!res.ok && primaryUrl.includes('localhost:5000')) {
+      const fallbackUrl = primaryUrl.replace(/http:\/\/localhost:5000/g, CLOUD_API_BASE);
+      try {
+        const fallbackRes = await fetch(fallbackUrl, options);
+        if (fallbackRes.ok) return fallbackRes;
+      } catch {
+        /* ignore fallback error and return original response */
+      }
+    }
+    return res;
+  } catch (err) {
+    if (primaryUrl.includes('localhost:5000')) {
+      const fallbackUrl = primaryUrl.replace(/http:\/\/localhost:5000/g, CLOUD_API_BASE);
+      try {
+        return await fetch(fallbackUrl, options);
+      } catch {
+        throw err;
+      }
+    }
+    throw err;
+  }
 };
 
 // Export the configuration

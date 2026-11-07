@@ -21,7 +21,7 @@ export default async function HomePage() {
       <ModernHero />
       <DiwaliOfferTemplates />
       <NewArrivals items={newArrivals} />
-      <RoyalSpecialOffers />
+      <RoyalSpecialOffers compact />
       <BestDeals items={deals} maxDiscount={maxDiscount} />
       {shelves.map((shelf, index) => (
         <CategoryShelf key={shelf.name} shelf={shelf} index={index} />

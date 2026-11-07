@@ -1,297 +1,262 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import SEOComponent from '../components/SEO/SEOComponent';
 import { BreadcrumbStructuredData } from '../components/SEO/StructuredData';
-import { Filter, ChevronRight } from 'lucide-react';
-import { API_BASE_URL } from '../config/api';
+import {
+  Filter,
+  ChevronRight,
+  Truck,
+  ShieldCheck,
+  Ruler,
+  SlidersHorizontal,
+  RotateCcw,
+  Sparkles,
+  MessageCircle,
+  Check,
+} from 'lucide-react';
+import { PRODUCT_ENDPOINTS, fetchWithFallback } from '../config/api';
 import ProductCard from '../component/common/ProductCard/ProductCard';
 import { findCategoryBySlug, slugifyCategory, titleFromSlug } from '../utils/categoryHelpers';
 import './CategoryPage.css';
 
-// Category mapping for API calls - moved outside component to avoid re-creation
-const categoryMapping = {};
-
-// Subcategory mapping for API calls
-const subcategoryMapping = {};
-
-// Hero background images per category
-const categoryHeroImages = {};
-
-// Category display names and descriptions
+/* --------------------------------------------------------------------------
+   Rich Category Copywriting (replaces raw admin debug strings)
+   -------------------------------------------------------------------------- */
 const categoryInfo = {
+  'sofa-section': {
+    eyebrow: 'Signature Living Collection',
+    title: 'Sofa Section & Luxury Loungers',
+    description:
+      'Handcrafted L-shape sectionals, 3+1+1 solid teak sofa suites, and plush upholstered seating engineered with high-density orthopedic cushioning for Nepali homes.',
+    keywords: 'sofa section Nepal, L shape sofa Nepal, wooden sofa set Nepal, living room sofa Sindureghari',
+  },
+  'sofa': {
+    eyebrow: 'Living Room Seating',
+    title: 'Handcrafted Sofas & Couches',
+    description:
+      'Explore 3-seater fabric sofas, carved solid timber couches, and modern lounge seating built from kiln-dried hardwood.',
+    keywords: 'sofa Nepal, 3 seater sofa price in Nepal, solid wood sofa Nepal',
+  },
   'living-room': {
+    eyebrow: 'Living Room Atelier',
     title: 'Living Room Furniture',
-    description: 'Transform your living space with our premium collection of sofas, coffee tables, TV units, and more. Create a comfortable and stylish environment for relaxation and entertainment.',
-    keywords: 'living room furniture Nepal, sofas Nepal, coffee tables Nepal, TV units Nepal, recliners Nepal'
+    description:
+      'Transform your living space with our handcrafted collection of solid wood sofas, center coffee tables, TV consoles, and lounge seating.',
+    keywords: 'living room furniture Nepal, sofas Nepal, coffee tables Nepal, TV units Nepal',
+  },
+  'modern-beds': {
+    eyebrow: 'Bedroom Sanctuary',
+    title: 'Modern Beds & Hydraulic Suites',
+    description:
+      'King and queen size solid timber beds, silent hydraulic box-storage frames, and tufted upholstered headboards built for decades of restful sleep.',
+    keywords: 'modern beds Nepal, hydraulic bed price in Nepal, king size bed Nepal',
   },
   'bedroom': {
+    eyebrow: 'Master Bedroom Collection',
     title: 'Bedroom Furniture',
-    description: 'Create your perfect sanctuary with our elegant bedroom furniture collection including beds, wardrobes, dressing tables, and bedside furniture.',
-    keywords: 'bedroom furniture Nepal, beds Nepal, wardrobes Nepal, dressing tables Nepal, mattresses Nepal'
+    description:
+      'Create a serene bedroom sanctuary with our solid teak and sisau beds, multi-door wardrobes, vanity dressing tables, and nightstands.',
+    keywords: 'bedroom furniture Nepal, beds Nepal, wardrobes Nepal, dressing tables Nepal',
   },
   'dining-room': {
-    title: 'Dining Room Furniture',
-    description: 'Gather around beautiful dining sets, tables, and chairs designed to make every meal memorable. Perfect for family dinners and entertaining guests.',
-    keywords: 'dining room furniture Nepal, dining sets Nepal, dining tables Nepal, dining chairs Nepal'
+    eyebrow: 'Family & Hosting',
+    title: 'Dining Room Sets & Tables',
+    description:
+      'Gather around heirloom 4, 6, and 8-seater solid sisau and teak dining tables paired with ergonomic cushioned chairs.',
+    keywords: 'dining room furniture Nepal, 6 seater dining table Nepal, wooden dining set Nepal',
   },
-  'office-and-study': {
-    title: 'Office & Study Furniture',
-    description: 'Boost productivity with our ergonomic office chairs, functional desks, and storage solutions designed for modern workspaces.',
-    keywords: 'office furniture Nepal, office chairs Nepal, office tables Nepal, study furniture Nepal'
+  'study-tables': {
+    eyebrow: 'Home Office & Study',
+    title: 'Study Tables & Executive Desks',
+    description:
+      'Productive workspaces crafted from seasoned timber—featuring computer desks with cable management, drawer storage, and ergonomic chairs.',
+    keywords: 'study table price in Nepal, computer desk Nepal, office table Nepal',
   },
   'study-room': {
-    title: 'Study Room Furniture',
-    description: 'Shop premium study tables, office chairs, bookshelves and home office furniture handcrafted for productive workspaces in Nepal.',
-    keywords: 'study room furniture Nepal, study table Nepal, office chair Nepal, bookshelf Nepal'
+    eyebrow: 'Workspace Collection',
+    title: 'Study & Office Furniture',
+    description:
+      'Shop solid wood study tables, ergonomic high-back office chairs, and bookshelves designed for modern home offices in Nepal.',
+    keywords: 'study room furniture Nepal, study table Nepal, office chair Nepal',
   },
-  'modular-kitchens': {
-    title: 'Modular Kitchens',
-    description: 'Design your dream kitchen with our modular kitchen solutions. Choose from L-shaped, U-shaped, parallel, and island kitchen designs.',
-    keywords: 'modular kitchens Nepal, kitchen design Nepal, L-shaped kitchen Nepal, U-shaped kitchen Nepal'
+  'wardrobes': {
+    eyebrow: 'Smart Bedroom Storage',
+    title: 'Solid Wood Wardrobes & Almirahs',
+    description:
+      'Spacious 2, 3, and 4-door wardrobes and shoe cabinets featuring full-length mirrors, hanging compartments, and secure lock drawers.',
+    keywords: 'wardrobe price in Nepal, wooden almirah Nepal, 3 door wardrobe Nepal',
   },
-  'bathroom': {
-    title: 'Bathroom Furniture',
-    description: 'Complete your bathroom with stylish vanity units, storage cabinets, mirrors, and accessories for a functional and beautiful space.',
-    keywords: 'bathroom furniture Nepal, vanity units Nepal, bathroom cabinets Nepal, bathroom mirrors Nepal'
-  },
-  'lightings': {
-    title: 'Lighting Solutions',
-    description: 'Illuminate your home with our diverse lighting collection including ceiling lights, table lamps, floor lamps, and decorative lighting.',
-    keywords: 'lighting Nepal, ceiling lights Nepal, table lamps Nepal, floor lamps Nepal, pendant lights Nepal'
-  },
-  'lighting': {
-    title: 'Lighting Solutions',
-    description: 'Shop chandeliers, floor lamps, wall lights and decorative lighting for premium home interiors in Nepal.',
-    keywords: 'lighting Nepal, chandeliers Nepal, floor lamps Nepal, wall lights Nepal'
-  },
-  'decor': {
-    title: 'Home Decor',
-    description: 'Add personality to your space with our curated collection of wall art, vases, cushions, rugs, and decorative accessories.',
-    keywords: 'home decor Nepal, wall art Nepal, vases Nepal, cushions Nepal, rugs Nepal, decorative items Nepal'
-  },
-  'outdoor': {
-    title: 'Outdoor Furniture',
-    description: 'Extend your living space outdoors with our weather-resistant garden furniture, outdoor dining sets, and patio accessories.',
-    keywords: 'outdoor furniture Nepal, garden furniture Nepal, patio furniture Nepal, outdoor dining Nepal'
-  },
-  'outdoor-furniture': {
-    title: 'Outdoor Furniture',
-    description: 'Shop garden swings, outdoor chairs and patio sets made for terraces, gardens and balconies in Nepal.',
-    keywords: 'outdoor furniture Nepal, garden swing Nepal, patio sets Nepal, outdoor chairs Nepal'
-  },
-  'all-products': {
-    title: 'All Furniture Products',
-    description: 'Browse our complete collection of premium furniture and home accessories. Find everything you need to furnish your home.',
-    keywords: 'furniture Nepal, home furniture Nepal, office furniture Nepal, all products Nepal'
+  'dashainoffer': {
+    eyebrow: 'Limited Festive Bundles',
+    title: 'Festive Room Combo Offers',
+    description:
+      'Save up to 29% with complete living room, bedroom, and whole-home furniture combo bundles with free delivery across Nepal.',
+    keywords: 'furniture combo offer Nepal, Dashain Diwali furniture offer Nepal',
   },
   'offers': {
-    title: 'Special Offers & Deals',
-    description: 'Discover amazing deals and special offers on premium furniture. Save on your favorite pieces and transform your home for less.',
-    keywords: 'furniture offers Nepal, furniture deals Nepal, discount furniture Nepal, sale furniture Nepal'
-  }
+    eyebrow: 'Special Savings',
+    title: 'Exclusive Offers & Festive Deals',
+    description:
+      'Enjoy special seasonal discounts and flat 5% OFF with code DIWALI5 across our handcrafted solid wood furniture collections.',
+    keywords: 'furniture offers Nepal, furniture deals Nepal, discount furniture Nepal',
+  },
+  'outdoor-furniture': {
+    eyebrow: 'Terrace & Garden',
+    title: 'Outdoor & Patio Furniture',
+    description:
+      'Weather-sealed teakwood garden swings, balcony chairs, and patio table sets built to handle Nepal’s climate.',
+    keywords: 'outdoor furniture Nepal, garden swing Nepal, patio furniture Nepal',
+  },
+  'lighting': {
+    eyebrow: 'Warm Ambience',
+    title: 'Architectural Chandeliers & Lighting',
+    description:
+      'Illuminate your wooden interiors with statement chandeliers, warm floor lamps, and decorative pendant lighting.',
+    keywords: 'lighting Nepal, chandeliers Nepal, floor lamps Nepal',
+  },
 };
 
-// Modern Skeleton Loader for Product Cards
+const QUICK_CATEGORY_PILLS = [
+  { label: 'All Collections', slug: 'all-products', path: '/products' },
+  { label: 'Sofa Section', slug: 'sofa-section', path: '/category/sofa-section' },
+  { label: 'Sofas', slug: 'sofa', path: '/category/sofa' },
+  { label: 'Modern Beds', slug: 'modern-beds', path: '/category/modern-beds' },
+  { label: 'Dining Room', slug: 'dining-room', path: '/category/dining-room' },
+  { label: 'Wardrobes', slug: 'wardrobes', path: '/category/wardrobes' },
+  { label: 'Study Tables', slug: 'study-tables', path: '/category/study-tables' },
+  { label: 'Festive Combos', slug: 'dashainoffer', path: '/category/dashainoffer' },
+];
+
+const MATERIAL_FILTERS = [
+  { label: 'Teak Wood', token: 'teak' },
+  { label: 'Sheesham / Sisau', token: 'sheesham' },
+  { label: 'Engineered Hardwood', token: 'engineered' },
+  { label: 'Velvet & Fabric', token: 'cotton' },
+  { label: 'Pine & Solid Wood', token: 'pine' },
+];
+
+const PRICE_PRESETS = [
+  { label: 'All Budgets', min: '', max: '' },
+  { label: 'Under Rs. 30,000', min: '0', max: '30000' },
+  { label: 'Rs. 30,000 – 75,000', min: '30000', max: '75000' },
+  { label: 'Rs. 75,000 – 1,50,000', min: '75000', max: '150000' },
+  { label: 'Above Rs. 1,50,000', min: '150000', max: '' },
+];
+
+// Related category keyword matcher so /category/sofa-section matches "Sofa Section", "Sofa", etc.
+const matchesCategorySlug = (product, targetSlug) => {
+  if (!targetSlug || targetSlug === 'all-products') return true;
+  const prodCatSlug = slugifyCategory(product.categoryName || product.category || '');
+  const prodName = String(product.name || product.title || '').toLowerCase();
+
+  if (prodCatSlug === targetSlug) return true;
+
+  const familyMap = {
+    'sofa-section': ['sofa-section', 'sofa', 'living-room', 'sofa-sets'],
+    'sofa': ['sofa', 'sofa-section', 'sofa-sets'],
+    'living-room': ['living-room', 'sofa-section', 'sofa', 'coffee-tables', 'tv-units'],
+    'modern-beds': ['modern-beds', 'bedroom', 'beds'],
+    'bedroom': ['bedroom', 'modern-beds', 'wardrobes', 'dressing-tables'],
+    'dining-room': ['dining-room', 'dining-sets', 'dining-tables'],
+    'study-tables': ['study-tables', 'study-room', 'office-and-study'],
+    'study-room': ['study-room', 'study-tables', 'office-and-study'],
+    'wardrobes': ['wardrobes', 'almirah'],
+    'dashainoffer': ['dashainoffer', 'offers', 'royal'],
+    'offers': ['offers', 'dashainoffer', 'royal'],
+  };
+
+  const allowedSlugs = familyMap[targetSlug] || [targetSlug];
+  if (allowedSlugs.includes(prodCatSlug)) return true;
+
+  // Keyword match in product title for specialized slugs
+  if (targetSlug === 'sofa-section' || targetSlug === 'sofa') {
+    return prodName.includes('sofa') || prodName.includes('couch') || prodName.includes('living room');
+  }
+  if (targetSlug === 'modern-beds') {
+    return prodName.includes('bed');
+  }
+  if (targetSlug === 'dining-room') {
+    return prodName.includes('dining');
+  }
+  if (targetSlug === 'wardrobes') {
+    return prodName.includes('wardrobe') || prodName.includes('shoe rack') || prodName.includes('cabinet');
+  }
+  if (targetSlug === 'study-tables' || targetSlug === 'study-room') {
+    return prodName.includes('desk') || prodName.includes('study') || prodName.includes('office chair');
+  }
+  if (targetSlug === 'offers' || targetSlug === 'dashainoffer') {
+    const oldP = Number(product.old_price || product.price || 0);
+    const newP = Number(product.new_price || product.salePrice || 0);
+    return prodCatSlug.includes('offer') || (oldP > newP && newP > 0);
+  }
+
+  return false;
+};
+
 const ProductSkeleton = () => (
   <div className="bkf-skeleton-card">
     <div className="bkf-skeleton-image">
-      <div className="bkf-skeleton-shimmer"></div>
+      <div className="bkf-skeleton-shimmer" />
     </div>
     <div className="bkf-skeleton-content">
-      <div className="bkf-skeleton-line title"></div>
-      <div className="bkf-skeleton-line meta"></div>
-      <div className="bkf-skeleton-line price"></div>
+      <div className="bkf-skeleton-line meta" />
+      <div className="bkf-skeleton-line title" />
+      <div className="bkf-skeleton-line price" />
     </div>
   </div>
 );
 
-// Discount Banner Component
-const DiscountBanner = () => {
-  const navigate = useNavigate();
-
-  return (
-    <div 
-      className="bkf-category__discount-banner"
-    >
-      <div className="bkf-category__discount-content">
-        <span className="bkf-category__discount-tag">EXCLUSIVE</span>
-        <h2 className="bkf-category__discount-title">Seasonal Refresh</h2>
-        <p className="bkf-category__discount-subtitle">Premium Collections up to 40% Off</p>
-        <button
-          className="bkf-category__discount-cta"
-          onClick={() => navigate('/category/offers')}
-        >
-          Explore Collection
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// ============================================================
-// SEO Keyword-Optimized Buying Guides & Collapsible FAQs
-// ============================================================
-const seoContentData = {
-  'living-room': {
-    guideTitle: 'The Ultimate Guide to Selecting the Best Sofa and Living Room Furniture in Nepal',
-    guideText: 'Your living room is the center of your home, and finding the perfect sofa set in Nepal is key to balancing comfort, style, and utility. At Sindureghari Furniture, we manufacture premium living room sets using seasoned solid wood like Teak and Sheesham (Sisam) sourced from responsible local forestry. When picking a sofa, first evaluate your room dimensions. L-shape sofas are highly efficient for maximizing seating in corners, while traditional 3-1-1 royal sofa designs offer a grand, symmetrical layout. Teak wood frames provide lifelong durability, natural termite resistance, and elegant grain aesthetics. Every piece in our Rautahat factory undergoes modern kiln drying and advanced preservative seasoning, ensuring your furniture remains warp-free and strong for generations across Nepal.',
-    faqs: [
-      {
-        q: 'Which wood is best for sofa sets in Nepal?',
-        a: 'Teak Wood (Saj) and Sheesham (Sisam) are highly recommended. Seasoned Teak wood has high natural oil content which provides unmatched termite and moisture resistance, while Sisam offers a beautiful dark grain and exceptional load-bearing strength.'
-      },
-      {
-        q: 'How can I customize my living room furniture dimensions?',
-        a: 'You can customize any sofa, TV cabinet, or recliner dimensions at our Chandrapur showroom or online. Share your room blueprint and wood preferences via our WhatsApp support (+977-9845427041) and our master artisans will draft a custom manufacturing design.'
-      },
-      {
-        q: 'Do you provide free home delivery and assembly in Kathmandu?',
-        a: 'Yes, we provide free premium home delivery, unloading, and full assembly across Kathmandu, Lalitpur, Pokhara, and major cities in Nepal for our premium collections.'
-      }
-    ]
-  },
-  'dining-room': {
-    guideTitle: 'Mastering Your Dining Room Furniture Design: A Premium Solid Wood Guide',
-    guideText: 'A thoughtfully designed dining area transforms family dinners and guests gatherings into special memories. Finding the best dining table sets in Nepal requires checking the seating count and room shape. A standard 6-seater dining set is the most popular choice for urban Nepalese families, providing spacious comfort without cluttering the room. Rectangular solid wood tables work best in long rooms, whereas round dining sets encourage conversational flow in square layouts. At Sindureghari, our dining sets are handcrafted using thick logs of premium timber. The dining chairs are ergonomically designed with premium heavy-density cushioning to support comfortable upright seating during long meals. Visit our showroom in Chandrapur, Rautahat to feel the premium finish of our wood polishing.',
-    faqs: [
-      {
-        q: 'What dining table sizes are available?',
-        a: 'We design 4-seater, 6-seater, and 8-seater dining table sets in standard dimensions. Custom length, width, and matching dining bench seating can be designed based on your room dimensions.'
-      },
-      {
-        q: 'How is the dining table surface treated to prevent heat and water damage?',
-        a: 'All our wooden dining tables undergo a multi-layered premium polyurethane (PU) polish treatment. This forms a protective heat-resistant and waterproof barrier, ensuring your wood remains stain-free from hot dishes and accidental liquid spills.'
-      },
-      {
-        q: 'Can I purchase dining chairs separately?',
-        a: 'Yes, you can choose custom dining chairs or purchase matching wooden dining benches and cabinets separately to complete your dining room layout.'
-      }
-    ]
-  },
-  'bedroom': {
-    guideTitle: 'Creating Your Dream Sanctuary: Solid Wood Bed Designs & Bedroom Furniture',
-    guideText: 'Your bedroom should be a serene haven of rest and relaxation. Choosing the right bed design in Nepal involves deciding between a king-size bed for maximum space or a queen-size bed for compact rooms. At Sindureghari Furniture, our master carpenters construct heavy-duty double beds and beds with pneumatic hydraulic storage lifts to help keep your room organized and spacious. Matching bedroom furniture sets such as wardrobes, modular almirahs, dressing tables with high-definition LED mirrors, and solid wood bedside nightstands help build a cohesive luxury interior layout. Our sheesham and teak timber beds are fully treated against pests, providing clean, allergen-free comfort for a lifetime of restful sleep.',
-    faqs: [
-      {
-        q: 'What is the standard warranty on solid wood beds?',
-        a: 'All our premium handcrafted solid wood beds come with a lifetime guarantee on the timber quality and a 1-year warranty on manufacturing defects and hydraulic lifts.'
-      },
-      {
-        q: 'Do you offer hydraulic storage beds?',
-        a: 'Yes, we specialize in high-end hydraulic box storage beds. We use premium heavy-gauge gas lift struts, allowing you to lift the mattress effortlessly to access storage space underneath.'
-      },
-      {
-        q: 'Can I choose a custom wood polish color for my wardrobe?',
-        a: 'Yes, we offer custom polish finishes ranging from natural teak, warm honey, deep walnut, to royal mahogany. Tell our design team your preference, and we will custom finish your entire bedroom set.'
-      }
-    ]
-  },
-  'office-and-study': {
-    guideTitle: 'Ergonomic Office Furniture & Solid Wood Study Tables in Nepal',
-    guideText: 'Boost your workspace productivity with ergonomically structured office furniture designed for premium comfort. At Sindureghari Furniture, we engineer office chairs with flexible lumbar adjustments, high-grade mesh backrests, and adjustable armrests to relieve spinal pressure during long desk hours. Our study tables and executive desks are handcrafted using seasoned timber, offering a clean, professional finish with spacious drawers, built-in cable grommets, and filing drawer slides. Whether you are setting up a cozy home workspace in Kathmandu or a corporate conference boardroom, our modular office desks and reception tables deliver executive-level performance.',
-    faqs: [
-      {
-        q: 'Do you supply bulk furniture for corporate offices?',
-        a: 'Yes, we specialize in bulk commercial and corporate office furniture supply, including modular cubicles, conference tables, and executive chairs, with fast delivery and assembly throughout Nepal.'
-      },
-      {
-        q: 'How do I pick the right ergonomic office chair?',
-        a: 'Look for chairs with adjustable lumbar support, 360-degree swivel, smooth gas lift height controls, and dynamic tilt lock mechanisms. Our team can help you select a model tailored to your height and workspace layout.'
-      }
-    ]
-  },
-  'modular-kitchens': {
-    guideTitle: 'Termite-Proof Modular Kitchen Cabinet Design & Installation in Nepal',
-    guideText: 'Elevate your cooking experience with customized modular kitchen cabinets manufactured for heavy-duty cooking environments in Nepal. We design L-shaped, U-shaped, parallel, and island kitchen layouts using boiling-water-proof (BWP) seasoned solid wood and premium anti-rust stainless steel pullouts. We integrate smart soft-close tandem drawer boxes, corner carousel baskets, and overhead lift-up shutters to maximize kitchen storage. Our team of kitchen consultants works with you from 3D design blueprint rendering to full granite counter fitting and cabinet installation in Rautahat, Kathmandu, and beyond.',
-    faqs: [
-      {
-        q: 'What materials are used for modular kitchen cabinets in Nepal?',
-        a: 'We use high-grade seasoned teak wood and solid boiling-water-proof marine grade plywood (BWP) with termite prevention treatments, ensuring your kitchen cabinets withstand heavy moisture and high-heat environments.'
-      },
-      {
-        q: 'How long does modular kitchen installation take?',
-        a: 'Once the 3D kitchen layout design is approved, manufacturing takes about 2 to 3 weeks at our factory. The on-site installation, including drawer slides and cabinet alignment, is completed in just 3 to 5 days by our professional carpenters.'
-      }
-    ]
-  }
-};
-
 const defaultSEOContent = {
-  guideTitle: 'Premium Solid Wood Furniture Handcrafted by Sindureghari Furniture',
-  guideText: 'For over three decades, Sindureghari Furniture has been synonymous with premium quality, exquisite woodwork design, and timeless craftsmanship. Handcrafted in our advanced manufacturing workshop along the Chandrapur highway in Rautahat, Nepal, our furniture collections include everything from royal sofa sets, luxury king beds, solid wood dining tables, to modern modular kitchens and ergonomic office spaces. We season all our timber using high-temperature steam kilns to prevent shrinking, splitting, or warping over time. We provide free shipping, lifetime wood assurance, custom design flexibility, and a dedicated team of master artisans to help bring your home interior dreams to life.',
+  guideTitle: 'Handcrafted Solid Wood Craftsmanship by Sindureghari Furniture',
+  guideText:
+    'Every piece in our showroom is crafted from kiln-dried Teak, Sisau (Sheesham), and Sal timber in our Rautahat workshop. By seasoning our wood to optimal moisture levels and finishing with protective polyurethane coatings, our sofas, beds, dining sets, and wardrobes resist warping and termites for decades.',
   faqs: [
     {
-      q: 'Where is your physical showroom and factory located?',
-      a: 'Our main showroom is located along the Highway Road in Chandrapur, Rautahat, Nepal. Our state-of-the-art wood seasoning and manufacturing workshops are situated nearby in the Rautahat district, where we craft and season all solid wood items.'
+      q: 'Can I customize the size, wood type, or fabric color?',
+      a: 'Yes. Share your room measurements or preferred upholstery shade with our team on WhatsApp (+977-9845427041) and our craftsmen will build it to your exact specifications.',
     },
     {
-      q: 'How do I place an order for customized furniture online?',
-      a: 'Browse our online catalogue and click the direct WhatsApp button (+977-9845427041) on any product detail page. You can consult with our design assistant, select custom sizing, wood finish (teak/sisam), and confirm your order securely.'
+      q: 'Do you provide delivery and installation across Nepal?',
+      a: 'We provide safe home delivery and professional on-site assembly across Kathmandu Valley, Pokhara, Chitwan, Chandrapur, and major cities in Nepal.',
     },
     {
-      q: 'Do you offer flexible EMI payment options?',
-      a: 'Yes, we offer easy EMI plans to make premium furniture affordable for all homes in Nepal. You can discuss the EMI eligibility and bank partners with our sales desk when placing your custom order.'
-    }
-  ]
+      q: 'What warranty is included with solid wood furniture?',
+      a: 'Our solid hardwood furniture frames carry up to a 10-year structural and termite-resistance warranty.',
+    },
+  ],
 };
 
-const CategorySEOSection = ({ category, subcategory }) => {
-  const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
-  
-  const content = seoContentData[category] || defaultSEOContent;
-  
-  const toggleFaq = (index) => {
-    setOpenFaqIndex(openFaqIndex === index ? null : index);
-  };
-  
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": content.faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.q,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.a
-      }
-    }))
-  };
+const CategorySEOSection = ({ title }) => {
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   return (
-    <div className="bkf-category__seo-section">
-      <script 
-        type="application/ld+json" 
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} 
-      />
+    <section className="bkf-category__seo-section">
       <div className="bkf-category__seo-container">
-        {/* Editorial Buying Guide */}
         <div className="bkf-category__seo-guide">
-          <h2 className="bkf-category__seo-guide-title">{content.guideTitle}</h2>
-          <p className="bkf-category__seo-guide-text">{content.guideText}</p>
+          <span className="bkf-seo-kicker">Atelier Quality Standard</span>
+          <h2 className="bkf-category__seo-guide-title">
+            {title ? `Why Choose Sindureghari for ${title}` : defaultSEOContent.guideTitle}
+          </h2>
+          <p className="bkf-category__seo-guide-text">{defaultSEOContent.guideText}</p>
         </div>
-        
-        {/* Collapsible FAQ Accordion */}
+
         <div className="bkf-category__seo-faqs">
-          <h2 className="bkf-category__seo-faqs-title">Expert Buying Questions & Answers</h2>
+          <h3 className="bkf-category__seo-faqs-title">Frequently Asked Questions</h3>
           <div className="bkf-category__faq-list">
-            {content.faqs.map((faq, idx) => {
+            {defaultSEOContent.faqs.map((faq, idx) => {
               const isOpen = openFaqIndex === idx;
               return (
-                <div 
-                  key={idx} 
-                  className={`bkf-category__faq-item ${isOpen ? 'active' : ''}`}
-                >
-                  <div 
-                    className="bkf-category__faq-question" 
-                    onClick={() => toggleFaq(idx)}
+                <div key={idx} className={`bkf-category__faq-item ${isOpen ? 'active' : ''}`}>
+                  <button
+                    type="button"
+                    className="bkf-category__faq-question"
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
                   >
-                    <h3>{faq.q}</h3>
-                    <span className="bkf-category__faq-toggle-icon">
-                      {isOpen ? '−' : '+'}
-                    </span>
-                  </div>
+                    <span>{faq.q}</span>
+                    <span className="bkf-category__faq-toggle-icon">{isOpen ? '−' : '+'}</span>
+                  </button>
                   <div className={`bkf-category__faq-answer ${isOpen ? 'open' : ''}`}>
                     <p>{faq.a}</p>
                   </div>
@@ -301,755 +266,585 @@ const CategorySEOSection = ({ category, subcategory }) => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
 const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride } = {}) => {
   const params = useParams();
-  const category = categoryOverride !== undefined ? categoryOverride : params.category;
+  const rawCategory = categoryOverride !== undefined ? categoryOverride : params.category;
+  const category = slugifyCategory(rawCategory || 'all-products');
   const subcategory = subcategoryOverride !== undefined ? subcategoryOverride : params.subcategory;
   const keyword = keywordOverride !== undefined ? keywordOverride : params.keyword;
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
-  const [isFallbackActive, setIsFallbackActive] = useState(false);
+
+  const [allProducts, setAllProducts] = useState([]);
+  const [adminCategories, setAdminCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+
+  // Filters & sorting
   const [sortBy, setSortBy] = useState('newest');
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [selectedMaterials, setSelectedMaterials] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
-  const [fastDelivery, setFastDelivery] = useState(false);
-  const [adminCategories, setAdminCategories] = useState([]);
-  const [visibleProductBatch, setVisibleProductBatch] = useState({ key: '', count: 24 });
+  const [inStockOnly, setInStockOnly] = useState(false);
+  const [onSaleOnly, setOnSaleOnly] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(24);
 
+  // Fetch categories + products using resilient fetchWithFallback
   useEffect(() => {
     let isMounted = true;
 
-    const fetchCategories = async () => {
+    const loadCatalog = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        const response = await fetch(`${API_BASE_URL}/api/categories`);
-        if (!response.ok) return;
-        const data = await response.json();
-        if (isMounted && Array.isArray(data)) {
-          setAdminCategories(data);
+        const [catRes, prodRes] = await Promise.allSettled([
+          fetchWithFallback(PRODUCT_ENDPOINTS.CATEGORIES),
+          keyword
+            ? fetchWithFallback(`/api/search?q=${encodeURIComponent(keyword)}&limit=150`)
+            : fetchWithFallback(`${PRODUCT_ENDPOINTS.LIST}?limit=200`),
+        ]);
+
+        if (isMounted && catRes.status === 'fulfilled' && catRes.value.ok) {
+          const catData = await catRes.value.json();
+          if (Array.isArray(catData)) setAdminCategories(catData);
         }
-      } catch (error) {
-        console.warn('Category taxonomy fetch failed:', error);
+
+        if (prodRes.status === 'fulfilled' && prodRes.value.ok) {
+          const prodData = await prodRes.value.json();
+          const rawList = Array.isArray(prodData)
+            ? prodData
+            : prodData.products || prodData.data || [];
+          if (isMounted) {
+            setAllProducts(rawList);
+          }
+        } else {
+          throw new Error('Unable to load products right now.');
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err.message);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
-    fetchCategories();
+    loadCatalog();
 
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [keyword]);
 
-  // Subcategories for each main category
-  const subcategoriesByCategory = {};
-
-  const getCategoryAndDescendantIds = (categoryNode) => {
-    if (!categoryNode?.id) return [];
-
-    const childIds = Array.isArray(categoryNode.children)
-      ? categoryNode.children.flatMap(getCategoryAndDescendantIds)
-      : [];
-
-    return [categoryNode.id, ...childIds];
-  };
-
-  // Fetch products based on category/subcategory or keyword
+  // Reset pagination count when category or filter changes
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      setError(null);
-      setIsFallbackActive(false);
+    setVisibleCount(24);
+  }, [category, subcategory, keyword, sortBy, priceRange, selectedMaterials, inStockOnly, onSaleOnly]);
 
-      try {
-        let isFallback = false;
-        let fetchedProducts = [];
-        let fetchedTotalPages = 1;
+  // Match products for current category/subcategory
+  const { categoryProducts, isShowingFallback } = useMemo(() => {
+    if (keyword) {
+      return { categoryProducts: allProducts, isShowingFallback: false };
+    }
 
-        if (keyword) {
-          // Programmatic SEO page mode - fetch matching products using the search API
-          const searchUrl = `${API_BASE_URL}/api/search?q=${encodeURIComponent(keyword)}&limit=100`;
-          const response = await fetch(searchUrl);
-          if (response.ok) {
-            const data = await response.json();
-            const rawProducts = data.products || [];
-            fetchedProducts = rawProducts;
-            fetchedTotalPages = Math.max(1, Math.ceil(rawProducts.length / 12));
-          } else {
-            throw new Error('Failed to fetch search results for keyword');
-          }
-        } else {
-          const activeAdminCategory = subcategory
-            ? findCategoryBySlug(adminCategories, subcategory)
-            : findCategoryBySlug(adminCategories, category);
-          const activeCategoryIds = getCategoryAndDescendantIds(activeAdminCategory);
-          let categoryName = '';
+    const targetSlug = subcategory ? slugifyCategory(subcategory) : category;
+    const matched = allProducts.filter((p) => matchesCategorySlug(p, targetSlug));
 
-          if (activeAdminCategory?.id) {
-            categoryName = '';
-          } else if (subcategory) {
-            // If subcategory is provided, use it for API call
-            categoryName = subcategoryMapping[subcategory] || subcategory;
-          } else if (category) {
-            // If only category is provided, use it for API call
-            categoryName = categoryMapping[category] || category;
-          }
+    if (matched.length > 0) {
+      return { categoryProducts: matched, isShowingFallback: false };
+    }
 
-          // Prefer admin taxonomy ID; fallback to legacy category names for old routes.
-          const shouldFilterDescendants = activeAdminCategory?.id && activeCategoryIds.length > 1;
-          const categoryFetchLimit = 100;
-          let url = shouldFilterDescendants
-            ? `${API_BASE_URL}/api/products?category=${activeAdminCategory.id}&includeChildren=true&page=${currentPage}&limit=${categoryFetchLimit}&sort=${sortBy}`
-            : activeAdminCategory?.id
-            ? `${API_BASE_URL}/api/products?category=${activeAdminCategory.id}&page=${currentPage}&limit=${categoryFetchLimit}&sort=${sortBy}`
-            : `${API_BASE_URL}/api/products?categoryName=${categoryName}&page=${currentPage}&limit=${categoryFetchLimit}&sort=${sortBy}`;
-
-          if (priceRange.min || priceRange.max) {
-            url += `&minPrice=${priceRange.min}&maxPrice=${priceRange.max}`;
-          }
-
-          // 1. Fetch category products
-          const response = await fetch(url);
-          if (response.ok) {
-            const data = await response.json();
-            if (Array.isArray(data)) {
-              fetchedProducts = data;
-            } else {
-              fetchedProducts = data.products || [];
-              fetchedTotalPages = data.totalPages || 1;
-            }
-          } else {
-            throw new Error('Failed to fetch category products');
-          }
-        }
-
-        // 2. If no products are found for legacy/fallback routes, fetch general products.
-        // Admin-created categories should show their own empty state instead of unrelated products.
-        const hasAdminCategoryMatch = !keyword && (
-          (subcategory && findCategoryBySlug(adminCategories, subcategory)) ||
-          (!subcategory && category && findCategoryBySlug(adminCategories, category))
-        );
-
-        if (fetchedProducts.length === 0 && !hasAdminCategoryMatch) {
-          isFallback = true;
-          // Fetch featured/recent general products
-          const fallbackUrl = `${API_BASE_URL}/api/products?page=1&limit=100&sort=newest`;
-          const fallbackResponse = await fetch(fallbackUrl);
-          if (fallbackResponse.ok) {
-            const fallbackData = await fallbackResponse.json();
-            if (Array.isArray(fallbackData)) {
-              fetchedProducts = fallbackData;
-            } else {
-              fetchedProducts = fallbackData.products || [];
-              fetchedTotalPages = fallbackData.totalPages || 1;
-            }
-          }
-        }
-
-        setProducts(fetchedProducts);
-        setTotalPages(fetchedTotalPages);
-        setIsFallbackActive(isFallback);
-      } catch (err) {
-        setError(err.message);
-        console.error('Error fetching products:', err);
-      } finally {
-        setLoading(false);
+    // If subcategory had 0 direct hits, try parent category
+    if (subcategory && category) {
+      const parentMatched = allProducts.filter((p) => matchesCategorySlug(p, category));
+      if (parentMatched.length > 0) {
+        return { categoryProducts: parentMatched, isShowingFallback: false };
       }
-    };
+    }
 
-    fetchProducts();
-  }, [category, subcategory, keyword, currentPage, sortBy, priceRange, adminCategories]);
+    return { categoryProducts: allProducts, isShowingFallback: allProducts.length > 0 };
+  }, [allProducts, category, subcategory, keyword]);
 
-  // Get current category info
+  // Apply user sidebar filters & sorting
+  const filteredProducts = useMemo(() => {
+    return categoryProducts
+      .filter((product) => {
+        const price = parseFloat(product.new_price ?? product.salePrice ?? product.price ?? 0);
+        const oldPrice = parseFloat(product.old_price ?? product.price ?? 0);
+
+        if (priceRange.min !== '' && Number.isFinite(Number(priceRange.min))) {
+          if (price < Number(priceRange.min)) return false;
+        }
+        if (priceRange.max !== '' && Number.isFinite(Number(priceRange.max))) {
+          if (price > Number(priceRange.max)) return false;
+        }
+
+        if (selectedMaterials.length > 0) {
+          const haystack = `${product.wooden_type || ''} ${product.material || ''} ${product.name || ''} ${product.description || ''}`.toLowerCase();
+          const hasMatch = selectedMaterials.some((token) => haystack.includes(token.toLowerCase()));
+          if (!hasMatch) return false;
+        }
+
+        if (inStockOnly) {
+          const stockVal = product.stock;
+          if (stockVal !== undefined && stockVal !== null && Number(stockVal) <= 0) return false;
+        }
+
+        if (onSaleOnly) {
+          if (!(oldPrice > price && price > 0)) return false;
+        }
+
+        return true;
+      })
+      .sort((a, b) => {
+        const priceA = parseFloat(a.new_price ?? a.salePrice ?? a.price ?? 0);
+        const priceB = parseFloat(b.new_price ?? b.salePrice ?? b.price ?? 0);
+
+        switch (sortBy) {
+          case 'price-low':
+            return priceA - priceB;
+          case 'price-high':
+            return priceB - priceA;
+          case 'name-asc':
+            return String(a.name || '').localeCompare(String(b.name || ''));
+          case 'name-desc':
+            return String(b.name || '').localeCompare(String(a.name || ''));
+          case 'newest':
+          default:
+            return Number(b.id || 0) - Number(a.id || 0);
+        }
+      });
+  }, [categoryProducts, priceRange, selectedMaterials, inStockOnly, onSaleOnly, sortBy]);
+
+  // Resolve clean display title & description
+  const activeAdminCategory = findCategoryBySlug(adminCategories, category);
+  const activeAdminSubcategory = subcategory ? findCategoryBySlug(adminCategories, subcategory) : null;
+
   const getCurrentCategoryInfo = () => {
     if (keyword) {
-      const cleanKeyword = keyword.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      const cleanKeyword = keyword.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
       return {
+        eyebrow: 'Curated Selection',
         title: `Best ${cleanKeyword} in Nepal`,
-        description: `Shop the best ${cleanKeyword} in Nepal. Handcrafted solid wood, premium quality, and free delivery to Kathmandu, Lalitpur, and Bhaktapur.`,
-        keywords: `best ${cleanKeyword.toLowerCase()} Nepal, buy ${cleanKeyword.toLowerCase()} online, solid wood ${cleanKeyword.toLowerCase()}`
-      };
-    }
-    if (subcategory) {
-      const adminSubcategory = findCategoryBySlug(adminCategories, subcategory);
-      if (adminSubcategory) {
-        return {
-          title: adminSubcategory.name,
-          description: `Explore ${adminSubcategory.name} products uploaded by our team. Browse pricing, finishes, stock and product details in one place.`,
-          keywords: `${adminSubcategory.name} Nepal, buy ${adminSubcategory.name} Nepal, Sindureghari Furniture`
-        };
-      }
-
-      const subcatName = subcategory.split('-').map(word =>
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' ');
-      return {
-        title: subcatName,
-        description: `Explore our premium ${subcatName.toLowerCase()} collection. High-quality furniture designed for comfort, style, and durability.`,
-        keywords: `${subcatName.toLowerCase()} Nepal, buy ${subcatName.toLowerCase()} Nepal, ${subcatName.toLowerCase()} furniture Nepal`
-      };
-    }
-    const adminCategory = findCategoryBySlug(adminCategories, category);
-    if (adminCategory) {
-      return {
-        title: adminCategory.name,
-        description: `Shop ${adminCategory.name} products uploaded from the admin dashboard. Products shown here follow the same category selected during product upload.`,
-        keywords: `${adminCategory.name} Nepal, Sindureghari Furniture, furniture category Nepal`
+        description: `Shop handcrafted solid wood ${cleanKeyword.toLowerCase()} with direct showroom delivery across Kathmandu and Nepal.`,
+        keywords: `best ${cleanKeyword.toLowerCase()} Nepal, Sindureghari Furniture`,
       };
     }
 
-    return categoryInfo[category] || {
-      title: titleFromSlug(category || 'all-products'),
-      description: `Shop premium ${titleFromSlug(category || 'furniture').toLowerCase()} products in Nepal.`,
-      keywords: `${titleFromSlug(category || 'furniture').toLowerCase()} Nepal`
+    const lookupSlug = subcategory ? slugifyCategory(subcategory) : category;
+    if (categoryInfo[lookupSlug]) {
+      return categoryInfo[lookupSlug];
+    }
+
+    const cleanName =
+      activeAdminSubcategory?.name ||
+      activeAdminCategory?.name ||
+      titleFromSlug(lookupSlug || 'Furniture');
+
+    const formattedTitle = String(cleanName)
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+
+    return {
+      eyebrow: 'Sindureghari Showroom',
+      title: formattedTitle,
+      description: `Explore our handcrafted ${formattedTitle.toLowerCase()} collection—built from seasoned solid timber with custom sizing and free delivery across Nepal.`,
+      keywords: `${formattedTitle.toLowerCase()} Nepal, buy ${formattedTitle.toLowerCase()} Sindureghari Furniture`,
     };
   };
 
   const currentCategoryInfo = getCurrentCategoryInfo();
-  const activeAdminCategory = findCategoryBySlug(adminCategories, category);
-  const activeAdminSubcategory = subcategory ? findCategoryBySlug(adminCategories, subcategory) : null;
-  const categoryLabel = activeAdminCategory?.name || categoryMapping[category] || titleFromSlug(category || '');
+  const categoryLabel = currentCategoryInfo.title;
   const subcategoryLabel = activeAdminSubcategory?.name || (subcategory ? titleFromSlug(subcategory) : '');
-  const dynamicSubcategories = !subcategory
-    ? (
-      Array.isArray(activeAdminCategory?.children) && activeAdminCategory.children.length > 0
-        ? activeAdminCategory.children.map((child) => ({
-          id: child.slug || slugifyCategory(child.name),
-          name: child.name,
-        }))
-        : subcategoriesByCategory[category] || []
-    )
-    : [];
 
-  // Handle subcategory click
-  const handleSubcategoryClick = (subcatId) => {
-    navigate(`/category/${category}/${slugifyCategory(subcatId)}`);
-  };
-
-  // Handle sort change
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
-    setCurrentPage(1);
-  };
-
-
-
-  // Pagination
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // Available filter options (you can fetch these from API in real implementation)
-  const availableMaterials = ['Sheesham Wood', 'Engineered Wood', 'Mango Wood', 'Ash Wood', 'Teak Wood', 'Oak Wood'];
-  const availableBrands = ['Wooden Street', 'Urban Ladder', 'Pepperfry', 'IKEA', 'Godrej Interio'];
-
-  // Handle material filter
-  const handleMaterialChange = (material) => {
-    setSelectedMaterials(prev =>
-      prev.includes(material)
-        ? prev.filter(m => m !== material)
-        : [...prev, material]
+  const toggleMaterial = (token) => {
+    setSelectedMaterials((prev) =>
+      prev.includes(token) ? prev.filter((item) => item !== token) : [...prev, token]
     );
-    setCurrentPage(1);
   };
 
-  // Handle brand filter
-  const handleBrandChange = (brand) => {
-    setSelectedBrands(prev =>
-      prev.includes(brand)
-        ? prev.filter(b => b !== brand)
-        : [...prev, brand]
-    );
-    setCurrentPage(1);
-  };
-
-  // Clear all filters
   const clearAllFilters = () => {
     setPriceRange({ min: '', max: '' });
     setSelectedMaterials([]);
-    setSelectedBrands([]);
-    setFastDelivery(false);
-    setCurrentPage(1);
+    setInStockOnly(false);
+    setOnSaleOnly(false);
+    setSortBy('newest');
   };
 
-  // Sidebar Filter Function
-  const renderFilterSidebar = () => (
-    <aside className="bkf-category__sidebar">
-      <div className="bkf-category__sidebar-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Filter size={18} />
-          <h3>Filters</h3>
-        </div>
-        <button onClick={clearAllFilters} className="bkf-category__clear-all">Reset</button>
-      </div>
+  const hasActiveFilters =
+    priceRange.min !== '' ||
+    priceRange.max !== '' ||
+    selectedMaterials.length > 0 ||
+    inStockOnly ||
+    onSaleOnly;
 
-      {/* Fast Delivery Filter */}
-      <div className="bkf-category__filter-section">
-        <label className="bkf-category__filter-checkbox">
-          <input
-            type="checkbox"
-            checked={fastDelivery}
-            onChange={(e) => setFastDelivery(e.target.checked)}
-          />
-          <span className="bkf-category__checkmark"></span>
-          FAST EXPRESS DELIVERY
-        </label>
-      </div>
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
+  const hasMore = filteredProducts.length > visibleCount;
 
-      {/* Price Range Filter */}
-      <div className="bkf-category__filter-section">
-        <h4 className="bkf-category__filter-title">PRICE BUDGET</h4>
-        
-        {/* Luxury Price Preset Tiers */}
-        <div className="bkf-category__price-presets">
-          {[
-            { label: 'All Budgets', min: '', max: '' },
-            { label: 'Under NPR 25K', min: '0', max: '25000' },
-            { label: 'NPR 25K – 75K', min: '25000', max: '75000' },
-            { label: 'NPR 75K – 150K', min: '75000', max: '150000' },
-            { label: 'Above NPR 150K', min: '150000', max: '999999' }
-          ].map((tier, idx) => {
-            const isSelected = priceRange.min === tier.min && priceRange.max === tier.max;
-            return (
-              <button
-                key={idx}
-                type="button"
-                className={`bkf-category__preset-pill ${isSelected ? 'active' : ''}`}
-                onClick={() => setPriceRange({ min: tier.min, max: tier.max })}
-              >
-                {tier.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Custom Price Range Inputs */}
-        <div className="bkf-category__custom-price-inputs">
-          <div className="price-input-wrapper">
-            <span className="price-currency">Rs.</span>
-            <input
-              type="number"
-              placeholder="Min"
-              value={priceRange.min}
-              onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
-              className="bkf-category__price-num-input"
-            />
-          </div>
-          <span className="price-input-to">to</span>
-          <div className="price-input-wrapper">
-            <span className="price-currency">Rs.</span>
-            <input
-              type="number"
-              placeholder="Max"
-              value={priceRange.max}
-              onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
-              className="bkf-category__price-num-input"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Material Filter */}
-      <div className="bkf-category__filter-section">
-        <h4 className="bkf-category__filter-title">MATERIAL</h4>
-        <div className="bkf-category__filter-options">
-          {availableMaterials.map(material => (
-            <label key={material} className="bkf-category__filter-option">
-              <input
-                type="checkbox"
-                checked={selectedMaterials.includes(material)}
-                onChange={() => handleMaterialChange(material)}
-              />
-              <span className="bkf-category__option-text">{material}</span>
-              <span className="bkf-category__option-count">(25)</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Brand Filter */}
-      <div className="bkf-category__filter-section">
-        <h4 className="bkf-category__filter-title">BRAND</h4>
-        <div className="bkf-category__filter-options">
-          {availableBrands.map(brand => (
-            <label key={brand} className="bkf-category__filter-option">
-              <input
-                type="checkbox"
-                checked={selectedBrands.includes(brand)}
-                onChange={() => handleBrandChange(brand)}
-              />
-              <span className="bkf-category__option-text">{brand}</span>
-              <span className="bkf-category__option-count">(15)</span>
-            </label>
-          ))}
-        </div>
-      </div>
-    </aside>
-  );
-
-  // Filter and sort products
-  const filteredProducts = products
-    .filter(product => {
-      // Price filter
-      const price = parseFloat(product.salePrice || product.price || 0);
-      const minPrice = parseFloat(priceRange.min || 1000);
-      const maxPrice = parseFloat(priceRange.max || 150000);
-      const priceInRange = price >= minPrice && price <= maxPrice;
-
-      // Material filter
-      const materialMatch = selectedMaterials.length === 0 ||
-        selectedMaterials.some(material =>
-          product.material?.toLowerCase().includes(material.toLowerCase()) ||
-          product.name.toLowerCase().includes(material.toLowerCase())
-        );
-
-      // Brand filter
-      const brandMatch = selectedBrands.length === 0 ||
-        selectedBrands.some(brand =>
-          product.brand?.toLowerCase().includes(brand.toLowerCase()) ||
-          product.name.toLowerCase().includes(brand.toLowerCase())
-        );
-
-      // Fast delivery filter
-      const deliveryMatch = !fastDelivery || product.fastDelivery === true;
-
-      return priceInRange && materialMatch && brandMatch && deliveryMatch;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'price-low':
-          return parseFloat(a.salePrice || a.price || 0) - parseFloat(b.salePrice || b.price || 0);
-        case 'price-high':
-          return parseFloat(b.salePrice || b.price || 0) - parseFloat(a.salePrice || a.price || 0);
-        case 'name-asc':
-          return a.name.localeCompare(b.name);
-        case 'name-desc':
-          return b.name.localeCompare(a.name);
-        case 'oldest':
-          return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
-        case 'newest':
-        default:
-          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-      }
-    });
-
-
-  const visibleProductsKey = [
-    category,
-    subcategory,
-    keyword,
-    sortBy,
-    priceRange.min,
-    priceRange.max,
-    selectedMaterials.join('|'),
-    selectedBrands.join('|'),
-    fastDelivery,
-    products.length
-  ].join('::');
-  const effectiveVisibleProductCount = visibleProductBatch.key === visibleProductsKey
-    ? visibleProductBatch.count
-    : 24;
-  const visibleFilteredProducts = filteredProducts.slice(0, effectiveVisibleProductCount);
-  const hasMoreVisibleProducts = filteredProducts.length > effectiveVisibleProductCount;
-
-  // Function to render products with discount banner
-  const renderProductsWithDiscount = () => {
-    // const productsPerRow = 5;
-    const discountAfterProducts = 10;
-    const result = [];
-
-    visibleFilteredProducts.forEach((product, index) => {
-      // Add discount banner after every 10 products
-      if (index === discountAfterProducts && index < products.length) {
-        result.push(
-          <DiscountBanner key={`discount-${index}`} />
-        );
-      }
-
-      result.push(
-        <ProductCard key={product.id || product._id} product={product} />
-      );
-    });
-
-    return result;
-  };
-
-  // Generate dynamic breadcrumbs array for JSON-LD schema
   const breadcrumbsList = [
-    { name: 'Home', url: 'https://sinduregharifurniture.shop/' }
+    { name: 'Home', url: 'https://sinduregharifurniture.shop/' },
+    { name: categoryLabel, url: `https://sinduregharifurniture.shop/category/${category}` },
   ];
-
-  if (keyword) {
-    const cleanKeyword = keyword.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  if (subcategory) {
     breadcrumbsList.push({
-      name: `Best ${cleanKeyword}`,
-      url: `https://sinduregharifurniture.shop/best-${keyword}-nepal`
+      name: subcategoryLabel,
+      url: `https://sinduregharifurniture.shop/category/${category}/${subcategory}`,
     });
-  } else if (category) {
-    breadcrumbsList.push({
-      name: categoryLabel,
-      url: `https://sinduregharifurniture.shop/category/${category}`
-    });
-    
-    if (subcategory) {
-      breadcrumbsList.push({
-        name: subcategoryLabel,
-        url: `https://sinduregharifurniture.shop/category/${category}/${subcategory}`
-      });
-    }
   }
-
 
   return (
     <>
       <SEOComponent
-        title={`${currentCategoryInfo.title} | Sindureghari Furniture - Premium Furniture in Nepal`}
+        title={`${currentCategoryInfo.title} | Sindureghari Furniture Nepal`}
         description={currentCategoryInfo.description}
         keywords={currentCategoryInfo.keywords}
         ogTitle={`${currentCategoryInfo.title} | Sindureghari Furniture`}
         ogDescription={currentCategoryInfo.description}
-        canonicalUrl={keyword ? `https://sinduregharifurniture.shop/best-${keyword}-nepal` : `https://sinduregharifurniture.shop/category/${category}${subcategory ? `/${subcategory}` : ''}`}
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "CollectionPage",
-          "name": currentCategoryInfo.title,
-          "description": currentCategoryInfo.description,
-          "url": keyword ? `https://sinduregharifurniture.shop/best-${keyword}-nepal` : `https://sinduregharifurniture.shop/category/${category}${subcategory ? `/${subcategory}` : ''}`,
-          "mainEntity": {
-            "@type": "ItemList",
-            "name": currentCategoryInfo.title,
-            "description": currentCategoryInfo.description,
-            "numberOfItems": products.length,
-            "itemListElement": products.map((prod, idx) => ({
-              "@type": "ListItem",
-              "position": idx + 1,
-              "url": `https://sinduregharifurniture.shop/product/${prod.id || prod._id}`,
-              "name": prod.title || prod.name
-            }))
-          }
-        }}
+        canonicalUrl={`https://sinduregharifurniture.shop/category/${category}${subcategory ? `/${subcategory}` : ''}`}
       />
       <BreadcrumbStructuredData breadcrumbs={breadcrumbsList} />
 
       <div className="bkf-category-page">
-        {/* Breadcrumb */}
-        <div className="bkf-category__breadcrumb">
+        {/* ── Warm Architectural Editorial Header (Aligned with 1600px Navbar Logo) ── */}
+        <header className="bkf-cat-hero">
           <div className="bkf-category__container">
-            <nav>
-              <span onClick={() => navigate('/')} className="bkf-category__breadcrumb-link">Home</span>
-              {keyword ? (
-                <>
-                  <span className="bkf-category__breadcrumb-separator">/</span>
-                  <span className="bkf-category__breadcrumb-current">
-                    Best {keyword.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span className="bkf-category__breadcrumb-separator">/</span>
-                  <span onClick={() => navigate(`/category/${category}`)} className="bkf-category__breadcrumb-link">
-                    {categoryLabel}
-                  </span>
-                  {subcategory && (
-                    <>
-                      <span className="bkf-category__breadcrumb-separator">/</span>
-                      <span className="bkf-category__breadcrumb-current">
-                        {subcategoryLabel}
-                      </span>
-                    </>
-                  )}
-                </>
-              )}
-            </nav>
-          </div>
-        </div>
-
-        {/* Category Hero Banner */}
-        <div className="bkf-category__header">
-          {/* Background image */}
-          <div className="bkf-category__hero-bg">
-            <img
-              src={activeAdminCategory?.image || 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&q=80&w=1800'}
-              alt={currentCategoryInfo.title}
-              loading="eager"
-            />
-          </div>
-          {/* Dark gradient overlay */}
-          <div className="bkf-category__hero-overlay" />
-
-          {/* Text content */}
-          <div className="bkf-category__hero-content">
-            <div className="bkf-category__container">
-              <span className="bkf-category__eyebrow">
-                Collection
+            {/* Breadcrumb Row */}
+            <nav className="bkf-cat-breadcrumb" aria-label="Breadcrumb">
+              <button type="button" onClick={() => navigate('/')} className="bkf-crumb-link">
+                Home
+              </button>
+              <ChevronRight size={13} className="bkf-crumb-sep" />
+              <button type="button" onClick={() => navigate('/products')} className="bkf-crumb-link">
+                Collections
+              </button>
+              <ChevronRight size={13} className="bkf-crumb-sep" />
+              <span className="bkf-crumb-current">
+                {subcategory ? subcategoryLabel : currentCategoryInfo.title}
               </span>
-              <h1 className="bkf-category__title">
-                {currentCategoryInfo.title}
-              </h1>
-              <p className="bkf-category__description">
-                {currentCategoryInfo.description}
-              </p>
+            </nav>
+
+            <div className="bkf-cat-hero__grid">
+              <div className="bkf-cat-hero__text">
+                <span className="bkf-cat-hero__eyebrow">
+                  <Sparkles size={13} />
+                  {currentCategoryInfo.eyebrow || 'Handcrafted Collection'}
+                </span>
+                <h1 className="bkf-cat-hero__title">{currentCategoryInfo.title}</h1>
+                <p className="bkf-cat-hero__desc">{currentCategoryInfo.description}</p>
+              </div>
+
+              {/* Assurance Badges Card */}
+              <div className="bkf-cat-hero__assurances">
+                <div className="bkf-assurance-item">
+                  <div className="bkf-assurance-icon">
+                    <Truck size={18} />
+                  </div>
+                  <div>
+                    <strong>Free Home Delivery</strong>
+                    <span>Safe dispatch across Nepal</span>
+                  </div>
+                </div>
+                <div className="bkf-assurance-item">
+                  <div className="bkf-assurance-icon">
+                    <ShieldCheck size={18} />
+                  </div>
+                  <div>
+                    <strong>10-Year Timber Warranty</strong>
+                    <span>Kiln-dried & termite treated</span>
+                  </div>
+                </div>
+                <div className="bkf-assurance-item">
+                  <div className="bkf-assurance-icon">
+                    <Ruler size={18} />
+                  </div>
+                  <div>
+                    <strong>Custom Room Sizing</strong>
+                    <span>Tailored to your floor plan</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Category Switcher Bar */}
+            <div className="bkf-cat-pills-bar" role="navigation" aria-label="Quick category switch">
+              {QUICK_CATEGORY_PILLS.map((pill) => {
+                const isCurrent = category === pill.slug;
+                return (
+                  <button
+                    key={pill.slug}
+                    type="button"
+                    className={`bkf-cat-nav-pill ${isCurrent ? 'active' : ''}`}
+                    onClick={() => navigate(pill.path)}
+                  >
+                    {pill.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
-        </div>
+        </header>
 
-        {/* Main Content with Sidebar */}
+        {/* ── Main Catalog Workspace ── */}
         <div className="bkf-category__main-content">
           <div className="bkf-category__container">
             <div className="bkf-category__content-wrapper">
-              {/* Sidebar Filters */}
-              {renderFilterSidebar()}
+              {/* Left Filter Sidebar */}
+              <aside className="bkf-category__sidebar" aria-label="Product Filters">
+                <div className="bkf-category__sidebar-header">
+                  <div className="bkf-sidebar-title-group">
+                    <Filter size={16} />
+                    <h3>Refine Collection</h3>
+                  </div>
+                  {hasActiveFilters && (
+                    <button type="button" onClick={clearAllFilters} className="bkf-category__clear-all">
+                      <RotateCcw size={12} /> Reset
+                    </button>
+                  )}
+                </div>
 
-              {/* Products Section */}
-              <div className="bkf-category__products-section">
-                {/* Subcategories (only show if on main category page) */}
-                {dynamicSubcategories.length > 0 && (
-                  <div className="bkf-category__subcategories-section">
-                    <h2 className="bkf-category__subcategories-title">Shop by Category</h2>
-                    <div className="bkf-category__subcategories-grid">
-                      {dynamicSubcategories.map((subcat, idx) => (
-                        <div
-                          key={subcat.id}
-                          className="bkf-category__subcategory-card"
-                          onClick={() => handleSubcategoryClick(subcat.id)}
+                {/* Availability & Offers */}
+                <div className="bkf-category__filter-section">
+                  <h4 className="bkf-category__filter-title">Availability & Deals</h4>
+                  <div className="bkf-filter-toggles">
+                    <label className={`bkf-toggle-row ${inStockOnly ? 'checked' : ''}`}>
+                      <input
+                        type="checkbox"
+                        checked={inStockOnly}
+                        onChange={(e) => setInStockOnly(e.target.checked)}
+                      />
+                      <span className="bkf-check-box">
+                        {inStockOnly && <Check size={12} />}
+                      </span>
+                      <span className="bkf-toggle-label">In Stock Ready to Ship</span>
+                    </label>
+
+                    <label className={`bkf-toggle-row ${onSaleOnly ? 'checked' : ''}`}>
+                      <input
+                        type="checkbox"
+                        checked={onSaleOnly}
+                        onChange={(e) => setOnSaleOnly(e.target.checked)}
+                      />
+                      <span className="bkf-check-box">
+                        {onSaleOnly && <Check size={12} />}
+                      </span>
+                      <span className="bkf-toggle-label">Special Discount Offers</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Price Budget Filter */}
+                <div className="bkf-category__filter-section">
+                  <h4 className="bkf-category__filter-title">Price Budget</h4>
+                  <div className="bkf-category__price-presets">
+                    {PRICE_PRESETS.map((tier, idx) => {
+                      const isSelected = priceRange.min === tier.min && priceRange.max === tier.max;
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          className={`bkf-category__preset-pill ${isSelected ? 'active' : ''}`}
+                          onClick={() => setPriceRange({ min: tier.min, max: tier.max })}
                         >
-                          <div className="bkf-category__subcategory-content">
-                            <h3 className="bkf-category__subcategory-name">{subcat.name}</h3>
-                            <ChevronRight size={16} className="bkf-category__subcategory-arrow-icon" />
-                          </div>
-                        </div>
-                      ))}
+                          <span>{tier.label}</span>
+                          {isSelected && <Check size={14} />}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="bkf-category__custom-price-inputs">
+                    <div className="price-input-wrapper">
+                      <span className="price-currency">Rs.</span>
+                      <input
+                        type="number"
+                        placeholder="Min"
+                        value={priceRange.min}
+                        onChange={(e) => setPriceRange((prev) => ({ ...prev, min: e.target.value }))}
+                        className="bkf-category__price-num-input"
+                      />
+                    </div>
+                    <span className="price-input-to">–</span>
+                    <div className="price-input-wrapper">
+                      <span className="price-currency">Rs.</span>
+                      <input
+                        type="number"
+                        placeholder="Max"
+                        value={priceRange.max}
+                        onChange={(e) => setPriceRange((prev) => ({ ...prev, max: e.target.value }))}
+                        className="bkf-category__price-num-input"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Timber & Material Filter */}
+                <div className="bkf-category__filter-section">
+                  <h4 className="bkf-category__filter-title">Timber & Upholstery</h4>
+                  <div className="bkf-filter-toggles">
+                    {MATERIAL_FILTERS.map((mat) => {
+                      const isChecked = selectedMaterials.includes(mat.token);
+                      return (
+                        <label key={mat.token} className={`bkf-toggle-row ${isChecked ? 'checked' : ''}`}>
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => toggleMaterial(mat.token)}
+                          />
+                          <span className="bkf-check-box">
+                            {isChecked && <Check size={12} />}
+                          </span>
+                          <span className="bkf-toggle-label">{mat.label}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Bespoke Custom Order Card */}
+                <div className="bkf-sidebar-bespoke-card">
+                  <span className="bkf-bespoke-tag">Bespoke Atelier</span>
+                  <h4>Need Custom Size or Fabric?</h4>
+                  <p>We craft sofas, beds & wardrobes to your exact room dimensions.</p>
+                  <a
+                    href="https://wa.me/9779845427041?text=Hi%20Sindureghari%20Furniture,%20I%20would%20like%20to%20inquire%20about%20customizing%20furniture."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bkf-bespoke-btn"
+                  >
+                    <MessageCircle size={15} />
+                    <span>Chat with Artisan</span>
+                  </a>
+                </div>
+              </aside>
+
+              {/* Right Products Area */}
+              <div className="bkf-category__products-section">
+                {/* Top Control Bar */}
+                <div className="bkf-category__controls">
+                  <div className="bkf-controls-summary">
+                    <SlidersHorizontal size={15} className="bkf-controls-icon" />
+                    {!loading ? (
+                      <span>
+                        Showing <strong>{visibleProducts.length}</strong> of{' '}
+                        <strong>{filteredProducts.length}</strong> handcrafted pieces
+                      </span>
+                    ) : (
+                      <span>Loading showroom catalogue...</span>
+                    )}
+                  </div>
+
+                  <div className="bkf-category__controls-right">
+                    <label htmlFor="bkf-sort-select" className="bkf-category__sort-label">
+                      Sort by:
+                    </label>
+                    <select
+                      id="bkf-sort-select"
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="bkf-category__sort-select"
+                    >
+                      <option value="newest">Featured & Newest</option>
+                      <option value="price-low">Price: Low to High</option>
+                      <option value="price-high">Price: High to Low</option>
+                      <option value="name-asc">Name: A to Z</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Active Filter Chips */}
+                {hasActiveFilters && (
+                  <div className="bkf-active-filters-bar">
+                    {inStockOnly && (
+                      <button type="button" className="bkf-filter-chip" onClick={() => setInStockOnly(false)}>
+                        In Stock <span>✕</span>
+                      </button>
+                    )}
+                    {onSaleOnly && (
+                      <button type="button" className="bkf-filter-chip" onClick={() => setOnSaleOnly(false)}>
+                        On Sale <span>✕</span>
+                      </button>
+                    )}
+                    {(priceRange.min || priceRange.max) && (
+                      <button
+                        type="button"
+                        className="bkf-filter-chip"
+                        onClick={() => setPriceRange({ min: '', max: '' })}
+                      >
+                        Price: {priceRange.min || '0'} – {priceRange.max || 'Any'} <span>✕</span>
+                      </button>
+                    )}
+                    {selectedMaterials.map((token) => (
+                      <button
+                        key={token}
+                        type="button"
+                        className="bkf-filter-chip"
+                        onClick={() => toggleMaterial(token)}
+                      >
+                        {MATERIAL_FILTERS.find((m) => m.token === token)?.label || token} <span>✕</span>
+                      </button>
+                    ))}
+                    <button type="button" className="bkf-chip-reset-link" onClick={clearAllFilters}>
+                      Clear all
+                    </button>
+                  </div>
+                )}
+
+                {isShowingFallback && !loading && (
+                  <div className="bkf-category__fallback-notice">
+                    <div>
+                      <span className="bkf-fallback-kicker">Showroom Catalogue</span>
+                      <p>
+                        Showing our complete handcrafted furniture collection while new{' '}
+                        <strong>{currentCategoryInfo.title}</strong> pieces are being photographed.
+                      </p>
                     </div>
                   </div>
                 )}
 
-                {/* Sort Controls */}
-                <div className="bkf-category__controls">
-                  <div className="bkf-category__controls-left">
-                    <span className="bkf-category__sort-label">Sort By</span>
-                    <select value={sortBy} onChange={handleSortChange} className="bkf-category__sort-select">
-                      <option value="newest">Recommended</option>
-                      <option value="oldest">Oldest First</option>
-                      <option value="price-low">Price: Low to High</option>
-                      <option value="price-high">Price: High to Low</option>
-                      <option value="name-asc">Name: A to Z</option>
-                      <option value="name-desc">Name: Z to A</option>
-                    </select>
-                  </div>
-                  {!loading && (
-                    <span className="bkf-category__results-count">
-                      {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
-                    </span>
-                  )}
-                </div>
-
-                {/* Products Content */}
-                {isFallbackActive && (
-                  <div className="bkf-category__fallback-banner" style={{
-                    background: 'rgba(156, 90, 51, 0.08)',
-                    borderLeft: '4px solid #9c5a33',
-                    padding: '20px 25px',
-                    borderRadius: '8px',
-                    marginBottom: '30px',
-                    fontFamily: "'Outfit', sans-serif"
-                  }}>
-                    <span style={{
-                      display: 'inline-block',
-                      fontSize: '11px',
-                      fontWeight: '700',
-                      letterSpacing: '1.5px',
-                      color: '#9c5a33',
-                      marginBottom: '6px',
-                      textTransform: 'uppercase'
-                    }}>RECOMMENDED FOR YOU</span>
-                    <h3 style={{
-                      margin: 0,
-                      fontSize: '1.1rem',
-                      fontWeight: '500',
-                      color: '#1a202c',
-                      lineHeight: '1.5'
-                    }}>
-                      We are currently updating our <strong>{categoryLabel || (keyword ? keyword.replace(/-/g, ' ') : 'furniture')}</strong> collection. In the meantime, explore our finest handcrafted furniture pieces below:
-                    </h3>
-                  </div>
-                )}
-
+                {/* Product Grid */}
                 {loading ? (
                   <div className="bkf-category__products-grid">
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map(i => <ProductSkeleton key={i} />)}
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                      <ProductSkeleton key={i} />
+                    ))}
                   </div>
                 ) : error ? (
                   <div className="bkf-category__error-state">
-                    <p>Error: {error}</p>
+                    <h3>Unable to load catalogue</h3>
+                    <p>{error}</p>
                     <button onClick={() => window.location.reload()} className="bkf-category__retry-btn">
-                      Try Again
+                      Retry Loading
                     </button>
                   </div>
-                ) : products.length === 0 ? (
+                ) : filteredProducts.length === 0 ? (
                   <div className="bkf-category__empty-state">
-                    <h3>No products found</h3>
-                    <p>Try adjusting your filters or browse other categories.</p>
+                    <h3>No matching furniture pieces found</h3>
+                    <p>Try clearing one of your active price or material filters to see more options.</p>
+                    <button type="button" onClick={clearAllFilters} className="bkf-category__retry-btn">
+                      Reset All Filters
+                    </button>
                   </div>
                 ) : (
                   <>
                     <div className="bkf-category__products-grid">
-                      {filteredProducts.length > 0 ? renderProductsWithDiscount() : (
-                        <div className="bkf-category__no-results">
-                          <p>No products match your current filters.</p>
-                        </div>
-                      )}
+                      {visibleProducts.map((product) => (
+                        <ProductCard key={product.id || product._id} product={product} />
+                      ))}
                     </div>
 
-                    {hasMoreVisibleProducts && (
+                    {hasMore && (
                       <div className="bkf-category__load-more-wrap">
                         <button
                           type="button"
                           className="bkf-category__load-more-btn"
-                          onClick={() => setVisibleProductBatch({
-                            key: visibleProductsKey,
-                            count: effectiveVisibleProductCount + 24
-                          })}
+                          onClick={() => setVisibleCount((prev) => prev + 24)}
                         >
-                          Load more products
-                        </button>
-                      </div>
-                    )}
-
-                    {/* Pagination */}
-                    {totalPages > 1 && (
-                      <div className="bkf-category__pagination">
-                        <button
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          disabled={currentPage === 1}
-                          className="bkf-category__pagination-btn"
-                        >
-                          Previous
-                        </button>
-
-                        {[...Array(totalPages)].map((_, index) => (
-                          <button
-                            key={index + 1}
-                            onClick={() => handlePageChange(index + 1)}
-                            className={`bkf-category__pagination-btn ${currentPage === index + 1 ? 'bkf-category__pagination-btn--active' : ''}`}
-                          >
-                            {index + 1}
-                          </button>
-                        ))}
-
-                        <button
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          disabled={currentPage === totalPages}
-                          className="bkf-category__pagination-btn"
-                        >
-                          Next
+                          Show More Furniture ({filteredProducts.length - visibleCount} remaining)
                         </button>
                       </div>
                     )}
@@ -1057,9 +852,9 @@ const CategoryPage = ({ categoryOverride, subcategoryOverride, keywordOverride }
                 )}
               </div>
             </div>
-            
-            {/* Keyword-Rich SEO Buying Guide & Collapsible FAQ Section */}
-            <CategorySEOSection category={category} subcategory={subcategory} />
+
+            {/* Clean Editorial Buying Guide & FAQ */}
+            <CategorySEOSection title={currentCategoryInfo.title} />
           </div>
         </div>
       </div>

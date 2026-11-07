@@ -155,7 +155,6 @@ export default async function Page({ params }) {
         />
       ))}
       <CategoryPage />
-      <CategoryAuthorityContent category={enterpriseMeta} />
     </>
   );
 }
