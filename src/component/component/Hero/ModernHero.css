@@ -17,13 +17,29 @@
 }
 
 .pro-hero__eyebrow {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #ebdcc5;
+  padding: 6px 14px;
+  border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #9a6a2f;
+  color: #8c531d;
   margin-bottom: 18px;
+  box-shadow: 0 4px 12px rgba(140, 83, 29, 0.06);
+}
+
+.pro-hero__eyebrow strong {
+  background: #1f1610;
+  color: #f7ca68;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 6px;
+  margin-left: 2px;
 }
 
 .pro-hero h1 {

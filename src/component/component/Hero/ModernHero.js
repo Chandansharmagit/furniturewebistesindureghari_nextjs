@@ -10,14 +10,18 @@ export default function ModernHero() {
     <section className="pro-hero" aria-label="Sindureghari Furniture">
       <div className="pro-hero__inner">
         <div className="pro-hero__text">
-          <span className="pro-hero__eyebrow">Handcrafted in Nepal since 2010</span>
+          
+          <span className="pro-hero__eyebrow">
+            🪔 Diwali Festival Special • Flat 5% OFF with code <strong>DIWALI5</strong>
+          </span>
+          
           <h1>
             Furniture that makes
             <em> your house a home.</em>
           </h1>
           <p>
             Solid teak and sisau wood sofas, beds and dining sets. Built by master
-            craftsmen, delivered to your door.
+            craftsmen, delivered to your door with special festive savings.
           </p>
 
           <div className="pro-hero__actions">
@@ -25,7 +29,7 @@ export default function ModernHero() {
               Shop Collection <FaArrowRight />
             </Link>
             <a
-              href="https://wa.me/9779845427041?text=Hi%20Sindureghari%20Furniture,%20I%20would%20like%20to%20inquire%20about%20your%20products."
+              href="https://wa.me/9779845427041?text=Hi%20Sindureghari%20Furniture,%20I%20would%20like%20to%20inquire%20about%20the%20Diwali%205%25%20offer."
               target="_blank"
               rel="noopener noreferrer"
               className="pro-btn pro-btn--outline"
@@ -51,10 +55,6 @@ export default function ModernHero() {
               sizes="(max-width: 900px) 100vw, 50vw"
               className="pro-hero__img"
             />
-          </div>
-          <div className="pro-hero__chip pro-hero__chip--top">
-            <strong>2,500+</strong>
-            <span>Happy homes</span>
           </div>
           <div className="pro-hero__chip pro-hero__chip--bottom">
             <strong>100% Solid Wood</strong>

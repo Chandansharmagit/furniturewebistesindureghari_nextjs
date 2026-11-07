@@ -3,7 +3,8 @@ import ModernHero from "../component/component/Hero/ModernHero";
 import { getHomeData } from "../component/home/homeData";
 import { NewArrivals, BestDeals, CategoryShelf } from "../component/home/HomeSections";
 
-// Interactive / below-the-fold client sections are code-split
+// Code-split interactive & below-the-fold sections
+const DiwaliOfferTemplates = dynamic(() => import("../component/offers/DiwaliOfferTemplates"), { ssr: true });
 const RoyalSpecialOffers = dynamic(() => import("../component/special-offers/RoyalSpecialOffers"));
 const CategoryLandingGrid = dynamic(() => import("../component/home-extensions/CategoryLandingGrid"));
 const EMIPromo = dynamic(() => import("../component/emi-promo/EMIPromo"));
@@ -18,6 +19,7 @@ export default async function HomePage() {
   return (
     <>
       <ModernHero />
+      <DiwaliOfferTemplates />
       <NewArrivals items={newArrivals} />
       <RoyalSpecialOffers />
       <BestDeals items={deals} maxDiscount={maxDiscount} />

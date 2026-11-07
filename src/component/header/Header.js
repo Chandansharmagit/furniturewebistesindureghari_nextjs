@@ -245,8 +245,8 @@ const Header = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }) => {
         <div className="header-utility-inner">
           <div className="header-utility-offer">
             <BadgePercent size={15} />
-            <span>{activeCoupon ? `${activeDiscount}% discount` : 'Current Offer'}</span>
-            <strong>{activeCoupon ? `Use code ${activeCoupon.code}` : 'Offers updating'}</strong>
+            <span>{activeCoupon ? `${activeDiscount}% discount` : 'Diwali Offer'}</span>
+            <strong>{activeCoupon ? `Use code ${activeCoupon.code}` : '5% OFF: DIWALI5'}</strong>
           </div>
 
           <nav className="header-utility-links" aria-label="Quick header links">
